@@ -1,12 +1,12 @@
 package hu.trigary.iodine.bukkit;
 
-import hu.trigary.iodine.api.IodineApi;
-import hu.trigary.iodine.common.CommonTest;
-import org.bukkit.Bukkit;
+import hu.trigary.iodine.bukkit.network.NetworkManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.Contract;
 
 public class IodinePlugin extends JavaPlugin {
+	private static IodinePlugin instance;
+	private NetworkManager network;
 	
 	@Contract("_ -> fail")
 	public static void main(String[] args) {
@@ -15,12 +15,17 @@ public class IodinePlugin extends JavaPlugin {
 	
 	@Override
 	public void onEnable() {
-		Class<CommonTest> clazz = CommonTest.class;
-		Bukkit.broadcastMessage("ping... " + IodineApi.ping());
+		instance = this;
+		network = new NetworkManager();
 	}
 	
-	@Override
-	public void onDisable() {
 	
+	
+	public static IodinePlugin getInstance() {
+		return instance;
+	}
+	
+	public NetworkManager getNetwork() {
+		return network;
 	}
 }
