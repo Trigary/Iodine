@@ -1,7 +1,5 @@
 repositories {
-    maven {
-        url 'https://hub.spigotmc.org/nexus/content/groups/public/'
-    }
+    maven { url 'https://hub.spigotmc.org/nexus/content/groups/public/' }
 }
 
 dependencies {
@@ -10,9 +8,11 @@ dependencies {
     compile project(':iodine-api')
 }
 
-processResources {
-    include '**/plugin.yml'
-    expand 'version': project.version
+processResources { //TODO copy how forge does this
+    include 'plugin.yml'
+    expand 'version': project.version,
+            'authors': project.authors,
+            'url': project.url
 }
 
 shadowJar {

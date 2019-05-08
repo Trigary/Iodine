@@ -1,4 +1,10 @@
 /.idea
-/*.iml
-/.gradle
+
+.gradle
+/*/.gradle
+
+/out
+/*/out
 /*/build
+
+iodine-forge/run
