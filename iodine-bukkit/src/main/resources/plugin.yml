@@ -1,0 +1,5 @@
+name: Iodine
+version: $version
+authors: [Trigary, NickAc]
+website: 'GitHub' #TODO
+main: hu.trigary.iodine.bukkit.IodinePlugin
