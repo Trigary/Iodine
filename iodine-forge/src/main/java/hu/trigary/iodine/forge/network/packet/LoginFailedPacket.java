@@ -5,8 +5,8 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+import org.jetbrains.annotations.NotNull;
 
 public class LoginFailedPacket extends InPacket {
 	private boolean outdatedClient;
@@ -16,10 +16,15 @@ public class LoginFailedPacket extends InPacket {
 		outdatedClient = buf.readByte() == 0;
 	}
 	
-	public static class Handler implements IMessageHandler<LoginFailedPacket, OutPacket> {
+	public static class Handler extends InPacket.Handler<LoginFailedPacket> {
+		
+		public Handler(@NotNull IodineMod mod) {
+			super(mod);
+		}
+		
 		@Override
 		public OutPacket onMessage(LoginFailedPacket message, MessageContext context) {
-			IodineMod.getInstance().getLogger().info("Server rejected login: outdated "
+			mod.getLogger().info("Server rejected login: outdated "
 					+ (message.outdatedClient ? "client" : "server"));
 			
 			String text = message.outdatedClient

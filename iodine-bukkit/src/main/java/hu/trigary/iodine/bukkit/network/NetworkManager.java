@@ -6,34 +6,36 @@ import hu.trigary.iodine.common.PacketType;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.messaging.Messenger;
+import org.jetbrains.annotations.NotNull;
 
 public class NetworkManager {
-	private final IodinePlugin plugin = IodinePlugin.getInstance();
+	private final IodinePlugin plugin;
 	private final byte[] oneBuffer = new byte[1];
 	private final byte[] twoBuffer = new byte[2];
 	
-	public NetworkManager() {
+	public NetworkManager(@NotNull IodinePlugin plugin) {
+		this.plugin = plugin;
 		Messenger messenger = Bukkit.getMessenger();
-		messenger.registerOutgoingPluginChannel(plugin, IodineConstants.NETWORK_CHANNEL);
-		messenger.registerIncomingPluginChannel(plugin, IodineConstants.NETWORK_CHANNEL, new PacketListener());
+		String channel = IodineConstants.NETWORK_CHANNEL;
+		messenger.registerOutgoingPluginChannel(plugin, channel);
+		messenger.registerIncomingPluginChannel(plugin, channel, new PacketListener(plugin));
 	}
 	
 	
 	
-	public void send(Player player, PacketType type) {
+	public void send(@NotNull Player player, @NotNull PacketType type) {
 		oneBuffer[0] = (byte) type.ordinal();
 		send(player, oneBuffer);
 	}
 	
-	public void send(Player player, PacketType type, byte value) {
+	public void send(@NotNull Player player, @NotNull PacketType type, byte value) {
 		twoBuffer[0] = (byte) type.ordinal();
 		twoBuffer[1] = value;
 		send(player, twoBuffer);
 	}
 	
-	public void send(Player player, byte[] message) {
-		IodinePlugin.getInstance().getLogger().info("Sending message to " + player.getName()
-				+ " of type " + PacketType.fromOrdinal(message[0]) + ", length: " + message.length);
+	public void send(@NotNull Player player, @NotNull byte[] message) {
+		plugin.logDebug("Sending message of type {0} to {1}", PacketType.fromOrdinal(message[0]), player.getName());
 		player.sendPluginMessage(plugin, IodineConstants.NETWORK_CHANNEL, message);
 	}
 }
