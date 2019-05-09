@@ -25,7 +25,7 @@ public class PacketListener implements PluginMessageListener {
 	public void onPluginMessageReceived(String channel, Player player, byte[] message) {
 		PlayerState state = plugin.getPlayer().getState(player);
 		if (state == PlayerState.INVALID) {
-			plugin.logDebug("Ignoring message from invalid player: {0}", player.getName());
+			plugin.logDebug("Ignoring message from invalid player {0}", player.getName());
 			return;
 		}
 		

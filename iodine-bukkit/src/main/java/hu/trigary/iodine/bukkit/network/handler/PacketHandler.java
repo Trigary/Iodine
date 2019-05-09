@@ -8,19 +8,17 @@ import org.jetbrains.annotations.NotNull;
 
 public abstract class PacketHandler {
 	protected final IodinePlugin plugin;
-	private final PlayerState targetState;
 	
-	protected PacketHandler(@NotNull IodinePlugin plugin, @NotNull PlayerState targetState) {
+	protected PacketHandler(@NotNull IodinePlugin plugin) {
 		this.plugin = plugin;
-		this.targetState = targetState;
 	}
 	
 	
 	
 	@NotNull
 	@Contract(pure = true)
-	public final PlayerState getTargetState() {
-		return targetState;
+	public PlayerState getTargetState() {
+		return PlayerState.MODDED;
 	}
 	
 	public abstract void handle(@NotNull Player player, @NotNull byte[] message);

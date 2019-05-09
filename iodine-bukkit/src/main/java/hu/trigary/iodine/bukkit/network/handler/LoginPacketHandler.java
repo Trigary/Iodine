@@ -7,6 +7,7 @@ import hu.trigary.iodine.common.PacketType;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.Validate;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
@@ -19,7 +20,7 @@ public class LoginPacketHandler extends PacketHandler {
 	private final int serverMinor;
 	
 	public LoginPacketHandler(@NotNull IodinePlugin plugin) {
-		super(plugin, PlayerState.UNKNOWN);
+		super(plugin);
 		
 		serverVersion = plugin.getDescription().getVersion();
 		Validate.isTrue(versionPattern.matcher(serverVersion).matches(), "Version must match the #.#.# format");
@@ -31,6 +32,13 @@ public class LoginPacketHandler extends PacketHandler {
 	}
 	
 	
+	
+	@NotNull
+	@Contract(pure = true)
+	@Override
+	public PlayerState getTargetState() {
+		return PlayerState.UNKNOWN;
+	}
 	
 	@Override
 	public void handle(@NotNull Player player, @NotNull byte[] message) {

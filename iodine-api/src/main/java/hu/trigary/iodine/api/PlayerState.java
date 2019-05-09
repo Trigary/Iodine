@@ -5,14 +5,8 @@ package hu.trigary.iodine.api;
  */
 public enum PlayerState {
 	/**
-	 * The player is yet to log in, but not enough time has
-	 * passed to assume that the player is not using the mod.
-	 */
-	UNKNOWN,
-	
-	/**
-	 * The player has failed to login for some time now,
-	 * assuming that the player is not using the mod.
+	 * The player is yet to log in, assuming that the player is not using the mod.
+	 * Even modded players start out with this state when they join.
 	 */
 	VANILLA,
 	
