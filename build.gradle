@@ -27,6 +27,6 @@ subprojects {
     }
 
     dependencies {
-        compileOnly 'org.jetbrains:annotations:16.0.1'
+        compileOnly 'org.jetbrains:annotations:17.0.0'
     }
 }

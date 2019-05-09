@@ -1,7 +1,8 @@
 package hu.trigary.iodine.bukkit.api;
 
 import hu.trigary.iodine.api.IodineApi;
-import hu.trigary.iodine.api.PlayerState;
+import hu.trigary.iodine.api.gui.IodineGui;
+import hu.trigary.iodine.api.player.IodinePlayer;
 import hu.trigary.iodine.bukkit.IodinePlugin;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Contract;
@@ -19,7 +20,13 @@ public class IodineApiImpl extends IodineApi {
 	@NotNull
 	@Contract(pure = true)
 	@Override
-	public PlayerState getState(@NotNull Player player) {
-		return plugin.getPlayer().getState(player);
+	public IodinePlayer getPlayer(@NotNull Player player) {
+		return plugin.getPlayer(player);
+	}
+	
+	@NotNull
+	@Override
+	public IodineGui createGui() {
+		return plugin.getGui().createGui();
 	}
 }

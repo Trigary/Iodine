@@ -3,7 +3,7 @@ repositories {
 }
 
 dependencies {
-    compile project(':iodine-common')
+    compile project(':iodine-backend')
     compileOnly('org.spigotmc:spigot-api:1.12.2-R0.1-SNAPSHOT')
     compile project(':iodine-api')
 }
@@ -16,5 +16,5 @@ processResources { //TODO copy how forge does this
 }
 
 shadowJar {
-    archiveName = "Iodine-${version}.${extension}"
+    archiveName = "iodine-${version}.${extension}"
 }

@@ -1,7 +1,7 @@
-package hu.trigary.iodine.api;
+package hu.trigary.iodine.api.player;
 
 /**
- * Represents the state of a player in terms of modded-UI support.
+ * Represents the state of a player in terms of modded-GUI support.
  */
 public enum PlayerState {
 	/**

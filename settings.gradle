@@ -1,2 +1,2 @@
 rootProject.name = 'iodine'
-include 'iodine-common', 'iodine-bukkit', 'iodine-api', 'iodine-forge'
+include 'iodine-common', 'iodine-backend', 'iodine-bukkit', 'iodine-api', 'iodine-forge'

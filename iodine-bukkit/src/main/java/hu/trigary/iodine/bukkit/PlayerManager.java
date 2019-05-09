@@ -1,6 +1,6 @@
 package hu.trigary.iodine.bukkit;
 
-import hu.trigary.iodine.api.PlayerState;
+import hu.trigary.iodine.bukkit.api.player.IodinePlayerImpl;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -15,9 +15,11 @@ import java.util.Map;
 import java.util.UUID;
 
 public class PlayerManager implements Listener {
-	private final Map<UUID, PlayerState> players = new HashMap<>();
+	private final Map<UUID, IodinePlayerImpl> players = new HashMap<>();
+	private final IodinePlugin plugin;
 	
 	public PlayerManager(@NotNull IodinePlugin plugin) {
+		this.plugin = plugin;
 		Bukkit.getPluginManager().registerEvents(this, plugin);
 	}
 	
@@ -25,18 +27,18 @@ public class PlayerManager implements Listener {
 	
 	@NotNull
 	@Contract(pure = true)
-	public PlayerState getState(@NotNull Player player) {
-		return players.getOrDefault(player.getUniqueId(), PlayerState.VANILLA);
-	}
-	
-	public void setState(@NotNull Player player, @NotNull PlayerState state) {
-		players.put(player.getUniqueId(), state);
+	public IodinePlayerImpl getPlayer(@NotNull Player player) {
+		return players.computeIfAbsent(player.getUniqueId(),
+				k -> new IodinePlayerImpl(plugin, player));
 	}
 	
 	
 	
 	@EventHandler(priority = EventPriority.HIGHEST)
 	private void onPlayerQuit(PlayerQuitEvent event) {
-		players.remove(event.getPlayer().getUniqueId());
+		IodinePlayerImpl impl = players.remove(event.getPlayer().getUniqueId());
+		if (impl != null) {
+			impl.closeGui();
+		}
 	}
 }

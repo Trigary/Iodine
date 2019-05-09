@@ -1,6 +1,6 @@
 package hu.trigary.iodine.forge;
 
-import hu.trigary.iodine.forge.network.packet.LoginPacket;
+import hu.trigary.iodine.forge.network.packet.out.ClientLoginPacket;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
@@ -26,7 +26,7 @@ public class ServerJoinEventHandler {
 		@SubscribeEvent
 		public void joined(EntityJoinWorldEvent event) {
 			mod.getLogger().info("Joined server, attempting login");
-			mod.getNetwork().send(new LoginPacket(mod.getVersion()));
+			mod.getNetwork().send(new ClientLoginPacket(mod.getVersion()));
 			MinecraftForge.EVENT_BUS.unregister(this);
 		}
 	}

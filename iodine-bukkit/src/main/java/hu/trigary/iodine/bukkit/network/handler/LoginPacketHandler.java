@@ -1,15 +1,16 @@
 package hu.trigary.iodine.bukkit.network.handler;
 
 import com.google.common.base.Charsets;
-import hu.trigary.iodine.api.PlayerState;
+import hu.trigary.iodine.api.player.PlayerState;
 import hu.trigary.iodine.bukkit.IodinePlugin;
-import hu.trigary.iodine.common.PacketType;
+import hu.trigary.iodine.backend.PacketType;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.Validate;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
+import java.nio.ByteBuffer;
 import java.util.Arrays;
 import java.util.regex.Pattern;
 
@@ -37,12 +38,14 @@ public class LoginPacketHandler extends PacketHandler {
 	@Contract(pure = true)
 	@Override
 	public PlayerState getTargetState() {
-		return PlayerState.UNKNOWN;
+		return PlayerState.VANILLA;
 	}
 	
 	@Override
-	public void handle(@NotNull Player player, @NotNull byte[] message) {
-		String clientVersion = new String(message, 1, message.length - 1, Charsets.UTF_8);
+	public void handle(@NotNull Player player, @NotNull ByteBuffer message) {
+		byte[] array = message.array();
+		String clientVersion = new String(array, 1, array.length - 1, Charsets.UTF_8);
+		
 		//if (serverVersion.equals(clientVersion)) {
 		if (serverVersion.equals(clientVersion) || clientVersion.equals("${version}")) {
 			//TODO remove this as soon as placeholders start getting replaced when launching MC from IDE
@@ -80,20 +83,20 @@ public class LoginPacketHandler extends PacketHandler {
 	
 	private void versionMatches(Player player) {
 		plugin.logDebug("Logged in successfully: {0}", player.getName());
-		plugin.getPlayer().setState(player, PlayerState.MODDED);
-		plugin.getNetwork().send(player, PacketType.LOGIN_SUCCESS);
+		plugin.getPlayer(player).setState(PlayerState.MODDED);
+		plugin.getNetwork().send(player, PacketType.SERVER_LOGIN_SUCCESS);
 	}
 	
 	private void outdatedParty(Player player, boolean outdatedClient) {
 		plugin.logDebug("Login failed for: {0} (outdated {1})",
 				player.getName(), outdatedClient ? "client" : "server");
-		plugin.getPlayer().setState(player, PlayerState.INVALID);
-		plugin.getNetwork().send(player, PacketType.LOGIN_FAILED, outdatedClient ? (byte) 0 : 1);
+		plugin.getPlayer(player).setState(PlayerState.INVALID);
+		plugin.getNetwork().send(player, PacketType.SERVER_LOGIN_FAILED, outdatedClient ? (byte) 0 : 1);
 	}
 	
 	private void unexpectedInput(Player player) {
 		plugin.logDebug("Login failed for: {0} (invalid LoginPacket)", player.getName());
-		plugin.getPlayer().setState(player, PlayerState.INVALID);
-		plugin.getNetwork().send(player, PacketType.LOGIN_FAILED, (byte) 0);
+		plugin.getPlayer(player).setState(PlayerState.INVALID);
+		plugin.getNetwork().send(player, PacketType.SERVER_LOGIN_FAILED, (byte) 0);
 	}
 }

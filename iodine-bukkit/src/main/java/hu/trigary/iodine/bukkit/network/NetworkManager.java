@@ -1,17 +1,18 @@
 package hu.trigary.iodine.bukkit.network;
 
 import hu.trigary.iodine.bukkit.IodinePlugin;
-import hu.trigary.iodine.common.IodineConstants;
-import hu.trigary.iodine.common.PacketType;
+import hu.trigary.iodine.backend.IodineConstants;
+import hu.trigary.iodine.backend.PacketType;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.messaging.Messenger;
 import org.jetbrains.annotations.NotNull;
 
+import java.nio.ByteBuffer;
+import java.util.function.Consumer;
+
 public class NetworkManager {
 	private final IodinePlugin plugin;
-	private final byte[] oneBuffer = new byte[1];
-	private final byte[] twoBuffer = new byte[2];
 	
 	public NetworkManager(@NotNull IodinePlugin plugin) {
 		this.plugin = plugin;
@@ -24,17 +25,26 @@ public class NetworkManager {
 	
 	
 	public void send(@NotNull Player player, @NotNull PacketType type) {
-		oneBuffer[0] = (byte) type.ordinal();
-		send(player, oneBuffer);
+		send(player, new byte[]{(byte) type.ordinal()});
 	}
 	
 	public void send(@NotNull Player player, @NotNull PacketType type, byte value) {
-		twoBuffer[0] = (byte) type.ordinal();
-		twoBuffer[1] = value;
-		send(player, twoBuffer);
+		send(player, new byte[]{(byte) type.ordinal(), value});
 	}
 	
-	public void send(@NotNull Player player, @NotNull byte[] message) {
+	public void send(@NotNull Player player, @NotNull PacketType type, int value) {
+		send(player, type, 4, buffer -> buffer.putInt(value));
+	}
+	
+	public void send(@NotNull Player player, @NotNull PacketType type,
+			int contentsLength, @NotNull Consumer<ByteBuffer> contentProvider) {
+		ByteBuffer buffer = ByteBuffer.wrap(new byte[contentsLength + 1]);
+		buffer.put((byte) type.ordinal());
+		contentProvider.accept(buffer);
+		send(player, buffer.array());
+	}
+	
+	private void send(@NotNull Player player, @NotNull byte[] message) {
 		plugin.logDebug("Sending message of type {0} to {1}", PacketType.fromOrdinal(message[0]), player.getName());
 		player.sendPluginMessage(plugin, IodineConstants.NETWORK_CHANNEL, message);
 	}

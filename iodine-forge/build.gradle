@@ -25,7 +25,7 @@ minecraft {
 }
 
 dependencies {
-    compile project(':iodine-common')
+    compile project(':iodine-backend')
 }
 
 processResources {
@@ -50,5 +50,5 @@ processResources {
 }
 
 shadowJar {
-    archiveName = "Iodine-${version}.${extension}"
+    archiveName = "iodine-${version}.${extension}"
 }
