@@ -8,9 +8,18 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * The implementation of {@link IodineApi}.
+ */
 public class IodineApiImpl extends IodineApi {
 	private final IodinePlugin plugin;
 	
+	/**
+	 * Creates a new instance.
+	 * Should only be called once, by {@link IodinePlugin}.
+	 *
+	 * @param plugin the plugin instance
+	 */
 	public IodineApiImpl(@NotNull IodinePlugin plugin) {
 		this.plugin = plugin;
 	}
@@ -27,6 +36,6 @@ public class IodineApiImpl extends IodineApi {
 	@NotNull
 	@Override
 	public IodineGui createGui() {
-		return plugin.getGui().createGui();
+		return plugin.getGui().create();
 	}
 }

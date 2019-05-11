@@ -1,6 +1,5 @@
 package hu.trigary.iodine.forge.network;
 
-import hu.trigary.iodine.backend.IodineConstants;
 import hu.trigary.iodine.backend.PacketType;
 import hu.trigary.iodine.forge.IodineMod;
 import hu.trigary.iodine.forge.network.packet.*;
@@ -22,7 +21,7 @@ public class NetworkManager {
 	
 	public NetworkManager(@NotNull IodineMod mod) {
 		this.mod = mod;
-		network = NetworkRegistry.INSTANCE.newSimpleChannel(IodineConstants.NETWORK_CHANNEL);
+		network = NetworkRegistry.INSTANCE.newSimpleChannel(PacketType.NETWORK_CHANNEL);
 		
 		registerOut(PacketType.CLIENT_LOGIN, ClientLoginPacket.class);
 		registerIn(PacketType.SERVER_LOGIN_SUCCESS, ServerLoginSuccessPacket.class, new ServerLoginSuccessPacket.Handler(mod));
@@ -46,12 +45,12 @@ public class NetworkManager {
 	
 	
 	private void registerOut(@NotNull PacketType type, @NotNull Class<? extends OutPacket> packet) {
-		network.registerMessage(DummyMessageHandler.INSTANCE, packet, type.ordinal(), Side.SERVER);
+		network.registerMessage(DummyMessageHandler.INSTANCE, packet, type.getId(), Side.SERVER);
 	}
 	
 	private <T extends InPacket> void registerIn(@NotNull PacketType type, @NotNull Class<T> packet,
 			@NotNull IMessageHandler<T, ? extends OutPacket> handler) {
-		network.registerMessage(handler, packet, type.ordinal(), Side.CLIENT);
+		network.registerMessage(handler, packet, type.getId(), Side.CLIENT);
 	}
 	
 	

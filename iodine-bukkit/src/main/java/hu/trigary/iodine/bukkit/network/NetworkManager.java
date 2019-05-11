@@ -1,7 +1,6 @@
 package hu.trigary.iodine.bukkit.network;
 
 import hu.trigary.iodine.bukkit.IodinePlugin;
-import hu.trigary.iodine.backend.IodineConstants;
 import hu.trigary.iodine.backend.PacketType;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -11,41 +10,82 @@ import org.jetbrains.annotations.NotNull;
 import java.nio.ByteBuffer;
 import java.util.function.Consumer;
 
+/**
+ * The manager which sets up the messaging channel and allows packets to be sent.
+ */
 public class NetworkManager {
 	private final IodinePlugin plugin;
 	
+	/**
+	 * Creates a new instance.
+	 * Should only be called once, by {@link IodinePlugin}.
+	 *
+	 * @param plugin the plugin instance
+	 */
 	public NetworkManager(@NotNull IodinePlugin plugin) {
 		this.plugin = plugin;
 		Messenger messenger = Bukkit.getMessenger();
-		String channel = IodineConstants.NETWORK_CHANNEL;
+		String channel = PacketType.NETWORK_CHANNEL;
 		messenger.registerOutgoingPluginChannel(plugin, channel);
 		messenger.registerIncomingPluginChannel(plugin, channel, new PacketListener(plugin));
 	}
 	
 	
 	
+	/**
+	 * Sends an empty packet of the specified type to the specified client.
+	 *
+	 * @param player the recipient
+	 * @param type the type of the packet
+	 */
 	public void send(@NotNull Player player, @NotNull PacketType type) {
-		send(player, new byte[]{(byte) type.ordinal()});
+		send(player, new byte[]{type.getId()});
 	}
 	
+	/**
+	 * Sends a packet of the specified type to the specified client,
+	 * with a single byte as its payload.
+	 *
+	 * @param player the recipient
+	 * @param type the type of the packet
+	 * @param value the payload of the packet
+	 */
 	public void send(@NotNull Player player, @NotNull PacketType type, byte value) {
-		send(player, new byte[]{(byte) type.ordinal(), value});
+		send(player, new byte[]{type.getId(), value});
 	}
 	
+	/**
+	 * Sends a packet of the specified type to the specified client,
+	 * with a single int as its payload.
+	 *
+	 * @param player the recipient
+	 * @param type the type of the packet
+	 * @param value the payload of the packet
+	 */
 	public void send(@NotNull Player player, @NotNull PacketType type, int value) {
 		send(player, type, 4, buffer -> buffer.putInt(value));
 	}
 	
+	/**
+	 * Sends a packet of the specified type to the specified client.
+	 * The payload is set by a {@link Consumer}, which can put
+	 * {@code contentsLength} many bytes into the passed {@link ByteBuffer}.
+	 *
+	 * @param player the recipient
+	 * @param type the type of the packet
+	 * @param contentsLength the length of the payload, in bytes
+	 * @param contentProvider the action which sets the payload
+	 */
 	public void send(@NotNull Player player, @NotNull PacketType type,
 			int contentsLength, @NotNull Consumer<ByteBuffer> contentProvider) {
 		ByteBuffer buffer = ByteBuffer.wrap(new byte[contentsLength + 1]);
-		buffer.put((byte) type.ordinal());
+		buffer.put(type.getId());
 		contentProvider.accept(buffer);
 		send(player, buffer.array());
 	}
 	
 	private void send(@NotNull Player player, @NotNull byte[] message) {
-		plugin.logDebug("Sending message of type {0} to {1}", PacketType.fromOrdinal(message[0]), player.getName());
-		player.sendPluginMessage(plugin, IodineConstants.NETWORK_CHANNEL, message);
+		plugin.logDebug("Sending message of type {0} to {1}", PacketType.fromId(message[0]), player.getName());
+		player.sendPluginMessage(plugin, PacketType.NETWORK_CHANNEL, message);
 	}
 }

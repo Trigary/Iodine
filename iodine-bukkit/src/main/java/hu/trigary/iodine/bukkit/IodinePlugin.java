@@ -13,16 +13,14 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.logging.Level;
 
+/**
+ * The Iodine plugin's main class.
+ */
 public class IodinePlugin extends JavaPlugin {
 	private static final boolean DEBUG_LOG = true;
 	private NetworkManager networkManager;
 	private PlayerManager playerManager;
 	private GuiManager guiManager;
-	
-	@Contract("_ -> fail")
-	public static void main(String[] args) {
-		throw new AssertionError("Fake entry points shouldn't be used");
-	}
 	
 	@Override
 	public void onEnable() {
@@ -38,23 +36,39 @@ public class IodinePlugin extends JavaPlugin {
 	
 	@Override
 	public void onDisable() {
-		//TODO close all GUIs, as late as possible (so other plugins' onDisable can still act upon them)
+		guiManager.closeAll();
 	}
 	
 	
 	
+	/**
+	 * Gets the network manager instance.
+	 *
+	 * @return the network manager
+	 */
 	@NotNull
 	@Contract(pure = true)
 	public NetworkManager getNetwork() {
 		return networkManager;
 	}
 	
+	/**
+	 * Gets the data associated with the specified player.
+	 *
+	 * @param player the player to get data about
+	 * @return the data associated with the player
+	 */
 	@NotNull
 	@Contract(pure = true)
 	public IodinePlayerImpl getPlayer(@NotNull Player player) {
 		return playerManager.getPlayer(player);
 	}
 	
+	/**
+	 * Gets the GUI manager instance.
+	 *
+	 * @return the GUI manager
+	 */
 	@NotNull
 	@Contract(pure = true)
 	public GuiManager getGui() {
@@ -63,12 +77,24 @@ public class IodinePlugin extends JavaPlugin {
 	
 	
 	
+	/**
+	 * Logs the specified message if debug logging is enabled.
+	 *
+	 * @param message the message to log
+	 * @param params the message's parameters
+	 */
 	public void logDebug(String message, Object... params) {
 		if (DEBUG_LOG) {
 			getLogger().log(Level.INFO, message, params);
 		}
 	}
 	
+	/**
+	 * Logs the specified message if debug logging is enabled.
+	 *
+	 * @param message the message to log
+	 * @param cause the {@link Throwable} associated with the log message
+	 */
 	public void logDebug(String message, Throwable cause) {
 		if (DEBUG_LOG) {
 			getLogger().log(Level.INFO, message, cause);

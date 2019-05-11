@@ -4,6 +4,7 @@ import com.google.common.base.Charsets;
 import hu.trigary.iodine.api.player.PlayerState;
 import hu.trigary.iodine.bukkit.IodinePlugin;
 import hu.trigary.iodine.backend.PacketType;
+import hu.trigary.iodine.bukkit.network.PacketListener;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.Validate;
 import org.bukkit.entity.Player;
@@ -14,12 +15,21 @@ import java.nio.ByteBuffer;
 import java.util.Arrays;
 import java.util.regex.Pattern;
 
+/**
+ * The handler of {@link PacketType#CLIENT_LOGIN}.
+ */
 public class LoginPacketHandler extends PacketHandler {
 	private final Pattern versionPattern = Pattern.compile("\\d+.\\d+.\\d+");
 	private final String serverVersion;
 	private final int serverMajor;
 	private final int serverMinor;
 	
+	/**
+	 * Creates a new instance.
+	 * Should only be called once, by {@link PacketListener}.
+	 *
+	 * @param plugin the plugin instance
+	 */
 	public LoginPacketHandler(@NotNull IodinePlugin plugin) {
 		super(plugin);
 		

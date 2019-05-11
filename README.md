@@ -13,7 +13,7 @@ This project consists of multiple subprojects, each with their own roles:
  - **iodine-api:** the API that plugin developers use, included in *iodine-bukkit*
  - **iodine-forge:** the Forge mod part of the project
 
-To recap which modules depends on which:
+To recap which modules depend on which:
 
  - **iodine-backend:** common
  - **iodine-bukkit:** backend + api (inherited: common)
