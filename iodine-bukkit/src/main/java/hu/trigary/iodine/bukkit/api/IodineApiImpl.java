@@ -36,6 +36,6 @@ public class IodineApiImpl extends IodineApi {
 	@NotNull
 	@Override
 	public IodineGui createGui() {
-		return plugin.getGui().create();
+		return plugin.getGui().createGui();
 	}
 }

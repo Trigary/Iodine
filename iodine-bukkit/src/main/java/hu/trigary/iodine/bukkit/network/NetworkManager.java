@@ -55,18 +55,6 @@ public class NetworkManager {
 	}
 	
 	/**
-	 * Sends a packet of the specified type to the specified client,
-	 * with a single int as its payload.
-	 *
-	 * @param player the recipient
-	 * @param type the type of the packet
-	 * @param value the payload of the packet
-	 */
-	public void send(@NotNull Player player, @NotNull PacketType type, int value) {
-		send(player, type, 4, buffer -> buffer.putInt(value));
-	}
-	
-	/**
 	 * Sends a packet of the specified type to the specified client.
 	 * The payload is set by a {@link Consumer}, which can put
 	 * {@code contentsLength} many bytes into the passed {@link ByteBuffer}.
@@ -84,7 +72,14 @@ public class NetworkManager {
 		send(player, buffer.array());
 	}
 	
-	private void send(@NotNull Player player, @NotNull byte[] message) {
+	/**
+	 * Sends the specified payload to the specified client.
+	 * The payload's first byte must be a {@link PacketType} ID.
+	 *
+	 * @param player the recipient
+	 * @param message the payload
+	 */
+	public void send(@NotNull Player player, @NotNull byte[] message) {
 		plugin.logDebug("Sending message of type {0} to {1}", PacketType.fromId(message[0]), player.getName());
 		player.sendPluginMessage(plugin, PacketType.NETWORK_CHANNEL, message);
 	}

@@ -1,6 +1,7 @@
 package hu.trigary.iodine.forge.network.packet.in;
 
 import hu.trigary.iodine.forge.IodineMod;
+import hu.trigary.iodine.forge.network.packet.out.OutPacket;
 import io.netty.buffer.ByteBuf;
 import org.jetbrains.annotations.NotNull;
 
@@ -14,8 +15,9 @@ public class ServerLoginSuccessPacket extends InPacket {
 		}
 		
 		@Override
-		protected void handle(ServerLoginSuccessPacket message) {
+		protected OutPacket handle(ServerLoginSuccessPacket message) {
 			mod.getLogger().info("Server accepted login");
+			return null;
 		}
 	}
 }

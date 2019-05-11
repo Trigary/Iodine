@@ -1,19 +1,21 @@
 package hu.trigary.iodine.forge.network.packet.in;
 
 import hu.trigary.iodine.forge.IodineMod;
+import hu.trigary.iodine.forge.network.packet.out.OutPacket;
 import io.netty.buffer.ByteBuf;
 import org.jetbrains.annotations.NotNull;
 
-public class ServerGuiChangePacket extends GuiInPacket {
-	private int elementId;
-	private byte[] contents;
+import java.util.Arrays;
+
+public class ServerGuiChangePacket extends InPacket {
+	private int guiId;
+	private byte[] data;
 	
 	@Override
-	protected void deserializeInner(ByteBuf buffer) {
-		elementId = buffer.readInt();
-		int length = buffer.readInt();
-		contents = new byte[buffer.readInt()];
-		buffer.readBytes(contents, 0, length);
+	protected void deserialize(ByteBuf buffer) {
+		guiId = buffer.readInt();
+		data = new byte[buffer.readableBytes()];
+		buffer.readBytes(data);
 	}
 	
 	public static class Handler extends InPacket.Handler<ServerGuiChangePacket> {
@@ -22,8 +24,10 @@ public class ServerGuiChangePacket extends GuiInPacket {
 		}
 		
 		@Override
-		protected void handle(ServerGuiChangePacket message) {
-			//TODO
+		protected OutPacket handle(ServerGuiChangePacket message) {
+			mod.getLogger().info("Received change data: " + Arrays.toString(message.data));
+			//TODO use data
+			return null;
 		}
 	}
 }

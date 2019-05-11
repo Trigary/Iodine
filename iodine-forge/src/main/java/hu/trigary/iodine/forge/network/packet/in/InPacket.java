@@ -23,10 +23,9 @@ public abstract class InPacket extends BasePacket {
 		
 		@Override
 		public final OutPacket onMessage(REQ message, MessageContext context) {
-			handle(message);
-			return null;
+			return handle(message);
 		}
 		
-		protected abstract void handle(REQ message);
+		protected abstract OutPacket handle(REQ message);
 	}
 }

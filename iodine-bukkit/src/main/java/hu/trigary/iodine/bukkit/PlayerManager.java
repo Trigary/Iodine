@@ -1,6 +1,5 @@
 package hu.trigary.iodine.bukkit;
 
-import hu.trigary.iodine.api.player.PlayerState;
 import hu.trigary.iodine.bukkit.api.player.IodinePlayerImpl;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
@@ -64,9 +63,9 @@ public class PlayerManager implements Listener {
 	@EventHandler(priority = EventPriority.HIGHEST)
 	private void onPlayerQuit(PlayerQuitEvent event) {
 		IodinePlayerImpl player = players.get(event.getPlayer().getUniqueId());
-		//can't call remove yet: closeOpenGui requires the instance to be present in the Map
-		if (player.getState() == PlayerState.MODDED) {
-			player.closeOpenGui();
+		//can't call remove yet: the gui close callback might still require the instance
+		if (player.getOpenGui() != null) {
+			player.getOpenGui().closeForNoPacket(player);
 		}
 		players.remove(event.getPlayer().getUniqueId());
 	}

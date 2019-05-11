@@ -16,21 +16,21 @@ public enum PacketType {
 	 * Sent by the client as soon as possible to indicate that it has the mod installed.
 	 * The payload is the client's mod version string.
 	 */
-	CLIENT_LOGIN(0x01),
+	CLIENT_LOGIN(0x00),
 	
 	/**
 	 * Sent as a reply to {@link #CLIENT_LOGIN}, indicating that the client's mod
 	 * and the server's plugin are compatible protocol version-wise.
 	 * There is no payload.
 	 */
-	SERVER_LOGIN_SUCCESS(0x02),
+	SERVER_LOGIN_SUCCESS(0x01),
 	
 	/**
 	 * Sent as a reply to {@link #CLIENT_LOGIN}, indicating that the client's mod
 	 * and the server's plugin are incompatible protocol version-wise.
 	 * Contains whether the client or the server is using the older version.
 	 */
-	SERVER_LOGIN_FAILED(0x03),
+	SERVER_LOGIN_FAILED(0x02),
 	
 	/**
 	 * Instructs the client to open the GUI specified in the payload.
@@ -67,7 +67,6 @@ public enum PacketType {
 	private static final PacketType[] VALUES;
 	
 	static {
-		//not using #ordinal() to make the IDs independent of declaration order (future compatibility)
 		VALUES = new PacketType[Arrays.stream(values())
 				.mapToInt(PacketType::getUnsignedId)
 				.max().orElse(-1) + 1];
@@ -82,6 +81,7 @@ public enum PacketType {
 	private final byte id;
 	
 	PacketType(int id) {
+		//not using #ordinal() for independence of declaration order (future compatibility)
 		this.id = (byte) id;
 	}
 	

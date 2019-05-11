@@ -43,7 +43,7 @@ public class IodinePlugin extends JavaPlugin implements Listener {
 	private void onDisable(PluginDisableEvent event) {
 		//this fires before the plugin is disabled, therefore eg. packets can still be sent
 		if (event.getPlugin() == this) {
-			guiManager.closeAll();
+			guiManager.closeAllGuiInstances();
 		}
 	}
 	

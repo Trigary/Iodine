@@ -8,6 +8,7 @@ import org.jetbrains.annotations.NotNull;
 public class IodineGui extends GuiScreen {
 	private final IodineMod mod;
 	private final int id;
+	private boolean serverClosing;
 	
 	public IodineGui(@NotNull IodineMod mod, int id) {
 		this.mod = mod;
@@ -26,13 +27,20 @@ public class IodineGui extends GuiScreen {
 	public void onGuiClosed() {
 		super.onGuiClosed();
 		
-		//TODO this also fires when the server tells me to close it -> set a flag
-		mod.getNetwork().send(new ClientGuiClosePacket(id));
+		if (!serverClosing) {
+			mod.getNetwork().send(new ClientGuiClosePacket(id));
+		}
 	}
 	
 	@Override
 	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
 		super.drawScreen(mouseX, mouseY, partialTicks);
 		drawDefaultBackground();
+	}
+	
+	
+	
+	public void flagServerClosing() {
+		serverClosing = true;
 	}
 }

@@ -19,6 +19,7 @@ public class ServerJoinEventHandler {
 	
 	@SubscribeEvent
 	public void connected(FMLNetworkEvent.ClientConnectedToServerEvent event) {
+		//packets can't yet be sent here
 		Minecraft.getMinecraft().addScheduledTask(() -> MinecraftForge.EVENT_BUS.register(new InnerHandler()));
 	}
 	
@@ -27,7 +28,7 @@ public class ServerJoinEventHandler {
 		public void joined(EntityJoinWorldEvent event) {
 			mod.getLogger().info("Joined server, attempting login");
 			mod.getNetwork().send(new ClientLoginPacket(mod.getVersion()));
-			MinecraftForge.EVENT_BUS.unregister(this);
+			MinecraftForge.EVENT_BUS.unregister(this); //don't let this listener fire multiple times
 		}
 	}
 }

@@ -3,21 +3,20 @@ package hu.trigary.iodine.forge.network.packet.out;
 import io.netty.buffer.ByteBuf;
 import org.jetbrains.annotations.NotNull;
 
-public class ClientGuiChangePacket extends GuiOutPacket { //TODO
-	private final int elementId;
-	private final byte[] contents;
+public class ClientGuiChangePacket extends OutPacket {
+	private final int guiId;
+	private final byte[] data;
 	
-	public ClientGuiChangePacket(int guiId, int elementId, @NotNull byte[] contents) {
-		super(guiId);
-		this.elementId = elementId;
+	public ClientGuiChangePacket(int guiId, @NotNull byte[] data) {
+		this.guiId = guiId;
 		//noinspection AssignmentOrReturnOfFieldWithMutableType
-		this.contents = contents;
+		this.data = data;
 	}
 	
 	@Override
-	protected void serializeInner(ByteBuf buffer) {
-		buffer.writeInt(elementId);
-		buffer.writeInt(contents.length);
-		buffer.writeBytes(contents);
+	protected void serialize(ByteBuf buffer) {
+		buffer.writeInt(guiId);
+		buffer.writeInt(data.length);
+		buffer.writeBytes(data);
 	}
 }

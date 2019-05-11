@@ -1,6 +1,7 @@
 package hu.trigary.iodine.forge.network.packet.in;
 
 import hu.trigary.iodine.forge.IodineMod;
+import hu.trigary.iodine.forge.network.packet.out.OutPacket;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.text.TextComponentString;
@@ -21,7 +22,7 @@ public class ServerLoginFailedPacket extends InPacket {
 		}
 		
 		@Override
-		protected void handle(ServerLoginFailedPacket message) {
+		protected OutPacket handle(ServerLoginFailedPacket message) {
 			mod.getLogger().info("Server rejected login: outdated "
 					+ (message.outdatedClient ? "client" : "server"));
 			
@@ -37,6 +38,7 @@ public class ServerLoginFailedPacket extends InPacket {
 			
 			Minecraft minecraft = Minecraft.getMinecraft();
 			minecraft.addScheduledTask(() -> minecraft.player.sendMessage(textComponent));
+			return null;
 		}
 	}
 }
