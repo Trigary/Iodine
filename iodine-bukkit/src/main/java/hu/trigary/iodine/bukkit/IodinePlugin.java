@@ -6,6 +6,10 @@ import hu.trigary.iodine.bukkit.api.player.IodinePlayerImpl;
 import hu.trigary.iodine.bukkit.network.NetworkManager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
+import org.bukkit.event.server.PluginDisableEvent;
 import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.Contract;
@@ -16,7 +20,7 @@ import java.util.logging.Level;
 /**
  * The Iodine plugin's main class.
  */
-public class IodinePlugin extends JavaPlugin {
+public class IodinePlugin extends JavaPlugin implements Listener {
 	private static final boolean DEBUG_LOG = true;
 	private NetworkManager networkManager;
 	private PlayerManager playerManager;
@@ -27,6 +31,7 @@ public class IodinePlugin extends JavaPlugin {
 		IodineApiImpl api = new IodineApiImpl(this);
 		Bukkit.getServicesManager().register(IodineApi.class, api, this, ServicePriority.Normal);
 		
+		Bukkit.getPluginManager().registerEvents(this, this);
 		networkManager = new NetworkManager(this);
 		playerManager = new PlayerManager(this);
 		guiManager = new GuiManager(this);
@@ -34,9 +39,12 @@ public class IodinePlugin extends JavaPlugin {
 		Bukkit.getPluginManager().registerEvents(new TestCommandListener(), this);
 	}
 	
-	@Override
-	public void onDisable() {
-		guiManager.closeAll();
+	@EventHandler(priority = EventPriority.LOWEST)
+	private void onDisable(PluginDisableEvent event) {
+		//this fires before the plugin is disabled, therefore eg. messages can still be sent
+		if (event.getPlugin() == this) {
+			guiManager.closeAll();
+		}
 	}
 	
 	

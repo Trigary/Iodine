@@ -68,12 +68,14 @@ public enum PacketType {
 	
 	static {
 		//not using #ordinal() to make the IDs independent of declaration order (future compatibility)
-		VALUES = new PacketType[Arrays.stream(values()).mapToInt(PacketType::getId).max().orElse(0)];
+		VALUES = new PacketType[Arrays.stream(values())
+				.mapToInt(PacketType::getUnsignedId)
+				.max().orElse(-1) + 1];
 		Arrays.stream(values()).forEach(type -> {
-			if (VALUES[type.getId()] != null) {
+			if (VALUES[type.getUnsignedId()] != null) {
 				throw new AssertionError("Multiple PacketTypes must not share the same ID");
 			}
-			VALUES[type.getId()] = type;
+			VALUES[type.getUnsignedId()] = type;
 		});
 	}
 	
@@ -86,12 +88,21 @@ public enum PacketType {
 	
 	
 	/**
+	 * Gets the packet ID, which has the highest unsigned value.
+	 *
+	 * @return the value of the highest unsigned packet ID
+	 */
+	@Contract(pure = true)
+	public static int getHighestId() {
+		return VALUES.length - 1;
+	}
+	
+	/**
 	 * Gets an enum value based on the specified id.
 	 * Returns null if no matching enum value was found.
 	 *
-	 * @param id the id to search for
+	 * @param id the ID to search for
 	 * @return the associated enum value or null, if none were found
-	 * @see #getId()
 	 */
 	@Nullable
 	@Contract(pure = true)
@@ -101,13 +112,24 @@ public enum PacketType {
 	}
 	
 	/**
-	 * Gets the id of this enum value.
+	 * Gets the ID of this enum value.
 	 *
-	 * @return the id of this enum value
-	 * @see #fromId(byte)
+	 * @return the ID of this enum value
 	 */
 	@Contract(pure = true)
 	public byte getId() {
 		return id;
+	}
+	
+	/**
+	 * Gets the ID of this enum value,
+	 * when interpreted as an unsigned integer.
+	 *
+	 * @return the ID of this enum value
+	 * @see #fromId(byte)
+	 */
+	@Contract(pure = true)
+	public int getUnsignedId() {
+		return id & 0xFF;
 	}
 }

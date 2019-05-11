@@ -26,7 +26,7 @@ public class IodineGui extends GuiScreen {
 	public void onGuiClosed() {
 		super.onGuiClosed();
 		
-		//TODO this probably also fires when the server tells me to close it
+		//TODO this also fires when the server tells me to close it -> set a flag
 		mod.getNetwork().send(new ClientGuiClosePacket(id));
 	}
 	

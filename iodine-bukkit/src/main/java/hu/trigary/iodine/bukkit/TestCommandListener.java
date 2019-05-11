@@ -1,6 +1,7 @@
 package hu.trigary.iodine.bukkit;
 
 import hu.trigary.iodine.api.IodineApi;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
@@ -18,9 +19,15 @@ public class TestCommandListener implements Listener {
 		}
 		
 		event.setCancelled(true);
+		Player player = event.getPlayer();
+		if (!api.isModded(player)) {
+			player.sendMessage("You are not modded!");
+			return;
+		}
+		
 		api.createGui()
 				.setOpenAction((gui, p) -> p.sendMessage("You opened a GUI"))
 				.setCloseAction((gui, p) -> p.sendMessage("You closed a GUI"))
-				.openFor(event.getPlayer());
+				.openFor(player);
 	}
 }

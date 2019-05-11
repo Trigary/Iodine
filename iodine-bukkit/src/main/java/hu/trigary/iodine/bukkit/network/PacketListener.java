@@ -19,8 +19,7 @@ import java.nio.ByteBuffer;
  */
 public class PacketListener implements PluginMessageListener {
 	private final IodinePlugin plugin;
-	private final PacketType[] types = PacketType.values();
-	private final PacketHandler[] handlers = new PacketHandler[types.length];
+	private final PacketHandler[] handlers = new PacketHandler[PacketType.getHighestId() + 1];
 	
 	/**
 	 * Creates a new instance.
@@ -30,9 +29,9 @@ public class PacketListener implements PluginMessageListener {
 	 */
 	public PacketListener(@NotNull IodinePlugin plugin) {
 		this.plugin = plugin;
-		handlers[PacketType.CLIENT_LOGIN.getId()] = new LoginPacketHandler(plugin);
-		handlers[PacketType.CLIENT_GUI_CLOSE.getId()] = new GuiClosePacketHandler(plugin);
-		handlers[PacketType.CLIENT_GUI_CHANGE.getId()] = new GuiChangePacketHandler(plugin);
+		handlers[PacketType.CLIENT_LOGIN.getUnsignedId()] = new LoginPacketHandler(plugin);
+		handlers[PacketType.CLIENT_GUI_CLOSE.getUnsignedId()] = new GuiClosePacketHandler(plugin);
+		handlers[PacketType.CLIENT_GUI_CHANGE.getUnsignedId()] = new GuiChangePacketHandler(plugin);
 	}
 	
 	
@@ -58,10 +57,16 @@ public class PacketListener implements PluginMessageListener {
 			return;
 		}
 		
-		PacketHandler handler = handlers[type.getId()];
-		if (handler == null || handler.getTargetState() != state) {
+		PacketHandler handler = handlers[type.getUnsignedId()];
+		if (handler == null) {
 			plugin.logDebug("Received message with invalid type ({0}) from {1}, ignoring player", type, player.getName());
 			plugin.getPlayer(player).setState(PlayerState.INVALID);
+			return;
+		}
+		
+		if (handler.getTargetState() != state) {
+			plugin.logDebug("Received message of type {0} from {1} with (invalid) state: {2}",
+					type, player.getName(), state);
 			return;
 		}
 		

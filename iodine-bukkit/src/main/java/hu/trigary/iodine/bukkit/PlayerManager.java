@@ -1,5 +1,6 @@
 package hu.trigary.iodine.bukkit;
 
+import hu.trigary.iodine.api.player.PlayerState;
 import hu.trigary.iodine.bukkit.api.player.IodinePlayerImpl;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
@@ -34,6 +35,7 @@ public class PlayerManager implements Listener {
 	public PlayerManager(@NotNull IodinePlugin plugin) {
 		this.plugin = plugin;
 		Bukkit.getPluginManager().registerEvents(this, plugin);
+		Bukkit.getOnlinePlayers().forEach(p -> onPlayerJoin(new PlayerJoinEvent(p, null)));
 	}
 	
 	
@@ -63,7 +65,9 @@ public class PlayerManager implements Listener {
 	private void onPlayerQuit(PlayerQuitEvent event) {
 		IodinePlayerImpl player = players.get(event.getPlayer().getUniqueId());
 		//can't call remove yet: closeOpenGui requires the instance to be present in the Map
-		player.closeOpenGui();
+		if (player.getState() == PlayerState.MODDED) {
+			player.closeOpenGui();
+		}
 		players.remove(event.getPlayer().getUniqueId());
 	}
 }
