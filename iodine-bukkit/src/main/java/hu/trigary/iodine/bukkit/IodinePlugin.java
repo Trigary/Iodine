@@ -39,9 +39,9 @@ public class IodinePlugin extends JavaPlugin implements Listener {
 		Bukkit.getPluginManager().registerEvents(new TestCommandListener(), this);
 	}
 	
-	@EventHandler(priority = EventPriority.LOWEST)
+	@EventHandler(priority = EventPriority.HIGHEST)
 	private void onDisable(PluginDisableEvent event) {
-		//this fires before the plugin is disabled, therefore eg. messages can still be sent
+		//this fires before the plugin is disabled, therefore eg. packets can still be sent
 		if (event.getPlugin() == this) {
 			guiManager.closeAll();
 		}

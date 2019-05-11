@@ -24,8 +24,6 @@ public abstract class PacketHandler {
 	/**
 	 * Gets the state that players must be in when they send a
 	 * message of {@link PacketType} associated with this handler.
-	 * If the returned value does not match the sender's state,
-	 * then the sender will become {@link PlayerState#INVALID}.
 	 *
 	 * @return the valid state of the sender
 	 */
