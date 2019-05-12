@@ -1,13 +1,12 @@
-package hu.trigary.iodine.bukkit.api.gui;
+package hu.trigary.iodine.bukkit.gui;
 
 import hu.trigary.iodine.api.gui.IodineGui;
 import hu.trigary.iodine.api.gui.element.GuiElement;
 import hu.trigary.iodine.backend.PacketType;
 import hu.trigary.iodine.bukkit.IodinePlugin;
-import hu.trigary.iodine.bukkit.GuiManager;
-import hu.trigary.iodine.bukkit.api.gui.element.GuiElementImpl;
-import hu.trigary.iodine.bukkit.api.player.IodinePlayerImpl;
+import hu.trigary.iodine.bukkit.gui.element.GuiElementImpl;
 import hu.trigary.iodine.bukkit.network.NetworkManager;
+import hu.trigary.iodine.bukkit.player.IodinePlayerImpl;
 import org.apache.commons.lang.Validate;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Contract;

@@ -1,10 +1,9 @@
-package hu.trigary.iodine.bukkit.api.player;
+package hu.trigary.iodine.bukkit.player;
 
 import hu.trigary.iodine.api.player.IodinePlayer;
 import hu.trigary.iodine.api.player.PlayerState;
 import hu.trigary.iodine.bukkit.IodinePlugin;
-import hu.trigary.iodine.bukkit.PlayerManager;
-import hu.trigary.iodine.bukkit.api.gui.IodineGuiImpl;
+import hu.trigary.iodine.bukkit.gui.IodineGuiImpl;
 import hu.trigary.iodine.bukkit.network.PacketListener;
 import hu.trigary.iodine.bukkit.network.handler.LoginPacketHandler;
 import org.apache.commons.lang.Validate;

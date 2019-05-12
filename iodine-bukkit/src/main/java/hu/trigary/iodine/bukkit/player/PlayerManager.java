@@ -1,6 +1,6 @@
-package hu.trigary.iodine.bukkit;
+package hu.trigary.iodine.bukkit.player;
 
-import hu.trigary.iodine.bukkit.api.player.IodinePlayerImpl;
+import hu.trigary.iodine.bukkit.IodinePlugin;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;

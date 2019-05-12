@@ -1,9 +1,9 @@
-package hu.trigary.iodine.bukkit.api.gui.element;
+package hu.trigary.iodine.bukkit.gui.element;
 
 import com.google.common.base.Charsets;
 import hu.trigary.iodine.api.gui.element.TextGuiElement;
 import hu.trigary.iodine.backend.GuiElementType;
-import hu.trigary.iodine.bukkit.api.gui.IodineGuiImpl;
+import hu.trigary.iodine.bukkit.gui.IodineGuiImpl;
 import org.apache.commons.lang.Validate;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;

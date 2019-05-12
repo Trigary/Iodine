@@ -1,6 +1,6 @@
-package hu.trigary.iodine.forge.network.packet.out;
+package hu.trigary.iodine.forge.network.out;
 
-import hu.trigary.iodine.forge.network.packet.BasePacket;
+import hu.trigary.iodine.forge.network.BasePacket;
 import io.netty.buffer.ByteBuf;
 
 public abstract class OutPacket extends BasePacket {

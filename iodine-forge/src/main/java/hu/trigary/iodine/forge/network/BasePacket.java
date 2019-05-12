@@ -1,4 +1,4 @@
-package hu.trigary.iodine.forge.network.packet;
+package hu.trigary.iodine.forge.network;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;

@@ -1,6 +1,6 @@
 package hu.trigary.iodine.forge;
 
-import hu.trigary.iodine.forge.network.packet.out.ClientLoginPacket;
+import hu.trigary.iodine.forge.network.out.ClientLoginPacket;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;

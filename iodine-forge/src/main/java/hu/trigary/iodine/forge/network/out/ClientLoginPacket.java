@@ -1,4 +1,4 @@
-package hu.trigary.iodine.forge.network.packet.out;
+package hu.trigary.iodine.forge.network.out;
 
 import com.google.common.base.Charsets;
 import io.netty.buffer.ByteBuf;

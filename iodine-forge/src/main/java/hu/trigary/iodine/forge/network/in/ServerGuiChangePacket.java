@@ -1,8 +1,8 @@
-package hu.trigary.iodine.forge.network.packet.in;
+package hu.trigary.iodine.forge.network.in;
 
 import hu.trigary.iodine.forge.IodineMod;
 import hu.trigary.iodine.forge.gui.IodineGui;
-import hu.trigary.iodine.forge.network.packet.out.OutPacket;
+import hu.trigary.iodine.forge.network.out.OutPacket;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;

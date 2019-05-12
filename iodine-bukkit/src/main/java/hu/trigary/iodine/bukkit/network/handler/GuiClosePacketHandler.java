@@ -1,7 +1,7 @@
 package hu.trigary.iodine.bukkit.network.handler;
 
 import hu.trigary.iodine.bukkit.IodinePlugin;
-import hu.trigary.iodine.bukkit.api.gui.IodineGuiImpl;
+import hu.trigary.iodine.bukkit.gui.IodineGuiImpl;
 import hu.trigary.iodine.bukkit.network.PacketListener;
 import hu.trigary.iodine.backend.PacketType;
 import org.bukkit.entity.Player;

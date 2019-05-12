@@ -2,7 +2,7 @@ package hu.trigary.iodine.forge.gui;
 
 import hu.trigary.iodine.forge.IodineMod;
 import hu.trigary.iodine.forge.gui.element.GuiElement;
-import hu.trigary.iodine.forge.network.packet.out.ClientGuiClosePacket;
+import hu.trigary.iodine.forge.network.out.ClientGuiClosePacket;
 import net.minecraft.client.gui.GuiScreen;
 import org.jetbrains.annotations.NotNull;
 

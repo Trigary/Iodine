@@ -1,4 +1,4 @@
-package hu.trigary.iodine.forge.network.packet.out;
+package hu.trigary.iodine.forge.network.out;
 
 import io.netty.buffer.ByteBuf;
 

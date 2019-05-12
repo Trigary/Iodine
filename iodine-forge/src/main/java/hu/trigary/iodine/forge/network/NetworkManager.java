@@ -2,12 +2,11 @@ package hu.trigary.iodine.forge.network;
 
 import hu.trigary.iodine.backend.PacketType;
 import hu.trigary.iodine.forge.IodineMod;
-import hu.trigary.iodine.forge.network.packet.*;
-import hu.trigary.iodine.forge.network.packet.in.*;
-import hu.trigary.iodine.forge.network.packet.out.ClientGuiChangePacket;
-import hu.trigary.iodine.forge.network.packet.out.ClientGuiClosePacket;
-import hu.trigary.iodine.forge.network.packet.out.ClientLoginPacket;
-import hu.trigary.iodine.forge.network.packet.out.OutPacket;
+import hu.trigary.iodine.forge.network.in.*;
+import hu.trigary.iodine.forge.network.out.ClientGuiChangePacket;
+import hu.trigary.iodine.forge.network.out.ClientGuiClosePacket;
+import hu.trigary.iodine.forge.network.out.ClientLoginPacket;
+import hu.trigary.iodine.forge.network.out.OutPacket;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;

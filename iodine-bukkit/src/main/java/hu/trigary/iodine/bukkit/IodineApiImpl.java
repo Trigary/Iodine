@@ -1,9 +1,8 @@
-package hu.trigary.iodine.bukkit.api;
+package hu.trigary.iodine.bukkit;
 
 import hu.trigary.iodine.api.IodineApi;
 import hu.trigary.iodine.api.gui.IodineGui;
 import hu.trigary.iodine.api.player.IodinePlayer;
-import hu.trigary.iodine.bukkit.IodinePlugin;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;

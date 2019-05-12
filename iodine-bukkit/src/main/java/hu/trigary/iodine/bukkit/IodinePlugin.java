@@ -1,9 +1,10 @@
 package hu.trigary.iodine.bukkit;
 
 import hu.trigary.iodine.api.IodineApi;
-import hu.trigary.iodine.bukkit.api.IodineApiImpl;
-import hu.trigary.iodine.bukkit.api.player.IodinePlayerImpl;
+import hu.trigary.iodine.bukkit.gui.GuiManager;
+import hu.trigary.iodine.bukkit.player.IodinePlayerImpl;
 import hu.trigary.iodine.bukkit.network.NetworkManager;
+import hu.trigary.iodine.bukkit.player.PlayerManager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

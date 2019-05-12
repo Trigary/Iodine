@@ -1,8 +1,8 @@
-package hu.trigary.iodine.forge.network.packet.in;
+package hu.trigary.iodine.forge.network.in;
 
 import hu.trigary.iodine.forge.IodineMod;
-import hu.trigary.iodine.forge.network.packet.BasePacket;
-import hu.trigary.iodine.forge.network.packet.out.OutPacket;
+import hu.trigary.iodine.forge.network.BasePacket;
+import hu.trigary.iodine.forge.network.out.OutPacket;
 import io.netty.buffer.ByteBuf;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;

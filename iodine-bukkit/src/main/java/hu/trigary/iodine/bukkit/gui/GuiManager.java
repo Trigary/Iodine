@@ -1,13 +1,13 @@
-package hu.trigary.iodine.bukkit;
+package hu.trigary.iodine.bukkit.gui;
 
 import hu.trigary.iodine.api.gui.element.ButtonGuiElement;
 import hu.trigary.iodine.api.gui.element.GuiElement;
 import hu.trigary.iodine.api.gui.element.TextGuiElement;
 import hu.trigary.iodine.backend.GuiElementType;
-import hu.trigary.iodine.bukkit.api.gui.IodineGuiImpl;
-import hu.trigary.iodine.bukkit.api.gui.element.ButtonGuiElementImpl;
-import hu.trigary.iodine.bukkit.api.gui.element.GuiElementImpl;
-import hu.trigary.iodine.bukkit.api.gui.element.TextGuiElementImpl;
+import hu.trigary.iodine.bukkit.IodinePlugin;
+import hu.trigary.iodine.bukkit.gui.element.ButtonGuiElementImpl;
+import hu.trigary.iodine.bukkit.gui.element.GuiElementImpl;
+import hu.trigary.iodine.bukkit.gui.element.TextGuiElementImpl;
 import org.apache.commons.lang.Validate;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
