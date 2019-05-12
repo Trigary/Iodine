@@ -2,12 +2,10 @@ package hu.trigary.iodine.forge.network.packet.in;
 
 import hu.trigary.iodine.forge.IodineMod;
 import hu.trigary.iodine.forge.network.packet.out.OutPacket;
-import hu.trigary.iodine.forge.ui.IodineGui;
+import hu.trigary.iodine.forge.gui.IodineGui;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.Arrays;
 
 public class ServerGuiOpenPacket extends InPacket {
 	private int guiId;
@@ -28,9 +26,10 @@ public class ServerGuiOpenPacket extends InPacket {
 		@Override
 		protected OutPacket handle(ServerGuiOpenPacket message) {
 			Minecraft minecraft = Minecraft.getMinecraft();
-			minecraft.addScheduledTask(() -> minecraft.displayGuiScreen(new IodineGui(mod, message.guiId)));
-			mod.getLogger().info("Received open data: " + Arrays.toString(message.data));
-			//TODO use data
+			minecraft.addScheduledTask(() -> {
+				mod.getLogger().info("Opening GUI");
+				minecraft.displayGuiScreen(new IodineGui(mod, message.guiId, message.data));
+			});
 			return null;
 		}
 	}

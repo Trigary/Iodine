@@ -36,7 +36,7 @@ public class IodinePlugin extends JavaPlugin implements Listener {
 		playerManager = new PlayerManager(this);
 		guiManager = new GuiManager(this);
 		
-		Bukkit.getPluginManager().registerEvents(new TestCommandListener(), this);
+		Bukkit.getPluginManager().registerEvents(new TestCommandListener(this), this);
 	}
 	
 	@EventHandler(priority = EventPriority.HIGHEST)

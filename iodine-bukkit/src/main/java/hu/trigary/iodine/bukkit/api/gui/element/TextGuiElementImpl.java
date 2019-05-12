@@ -52,6 +52,8 @@ public class TextGuiElementImpl extends GuiElementImpl implements TextGuiElement
 	@Override
 	public void serialize(@NotNull ByteBuffer buffer) {
 		super.serialize(buffer);
-		buffer.put(text.getBytes(Charsets.UTF_8));
+		byte[] textBytes = text.getBytes(Charsets.UTF_8);
+		buffer.putInt(textBytes.length);
+		buffer.put(textBytes);
 	}
 }

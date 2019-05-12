@@ -2,19 +2,14 @@ package hu.trigary.iodine.forge.network.packet.in;
 
 import hu.trigary.iodine.forge.IodineMod;
 import hu.trigary.iodine.forge.network.packet.out.OutPacket;
-import hu.trigary.iodine.forge.ui.IodineGui;
+import hu.trigary.iodine.forge.gui.IodineGui;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiScreen;
 import org.jetbrains.annotations.NotNull;
 
 public class ServerGuiClosePacket extends InPacket {
-	private int guiId;
-	
 	@Override
-	protected void deserialize(ByteBuf buffer) {
-		guiId = buffer.readInt();
-	}
+	protected void deserialize(ByteBuf buffer) { }
 	
 	public static class Handler extends InPacket.Handler<ServerGuiClosePacket> {
 		public Handler(@NotNull IodineMod mod) {
@@ -25,15 +20,11 @@ public class ServerGuiClosePacket extends InPacket {
 		protected OutPacket handle(ServerGuiClosePacket message) {
 			Minecraft minecraft = Minecraft.getMinecraft();
 			minecraft.addScheduledTask(() -> {
-				GuiScreen screen = minecraft.currentScreen;
-				if (!(screen instanceof IodineGui)) {
-					return;
-				}
-				
-				IodineGui gui = (IodineGui) screen;
-				if (gui.getId() == message.guiId) {
-					gui.flagServerClosing();
+				if (minecraft.currentScreen instanceof IodineGui) {
+					mod.getLogger().info("Closing GUI");
 					minecraft.player.closeScreen();
+				} else {
+					mod.getLogger().info("Can't close GUI: it's already closed");
 				}
 			});
 			return null;

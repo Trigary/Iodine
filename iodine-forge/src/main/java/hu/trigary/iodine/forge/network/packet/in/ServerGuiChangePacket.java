@@ -1,19 +1,18 @@
 package hu.trigary.iodine.forge.network.packet.in;
 
 import hu.trigary.iodine.forge.IodineMod;
+import hu.trigary.iodine.forge.gui.IodineGui;
 import hu.trigary.iodine.forge.network.packet.out.OutPacket;
 import io.netty.buffer.ByteBuf;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiScreen;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Arrays;
-
 public class ServerGuiChangePacket extends InPacket {
-	private int guiId;
 	private byte[] data;
 	
 	@Override
 	protected void deserialize(ByteBuf buffer) {
-		guiId = buffer.readInt();
 		data = new byte[buffer.readableBytes()];
 		buffer.readBytes(data);
 	}
@@ -25,8 +24,16 @@ public class ServerGuiChangePacket extends InPacket {
 		
 		@Override
 		protected OutPacket handle(ServerGuiChangePacket message) {
-			mod.getLogger().info("Received change data: " + Arrays.toString(message.data));
-			//TODO use data
+			Minecraft minecraft = Minecraft.getMinecraft();
+			minecraft.addScheduledTask(() -> {
+				GuiScreen screen = minecraft.currentScreen;
+				if (screen instanceof IodineGui) {
+					mod.getLogger().info("Updating GUI");
+					((IodineGui) screen).deserialize(message.data);
+				} else {
+					mod.getLogger().info("Can't update GUI: it's no longer opened");
+				}
+			});
 			return null;
 		}
 	}

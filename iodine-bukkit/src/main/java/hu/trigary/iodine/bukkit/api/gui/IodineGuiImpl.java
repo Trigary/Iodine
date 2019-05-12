@@ -23,12 +23,10 @@ import java.util.function.Consumer;
  * The implementation of {@link IodineGui}.
  */
 public class IodineGuiImpl extends IodineGui {
-	private static final ByteBuffer BUFFER = ByteBuffer.wrap(new byte[0xFFF]);
-	//these seem like reasonable values: probably max 2 GUIs being
-	//simultaneously edited and a GUI surely fits into 4095 bytes
-	
+	private static final ByteBuffer BUFFER = ByteBuffer.wrap(new byte[0xFFF]); //a GUI surely fits in ~4kB
 	private final Set<Player> viewers = new HashSet<>();
-	private final Map<Object, GuiElementImpl> elements = new HashMap<>();
+	private final Map<Integer, GuiElementImpl> elements = new HashMap<>();
+	private final Map<Object, GuiElementImpl> apiIdElements = new HashMap<>();
 	private final IodinePlugin plugin;
 	private final int id;
 	private int nextElementId;
@@ -72,7 +70,7 @@ public class IodineGuiImpl extends IodineGui {
 	@Override
 	public GuiElement getElement(@NotNull Object id) {
 		Validate.notNull(id, "IDs must be non-null");
-		return elements.get(id);
+		return apiIdElements.get(id);
 	}
 	
 	@Nullable
@@ -105,9 +103,10 @@ public class IodineGuiImpl extends IodineGui {
 	public <T extends GuiElement> IodineGui addElement(@NotNull Object id,
 			@NotNull Class<T> type, @NotNull Consumer<T> initializer) {
 		Validate.notNull(id, "IDs must be non-null");
-		Validate.isTrue(!elements.containsKey(id), "IDs must be unique");
-		GuiElementImpl element = plugin.getGui().createElement(type, this, nextElementId++, id);
-		elements.put(id, element);
+		Validate.isTrue(!apiIdElements.containsKey(id), "IDs must be unique");
+		GuiElementImpl element = plugin.getGui().createElement(type, this, nextElementId, id);
+		elements.put(nextElementId++, element);
+		apiIdElements.put(id, element);
 		atomicUpdate(gui -> initializer.accept(type.cast(element)));
 		return this;
 	}
@@ -116,7 +115,7 @@ public class IodineGuiImpl extends IodineGui {
 	@Override
 	public IodineGui removeElement(@NotNull Object id) {
 		Validate.notNull(id, "IDs must be non-null");
-		GuiElement element = elements.remove(id);
+		GuiElement element = apiIdElements.remove(id);
 		if (element != null) {
 			update();
 		}
@@ -142,7 +141,7 @@ public class IodineGuiImpl extends IodineGui {
 	 */
 	public void update() {
 		if (atomicUpdateLock == 0 && !viewers.isEmpty()) {
-			byte[] payload = serialize(PacketType.SERVER_GUI_CHANGE);
+			byte[] payload = serialize(false);
 			NetworkManager network = plugin.getNetwork();
 			viewers.forEach(player -> network.send(player, payload));
 		}
@@ -173,7 +172,7 @@ public class IodineGuiImpl extends IodineGui {
 			openAction.accept(this, player);
 		}
 		
-		plugin.getNetwork().send(player, serialize(PacketType.SERVER_GUI_OPEN));
+		plugin.getNetwork().send(player, serialize(true));
 		return this;
 	}
 	
@@ -183,7 +182,7 @@ public class IodineGuiImpl extends IodineGui {
 		IodinePlayerImpl iodinePlayer = plugin.getPlayer(player);
 		iodinePlayer.assertModded();
 		closeForNoPacket(iodinePlayer);
-		plugin.getNetwork().send(player, PacketType.SERVER_GUI_CLOSE, 4, buffer -> buffer.putInt(id));
+		plugin.getNetwork().send(player, PacketType.SERVER_GUI_CLOSE);
 		return this;
 	}
 	
@@ -212,9 +211,14 @@ public class IodineGuiImpl extends IodineGui {
 	
 	
 	
-	private byte[] serialize(PacketType packetType) {
-		BUFFER.put(packetType.getId());
-		BUFFER.putInt(id);
+	private byte[] serialize(boolean opening) {
+		if (opening) {
+			BUFFER.put(PacketType.SERVER_GUI_OPEN.getId());
+			BUFFER.putInt(id);
+		} else {
+			BUFFER.put(PacketType.SERVER_GUI_CHANGE.getId());
+		}
+		
 		elements.values().forEach(element -> element.serialize(BUFFER));
 		byte[] result = new byte[BUFFER.flip().remaining()];
 		BUFFER.get(result).rewind();

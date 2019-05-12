@@ -1,5 +1,6 @@
 package hu.trigary.iodine.forge;
 
+import hu.trigary.iodine.forge.gui.GuiManager;
 import hu.trigary.iodine.forge.network.NetworkManager;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
@@ -13,7 +14,8 @@ import org.jetbrains.annotations.NotNull;
 public class IodineMod {
 	private Logger logger;
 	private String version;
-	private NetworkManager network;
+	private NetworkManager networkManager;
+	private GuiManager guiManager;
 	
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
@@ -23,7 +25,8 @@ public class IodineMod {
 	
 	@EventHandler
 	public void init(FMLInitializationEvent event) {
-		network = new NetworkManager(this);
+		networkManager = new NetworkManager(this);
+		guiManager = new GuiManager(this);
 		MinecraftForge.EVENT_BUS.register(new ServerJoinEventHandler(this));
 	}
 	
@@ -41,6 +44,11 @@ public class IodineMod {
 	
 	@NotNull
 	public NetworkManager getNetwork() {
-		return network;
+		return networkManager;
+	}
+	
+	@NotNull
+	public GuiManager getGui() {
+		return guiManager;
 	}
 }
