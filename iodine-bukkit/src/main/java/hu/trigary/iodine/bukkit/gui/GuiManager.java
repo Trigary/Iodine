@@ -1,7 +1,7 @@
 package hu.trigary.iodine.bukkit.gui;
 
 import hu.trigary.iodine.api.gui.element.ButtonGuiElement;
-import hu.trigary.iodine.api.gui.element.GuiElement;
+import hu.trigary.iodine.api.gui.element.base.GuiElement;
 import hu.trigary.iodine.api.gui.element.TextGuiElement;
 import hu.trigary.iodine.backend.GuiElementType;
 import hu.trigary.iodine.bukkit.IodinePlugin;

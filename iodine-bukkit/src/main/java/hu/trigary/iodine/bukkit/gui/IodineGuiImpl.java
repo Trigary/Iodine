@@ -1,7 +1,8 @@
 package hu.trigary.iodine.bukkit.gui;
 
+import hu.trigary.iodine.api.gui.GuiElements;
 import hu.trigary.iodine.api.gui.IodineGui;
-import hu.trigary.iodine.api.gui.element.GuiElement;
+import hu.trigary.iodine.api.gui.element.base.GuiElement;
 import hu.trigary.iodine.backend.PacketType;
 import hu.trigary.iodine.bukkit.IodinePlugin;
 import hu.trigary.iodine.bukkit.gui.element.GuiElementImpl;
@@ -100,13 +101,13 @@ public class IodineGuiImpl extends IodineGui {
 	@NotNull
 	@Override
 	public <T extends GuiElement> IodineGui addElement(@NotNull Object id,
-			@NotNull Class<T> type, @NotNull Consumer<T> initializer) {
+			@NotNull GuiElements<T> type, @NotNull Consumer<T> initializer) {
 		Validate.notNull(id, "IDs must be non-null");
 		Validate.isTrue(!apiIdElements.containsKey(id), "IDs must be unique");
-		GuiElementImpl element = plugin.getGui().createElement(type, this, nextElementId, id);
+		GuiElementImpl element = plugin.getGui().createElement(type.getType(), this, nextElementId, id);
 		elements.put(nextElementId++, element);
 		apiIdElements.put(id, element);
-		atomicUpdate(gui -> initializer.accept(type.cast(element)));
+		atomicUpdate(gui -> initializer.accept(type.getType().cast(element)));
 		return this;
 	}
 	

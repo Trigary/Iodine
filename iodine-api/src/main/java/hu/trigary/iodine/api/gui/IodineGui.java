@@ -1,6 +1,7 @@
 package hu.trigary.iodine.api.gui;
 
-import hu.trigary.iodine.api.gui.element.GuiElement;
+import hu.trigary.iodine.api.gui.container.base.GuiParent;
+import hu.trigary.iodine.api.gui.element.base.GuiElement;
 import hu.trigary.iodine.api.player.PlayerState;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Contract;
@@ -8,14 +9,13 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
-import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 /**
  * Represents a GUI (General User Interface) that can be opened
  * for players who are in the {@link PlayerState#MODDED} state.
  */
-public abstract class IodineGui {
+public interface IodineGui extends GuiParent<IodineGui> {
 	/**
 	 * Gets the players who have this GUI opened.
 	 * The returned collection is an unmodifiable view of the underlying data.
@@ -24,7 +24,7 @@ public abstract class IodineGui {
 	 */
 	@NotNull
 	@Contract(pure = true)
-	public abstract Collection<Player> getViewers();
+	Collection<Player> getViewers();
 	
 	/**
 	 * Gets the element which has the specified ID.
@@ -35,7 +35,7 @@ public abstract class IodineGui {
 	 */
 	@Nullable
 	@Contract(pure = true)
-	public abstract GuiElement getElement(@NotNull Object id);
+	GuiElement<?> getElement(@NotNull Object id);
 	
 	/**
 	 * Gets the elements that have been added to this GUI.
@@ -45,67 +45,64 @@ public abstract class IodineGui {
 	 */
 	@Nullable
 	@Contract(pure = true)
-	public abstract Collection<GuiElement> getAllElements();
+	Collection<GuiElement<?>> getAllElements();
 	
 	
 	
 	/**
-	 * Sets the action that should be executed when this GUI is opened for a player.
-	 * GUIs are not allowed to be opened or closed in this callback.
+	 * Makes the specified element a direct child of this GUI.
 	 *
-	 * @param action the action to execute
+	 * @param element the element to add as a child
+	 * @param x the X component of the element's render position
+	 * @param y the Y component of the element's render position
 	 * @return the current instance (for chaining)
 	 */
 	@NotNull
-	public abstract IodineGui setOpenAction(@Nullable BiConsumer<IodineGui, Player> action);
-	
-	/**
-	 * Sets the action that should be executed when this GUI is closed for or closed by a player.
-	 * GUIs are not allowed to be opened or closed in this callback.
-	 *
-	 * @param action the action to execute
-	 * @return the current instance (for chaining)
-	 */
-	@NotNull
-	public abstract IodineGui setCloseAction(@Nullable BiConsumer<IodineGui, Player> action);
-	
-	
+	IodineGui makeChild(@NotNull GuiElement<?> element, int x, int y);
 	
 	/**
 	 * Adds a new element of the specified type to this GUI.
+	 * The parent of the element will be this GUI.
 	 * The initializer function atomically initializes the new element.
 	 * The element will be accessible using the specified ID.
 	 * This ID must be unique.
 	 * If ID-based access is not required, then optionally
-	 * {@link #addElement(Class, Consumer)} can be used instead.
+	 * {@link #addElement(GuiElements, Consumer, int, int)} can be used instead.
 	 *
 	 * @param id id the identifier of the element
 	 * @param type the class of the element to add
 	 * @param initializer the function which atomically initializes the element
-	 * @param <T> the type of the element to add
+	 * @param x the X component of the element's render position
+	 * @param y the Y component of the element's render position
+	 * @param <E> the type of the element to add
 	 * @return the current instance (for chaining)
 	 */
 	@NotNull
-	public abstract <T extends GuiElement> IodineGui addElement(@NotNull Object id,
-			@NotNull Class<T> type, @NotNull Consumer<T> initializer);
+	<E extends GuiElement<E>> IodineGui addElement(@NotNull Object id,
+			@NotNull GuiElements<E> type, @NotNull Consumer<E> initializer, int x, int y);
 	
 	/**
 	 * Adds a new element of the specified type to this GUI.
+	 * The parent of the element will be this GUI.
 	 * The initializer function atomically initializes the new element.
 	 * The element will have an internally created ID.
-	 * If ID-based access is required, then {@link #addElement(Object, Class, Consumer)}
+	 * If ID-based access is required, then {@link #addElement(Object, GuiElements, Consumer, int, int)}
 	 * should be used instead.
 	 *
 	 * @param type the class of the element to add
 	 * @param initializer the function which atomically initializes the element
-	 * @param <T> the type of the element to add
+	 * @param x the X component of the element's render position
+	 * @param y the Y component of the element's render position
+	 * @param <E> the type of the element to add
 	 * @return the current instance (for chaining)
 	 */
 	@NotNull
-	public <T extends GuiElement> IodineGui addElement(@NotNull Class<T> type,
-			@NotNull Consumer<T> initializer) {
-		return addElement(new Object(), type, initializer);
+	default <E extends GuiElement<E>> IodineGui addElement(@NotNull GuiElements<E> type,
+			@NotNull Consumer<E> initializer, int x, int y) {
+		return addElement(new Object(), type, initializer, x, y);
 	}
+	
+	
 	
 	/**
 	 * Deletes the element with the specified ID from this GUI.
@@ -114,10 +111,7 @@ public abstract class IodineGui {
 	 * @param id the identifier of the element
 	 * @return the current instance (for chaining)
 	 */
-	@NotNull
-	public abstract IodineGui removeElement(@NotNull Object id);
-	
-	
+	@NotNull IodineGui removeElement(@NotNull Object id);
 	
 	/**
 	 * Runs the specified callback, executing all updates atomically.
@@ -129,8 +123,7 @@ public abstract class IodineGui {
 	 * @param updater the callback that updates this GUI
 	 * @return the current instance (for chaining)
 	 */
-	@NotNull
-	public abstract IodineGui atomicUpdate(@NotNull Consumer<IodineGui> updater);
+	@NotNull IodineGui atomicUpdate(@NotNull Consumer<IodineGui> updater);
 	
 	
 	
@@ -143,8 +136,7 @@ public abstract class IodineGui {
 	 * @param player the target player
 	 * @return the current instance (for chaining)
 	 */
-	@NotNull
-	public abstract IodineGui openFor(@NotNull Player player);
+	@NotNull IodineGui openFor(@NotNull Player player);
 	
 	/**
 	 * Closes this GUI for the specified player.
@@ -153,6 +145,31 @@ public abstract class IodineGui {
 	 * @param player the target player
 	 * @return the current instance (for chaining)
 	 */
+	@NotNull IodineGui closeFor(@NotNull Player player);
+	
+	/**
+	 * Sets the action that should be executed when this GUI is closed by a player.
+	 * GUIs are not allowed to be opened or closed in this callback.
+	 *
+	 * @param action the action to execute
+	 * @return the current instance (for chaining)
+	 */
 	@NotNull
-	public abstract IodineGui closeFor(@NotNull Player player);
+	IodineGui onClosed(@Nullable ClosedAction action);
+	
+	
+	
+	/**
+	 * The handler of the closed action.
+	 */
+	@FunctionalInterface
+	interface ClosedAction {
+		/**
+		 * Handles the closed action.
+		 *
+		 * @param gui the GUI that was closed
+		 * @param player the player that closed the GUI
+		 */
+		void apply(@NotNull IodineGui gui, @NotNull Player player);
+	}
 }

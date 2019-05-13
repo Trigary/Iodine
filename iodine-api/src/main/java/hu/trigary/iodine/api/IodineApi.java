@@ -14,7 +14,7 @@ import org.jetbrains.annotations.NotNull;
  * Instances of this class can be obtained through the {@link ServicesManager}.
  * The {@link #getInstance()} method does this internally.
  */
-public abstract class IodineApi {
+public interface IodineApi {
 	/**
 	 * Gets an instance of this class, using the {@link ServicesManager}.
 	 *
@@ -22,7 +22,7 @@ public abstract class IodineApi {
 	 */
 	@NotNull
 	@Contract(pure = true)
-	public static IodineApi getInstance() {
+	static IodineApi getInstance() {
 		return Bukkit.getServicesManager().getRegistration(IodineApi.class).getProvider();
 	}
 	
@@ -36,7 +36,7 @@ public abstract class IodineApi {
 	 */
 	@NotNull
 	@Contract(pure = true)
-	public abstract IodinePlayer getPlayer(@NotNull Player player);
+	IodinePlayer getPlayer(@NotNull Player player);
 	
 	/**
 	 * Gets whether the player is using the Iodine mod.
@@ -46,7 +46,7 @@ public abstract class IodineApi {
 	 * @return whether the player's state is {@link PlayerState#MODDED}
 	 */
 	@Contract(pure = true)
-	public boolean isModded(@NotNull Player player) {
+	default boolean isModded(@NotNull Player player) {
 		return getPlayer(player).getState() == PlayerState.MODDED;
 	}
 	
@@ -59,5 +59,5 @@ public abstract class IodineApi {
 	 */
 	@NotNull
 	@Contract(pure = true)
-	public abstract IodineGui createGui();
+	IodineGui createGui();
 }

@@ -12,7 +12,7 @@ import org.jetbrains.annotations.Nullable;
  * references to this class' instances must be disposed of as soon as the player logs off.
  * Otherwise memory leaks and unintended consequences follow.
  */
-public abstract class IodinePlayer {
+public interface IodinePlayer {
 	/**
 	 * Gets the Bukkit player that this instance is associated with.
 	 *
@@ -20,7 +20,7 @@ public abstract class IodinePlayer {
 	 */
 	@NotNull
 	@Contract(pure = true)
-	public abstract Player getPlayer();
+	Player getPlayer();
 	
 	/**
 	 * Gets the state this player is currently in.
@@ -29,7 +29,7 @@ public abstract class IodinePlayer {
 	 */
 	@NotNull
 	@Contract(pure = true)
-	public abstract PlayerState getState();
+	PlayerState getState();
 	
 	/**
 	 * Gets the GUI that this player currently has opened.
@@ -42,7 +42,7 @@ public abstract class IodinePlayer {
 	 */
 	@Nullable
 	@Contract(pure = true)
-	public abstract IodineGui getOpenGui();
+	IodineGui getOpenGui();
 	
 	
 	
@@ -51,5 +51,5 @@ public abstract class IodinePlayer {
 	 * Doesn't do anything if the player doesn't have one opened.
 	 * This operation is only valid for modded players.
 	 */
-	public abstract void closeOpenGui();
+	void closeOpenGui();
 }
