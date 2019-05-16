@@ -29,8 +29,8 @@ public class IodinePlugin extends JavaPlugin implements Listener {
 	
 	@Override
 	public void onEnable() {
-		IodineApiImpl api = new IodineApiImpl(this);
-		Bukkit.getServicesManager().register(IodineApi.class, api, this, ServicePriority.Normal);
+		Bukkit.getServicesManager().register(IodineApi.class,
+				new IodineApiImpl(this), this, ServicePriority.Normal);
 		
 		Bukkit.getPluginManager().registerEvents(this, this);
 		networkManager = new NetworkManager(this);

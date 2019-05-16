@@ -29,8 +29,6 @@ public interface GuiElement<T extends GuiElement<T>> {
 	@Contract(pure = true)
 	Object getId();
 	
-	
-	
 	/**
 	 * Gets the parent of this element.
 	 *

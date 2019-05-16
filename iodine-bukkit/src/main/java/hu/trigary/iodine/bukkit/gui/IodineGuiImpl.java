@@ -5,6 +5,7 @@ import hu.trigary.iodine.api.gui.IodineGui;
 import hu.trigary.iodine.api.gui.element.base.GuiElement;
 import hu.trigary.iodine.backend.PacketType;
 import hu.trigary.iodine.bukkit.IodinePlugin;
+import hu.trigary.iodine.bukkit.gui.container.GuiParentPlus;
 import hu.trigary.iodine.bukkit.gui.element.GuiElementImpl;
 import hu.trigary.iodine.bukkit.network.NetworkManager;
 import hu.trigary.iodine.bukkit.player.IodinePlayerImpl;
@@ -16,23 +17,22 @@ import org.jetbrains.annotations.Nullable;
 
 import java.nio.ByteBuffer;
 import java.util.*;
-import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 /**
  * The implementation of {@link IodineGui}.
  */
-public class IodineGuiImpl extends IodineGui {
+public class IodineGuiImpl implements IodineGui, GuiParentPlus<IodineGui> {
 	private static final ByteBuffer BUFFER = ByteBuffer.wrap(new byte[0xFFF]); //a GUI surely fits in ~4kB
 	private final Set<Player> viewers = new HashSet<>();
-	private final Map<Integer, GuiElementImpl> elements = new HashMap<>();
-	private final Map<Object, GuiElementImpl> apiIdElements = new HashMap<>();
+	private final Map<Integer, GuiElementImpl<?>> elements = new HashMap<>();
+	private final Map<Object, GuiElementImpl<?>> apiIdElements = new HashMap<>();
+	private final Map<GuiElementImpl<?>, Position> children = new HashMap<>();
 	private final IodinePlugin plugin;
 	private final int id;
 	private int nextElementId;
 	private int atomicUpdateLock;
-	private BiConsumer<IodineGui, Player> openAction;
-	private BiConsumer<IodineGui, Player> closeAction;
+	private ClosedAction closedAction;
 	
 	/**
 	 * Creates a new instance.
@@ -68,54 +68,68 @@ public class IodineGuiImpl extends IodineGui {
 	@Nullable
 	@Contract(pure = true)
 	@Override
-	public GuiElement getElement(@NotNull Object id) {
+	public GuiElementImpl<?> getElement(@NotNull Object id) {
 		Validate.notNull(id, "IDs must be non-null");
 		return apiIdElements.get(id);
 	}
 	
-	@Nullable
+	@NotNull
 	@Contract(pure = true)
 	@Override
-	public Collection<GuiElement> getAllElements() {
+	public Collection<GuiElement<?>> getAllElements() {
 		return Collections.unmodifiableCollection(elements.values());
 	}
 	
-	
-	
 	@NotNull
+	@Contract(pure = true)
 	@Override
-	public IodineGui setOpenAction(@Nullable BiConsumer<IodineGui, Player> action) {
-		openAction = action;
-		return this;
-	}
-	
-	@NotNull
-	@Override
-	public IodineGui setCloseAction(@Nullable BiConsumer<IodineGui, Player> action) {
-		closeAction = action;
-		return this;
+	public Collection<GuiElement<?>> getChildren() {
+		return Collections.unmodifiableCollection(children.keySet());
 	}
 	
 	
 	
 	@NotNull
 	@Override
-	public <T extends GuiElement> IodineGui addElement(@NotNull Object id,
-			@NotNull GuiElements<T> type, @NotNull Consumer<T> initializer) {
+	public <E extends GuiElement<E>> E makeChild(@NotNull E element, int x, int y) {
+		GuiElementImpl<?> impl = (GuiElementImpl<?>) element;
+		Validate.isTrue(children.put(impl, new Position(x, y)) == null,
+				"The specified element is already the child of this GUI");
+		impl.setParent(this);
+		update();
+		return element;
+	}
+	
+	@Override
+	public void removeChild(@NotNull GuiElementImpl<?> child) {
+	
+	}
+	
+	
+	
+	@NotNull
+	@Override
+	public <E extends GuiElement<E>> E addElement(@NotNull Object id,
+			@NotNull GuiElements<E> type, @NotNull Consumer<E> initializer, int x, int y) {
 		Validate.notNull(id, "IDs must be non-null");
 		Validate.isTrue(!apiIdElements.containsKey(id), "IDs must be unique");
-		GuiElementImpl element = plugin.getGui().createElement(type.getType(), this, nextElementId, id);
-		elements.put(nextElementId++, element);
-		apiIdElements.put(id, element);
-		atomicUpdate(gui -> initializer.accept(type.getType().cast(element)));
-		return this;
+		GuiElementImpl<E> impl = plugin.getGui().createElement(type.getType(), this, nextElementId, id);
+		//noinspection unchecked
+		E element = (E) impl;
+		elements.put(nextElementId++, impl);
+		apiIdElements.put(id, impl);
+		atomicUpdate(gui -> {
+			makeChild(element, x, y);
+			initializer.accept(type.getType().cast(element));
+		});
+		return element;
 	}
 	
 	@NotNull
 	@Override
-	public IodineGui removeElement(@NotNull Object id) {
+	public IodineGuiImpl removeElement(@NotNull Object id) {
 		Validate.notNull(id, "IDs must be non-null");
-		GuiElement element = apiIdElements.remove(id);
+		GuiElementImpl<?> element = apiIdElements.remove(id);
 		if (element != null) {
 			update();
 		}
@@ -126,7 +140,7 @@ public class IodineGuiImpl extends IodineGui {
 	
 	@NotNull
 	@Override
-	public IodineGui atomicUpdate(@NotNull Consumer<IodineGui> updater) {
+	public IodineGuiImpl atomicUpdate(@NotNull Consumer<IodineGui> updater) {
 		atomicUpdateLock++;
 		updater.accept(this);
 		atomicUpdateLock--;
@@ -151,7 +165,7 @@ public class IodineGuiImpl extends IodineGui {
 	
 	@NotNull
 	@Override
-	public IodineGui openFor(@NotNull Player player) {
+	public IodineGuiImpl openFor(@NotNull Player player) {
 		IodinePlayerImpl iodinePlayer = plugin.getPlayer(player);
 		iodinePlayer.assertModded();
 		
@@ -159,7 +173,7 @@ public class IodineGuiImpl extends IodineGui {
 		if (previous == this) {
 			return this;
 		} else if (previous != null) {
-			previous.closeForNoPacket(iodinePlayer);
+			previous.closeForNoPacket(iodinePlayer, false);
 		}
 		
 		viewers.add(player);
@@ -168,20 +182,16 @@ public class IodineGuiImpl extends IodineGui {
 		}
 		
 		iodinePlayer.setOpenGui(this);
-		if (openAction != null) {
-			openAction.accept(this, player);
-		}
-		
 		plugin.getNetwork().send(player, serialize(true));
 		return this;
 	}
 	
 	@NotNull
 	@Override
-	public IodineGui closeFor(@NotNull Player player) {
+	public IodineGuiImpl closeFor(@NotNull Player player) {
 		IodinePlayerImpl iodinePlayer = plugin.getPlayer(player);
 		iodinePlayer.assertModded();
-		closeForNoPacket(iodinePlayer);
+		closeForNoPacket(iodinePlayer, false);
 		plugin.getNetwork().send(player, PacketType.SERVER_GUI_CLOSE);
 		return this;
 	}
@@ -193,7 +203,7 @@ public class IodineGuiImpl extends IodineGui {
 	 *
 	 * @param iodinePlayer the target player
 	 */
-	public void closeForNoPacket(@NotNull IodinePlayerImpl iodinePlayer) {
+	public void closeForNoPacket(@NotNull IodinePlayerImpl iodinePlayer, boolean byPlayer) {
 		Player player = iodinePlayer.getPlayer();
 		if (!viewers.remove(player)) {
 			return;
@@ -204,9 +214,16 @@ public class IodineGuiImpl extends IodineGui {
 		}
 		
 		iodinePlayer.setOpenGui(null);
-		if (closeAction != null) {
-			closeAction.accept(this, player);
+		if (byPlayer && closedAction != null) {
+			closedAction.accept(this, player);
 		}
+	}
+	
+	@NotNull
+	@Override
+	public IodineGuiImpl onClosed(@Nullable ClosedAction action) {
+		closedAction = action;
+		return this;
 	}
 	
 	

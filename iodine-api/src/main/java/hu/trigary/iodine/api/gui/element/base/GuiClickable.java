@@ -12,8 +12,9 @@ import org.jetbrains.annotations.Nullable;
 public interface GuiClickable<T extends GuiClickable<T>> {
 	/**
 	 * Sets the action that should be executed when this GUI element is clicked.
+	 * The callback is atomically executed GUI updating wise.
 	 *
-	 * @param action the action to execute
+	 * @param action the action to atomically execute
 	 * @return the current instance (for chaining)
 	 */
 	@NotNull

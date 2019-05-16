@@ -43,7 +43,7 @@ public interface IodineGui extends GuiParent<IodineGui> {
 	 *
 	 * @return the elements this GUI contains
 	 */
-	@Nullable
+	@NotNull
 	@Contract(pure = true)
 	Collection<GuiElement<?>> getAllElements();
 	
@@ -57,8 +57,7 @@ public interface IodineGui extends GuiParent<IodineGui> {
 	 * @param y the Y component of the element's render position
 	 * @return the current instance (for chaining)
 	 */
-	@NotNull
-	IodineGui makeChild(@NotNull GuiElement<?> element, int x, int y);
+	@NotNull <E extends GuiElement<E>> E makeChild(@NotNull E element, int x, int y);
 	
 	/**
 	 * Adds a new element of the specified type to this GUI.
@@ -77,8 +76,7 @@ public interface IodineGui extends GuiParent<IodineGui> {
 	 * @param <E> the type of the element to add
 	 * @return the current instance (for chaining)
 	 */
-	@NotNull
-	<E extends GuiElement<E>> IodineGui addElement(@NotNull Object id,
+	@NotNull <E extends GuiElement<E>> E addElement(@NotNull Object id,
 			@NotNull GuiElements<E> type, @NotNull Consumer<E> initializer, int x, int y);
 	
 	/**
@@ -97,12 +95,10 @@ public interface IodineGui extends GuiParent<IodineGui> {
 	 * @return the current instance (for chaining)
 	 */
 	@NotNull
-	default <E extends GuiElement<E>> IodineGui addElement(@NotNull GuiElements<E> type,
+	default <E extends GuiElement<E>> E addElement(@NotNull GuiElements<E> type,
 			@NotNull Consumer<E> initializer, int x, int y) {
 		return addElement(new Object(), type, initializer, x, y);
 	}
-	
-	
 	
 	/**
 	 * Deletes the element with the specified ID from this GUI.
@@ -111,7 +107,10 @@ public interface IodineGui extends GuiParent<IodineGui> {
 	 * @param id the identifier of the element
 	 * @return the current instance (for chaining)
 	 */
-	@NotNull IodineGui removeElement(@NotNull Object id);
+	@NotNull
+	IodineGui removeElement(@NotNull Object id);
+	
+	
 	
 	/**
 	 * Runs the specified callback, executing all updates atomically.
@@ -123,7 +122,8 @@ public interface IodineGui extends GuiParent<IodineGui> {
 	 * @param updater the callback that updates this GUI
 	 * @return the current instance (for chaining)
 	 */
-	@NotNull IodineGui atomicUpdate(@NotNull Consumer<IodineGui> updater);
+	@NotNull
+	IodineGui atomicUpdate(@NotNull Consumer<IodineGui> updater);
 	
 	
 	
@@ -136,7 +136,8 @@ public interface IodineGui extends GuiParent<IodineGui> {
 	 * @param player the target player
 	 * @return the current instance (for chaining)
 	 */
-	@NotNull IodineGui openFor(@NotNull Player player);
+	@NotNull
+	IodineGui openFor(@NotNull Player player);
 	
 	/**
 	 * Closes this GUI for the specified player.
@@ -145,13 +146,15 @@ public interface IodineGui extends GuiParent<IodineGui> {
 	 * @param player the target player
 	 * @return the current instance (for chaining)
 	 */
-	@NotNull IodineGui closeFor(@NotNull Player player);
+	@NotNull
+	IodineGui closeFor(@NotNull Player player);
 	
 	/**
 	 * Sets the action that should be executed when this GUI is closed by a player.
 	 * GUIs are not allowed to be opened or closed in this callback.
+	 * The callback is atomically executed GUI updating wise.
 	 *
-	 * @param action the action to execute
+	 * @param action the action to atomically execute
 	 * @return the current instance (for chaining)
 	 */
 	@NotNull
@@ -170,6 +173,6 @@ public interface IodineGui extends GuiParent<IodineGui> {
 		 * @param gui the GUI that was closed
 		 * @param player the player that closed the GUI
 		 */
-		void apply(@NotNull IodineGui gui, @NotNull Player player);
+		void accept(@NotNull IodineGui gui, @NotNull Player player);
 	}
 }

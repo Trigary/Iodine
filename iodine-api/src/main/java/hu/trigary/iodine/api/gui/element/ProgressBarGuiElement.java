@@ -9,5 +9,5 @@ import hu.trigary.iodine.api.gui.element.base.GuiTextable;
  * A GUI element that is a progress bar, with text on top of it.
  */
 public interface ProgressBarGuiElement extends GuiElement<ProgressBarGuiElement>, GuiTextable<ProgressBarGuiElement>,
-		GuiProgressable<ProgressBarGuiElement>, GuiOrientable<SliderGuiElement> {
+		GuiProgressable<ProgressBarGuiElement>, GuiOrientable<ProgressBarGuiElement> {
 }

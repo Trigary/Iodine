@@ -4,6 +4,7 @@ import hu.trigary.iodine.api.gui.IodineGui;
 import hu.trigary.iodine.api.gui.element.base.GuiElement;
 import hu.trigary.iodine.backend.GuiElementType;
 import hu.trigary.iodine.bukkit.gui.IodineGuiImpl;
+import hu.trigary.iodine.bukkit.gui.container.GuiParentPlus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -12,11 +13,12 @@ import java.nio.ByteBuffer;
 /**
  * The implementation of {@link GuiElement}.
  */
-public abstract class GuiElementImpl implements GuiElement {
+public abstract class GuiElementImpl<T extends GuiElement<T>> implements GuiElement<T> {
 	protected final IodineGuiImpl gui;
 	private final GuiElementType type;
 	private final int internalId;
 	private final Object id;
+	private GuiParentPlus<?> parent;
 	
 	protected GuiElementImpl(@NotNull IodineGuiImpl gui,
 			@NotNull GuiElementType type, int internalId, @NotNull Object id) {
@@ -24,6 +26,7 @@ public abstract class GuiElementImpl implements GuiElement {
 		this.internalId = internalId;
 		this.id = id;
 		this.type = type;
+		parent = gui;
 	}
 	
 	
@@ -49,6 +52,22 @@ public abstract class GuiElementImpl implements GuiElement {
 	@Override
 	public Object getId() {
 		return id;
+	}
+	
+	
+	
+	@NotNull
+	@Contract(pure = true)
+	@Override
+	public GuiParentPlus<?> getParent() {
+		return parent;
+	}
+	
+	public void setParent(@NotNull GuiParentPlus<?> parent) {
+		if (this.parent != null) {
+			this.parent.removeChild(this);
+		}
+		this.parent = parent;
 	}
 	
 	

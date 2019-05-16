@@ -65,7 +65,7 @@ public class PlayerManager implements Listener {
 		IodinePlayerImpl player = players.get(event.getPlayer().getUniqueId());
 		//can't call remove yet: the gui close callback might still require the instance
 		if (player.getOpenGui() != null) {
-			player.getOpenGui().closeForNoPacket(player);
+			player.getOpenGui().closeForNoPacket(player, true);
 		}
 		players.remove(event.getPlayer().getUniqueId());
 	}

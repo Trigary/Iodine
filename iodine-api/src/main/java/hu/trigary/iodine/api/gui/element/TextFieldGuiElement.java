@@ -15,8 +15,9 @@ public interface TextFieldGuiElement extends GuiElement<TextFieldGuiElement>,
 	/**
 	 * Sets the action that should be executed when
 	 * this GUI element's text is changed by a player.
+	 * The callback is atomically executed GUI updating wise.
 	 *
-	 * @param action the action to execute
+	 * @param action the action to atomically execute
 	 * @return the current instance (for chaining)
 	 */
 	@NotNull
@@ -37,7 +38,7 @@ public interface TextFieldGuiElement extends GuiElement<TextFieldGuiElement>,
 		 * @param newText the text that was set by the player
 		 * @param player the player who caused this change to happen
 		 */
-		void apply(@NotNull TextFieldGuiElement element, @NotNull String oldText,
+		void accept(@NotNull TextFieldGuiElement element, @NotNull String oldText,
 				@NotNull String newText, @NotNull Player player);
 	}
 }

@@ -13,7 +13,7 @@ import java.nio.ByteBuffer;
 /**
  * The implementation of {@link TextGuiElement}.
  */
-public class TextGuiElementImpl extends GuiElementImpl implements TextGuiElement {
+public class TextGuiElementImpl extends GuiElementImpl<TextGuiElement> implements TextGuiElement {
 	private String text = "";
 	
 	/**
@@ -38,10 +38,11 @@ public class TextGuiElementImpl extends GuiElementImpl implements TextGuiElement
 		return text;
 	}
 	
+	
+	
 	@NotNull
 	@Override
 	public TextGuiElement setText(@NotNull String text) {
-		Validate.notNull(text, "Text must be non-null");
 		this.text = text;
 		gui.update();
 		return this;

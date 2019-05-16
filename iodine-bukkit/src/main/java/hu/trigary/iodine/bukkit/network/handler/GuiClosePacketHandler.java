@@ -30,7 +30,7 @@ public class GuiClosePacketHandler extends PacketHandler {
 	public void handle(@NotNull Player player, @NotNull ByteBuffer message) {
 		IodineGuiImpl gui = plugin.getGui().getGui(message.getInt());
 		if (gui != null) {
-			gui.closeForNoPacket(plugin.getPlayer(player));
+			gui.closeForNoPacket(plugin.getPlayer(player), true);
 		}
 	}
 }

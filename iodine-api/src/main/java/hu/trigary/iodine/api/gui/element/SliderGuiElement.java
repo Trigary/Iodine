@@ -13,8 +13,9 @@ public interface SliderGuiElement extends GuiElement<SliderGuiElement>, GuiTexta
 	/**
 	 * Sets the action that should be executed when
 	 * this GUI element's progress is changed by a player.
+	 * The callback is atomically executed GUI updating wise.
 	 *
-	 * @param action the action to execute
+	 * @param action the action to atomically execute
 	 * @return the current instance (for chaining)
 	 */
 	@NotNull
@@ -35,6 +36,6 @@ public interface SliderGuiElement extends GuiElement<SliderGuiElement>, GuiTexta
 		 * @param newProgress the progress that was set by the player
 		 * @param player the player who changed the progress
 		 */
-		void apply(@NotNull SliderGuiElement element, int oldProgress, int newProgress, @NotNull Player player);
+		void accept(@NotNull SliderGuiElement element, int oldProgress, int newProgress, @NotNull Player player);
 	}
 }

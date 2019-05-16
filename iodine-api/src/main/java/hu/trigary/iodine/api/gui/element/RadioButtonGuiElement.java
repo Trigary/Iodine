@@ -4,6 +4,7 @@ import hu.trigary.iodine.api.gui.element.base.GuiCheckable;
 import hu.trigary.iodine.api.gui.element.base.GuiEditable;
 import hu.trigary.iodine.api.gui.element.base.GuiElement;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -13,6 +14,14 @@ import org.jetbrains.annotations.Nullable;
  */
 public interface RadioButtonGuiElement extends GuiElement<RadioButtonGuiElement>,
 		GuiCheckable<RadioButtonGuiElement>, GuiEditable<RadioButtonGuiElement> {
+	/**
+	 * Gets this element's group-ID.
+	 *
+	 * @return the group-ID of this element
+	 */
+	@Contract(pure = true)
+	int getGroupId();
+	
 	/**
 	 * Sets this element's group-ID to the specified ID.
 	 * If this element is the first one with the specified ID,
@@ -31,8 +40,9 @@ public interface RadioButtonGuiElement extends GuiElement<RadioButtonGuiElement>
 	 * Sets the action that should be executed when
 	 * this GUI element is unchecked by a player.
 	 * This callback fires before {@link #onChecked(CheckedAction)}.
+	 * The callback is atomically executed GUI updating wise.
 	 *
-	 * @param action the action to execute
+	 * @param action the action to atomically execute
 	 * @return the current instance (for chaining)
 	 */
 	@NotNull
@@ -41,8 +51,9 @@ public interface RadioButtonGuiElement extends GuiElement<RadioButtonGuiElement>
 	 * Sets the action that should be executed when
 	 * this GUI element is checked by a player.
 	 * This callback fires after {@link #onUnchecked(UncheckedAction)}.
+	 * The callback is atomically executed GUI updating wise.
 	 *
-	 * @param action the action to execute
+	 * @param action the action to atomically execute
 	 * @return the current instance (for chaining)
 	 */
 	@NotNull
@@ -62,7 +73,7 @@ public interface RadioButtonGuiElement extends GuiElement<RadioButtonGuiElement>
 		 * @param unchecked the element that became unchecked
 		 * @param player the player who caused the change
 		 */
-		void apply(@NotNull RadioButtonGuiElement checked,
+		void accept(@NotNull RadioButtonGuiElement checked,
 				@NotNull RadioButtonGuiElement unchecked, @NotNull Player player);
 	}
 	
@@ -78,7 +89,7 @@ public interface RadioButtonGuiElement extends GuiElement<RadioButtonGuiElement>
 		 * @param unchecked the element that became unchecked
 		 * @param player the player who caused the change
 		 */
-		void apply(@NotNull RadioButtonGuiElement checked,
+		void accept(@NotNull RadioButtonGuiElement checked,
 				@NotNull RadioButtonGuiElement unchecked, @NotNull Player player);
 	}
 }

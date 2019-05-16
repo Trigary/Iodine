@@ -22,6 +22,9 @@ public interface GridGuiContainer extends GuiContainer<GridGuiContainer> {
 	@Contract(pure = true)
 	GuiElement<?> getChild(int column, int row);
 	
+	@NotNull
+	GridGuiContainer setGridSize(int columns, int rows);
+	
 	/**
 	 * Makes the specified element a direct child of this container.
 	 * The element is inserted into the specified column-row pair.
@@ -33,5 +36,5 @@ public interface GridGuiContainer extends GuiContainer<GridGuiContainer> {
 	 * @return the current instance (for chaining)
 	 */
 	@NotNull
-	GridGuiContainer makeChild(@NotNull GuiElement<?> element, int column, int row);
+	<E extends GuiElement<E>> E makeChild(@NotNull E element, int column, int row);
 }

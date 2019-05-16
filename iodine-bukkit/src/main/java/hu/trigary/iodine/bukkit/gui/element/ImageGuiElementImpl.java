@@ -1,6 +1,6 @@
 package hu.trigary.iodine.bukkit.gui.element;
 
-import hu.trigary.iodine.api.gui.element.ButtonGuiElement;
+import hu.trigary.iodine.api.gui.element.ImageGuiElement;
 import hu.trigary.iodine.backend.GuiElementType;
 import hu.trigary.iodine.bukkit.gui.IodineGuiImpl;
 import org.jetbrains.annotations.Contract;
@@ -8,11 +8,10 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * The implementation of {@link ButtonGuiElement}.
+ * The implementation of {@link ImageGuiElement}.
  */
-public class ButtonGuiElementImpl extends GuiElementImpl<ButtonGuiElement> implements ButtonGuiElement {
-	private String text;
-	private ClickedAction<ButtonGuiElement> clickedAction;
+public class ImageGuiElementImpl extends GuiElementImpl<ImageGuiElement> implements ImageGuiElement {
+	private ClickedAction<ImageGuiElement> clickedAction;
 	
 	/**
 	 * Creates a new instance.
@@ -22,7 +21,7 @@ public class ButtonGuiElementImpl extends GuiElementImpl<ButtonGuiElement> imple
 	 * @param internalId the internal ID of this element
 	 * @param id the API-friendly ID of this element
 	 */
-	public ButtonGuiElementImpl(@NotNull IodineGuiImpl gui,
+	public ImageGuiElementImpl(@NotNull IodineGuiImpl gui,
 			@NotNull GuiElementType type, int internalId, @NotNull Object id) {
 		super(gui, type, internalId, id);
 	}
@@ -32,23 +31,21 @@ public class ButtonGuiElementImpl extends GuiElementImpl<ButtonGuiElement> imple
 	@NotNull
 	@Contract(pure = true)
 	@Override
-	public String getText() {
-		return text;
+	public byte[] getImage() {
+		throw new UnsupportedOperationException();
 	}
 	
 	
 	
 	@NotNull
 	@Override
-	public ButtonGuiElementImpl setText(@NotNull String text) {
-		this.text = text;
-		gui.update();
-		return this;
+	public ImageGuiElementImpl setImage(@NotNull byte[] image) {
+		throw new UnsupportedOperationException();
 	}
 	
 	@NotNull
 	@Override
-	public ButtonGuiElementImpl onClicked(@Nullable ClickedAction<ButtonGuiElement> action) {
+	public ImageGuiElementImpl onClicked(@Nullable ClickedAction<ImageGuiElement> action) {
 		clickedAction = action;
 		return this;
 	}

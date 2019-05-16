@@ -21,7 +21,7 @@ import java.util.Map;
  * The manager whose responsibility is keeping track of {@link IodineGuiImpl} instances.
  */
 public class GuiManager {
-	private final Map<Class<? extends GuiElement>, ElementData> elements = new HashMap<>();
+	private final Map<Class<? extends GuiElement<?>>, ElementData> elements = new HashMap<>();
 	private final Map<Integer, IodineGuiImpl> guiMap = new HashMap<>();
 	private final IodinePlugin plugin;
 	private int nextGuiId;
@@ -76,12 +76,12 @@ public class GuiManager {
 	 */
 	@NotNull
 	@Contract(pure = true)
-	public GuiElementImpl createElement(@NotNull Class<? extends GuiElement> type,
+	public <T extends GuiElement<T>> GuiElementImpl<T> createElement(@NotNull Class<T> type,
 			@NotNull IodineGuiImpl gui, int internalId, @NotNull Object id) {
 		ElementData data = elements.get(type);
 		Validate.notNull(data, "A valid Class<? extends GuiElement> must be provided");
 		//noinspection unchecked
-		return (GuiElementImpl) data.constructor.apply(gui, data.type, internalId, id);
+		return (GuiElementImpl<T>) data.constructor.apply(gui, data.type, internalId, id);
 	}
 	
 	
@@ -117,7 +117,7 @@ public class GuiManager {
 	
 	
 	
-	private <T extends GuiElement> void element(Class<T> clazz,
+	private <T extends GuiElement<T>> void element(Class<T> clazz,
 			GuiElementType type, ElementConstructor<T> constructor) {
 		//noinspection unchecked
 		Validate.isTrue(elements.put(clazz, new ElementData(type, constructor)) == null,
@@ -135,7 +135,7 @@ public class GuiManager {
 	}
 	
 	@FunctionalInterface
-	private interface ElementConstructor<R extends GuiElement> {
+	private interface ElementConstructor<R extends GuiElement<R>> {
 		R apply(IodineGuiImpl gui, GuiElementType type, int internalId, Object id);
 	}
 }

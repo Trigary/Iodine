@@ -1,6 +1,6 @@
 package hu.trigary.iodine.bukkit.gui.element;
 
-import hu.trigary.iodine.api.gui.element.ButtonGuiElement;
+import hu.trigary.iodine.api.gui.element.TextFieldGuiElement;
 import hu.trigary.iodine.backend.GuiElementType;
 import hu.trigary.iodine.bukkit.gui.IodineGuiImpl;
 import org.jetbrains.annotations.Contract;
@@ -8,11 +8,12 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * The implementation of {@link ButtonGuiElement}.
+ * The implementation of {@link TextFieldGuiElement}.
  */
-public class ButtonGuiElementImpl extends GuiElementImpl<ButtonGuiElement> implements ButtonGuiElement {
+public class TextFieldGuiElementImpl extends GuiElementImpl<TextFieldGuiElement> implements TextFieldGuiElement {
+	private boolean editable = true;
 	private String text;
-	private ClickedAction<ButtonGuiElement> clickedAction;
+	private TextChangedAction textChangedAction;
 	
 	/**
 	 * Creates a new instance.
@@ -22,12 +23,18 @@ public class ButtonGuiElementImpl extends GuiElementImpl<ButtonGuiElement> imple
 	 * @param internalId the internal ID of this element
 	 * @param id the API-friendly ID of this element
 	 */
-	public ButtonGuiElementImpl(@NotNull IodineGuiImpl gui,
+	public TextFieldGuiElementImpl(@NotNull IodineGuiImpl gui,
 			@NotNull GuiElementType type, int internalId, @NotNull Object id) {
 		super(gui, type, internalId, id);
 	}
 	
 	
+	
+	@Contract(pure = true)
+	@Override
+	public boolean isEditable() {
+		return editable;
+	}
 	
 	@NotNull
 	@Contract(pure = true)
@@ -40,7 +47,15 @@ public class ButtonGuiElementImpl extends GuiElementImpl<ButtonGuiElement> imple
 	
 	@NotNull
 	@Override
-	public ButtonGuiElementImpl setText(@NotNull String text) {
+	public TextFieldGuiElementImpl setEditable(boolean editable) {
+		this.editable = editable;
+		gui.update();
+		return this;
+	}
+	
+	@NotNull
+	@Override
+	public TextFieldGuiElementImpl setText(@NotNull String text) {
 		this.text = text;
 		gui.update();
 		return this;
@@ -48,8 +63,8 @@ public class ButtonGuiElementImpl extends GuiElementImpl<ButtonGuiElement> imple
 	
 	@NotNull
 	@Override
-	public ButtonGuiElementImpl onClicked(@Nullable ClickedAction<ButtonGuiElement> action) {
-		clickedAction = action;
+	public TextFieldGuiElementImpl onChanged(@Nullable TextChangedAction action) {
+		textChangedAction = action;
 		return this;
 	}
 }

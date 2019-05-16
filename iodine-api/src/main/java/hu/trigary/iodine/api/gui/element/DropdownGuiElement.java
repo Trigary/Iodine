@@ -74,8 +74,9 @@ public interface DropdownGuiElement extends GuiElement<DropdownGuiElement>, GuiE
 	/**
 	 * Sets the action that should be executed when
 	 * this GUI element's chosen value is changed by a player.
+	 * The callback is atomically executed GUI updating wise.
 	 *
-	 * @param action the action to execute
+	 * @param action the action to atomically execute
 	 * @return the current instance (for chaining)
 	 */
 	@NotNull
