@@ -17,6 +17,7 @@ import java.util.List;
 public interface DropdownGuiElement extends GuiElement<DropdownGuiElement>, GuiEditable<DropdownGuiElement> {
 	/**
 	 * Gets the values that can be selected.
+	 * The returned list is an unmodifiable view of the underlying data.
 	 *
 	 * @return the selectable values
 	 */
@@ -49,6 +50,7 @@ public interface DropdownGuiElement extends GuiElement<DropdownGuiElement>, GuiE
 	
 	/**
 	 * Sets the values that should be selectable.
+	 * These values must be non-null.
 	 * Clears all previous choices.
 	 * The count of elements must be at least one.
 	 * The first element will become selected.

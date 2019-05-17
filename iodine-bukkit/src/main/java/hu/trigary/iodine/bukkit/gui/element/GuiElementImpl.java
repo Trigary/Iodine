@@ -1,5 +1,6 @@
 package hu.trigary.iodine.bukkit.gui.element;
 
+import com.google.common.base.Charsets;
 import hu.trigary.iodine.api.gui.IodineGui;
 import hu.trigary.iodine.api.gui.element.base.GuiElement;
 import hu.trigary.iodine.backend.GuiElementType;
@@ -82,5 +83,15 @@ public abstract class GuiElementImpl<T extends GuiElement<T>> implements GuiElem
 	public void serialize(@NotNull ByteBuffer buffer) {
 		buffer.put(type.getId());
 		buffer.putInt(internalId);
+	}
+	
+	protected void serializeBoolean(ByteBuffer buffer, boolean bool) {
+		buffer.put(bool ? (byte) 1 : 0);
+	}
+	
+	protected void serializeText(ByteBuffer buffer, String text) {
+		byte[] textBytes = text.getBytes(Charsets.UTF_8);
+		buffer.putInt(textBytes.length);
+		buffer.put(textBytes);
 	}
 }

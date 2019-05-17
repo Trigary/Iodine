@@ -24,9 +24,8 @@ public interface RadioButtonGuiElement extends GuiElement<RadioButtonGuiElement>
 	
 	/**
 	 * Sets this element's group-ID to the specified ID.
-	 * If this element is the first one with the specified ID,
-	 * then this element will become checked.
-	 * Otherwise this element will become unchecked.
+	 * This element will become unchecked except if it is
+	 * the only element with the specified ID.
 	 *
 	 * @param groupId the new group-ID of this element
 	 * @return the current instance (for chaining)

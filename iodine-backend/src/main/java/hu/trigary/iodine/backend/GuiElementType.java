@@ -9,8 +9,17 @@ import java.util.Arrays;
  * A list of all element types that can be displayed.
  */
 public enum GuiElementType {
-	TEXT(0x00),
-	BUTTON(0x01);
+	CONTAINER_GRID(0x00),
+	CONTAINER_LINEAR(0x01),
+	BUTTON(0x10),
+	CHECKBOX(0x11),
+	DROPDOWN(0x12),
+	IMAGE(0x13),
+	PROGRESS_BAR(0x14),
+	RADIO_BUTTON(0x15),
+	SLIDER(0x16),
+	TEXT_FIELD(0x17),
+	TEXT(0x18);
 	
 	private static final GuiElementType[] VALUES;
 	

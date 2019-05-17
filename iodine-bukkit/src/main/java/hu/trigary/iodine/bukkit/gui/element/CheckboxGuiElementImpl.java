@@ -7,6 +7,8 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.nio.ByteBuffer;
+
 /**
  * The implementation of {@link CheckboxGuiElement}.
  */
@@ -19,13 +21,11 @@ public class CheckboxGuiElementImpl extends GuiElementImpl<CheckboxGuiElement> i
 	 * Creates a new instance.
 	 *
 	 * @param gui the GUI which will contain this element
-	 * @param type the type of this element
 	 * @param internalId the internal ID of this element
 	 * @param id the API-friendly ID of this element
 	 */
-	public CheckboxGuiElementImpl(@NotNull IodineGuiImpl gui,
-			@NotNull GuiElementType type, int internalId, @NotNull Object id) {
-		super(gui, type, internalId, id);
+	public CheckboxGuiElementImpl(@NotNull IodineGuiImpl gui, int internalId, @NotNull Object id) {
+		super(gui, GuiElementType.CHECKBOX, internalId, id);
 	}
 	
 	
@@ -65,5 +65,14 @@ public class CheckboxGuiElementImpl extends GuiElementImpl<CheckboxGuiElement> i
 	public CheckboxGuiElementImpl onClicked(@Nullable ClickedAction<CheckboxGuiElement> action) {
 		clickedAction = action;
 		return this;
+	}
+	
+	
+	
+	@Override
+	public void serialize(@NotNull ByteBuffer buffer) {
+		super.serialize(buffer);
+		serializeBoolean(buffer, editable);
+		serializeBoolean(buffer, checked);
 	}
 }

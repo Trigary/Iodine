@@ -1,13 +1,13 @@
 package hu.trigary.iodine.bukkit.gui;
 
-import hu.trigary.iodine.api.gui.element.ButtonGuiElement;
+import hu.trigary.iodine.api.gui.container.GridGuiContainer;
+import hu.trigary.iodine.api.gui.container.LinearGuiContainer;
+import hu.trigary.iodine.api.gui.element.*;
 import hu.trigary.iodine.api.gui.element.base.GuiElement;
-import hu.trigary.iodine.api.gui.element.TextGuiElement;
-import hu.trigary.iodine.backend.GuiElementType;
 import hu.trigary.iodine.bukkit.IodinePlugin;
-import hu.trigary.iodine.bukkit.gui.element.ButtonGuiElementImpl;
-import hu.trigary.iodine.bukkit.gui.element.GuiElementImpl;
-import hu.trigary.iodine.bukkit.gui.element.TextGuiElementImpl;
+import hu.trigary.iodine.bukkit.gui.container.GridGuiContainerImpl;
+import hu.trigary.iodine.bukkit.gui.container.LinearGuiContainerImpl;
+import hu.trigary.iodine.bukkit.gui.element.*;
 import org.apache.commons.lang.Validate;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -21,7 +21,7 @@ import java.util.Map;
  * The manager whose responsibility is keeping track of {@link IodineGuiImpl} instances.
  */
 public class GuiManager {
-	private final Map<Class<? extends GuiElement<?>>, ElementData> elements = new HashMap<>();
+	private final Map<Class<? extends GuiElement<?>>, ElementConstructor<?>> elements = new HashMap<>();
 	private final Map<Integer, IodineGuiImpl> guiMap = new HashMap<>();
 	private final IodinePlugin plugin;
 	private int nextGuiId;
@@ -34,8 +34,18 @@ public class GuiManager {
 	 */
 	public GuiManager(@NotNull IodinePlugin plugin) {
 		this.plugin = plugin;
-		element(TextGuiElement.class, GuiElementType.TEXT, TextGuiElementImpl::new);
-		element(ButtonGuiElement.class, GuiElementType.BUTTON, ButtonGuiElementImpl::new);
+		element(GridGuiContainer.class, GridGuiContainerImpl::new);
+		element(LinearGuiContainer.class, LinearGuiContainerImpl::new);
+		
+		element(ButtonGuiElement.class, ButtonGuiElementImpl::new);
+		element(CheckboxGuiElement.class, CheckboxGuiElementImpl::new);
+		element(DropdownGuiElement.class, DropdownGuiElementImpl::new);
+		element(ImageGuiElement.class, ImageGuiElementImpl::new);
+		element(ProgressBarGuiElement.class, ProgressBarGuiElementImpl::new);
+		element(RadioButtonGuiElement.class, RadioButtonGuiElementImpl::new);
+		element(SliderGuiElement.class, SliderGuiElementImpl::new);
+		element(TextFieldGuiElement.class, TextFieldGuiElementImpl::new);
+		element(TextGuiElement.class, TextGuiElementImpl::new);
 	}
 	
 	
@@ -78,10 +88,10 @@ public class GuiManager {
 	@Contract(pure = true)
 	public <T extends GuiElement<T>> GuiElementImpl<T> createElement(@NotNull Class<T> type,
 			@NotNull IodineGuiImpl gui, int internalId, @NotNull Object id) {
-		ElementData data = elements.get(type);
-		Validate.notNull(data, "A valid Class<? extends GuiElement> must be provided");
+		ElementConstructor<?> constructor = elements.get(type);
+		Validate.notNull(constructor, "A valid Class<? extends GuiElement> must be provided");
 		//noinspection unchecked
-		return (GuiElementImpl<T>) data.constructor.apply(gui, data.type, internalId, id);
+		return (GuiElementImpl<T>) constructor.apply(gui, internalId, id);
 	}
 	
 	
@@ -117,25 +127,14 @@ public class GuiManager {
 	
 	
 	
-	private <T extends GuiElement<T>> void element(Class<T> clazz,
-			GuiElementType type, ElementConstructor<T> constructor) {
+	private <T extends GuiElement<T>> void element(Class<T> clazz, ElementConstructor<T> constructor) {
 		//noinspection unchecked
-		Validate.isTrue(elements.put(clazz, new ElementData(type, constructor)) == null,
+		Validate.isTrue(elements.put(clazz, constructor) == null,
 				"Only one constructor can be mapped to a type");
-	}
-	
-	private static class ElementData {
-		final GuiElementType type;
-		final ElementConstructor<?> constructor;
-		
-		ElementData(GuiElementType type, ElementConstructor<?> constructor) {
-			this.type = type;
-			this.constructor = constructor;
-		}
 	}
 	
 	@FunctionalInterface
 	private interface ElementConstructor<R extends GuiElement<R>> {
-		R apply(IodineGuiImpl gui, GuiElementType type, int internalId, Object id);
+		R apply(IodineGuiImpl gui, int internalId, Object id);
 	}
 }

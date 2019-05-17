@@ -8,13 +8,15 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.nio.ByteBuffer;
+
 /**
  * The implementation of {@link SliderGuiElement}.
  */
 public class SliderGuiElementImpl extends GuiElementImpl<SliderGuiElement> implements SliderGuiElement {
 	private boolean editable = true;
 	private boolean verticalOrientation;
-	private String text;
+	private String text = "";
 	private int maxProgress;
 	private int progress;
 	private ProgressedAction progressedAction;
@@ -23,13 +25,11 @@ public class SliderGuiElementImpl extends GuiElementImpl<SliderGuiElement> imple
 	 * Creates a new instance.
 	 *
 	 * @param gui the GUI which will contain this element
-	 * @param type the type of this element
 	 * @param internalId the internal ID of this element
 	 * @param id the API-friendly ID of this element
 	 */
-	public SliderGuiElementImpl(@NotNull IodineGuiImpl gui,
-			@NotNull GuiElementType type, int internalId, @NotNull Object id) {
-		super(gui, type, internalId, id);
+	public SliderGuiElementImpl(@NotNull IodineGuiImpl gui, int internalId, @NotNull Object id) {
+		super(gui, GuiElementType.SLIDER, internalId, id);
 	}
 	
 	
@@ -107,7 +107,7 @@ public class SliderGuiElementImpl extends GuiElementImpl<SliderGuiElement> imple
 	@Override
 	public SliderGuiElementImpl setProgress(int progress) {
 		Validate.isTrue(progress >= 0 && progress <= maxProgress,
-				"Progress must be at least 0 and most maxProgress");
+				"Progress must be at least 0 and at most maxProgress");
 		this.progress = progress;
 		gui.update();
 		return this;
@@ -118,5 +118,17 @@ public class SliderGuiElementImpl extends GuiElementImpl<SliderGuiElement> imple
 	public SliderGuiElementImpl onProgressed(@Nullable ProgressedAction action) {
 		progressedAction = action;
 		return this;
+	}
+	
+	
+	
+	@Override
+	public void serialize(@NotNull ByteBuffer buffer) {
+		super.serialize(buffer);
+		serializeBoolean(buffer, editable);
+		serializeBoolean(buffer, verticalOrientation);
+		serializeText(buffer, text);
+		buffer.putInt(maxProgress);
+		buffer.putInt(progress);
 	}
 }

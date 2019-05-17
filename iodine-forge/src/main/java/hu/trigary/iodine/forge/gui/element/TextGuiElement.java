@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
 import java.nio.ByteBuffer;
 
 public class TextGuiElement extends GuiElement {
-	private String text;
+	private String text = "";
 	
 	public TextGuiElement(@NotNull IodineGui gui, @NotNull GuiElementType type, int id) {
 		super(gui, type, id);

@@ -9,18 +9,28 @@ import org.apache.commons.lang.Validate;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * The implementation of {@link LinearGuiContainer}.
+ */
 public class LinearGuiContainerImpl extends GuiElementImpl<LinearGuiContainer>
 		implements LinearGuiContainer, GuiParentPlus<LinearGuiContainer> {
 	private final List<GuiElementImpl<?>> children = new ArrayList<>();
 	private boolean verticalOrientation;
 	
-	public LinearGuiContainerImpl(@NotNull IodineGuiImpl gui,
-			@NotNull GuiElementType type, int internalId, @NotNull Object id) {
-		super(gui, type, internalId, id);
+	/**
+	 * Creates a new instance.
+	 *
+	 * @param gui the GUI which will contain this element
+	 * @param internalId the internal ID of this element
+	 * @param id the API-friendly ID of this element
+	 */
+	public LinearGuiContainerImpl(@NotNull IodineGuiImpl gui, int internalId, @NotNull Object id) {
+		super(gui, GuiElementType.CONTAINER_LINEAR, internalId, id);
 	}
 	
 	
@@ -70,17 +80,17 @@ public class LinearGuiContainerImpl extends GuiElementImpl<LinearGuiContainer>
 	public <E extends GuiElement<E>> E makeChildAfter(@NotNull E element, @NotNull GuiElement<?> after) {
 		//noinspection SuspiciousMethodCalls
 		int index = children.indexOf(after);
-		//TODO validate index
+		Validate.isTrue(index != -1, "The specified element is not a child of this parent");
 		makeChildAt(index + 1, element);
 		return element;
 	}
 	
 	@NotNull
 	@Override
-	public <E extends GuiElement<E>> E makeChildBefore(@NotNull E element, @NotNull GuiElement<?> after) {
+	public <E extends GuiElement<E>> E makeChildBefore(@NotNull E element, @NotNull GuiElement<?> before) {
 		//noinspection SuspiciousMethodCalls
-		int index = children.indexOf(after);
-		//TODO validate index
+		int index = children.indexOf(before);
+		Validate.isTrue(index != -1, "The specified element is not a child of this parent");
 		makeChildAt(index, element);
 		return element;
 	}
@@ -98,5 +108,17 @@ public class LinearGuiContainerImpl extends GuiElementImpl<LinearGuiContainer>
 	public void removeChild(@NotNull GuiElementImpl<?> child) {
 		Validate.isTrue(children.remove(child),
 				"The specified element is not a child of this parent");
+	}
+	
+	
+	
+	@Override
+	public void serialize(@NotNull ByteBuffer buffer) {
+		super.serialize(buffer);
+		serializeBoolean(buffer, verticalOrientation);
+		buffer.putInt(children.size());
+		for (GuiElementImpl<?> element : children) {
+			buffer.putInt(element.getInternalId());
+		}
 	}
 }

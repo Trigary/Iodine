@@ -8,31 +8,27 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.nio.ByteBuffer;
+import java.util.*;
 
 /**
  * The implementation of {@link DropdownGuiElement}.
  */
 public class DropdownGuiElementImpl extends GuiElementImpl<DropdownGuiElement> implements DropdownGuiElement {
 	private boolean editable = true;
-	private List<String> choices;
-	private String selected; //TODO serialize based on index
+	private final List<String> choices = new ArrayList<>(Collections.singletonList(""));
+	private int selected;
 	private ChosenAction chosenAction;
 	
 	/**
 	 * Creates a new instance.
 	 *
 	 * @param gui the GUI which will contain this element
-	 * @param type the type of this element
 	 * @param internalId the internal ID of this element
 	 * @param id the API-friendly ID of this element
 	 */
-	public DropdownGuiElementImpl(@NotNull IodineGuiImpl gui,
-			@NotNull GuiElementType type, int internalId, @NotNull Object id) {
-		super(gui, type, internalId, id);
+	public DropdownGuiElementImpl(@NotNull IodineGuiImpl gui, int internalId, @NotNull Object id) {
+		super(gui, GuiElementType.DROPDOWN, internalId, id);
 	}
 	
 	
@@ -54,7 +50,7 @@ public class DropdownGuiElementImpl extends GuiElementImpl<DropdownGuiElement> i
 	@Contract(pure = true)
 	@Override
 	public String getSelected() {
-		return selected;
+		return choices.get(selected);
 	}
 	
 	
@@ -71,8 +67,9 @@ public class DropdownGuiElementImpl extends GuiElementImpl<DropdownGuiElement> i
 	@Override
 	public DropdownGuiElementImpl setChoices(@NotNull Collection<String> choices) {
 		Validate.isTrue(!choices.isEmpty(), "The count of choices must be at least 1");
-		this.choices = new ArrayList<>(choices);
-		selected = this.choices.get(0);
+		this.choices.clear();
+		this.choices.addAll(choices);
+		selected = 0;
 		gui.update();
 		return this;
 	}
@@ -82,7 +79,7 @@ public class DropdownGuiElementImpl extends GuiElementImpl<DropdownGuiElement> i
 	public DropdownGuiElementImpl setSelected(@NotNull String value) {
 		int index = choices.indexOf(value);
 		Validate.isTrue(index != -1, "The selected value must be among the choices");
-		selected = value;
+		selected = index;
 		gui.update();
 		return this;
 	}
@@ -92,5 +89,18 @@ public class DropdownGuiElementImpl extends GuiElementImpl<DropdownGuiElement> i
 	public DropdownGuiElementImpl onChosen(@Nullable ChosenAction action) {
 		chosenAction = action;
 		return this;
+	}
+	
+	
+	
+	@Override
+	public void serialize(@NotNull ByteBuffer buffer) {
+		super.serialize(buffer);
+		serializeBoolean(buffer, editable);
+		buffer.putInt(choices.size());
+		for (String choice : choices) {
+			serializeText(buffer, choice);
+		}
+		buffer.putInt(selected);
 	}
 }

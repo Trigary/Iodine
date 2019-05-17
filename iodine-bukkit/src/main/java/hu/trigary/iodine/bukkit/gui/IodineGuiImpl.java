@@ -102,7 +102,8 @@ public class IodineGuiImpl implements IodineGui, GuiParentPlus<IodineGui> {
 	
 	@Override
 	public void removeChild(@NotNull GuiElementImpl<?> child) {
-	
+		Validate.notNull(children.remove(child),
+				"The specified element is not a child of this parent");
 	}
 	
 	
@@ -120,7 +121,7 @@ public class IodineGuiImpl implements IodineGui, GuiParentPlus<IodineGui> {
 		apiIdElements.put(id, impl);
 		atomicUpdate(gui -> {
 			makeChild(element, x, y);
-			initializer.accept(type.getType().cast(element));
+			initializer.accept(element);
 		});
 		return element;
 	}
@@ -157,7 +158,9 @@ public class IodineGuiImpl implements IodineGui, GuiParentPlus<IodineGui> {
 		if (atomicUpdateLock == 0 && !viewers.isEmpty()) {
 			byte[] payload = serialize(false);
 			NetworkManager network = plugin.getNetwork();
-			viewers.forEach(player -> network.send(player, payload));
+			for (Player player : viewers) {
+				network.send(player, payload);
+			}
 		}
 	}
 	
@@ -236,9 +239,29 @@ public class IodineGuiImpl implements IodineGui, GuiParentPlus<IodineGui> {
 			BUFFER.put(PacketType.SERVER_GUI_CHANGE.getId());
 		}
 		
-		elements.values().forEach(element -> element.serialize(BUFFER));
+		for (GuiElementImpl<?> element : elements.values()) {
+			element.serialize(BUFFER);
+		}
+		children.forEach((element, position) -> {
+			BUFFER.putInt(element.getInternalId());
+			BUFFER.putInt(position.x);
+			BUFFER.putInt(position.y);
+		});
+		
 		byte[] result = new byte[BUFFER.flip().remaining()];
 		BUFFER.get(result).rewind();
 		return result;
+	}
+	
+	
+	
+	private static class Position {
+		final int x;
+		final int y;
+		
+		Position(int x, int y) {
+			this.x = x;
+			this.y = y;
+		}
 	}
 }

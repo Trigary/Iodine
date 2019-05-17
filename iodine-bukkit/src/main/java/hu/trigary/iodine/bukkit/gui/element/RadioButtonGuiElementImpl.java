@@ -7,6 +7,7 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,13 +25,11 @@ public class RadioButtonGuiElementImpl extends GuiElementImpl<RadioButtonGuiElem
 	 * Creates a new instance.
 	 *
 	 * @param gui the GUI which will contain this element
-	 * @param type the type of this element
 	 * @param internalId the internal ID of this element
 	 * @param id the API-friendly ID of this element
 	 */
-	public RadioButtonGuiElementImpl(@NotNull IodineGuiImpl gui,
-			@NotNull GuiElementType type, int internalId, @NotNull Object id) {
-		super(gui, type, internalId, id);
+	public RadioButtonGuiElementImpl(@NotNull IodineGuiImpl gui, int internalId, @NotNull Object id) {
+		super(gui, GuiElementType.RADIO_BUTTON, internalId, id);
 		setGroupId(0);
 	}
 	
@@ -75,11 +74,6 @@ public class RadioButtonGuiElementImpl extends GuiElementImpl<RadioButtonGuiElem
 	@NotNull
 	@Override
 	public RadioButtonGuiElementImpl setGroupId(int groupId) {
-		//TODO I don't like this, make sure everything works, etc.
-		//also re-check the documentation and implementation differences
-		//eg. document what happens when a group runs out of elements
-		//doc: the event does not fire
-		
 		if (groupData != null && groupData.id == groupId) {
 			return this;
 		}
@@ -88,7 +82,7 @@ public class RadioButtonGuiElementImpl extends GuiElementImpl<RadioButtonGuiElem
 			groupData.elements.remove(this);
 			if (!groupData.elements.isEmpty() && groupData.checked == this) {
 				groupData.checked = groupData.elements.get(0);
-				//TODO update the newly checked element
+				groupData.checked.checked = true;
 			}
 		}
 		
@@ -100,8 +94,10 @@ public class RadioButtonGuiElementImpl extends GuiElementImpl<RadioButtonGuiElem
 		if (other == null) {
 			groupData = new RadioButtonGroupData(groupId);
 			groupData.checked = this;
+			checked = true;
 		} else {
 			groupData = other.groupData;
+			checked = false;
 		}
 		
 		groupData.elements.add(this);
@@ -123,6 +119,16 @@ public class RadioButtonGuiElementImpl extends GuiElementImpl<RadioButtonGuiElem
 	public RadioButtonGuiElementImpl onChecked(@Nullable CheckedAction action) {
 		checkedAction = action;
 		return this;
+	}
+	
+	
+	
+	@Override
+	public void serialize(@NotNull ByteBuffer buffer) {
+		super.serialize(buffer);
+		serializeBoolean(buffer, editable);
+		serializeBoolean(buffer, checked);
+		buffer.putInt(groupData.id);
 	}
 	
 	

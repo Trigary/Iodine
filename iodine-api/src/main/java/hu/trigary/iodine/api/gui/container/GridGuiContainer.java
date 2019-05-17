@@ -22,6 +22,7 @@ public interface GridGuiContainer extends GuiContainer<GridGuiContainer> {
 	@Contract(pure = true)
 	GuiElement<?> getChild(int column, int row);
 	
+	//TODO docs: throws exception if there are children which do not fit into the new size
 	@NotNull
 	GridGuiContainer setGridSize(int columns, int rows);
 	

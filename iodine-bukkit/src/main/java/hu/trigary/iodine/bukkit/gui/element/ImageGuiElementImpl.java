@@ -7,6 +7,8 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.nio.ByteBuffer;
+
 /**
  * The implementation of {@link ImageGuiElement}.
  */
@@ -17,13 +19,11 @@ public class ImageGuiElementImpl extends GuiElementImpl<ImageGuiElement> impleme
 	 * Creates a new instance.
 	 *
 	 * @param gui the GUI which will contain this element
-	 * @param type the type of this element
 	 * @param internalId the internal ID of this element
 	 * @param id the API-friendly ID of this element
 	 */
-	public ImageGuiElementImpl(@NotNull IodineGuiImpl gui,
-			@NotNull GuiElementType type, int internalId, @NotNull Object id) {
-		super(gui, type, internalId, id);
+	public ImageGuiElementImpl(@NotNull IodineGuiImpl gui, int internalId, @NotNull Object id) {
+		super(gui, GuiElementType.IMAGE, internalId, id);
 	}
 	
 	
@@ -48,5 +48,13 @@ public class ImageGuiElementImpl extends GuiElementImpl<ImageGuiElement> impleme
 	public ImageGuiElementImpl onClicked(@Nullable ClickedAction<ImageGuiElement> action) {
 		clickedAction = action;
 		return this;
+	}
+	
+	
+	
+	@Override
+	public void serialize(@NotNull ByteBuffer buffer) {
+		super.serialize(buffer);
+		throw new UnsupportedOperationException();
 	}
 }

@@ -7,25 +7,25 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.nio.ByteBuffer;
+
 /**
  * The implementation of {@link TextFieldGuiElement}.
  */
 public class TextFieldGuiElementImpl extends GuiElementImpl<TextFieldGuiElement> implements TextFieldGuiElement {
 	private boolean editable = true;
-	private String text;
+	private String text = "";
 	private TextChangedAction textChangedAction;
 	
 	/**
 	 * Creates a new instance.
 	 *
 	 * @param gui the GUI which will contain this element
-	 * @param type the type of this element
 	 * @param internalId the internal ID of this element
 	 * @param id the API-friendly ID of this element
 	 */
-	public TextFieldGuiElementImpl(@NotNull IodineGuiImpl gui,
-			@NotNull GuiElementType type, int internalId, @NotNull Object id) {
-		super(gui, type, internalId, id);
+	public TextFieldGuiElementImpl(@NotNull IodineGuiImpl gui, int internalId, @NotNull Object id) {
+		super(gui, GuiElementType.TEXT_FIELD, internalId, id);
 	}
 	
 	
@@ -66,5 +66,14 @@ public class TextFieldGuiElementImpl extends GuiElementImpl<TextFieldGuiElement>
 	public TextFieldGuiElementImpl onChanged(@Nullable TextChangedAction action) {
 		textChangedAction = action;
 		return this;
+	}
+	
+	
+	
+	@Override
+	public void serialize(@NotNull ByteBuffer buffer) {
+		super.serialize(buffer);
+		serializeBoolean(buffer, editable);
+		serializeText(buffer, text);
 	}
 }
