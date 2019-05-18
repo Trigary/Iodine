@@ -1,7 +1,7 @@
 package hu.trigary.iodine.bukkit;
 
 import hu.trigary.iodine.api.IodineApi;
-import hu.trigary.iodine.api.gui.element.TextGuiElement;
+import hu.trigary.iodine.api.gui.GuiElements;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -35,12 +35,13 @@ public class TestCommandListener implements Listener {
 		}
 		
 		api.createGui()
-				.addElement(TextGuiElement.class, e -> e.setText("Hello, world!"))
-				//.addElement(ButtonGuiElement.class,
-				//		e -> e.setClickAction((button, p) -> p.sendMessage("You clicked the button"))
-				//				.setText("Click me!"))
-				.setOpenAction((gui, p) -> p.sendMessage("You opened a GUI"))
-				.setCloseAction((gui, p) -> p.sendMessage("You closed a GUI"))
+				.addElement(GuiElements.CONTAINER_LINEAR, container -> container.getGui()
+						.addElement(GuiElements.TEXT, e -> container.makeChildLast(e)
+								.setText("Hello, world!"))
+						.addElement(GuiElements.BUTTON, e -> container.makeChildLast(e)
+								.setText("Click me!")
+								.onClicked((b, p) -> p.sendMessage("You clicked the button"))))
+				.onClosed((gui, p) -> p.sendMessage("You closed a GUI"))
 				.openFor(player);
 	}
 }

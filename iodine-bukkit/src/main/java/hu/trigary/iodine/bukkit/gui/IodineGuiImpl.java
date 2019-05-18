@@ -110,20 +110,20 @@ public class IodineGuiImpl implements IodineGui, GuiParentPlus<IodineGui> {
 	
 	@NotNull
 	@Override
-	public <E extends GuiElement<E>> E addElement(@NotNull Object id,
+	public <E extends GuiElement<E>> IodineGui addElement(@NotNull Object id,
 			@NotNull GuiElements<E> type, @NotNull Consumer<E> initializer, int x, int y) {
 		Validate.notNull(id, "IDs must be non-null");
 		Validate.isTrue(!apiIdElements.containsKey(id), "IDs must be unique");
 		GuiElementImpl<E> impl = plugin.getGui().createElement(type.getType(), this, nextElementId, id);
-		//noinspection unchecked
-		E element = (E) impl;
 		elements.put(nextElementId++, impl);
 		apiIdElements.put(id, impl);
 		atomicUpdate(gui -> {
+			//noinspection unchecked
+			E element = (E) impl;
 			makeChild(element, x, y);
 			initializer.accept(element);
 		});
-		return element;
+		return this;
 	}
 	
 	@NotNull

@@ -57,6 +57,7 @@ public abstract class GuiElementImpl<T extends GuiElement<T>> implements GuiElem
 		return internalId;
 	}
 	
+	@NotNull
 	@Contract(pure = true)
 	@Override
 	public Object getId() {

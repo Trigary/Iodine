@@ -76,16 +76,13 @@ public interface IodineGui extends GuiParent<IodineGui> {
 	 * @param <E> the type of the element to add
 	 * @return the current instance (for chaining)
 	 */
-	@NotNull <E extends GuiElement<E>> E addElement(@NotNull Object id,
+	@NotNull <E extends GuiElement<E>> IodineGui addElement(@NotNull Object id,
 			@NotNull GuiElements<E> type, @NotNull Consumer<E> initializer, int x, int y);
 	
 	/**
 	 * Adds a new element of the specified type to this GUI.
-	 * The parent of the element will be this GUI.
-	 * The initializer function atomically initializes the new element.
-	 * The element will have an internally created ID.
-	 * If ID-based access is required, then {@link #addElement(Object, GuiElements, Consumer, int, int)}
-	 * should be used instead.
+	 * Same as calling {@link #addElement(Object, GuiElements, Consumer, int, int)}
+	 * with {@code new Object()} as the ID.
 	 *
 	 * @param type the class of the element to add
 	 * @param initializer the function which atomically initializes the element
@@ -95,9 +92,41 @@ public interface IodineGui extends GuiParent<IodineGui> {
 	 * @return the current instance (for chaining)
 	 */
 	@NotNull
-	default <E extends GuiElement<E>> E addElement(@NotNull GuiElements<E> type,
+	default <E extends GuiElement<E>> IodineGui addElement(@NotNull GuiElements<E> type,
 			@NotNull Consumer<E> initializer, int x, int y) {
 		return addElement(new Object(), type, initializer, x, y);
+	}
+	
+	/**
+	 * Adds a new element of the specified type to this GUI.
+	 * Same as calling {@link #addElement(Object, GuiElements, Consumer, int, int)}
+	 * with 0;0 as the X;Y positions.
+	 *
+	 * @param type the class of the element to add
+	 * @param initializer the function which atomically initializes the element
+	 * @param <E> the type of the element to add
+	 * @return the current instance (for chaining)
+	 */
+	@NotNull
+	default <E extends GuiElement<E>> IodineGui addElement(@NotNull Object id,
+			@NotNull GuiElements<E> type, @NotNull Consumer<E> initializer) {
+		return addElement(id, type, initializer, 0, 0);
+	}
+	
+	/**
+	 * Adds a new element of the specified type to this GUI.
+	 * Same as calling {@link #addElement(Object, GuiElements, Consumer, int, int)}
+	 * with {@code new Object()} as the ID and 0;0 as the X;Y positions.
+	 *
+	 * @param type the class of the element to add
+	 * @param initializer the function which atomically initializes the element
+	 * @param <E> the type of the element to add
+	 * @return the current instance (for chaining)
+	 */
+	@NotNull
+	default <E extends GuiElement<E>> IodineGui addElement(@NotNull GuiElements<E> type,
+			@NotNull Consumer<E> initializer) {
+		return addElement(new Object(), type, initializer, 0, 0);
 	}
 	
 	/**

@@ -26,6 +26,7 @@ public interface GuiElement<T extends GuiElement<T>> {
 	 *
 	 * @return the ID of this element
 	 */
+	@NotNull
 	@Contract(pure = true)
 	Object getId();
 	
