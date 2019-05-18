@@ -2,6 +2,7 @@ package hu.trigary.iodine.bukkit.network.handler;
 
 import hu.trigary.iodine.api.player.PlayerState;
 import hu.trigary.iodine.bukkit.IodinePlugin;
+import hu.trigary.iodine.bukkit.network.PacketListener;
 import hu.trigary.iodine.backend.PacketType;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Contract;
@@ -15,6 +16,12 @@ import java.nio.ByteBuffer;
 public abstract class PacketHandler {
 	protected final IodinePlugin plugin;
 	
+	/**
+	 * Creates a new instance.
+	 * Should only be called once, by {@link PacketListener}.
+	 *
+	 * @param plugin the plugin instance
+	 */
 	protected PacketHandler(@NotNull IodinePlugin plugin) {
 		this.plugin = plugin;
 	}

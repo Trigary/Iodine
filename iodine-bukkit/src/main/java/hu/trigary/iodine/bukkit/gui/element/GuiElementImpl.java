@@ -21,6 +21,14 @@ public abstract class GuiElementImpl<T extends GuiElement<T>> implements GuiElem
 	private final Object id;
 	private GuiParentPlus<?> parent;
 	
+	/**
+	 * Creates a new instance.
+	 *
+	 * @param gui the GUI which will contain this element
+	 * @param type the exact type of this element
+	 * @param internalId the internal ID of this element
+	 * @param id the API-friendly ID of this element
+	 */
 	protected GuiElementImpl(@NotNull IodineGuiImpl gui,
 			@NotNull GuiElementType type, int internalId, @NotNull Object id) {
 		this.gui = gui;
@@ -64,6 +72,12 @@ public abstract class GuiElementImpl<T extends GuiElement<T>> implements GuiElem
 		return parent;
 	}
 	
+	/**
+	 * Sets this element's parent,
+	 * internally unregistering it from its previous parent.
+	 *
+	 * @param parent this element's new parent
+	 */
 	public void setParent(@NotNull GuiParentPlus<?> parent) {
 		if (this.parent != null) {
 			this.parent.removeChild(this);
@@ -85,11 +99,26 @@ public abstract class GuiElementImpl<T extends GuiElement<T>> implements GuiElem
 		buffer.putInt(internalId);
 	}
 	
-	protected void serializeBoolean(ByteBuffer buffer, boolean bool) {
+	/**
+	 * Serializes the specified boolean as a byte.
+	 * True values are serialized as {@code (byte)1},
+	 * while false values are serialized as {@code (byte)0}.
+	 *
+	 * @param buffer the buffer to serialize into
+	 * @param bool the boolean to serialize
+	 */
+	protected void serializeBoolean(@NotNull ByteBuffer buffer, boolean bool) {
 		buffer.put(bool ? (byte) 1 : 0);
 	}
 	
-	protected void serializeText(ByteBuffer buffer, String text) {
+	/**
+	 * Serializes the specified text by converting it to an UTF-8 encoded by byte array.
+	 * The length of this array and the array itself is then put into the buffer.
+	 *
+	 * @param buffer the buffer to serialize into
+	 * @param text the text to serialize
+	 */
+	protected void serializeText(@NotNull ByteBuffer buffer, @NotNull String text) {
 		byte[] textBytes = text.getBytes(Charsets.UTF_8);
 		buffer.putInt(textBytes.length);
 		buffer.put(textBytes);

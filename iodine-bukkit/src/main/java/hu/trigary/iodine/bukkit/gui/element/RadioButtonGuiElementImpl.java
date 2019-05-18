@@ -134,7 +134,7 @@ public class RadioButtonGuiElementImpl extends GuiElementImpl<RadioButtonGuiElem
 	
 	
 	private static class RadioButtonGroupData {
-		private final List<RadioButtonGuiElementImpl> elements = new ArrayList<>();
+		final List<RadioButtonGuiElementImpl> elements = new ArrayList<>();
 		final int id;
 		RadioButtonGuiElementImpl checked;
 		
