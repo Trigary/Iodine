@@ -11,10 +11,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.nio.ByteBuffer;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 /**
  * The implementation of {@link GridGuiContainer}.
@@ -130,11 +127,8 @@ public class GridGuiContainerImpl extends GuiElementImpl<GridGuiContainer>
 		super.serialize(buffer);
 		buffer.putInt(columnCount);
 		buffer.putInt(rowCount);
-		for (int column = 0; column < columnCount; column++) {
-			for (int row = 0; row < rowCount; row++) {
-				GuiElementImpl<?> element = children.get(column * rowCount + row);
-				buffer.putInt(element == null ? getInternalId() : element.getInternalId());
-			}
+		for (GuiElementImpl<?> element : children) {
+			buffer.putInt(element == null ? getInternalId() : element.getInternalId());
 		}
 	}
 }

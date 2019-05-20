@@ -242,6 +242,7 @@ public class IodineGuiImpl implements IodineGui, GuiParentPlus<IodineGui> {
 			BUFFER.put(PacketType.SERVER_GUI_CHANGE.getId());
 		}
 		
+		BUFFER.putInt(elements.size());
 		for (GuiElementImpl<?> element : elements.values()) {
 			element.serialize(BUFFER);
 		}

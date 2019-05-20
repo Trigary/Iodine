@@ -24,20 +24,18 @@ public class GuiManager {
 	
 	
 	
-	public void deserializeElements(@NotNull IodineGui gui,
+	public void deserializeElement(@NotNull IodineGui gui,
 			@NotNull Map<Integer, GuiElement> storage, @NotNull ByteBuffer buffer) {
-		while (buffer.hasRemaining()) {
-			GuiElementType type = GuiElementType.fromId(buffer.get());
-			if (type == null) {
-				mod.getLogger().error("Encountered invalid GuiElementType while deserializing");
-				return;
-			}
-			
-			GuiElement element = storage.computeIfAbsent(buffer.getInt(),
-					id -> constructors.get(type).apply(gui, id));
-			element.deserialize(buffer);
-			element.update();
+		GuiElementType type = GuiElementType.fromId(buffer.get());
+		if (type == null) {
+			mod.getLogger().error("Encountered invalid GuiElementType while deserializing");
+			return;
 		}
+		
+		GuiElement element = storage.computeIfAbsent(buffer.getInt(),
+				id -> constructors.get(type).apply(gui, id));
+		element.deserialize(buffer);
+		element.update();
 	}
 	
 	

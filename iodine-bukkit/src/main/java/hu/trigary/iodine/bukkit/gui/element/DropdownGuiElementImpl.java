@@ -15,8 +15,8 @@ import java.util.*;
  * The implementation of {@link DropdownGuiElement}.
  */
 public class DropdownGuiElementImpl extends GuiElementImpl<DropdownGuiElement> implements DropdownGuiElement {
-	private boolean editable = true;
 	private final List<String> choices = new ArrayList<>(Collections.singletonList(""));
+	private boolean editable = true;
 	private int selected;
 	private ChosenAction chosenAction;
 	

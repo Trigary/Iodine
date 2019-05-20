@@ -13,6 +13,7 @@ import java.util.Map;
 
 public class IodineGui extends GuiScreen {
 	private final Map<Integer, GuiElement> elements = new HashMap<>();
+	private final Map<Integer, Position> children = new HashMap<>();
 	private final IodineMod mod;
 	private final int id;
 	
@@ -25,7 +26,16 @@ public class IodineGui extends GuiScreen {
 	
 	
 	public void deserialize(@NotNull byte[] data) {
-		mod.getGui().deserializeElements(this, elements, ByteBuffer.wrap(data));
+		ByteBuffer buffer = ByteBuffer.wrap(data);
+		
+		int elementCount = buffer.getInt();
+		for (int i = 0; i < elementCount; i++) {
+			mod.getGui().deserializeElement(this, elements, buffer);
+		}
+		
+		while (buffer.hasRemaining()) {
+			children.put(buffer.getInt(), new Position(buffer.getShort(), buffer.getShort()));
+		}
 	}
 	
 	
@@ -71,5 +81,17 @@ public class IodineGui extends GuiScreen {
 	@Override
 	protected void mouseClickMove(int mouseX, int mouseY, int clickedMouseButton, long timeSinceLastClick) {
 	
+	}
+	
+	
+	
+	private static class Position {
+		final short x;
+		final short y;
+		
+		Position(short x, short y) {
+			this.x = x;
+			this.y = y;
+		}
 	}
 }
