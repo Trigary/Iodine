@@ -19,6 +19,7 @@ public class TextGuiElement extends GuiElement {
 	
 	@Override
 	public void deserialize(@NotNull ByteBuffer buffer) {
+		super.deserialize(buffer);
 		text = deserializeString(buffer);
 	}
 	

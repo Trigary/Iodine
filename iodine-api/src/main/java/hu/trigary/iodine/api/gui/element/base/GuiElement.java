@@ -38,4 +38,29 @@ public interface GuiElement<T extends GuiElement<T>> {
 	@NotNull
 	@Contract(pure = true)
 	GuiParent<?> getParent();
+	
+	
+	
+	/**
+	 * Gets the offset on the specified side.
+	 * This side must not be a compound side:
+	 * it can only be left, right, top or bottom.
+	 *
+	 * @param side the side to get the offset on
+	 * @return the offset on the specified side
+	 */
+	@Contract(pure = true)
+	int getOffset(int side);
+	
+	/**
+	 * Sets the offset on the specified sides.
+	 * The side can be a compound side.
+	 * The amount must be at least 0 and at most {@link Short#MAX_VALUE}.
+	 *
+	 * @param sides the sides to set the offset on
+	 * @param amount the amount of the offset
+	 * @return the current instance (for chaining)
+	 */
+	@NotNull
+	GuiElement<T> setOffset(int sides, int amount);
 }

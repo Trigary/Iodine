@@ -92,8 +92,11 @@ public class IodineGuiImpl implements IodineGui, GuiParentPlus<IodineGui> {
 	@NotNull
 	@Override
 	public <E extends GuiElement<E>> E makeChild(@NotNull E element, int x, int y) {
+		Validate.isTrue(x >= 0 && y >= 0 && x <= Short.MAX_VALUE && y <= Short.MAX_VALUE,
+				"The element's render position must be at least 0 and at most Short.MAX_VALUE");
+		//TODO can it fit into 8 bits instead?
 		GuiElementImpl<?> impl = (GuiElementImpl<?>) element;
-		Validate.isTrue(children.put(impl, new Position(x, y)) == null,
+		Validate.isTrue(children.put(impl, new Position((short) x, (short) y)) == null,
 				"The specified element is already the child of this GUI");
 		impl.setParent(this);
 		update();
@@ -242,10 +245,11 @@ public class IodineGuiImpl implements IodineGui, GuiParentPlus<IodineGui> {
 		for (GuiElementImpl<?> element : elements.values()) {
 			element.serialize(BUFFER);
 		}
+		
 		children.forEach((element, position) -> {
 			BUFFER.putInt(element.getInternalId());
-			BUFFER.putInt(position.x);
-			BUFFER.putInt(position.y);
+			BUFFER.putShort(position.x);
+			BUFFER.putShort(position.y);
 		});
 		
 		byte[] result = new byte[BUFFER.flip().remaining()];
@@ -256,10 +260,10 @@ public class IodineGuiImpl implements IodineGui, GuiParentPlus<IodineGui> {
 	
 	
 	private static class Position {
-		final int x;
-		final int y;
+		final short x;
+		final short y;
 		
-		Position(int x, int y) {
+		Position(short x, short y) {
 			this.x = x;
 			this.y = y;
 		}

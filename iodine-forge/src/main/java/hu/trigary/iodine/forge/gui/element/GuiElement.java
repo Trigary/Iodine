@@ -14,6 +14,7 @@ import java.nio.ByteBuffer;
 
 public abstract class GuiElement extends Gui {
 	protected static final Minecraft MC = Minecraft.getMinecraft();
+	private final short[] offsets = new short[4];
 	private final IodineGui gui;
 	private final GuiElementType type;
 	private final int id;
@@ -34,7 +35,12 @@ public abstract class GuiElement extends Gui {
 	
 	
 	
-	public abstract void deserialize(@NotNull ByteBuffer buffer);
+	public void deserialize(@NotNull ByteBuffer buffer) {
+		offsets[0] = buffer.getShort();
+		offsets[1] = buffer.getShort();
+		offsets[2] = buffer.getShort();
+		offsets[3] = buffer.getShort();
+	}
 	
 	protected final boolean deserializeBoolean(@NotNull ByteBuffer buffer) {
 		return buffer.get() == 1;

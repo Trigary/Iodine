@@ -20,6 +20,7 @@ public class ButtonGuiElement extends GuiElement {
 	
 	@Override
 	public void deserialize(@NotNull ByteBuffer buffer) {
+		super.deserialize(buffer);
 		editable = deserializeBoolean(buffer);
 		text = deserializeString(buffer);
 	}

@@ -51,6 +51,7 @@ public interface IodineGui extends GuiParent<IodineGui> {
 	
 	/**
 	 * Makes the specified element a direct child of this GUI.
+	 * The element's render position must be at least 0 and at most {@link Short#MAX_VALUE}.
 	 *
 	 * @param element the element to add as a child
 	 * @param x the X component of the element's render position
@@ -65,6 +66,7 @@ public interface IodineGui extends GuiParent<IodineGui> {
 	 * The initializer function atomically initializes the new element.
 	 * The element will be accessible using the specified ID.
 	 * This ID must be unique.
+	 * The element's render position must be at least 0 and at most {@link Short#MAX_VALUE}.
 	 * If ID-based access is not required, then optionally
 	 * {@link #addElement(GuiElements, Consumer, int, int)} can be used instead.
 	 *

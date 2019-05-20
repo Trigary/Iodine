@@ -34,7 +34,7 @@ public class GuiManager {
 			}
 			
 			GuiElement element = storage.computeIfAbsent(buffer.getInt(),
-					id -> constructors.get(type).apply(gui, type, id));
+					id -> constructors.get(type).apply(gui, id));
 			element.deserialize(buffer);
 			element.update();
 		}
@@ -44,6 +44,6 @@ public class GuiManager {
 	
 	@FunctionalInterface
 	private interface ElementConstructor<R extends GuiElement> {
-		R apply(IodineGui gui, GuiElementType type, int id);
+		R apply(IodineGui gui, int id);
 	}
 }
