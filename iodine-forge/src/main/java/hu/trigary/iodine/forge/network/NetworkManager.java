@@ -23,12 +23,17 @@ public class NetworkManager {
 		network = NetworkRegistry.INSTANCE.newSimpleChannel(PacketType.NETWORK_CHANNEL);
 		
 		registerOut(PacketType.CLIENT_LOGIN, ClientLoginPacket.class);
-		registerIn(PacketType.SERVER_LOGIN_SUCCESS, ServerLoginSuccessPacket.class, new ServerLoginSuccessPacket.Handler(mod));
-		registerIn(PacketType.SERVER_LOGIN_FAILED, ServerLoginFailedPacket.class, new ServerLoginFailedPacket.Handler(mod));
+		registerIn(PacketType.SERVER_LOGIN_SUCCESS, ServerLoginSuccessPacket.class,
+				new ServerLoginSuccessPacket.Handler(mod));
+		registerIn(PacketType.SERVER_LOGIN_FAILED, ServerLoginFailedPacket.class,
+				new ServerLoginFailedPacket.Handler(mod));
 		
-		registerIn(PacketType.SERVER_GUI_OPEN, ServerGuiOpenPacket.class, new ServerGuiOpenPacket.Handler(mod));
-		registerIn(PacketType.SERVER_GUI_CLOSE, ServerGuiClosePacket.class, new ServerGuiClosePacket.Handler(mod));
-		registerIn(PacketType.SERVER_GUI_CHANGE, ServerGuiChangePacket.class, new ServerGuiChangePacket.Handler(mod));
+		registerIn(PacketType.SERVER_GUI_OPEN, ServerGuiOpenPacket.class,
+				new ServerGuiOpenPacket.Handler(mod));
+		registerIn(PacketType.SERVER_GUI_CLOSE, ServerGuiClosePacket.class,
+				new ServerGuiClosePacket.Handler(mod));
+		registerIn(PacketType.SERVER_GUI_CHANGE, ServerGuiChangePacket.class,
+				new ServerGuiChangePacket.Handler(mod));
 		
 		registerOut(PacketType.CLIENT_GUI_CLOSE, ClientGuiClosePacket.class);
 		registerOut(PacketType.CLIENT_GUI_CHANGE, ClientGuiChangePacket.class);

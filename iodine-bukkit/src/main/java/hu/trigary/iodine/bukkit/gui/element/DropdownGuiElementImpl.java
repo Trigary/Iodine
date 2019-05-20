@@ -99,7 +99,7 @@ public class DropdownGuiElementImpl extends GuiElementImpl<DropdownGuiElement> i
 		serializeBoolean(buffer, editable);
 		buffer.putInt(choices.size());
 		for (String choice : choices) {
-			serializeText(buffer, choice);
+			serializeString(buffer, choice);
 		}
 		buffer.putInt(selected);
 	}

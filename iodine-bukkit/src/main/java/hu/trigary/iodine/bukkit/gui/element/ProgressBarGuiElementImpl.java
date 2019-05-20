@@ -102,7 +102,7 @@ public class ProgressBarGuiElementImpl extends GuiElementImpl<ProgressBarGuiElem
 	public void serialize(@NotNull ByteBuffer buffer) {
 		super.serialize(buffer);
 		serializeBoolean(buffer, verticalOrientation);
-		serializeText(buffer, text);
+		serializeString(buffer, text);
 		buffer.putInt(maxProgress);
 		buffer.putInt(progress);
 	}

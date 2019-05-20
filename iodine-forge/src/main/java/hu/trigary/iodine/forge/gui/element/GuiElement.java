@@ -1,5 +1,6 @@
 package hu.trigary.iodine.forge.gui.element;
 
+import com.google.common.base.Charsets;
 import hu.trigary.iodine.backend.GuiElementType;
 import hu.trigary.iodine.forge.gui.IodineGui;
 import net.minecraft.client.Minecraft;
@@ -33,7 +34,20 @@ public abstract class GuiElement extends Gui {
 	
 	
 	
-	public void deserialize(@NotNull ByteBuffer buffer) { }
+	public abstract void deserialize(@NotNull ByteBuffer buffer);
+	
+	protected final boolean deserializeBoolean(@NotNull ByteBuffer buffer) {
+		return buffer.get() == 1;
+	}
+	
+	@NotNull
+	protected final String deserializeString(@NotNull ByteBuffer buffer) {
+		byte[] bytes = new byte[buffer.getInt()];
+		buffer.get(bytes);
+		return new String(bytes, Charsets.UTF_8);
+	}
+	
+	
 	
 	public final void update() {
 		minecraftGuiObject = updateImpl();

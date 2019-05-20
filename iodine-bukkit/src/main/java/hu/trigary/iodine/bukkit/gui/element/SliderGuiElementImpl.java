@@ -127,7 +127,7 @@ public class SliderGuiElementImpl extends GuiElementImpl<SliderGuiElement> imple
 		super.serialize(buffer);
 		serializeBoolean(buffer, editable);
 		serializeBoolean(buffer, verticalOrientation);
-		serializeText(buffer, text);
+		serializeString(buffer, text);
 		buffer.putInt(maxProgress);
 		buffer.putInt(progress);
 	}

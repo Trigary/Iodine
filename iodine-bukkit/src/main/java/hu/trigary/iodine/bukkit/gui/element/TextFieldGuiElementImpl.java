@@ -74,6 +74,6 @@ public class TextFieldGuiElementImpl extends GuiElementImpl<TextFieldGuiElement>
 	public void serialize(@NotNull ByteBuffer buffer) {
 		super.serialize(buffer);
 		serializeBoolean(buffer, editable);
-		serializeText(buffer, text);
+		serializeString(buffer, text);
 	}
 }

@@ -108,7 +108,7 @@ public abstract class GuiElementImpl<T extends GuiElement<T>> implements GuiElem
 	 * @param buffer the buffer to serialize into
 	 * @param bool the boolean to serialize
 	 */
-	protected void serializeBoolean(@NotNull ByteBuffer buffer, boolean bool) {
+	protected final void serializeBoolean(@NotNull ByteBuffer buffer, boolean bool) {
 		buffer.put(bool ? (byte) 1 : 0);
 	}
 	
@@ -117,10 +117,10 @@ public abstract class GuiElementImpl<T extends GuiElement<T>> implements GuiElem
 	 * The length of this array and the array itself is then put into the buffer.
 	 *
 	 * @param buffer the buffer to serialize into
-	 * @param text the text to serialize
+	 * @param string the text to serialize
 	 */
-	protected void serializeText(@NotNull ByteBuffer buffer, @NotNull String text) {
-		byte[] textBytes = text.getBytes(Charsets.UTF_8);
+	protected final void serializeString(@NotNull ByteBuffer buffer, @NotNull String string) {
+		byte[] textBytes = string.getBytes(Charsets.UTF_8);
 		buffer.putInt(textBytes.length);
 		buffer.put(textBytes);
 	}

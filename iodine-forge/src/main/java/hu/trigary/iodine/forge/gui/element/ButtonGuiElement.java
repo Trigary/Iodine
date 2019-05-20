@@ -6,15 +6,26 @@ import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiButton;
 import org.jetbrains.annotations.NotNull;
 
-public class ButtonGuiElement extends TextGuiElement {
-	public ButtonGuiElement(@NotNull IodineGui gui, @NotNull GuiElementType type, int id) {
-		super(gui, type, id);
+import java.nio.ByteBuffer;
+
+public class ButtonGuiElement extends GuiElement {
+	private boolean editable;
+	private String text;
+	
+	public ButtonGuiElement(@NotNull IodineGui gui, int id) {
+		super(gui, GuiElementType.BUTTON, id);
 	}
 	
 	
 	
 	@Override
+	public void deserialize(@NotNull ByteBuffer buffer) {
+		editable = deserializeBoolean(buffer);
+		text = deserializeString(buffer);
+	}
+	
+	@Override
 	public Gui updateImpl() {
-		return new GuiButton(getId(), 0, 0, getText());
+		return new GuiButton(getId(), 0, 0, text);
 	}
 }

@@ -49,6 +49,6 @@ public class TextGuiElementImpl extends GuiElementImpl<TextGuiElement> implement
 	@Override
 	public void serialize(@NotNull ByteBuffer buffer) {
 		super.serialize(buffer);
-		serializeText(buffer, text);
+		serializeString(buffer, text);
 	}
 }
