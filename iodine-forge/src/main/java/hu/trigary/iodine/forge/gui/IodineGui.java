@@ -4,16 +4,20 @@ import hu.trigary.iodine.forge.IodineMod;
 import hu.trigary.iodine.forge.gui.element.GuiElement;
 import hu.trigary.iodine.forge.network.out.ClientGuiClosePacket;
 import net.minecraft.client.gui.GuiScreen;
+import org.apache.commons.lang3.Validate;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
 public class IodineGui extends GuiScreen {
 	private final Map<Integer, GuiElement> elements = new HashMap<>();
-	private final Map<Integer, Position> children = new HashMap<>();
+	private final Map<GuiElement, Position> children = new HashMap<>();
 	private final IodineMod mod;
 	private final int id;
 	
@@ -33,9 +37,27 @@ public class IodineGui extends GuiScreen {
 			mod.getGui().deserializeElement(this, elements, buffer);
 		}
 		
-		while (buffer.hasRemaining()) {
-			children.put(buffer.getInt(), new Position(buffer.getShort(), buffer.getShort()));
+		for (GuiElement element : elements.values()) {
+			element.resolveElementReferences();
 		}
+		
+		while (buffer.hasRemaining()) {
+			children.put(elements.get(buffer.getInt()), new Position(buffer.getShort(), buffer.getShort()));
+		}
+	}
+	
+	@NotNull
+	@Contract(pure = true)
+	public Collection<GuiElement> getElements() {
+		return Collections.unmodifiableCollection(elements.values());
+	}
+	
+	@NotNull
+	@Contract(pure = true)
+	public GuiElement getElement(int id) {
+		GuiElement element = elements.get(id);
+		Validate.notNull(element, "Valid element ID must be provided: no elements found with ID");
+		return element;
 	}
 	
 	

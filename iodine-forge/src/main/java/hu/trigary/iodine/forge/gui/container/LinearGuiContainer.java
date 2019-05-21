@@ -10,7 +10,8 @@ import java.nio.ByteBuffer;
 import java.util.Arrays;
 
 public class LinearGuiContainer extends GuiElement {
-	private int[] children;
+	private int[] childrenTemp;
+	private GuiElement[] children;
 	private boolean verticalOrientation;
 	
 	public LinearGuiContainer(@NotNull IodineGui gui, int id) {
@@ -23,8 +24,16 @@ public class LinearGuiContainer extends GuiElement {
 	public void deserialize(@NotNull ByteBuffer buffer) {
 		super.deserialize(buffer);
 		verticalOrientation = deserializeBoolean(buffer);
-		children = new int[buffer.getInt()];
-		Arrays.setAll(children, i -> buffer.getInt());
+		childrenTemp = new int[buffer.getInt()];
+		Arrays.setAll(childrenTemp, i -> buffer.getInt());
+	}
+	
+	@Override
+	public void resolveElementReferences() {
+		IodineGui gui = getGui();
+		children = new GuiElement[childrenTemp.length];
+		Arrays.setAll(children, i -> gui.getElement(childrenTemp[i]));
+		childrenTemp = null;
 	}
 	
 	@Override

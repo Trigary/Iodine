@@ -11,7 +11,8 @@ import java.nio.ByteBuffer;
 import java.util.Arrays;
 
 public class GridGuiContainer extends GuiElement {
-	private int[] children;
+	private int[] childrenTemp;
+	private GuiElement[] children;
 	private int columnCount;
 	private int rowCount;
 	
@@ -26,8 +27,16 @@ public class GridGuiContainer extends GuiElement {
 		super.deserialize(buffer);
 		columnCount = buffer.getInt();
 		rowCount = buffer.getInt();
-		children = new int[columnCount * rowCount];
+		childrenTemp = new int[columnCount * rowCount];
 		Arrays.setAll(children, i ->  buffer.getInt());
+	}
+	
+	@Override
+	public void resolveElementReferences() {
+		IodineGui gui = getGui();
+		children = new GuiElement[childrenTemp.length];
+		Arrays.setAll(children, i -> gui.getElement(childrenTemp[i]));
+		childrenTemp = null;
 	}
 	
 	@Override

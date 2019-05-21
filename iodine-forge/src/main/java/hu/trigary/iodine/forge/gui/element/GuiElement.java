@@ -7,6 +7,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiLabel;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -14,7 +15,7 @@ import java.nio.ByteBuffer;
 
 public abstract class GuiElement extends Gui {
 	protected static final Minecraft MC = Minecraft.getMinecraft();
-	private final short[] offsets = new short[4];
+	private final short[] offsets = new short[4]; //TODO inherit offset -> containers set parent of children
 	private final IodineGui gui;
 	private final GuiElementType type;
 	private final int id;
@@ -29,6 +30,13 @@ public abstract class GuiElement extends Gui {
 	
 	
 	
+	@NotNull
+	@Contract(pure = true)
+	public IodineGui getGui() {
+		return gui;
+	}
+	
+	@Contract(pure = true)
 	public int getId() {
 		return id;
 	}
@@ -54,6 +62,8 @@ public abstract class GuiElement extends Gui {
 	}
 	
 	
+	
+	public void resolveElementReferences() { }
 	
 	public final void update() {
 		minecraftGuiObject = updateImpl();

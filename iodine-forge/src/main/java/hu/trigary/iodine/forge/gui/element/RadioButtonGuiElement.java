@@ -6,10 +6,13 @@ import net.minecraft.client.gui.Gui;
 import org.jetbrains.annotations.NotNull;
 
 import java.nio.ByteBuffer;
+import java.util.ArrayList;
+import java.util.List;
 
 public class RadioButtonGuiElement extends GuiElement {
 	private boolean editable;
 	private boolean checked;
+	private RadioButtonGroupData groupData;
 	
 	public RadioButtonGuiElement(@NotNull IodineGui gui, int id) {
 		super(gui, GuiElementType.RADIO_BUTTON, id);
@@ -22,11 +25,35 @@ public class RadioButtonGuiElement extends GuiElement {
 		super.deserialize(buffer);
 		editable = deserializeBoolean(buffer);
 		checked = deserializeBoolean(buffer);
-		int groupId = buffer.getInt(); //TODO use
+		
+		int groupId = buffer.getInt();
+		groupData = getGui().getElements().stream()
+				.filter(RadioButtonGuiElement.class::isInstance)
+				.map(RadioButtonGuiElement.class::cast)
+				.map(e -> e.groupData)
+				.filter(data -> data.id == groupId)
+				.findAny().orElseGet(() -> new RadioButtonGroupData(groupId));
+		
+		groupData.elements.add(this);
+		if (checked) {
+			groupData.checked = this;
+		}
 	}
 	
 	@Override
 	public Gui updateImpl() {
 	
+	}
+	
+	
+	
+	private static class RadioButtonGroupData {
+		final List<RadioButtonGuiElement> elements = new ArrayList<>();
+		final int id;
+		RadioButtonGuiElement checked;
+		
+		RadioButtonGroupData(int id) {
+			this.id = id;
+		}
 	}
 }
