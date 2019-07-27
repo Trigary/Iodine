@@ -1,8 +1,9 @@
-package hu.trigary.iodine.forge.gui.element;
+package hu.trigary.iodine.forge.gui.element.base;
 
-import com.google.common.base.Charsets;
 import hu.trigary.iodine.backend.GuiElementType;
 import hu.trigary.iodine.forge.gui.IodineGui;
+import hu.trigary.iodine.forge.gui.container.base.GuiParent;
+import hu.trigary.iodine.forge.network.out.ClientGuiChangePacket;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiButton;
@@ -12,13 +13,16 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.nio.ByteBuffer;
+import java.util.function.Consumer;
 
-public abstract class GuiElement extends Gui {
+public abstract class GuiElement {
 	protected static final Minecraft MC = Minecraft.getMinecraft();
-	private final short[] offsets = new short[4]; //TODO inherit offset -> containers set parent of children
 	private final IodineGui gui;
 	private final GuiElementType type;
 	private final int id;
+	private GuiParent parent;
+	private int xOffset;
+	private int yOffset;
 	private Gui minecraftGuiObject;
 	private boolean isButton;
 	
@@ -32,38 +36,44 @@ public abstract class GuiElement extends Gui {
 	
 	@NotNull
 	@Contract(pure = true)
-	public IodineGui getGui() {
+	public final IodineGui getGui() {
 		return gui;
 	}
 	
 	@Contract(pure = true)
-	public int getId() {
+	public final int getId() {
 		return id;
 	}
 	
 	
 	
-	public void deserialize(@NotNull ByteBuffer buffer) {
-		offsets[0] = buffer.getShort();
-		offsets[1] = buffer.getShort();
-		offsets[2] = buffer.getShort();
-		offsets[3] = buffer.getShort();
+	public final int getX() {
+		return parent.getLeft() + xOffset;
 	}
 	
-	protected final boolean deserializeBoolean(@NotNull ByteBuffer buffer) {
-		return buffer.get() == 1;
-	}
-	
-	@NotNull
-	protected final String deserializeString(@NotNull ByteBuffer buffer) {
-		byte[] bytes = new byte[buffer.getInt()];
-		buffer.get(bytes);
-		return new String(bytes, Charsets.UTF_8);
+	public final int getY() {
+		return parent.getTop() + yOffset;
 	}
 	
 	
 	
-	public void resolveElementReferences() { }
+	public void deserialize(@NotNull ByteBuffer buffer) { }
+	
+	protected final void sendChangePacket(int dataLength, @NotNull Consumer<ByteBuffer> dataProvider) {
+		byte[] data = new byte[dataLength];
+		dataProvider.accept(ByteBuffer.wrap(data));
+		getGui().getMod().getNetwork().send(new ClientGuiChangePacket(getGui().getId(), id, data));
+	}
+	
+	
+	
+	public void initialize(@NotNull GuiParent parent, int xOffset, int yOffset) {
+		this.parent = parent;
+		this.xOffset = xOffset;
+		this.yOffset = yOffset;
+	}
+	
+	
 	
 	public final void update() {
 		minecraftGuiObject = updateImpl();

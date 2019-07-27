@@ -1,13 +1,11 @@
-package hu.trigary.iodine.bukkit.gui.element;
+package hu.trigary.iodine.bukkit.gui.element.base;
 
-import com.google.common.base.Charsets;
-import hu.trigary.iodine.api.gui.GuiSide;
 import hu.trigary.iodine.api.gui.IodineGui;
 import hu.trigary.iodine.api.gui.element.base.GuiElement;
 import hu.trigary.iodine.backend.GuiElementType;
 import hu.trigary.iodine.bukkit.gui.IodineGuiImpl;
-import hu.trigary.iodine.bukkit.gui.container.GuiParentPlus;
-import org.apache.commons.lang.Validate;
+import hu.trigary.iodine.bukkit.gui.container.base.GuiParentPlus;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -17,7 +15,6 @@ import java.nio.ByteBuffer;
  * The implementation of {@link GuiElement}.
  */
 public abstract class GuiElementImpl<T extends GuiElement<T>> implements GuiElement<T> {
-	private final short[] offsets = new short[4];
 	protected final IodineGuiImpl gui;
 	private final GuiElementType type;
 	private final int internalId;
@@ -38,7 +35,6 @@ public abstract class GuiElementImpl<T extends GuiElement<T>> implements GuiElem
 		this.internalId = internalId;
 		this.id = id;
 		this.type = type;
-		parent = gui;
 	}
 	
 	
@@ -76,25 +72,6 @@ public abstract class GuiElementImpl<T extends GuiElement<T>> implements GuiElem
 		return parent;
 	}
 	
-	@Contract(pure = true)
-	@Override
-	public int getOffset(int side) {
-		switch (side) {
-			case GuiSide.LEFT:
-				return offsets[0];
-			case GuiSide.RIGHT:
-				return offsets[1];
-			case GuiSide.TOP:
-				return offsets[2];
-			case GuiSide.BOTTOM:
-				return offsets[3];
-			default:
-				throw new AssertionError("The specified side must not be a compound one");
-		}
-	}
-	
-	
-	
 	/**
 	 * Sets this element's parent,
 	 * internally unregistering it from its previous parent.
@@ -106,27 +83,6 @@ public abstract class GuiElementImpl<T extends GuiElement<T>> implements GuiElem
 			this.parent.removeChild(this);
 		}
 		this.parent = parent;
-	}
-	
-	@NotNull
-	@Override
-	public GuiElementImpl<T> setOffset(int sides, int amount) {
-		Validate.isTrue(amount >= 0 && amount <= Short.MAX_VALUE,
-				"The amount must be at least 0 and at most Short.MAX_VALUE");
-		//TODO can it fit into 8 bits instead?
-		if (GuiSide.hasLeft(sides)) {
-			offsets[0] = (short) amount;
-		}
-		if (GuiSide.hasRight(sides)) {
-			offsets[1] = (short) amount;
-		}
-		if (GuiSide.hasTop(sides)) {
-			offsets[2] = (short) amount;
-		}
-		if (GuiSide.hasBottom(sides)) {
-			offsets[3] = (short) amount;
-		}
-		return this;
 	}
 	
 	
@@ -141,34 +97,7 @@ public abstract class GuiElementImpl<T extends GuiElement<T>> implements GuiElem
 	public void serialize(@NotNull ByteBuffer buffer) {
 		buffer.put(type.getId());
 		buffer.putInt(internalId);
-		buffer.putShort(offsets[0]);
-		buffer.putShort(offsets[1]);
-		buffer.putShort(offsets[2]);
-		buffer.putShort(offsets[3]);
 	}
 	
-	/**
-	 * Serializes the specified boolean as a byte.
-	 * True values are serialized as {@code (byte)1},
-	 * while false values are serialized as {@code (byte)0}.
-	 *
-	 * @param buffer the buffer to serialize into
-	 * @param bool the boolean to serialize
-	 */
-	protected final void serializeBoolean(@NotNull ByteBuffer buffer, boolean bool) {
-		buffer.put(bool ? (byte) 1 : 0);
-	}
-	
-	/**
-	 * Serializes the specified text by converting it to an UTF-8 encoded by byte array.
-	 * The length of this array and the array itself is then put into the buffer.
-	 *
-	 * @param buffer the buffer to serialize into
-	 * @param string the text to serialize
-	 */
-	protected final void serializeString(@NotNull ByteBuffer buffer, @NotNull String string) {
-		byte[] textBytes = string.getBytes(Charsets.UTF_8);
-		buffer.putInt(textBytes.length);
-		buffer.put(textBytes);
-	}
+	public abstract void handleChangePacket(@NotNull Player player, @NotNull ByteBuffer message); //TODO javadocs
 }

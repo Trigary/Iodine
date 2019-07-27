@@ -1,8 +1,11 @@
 package hu.trigary.iodine.bukkit.gui.element;
 
 import hu.trigary.iodine.api.gui.element.CheckboxGuiElement;
+import hu.trigary.iodine.backend.BufferUtils;
 import hu.trigary.iodine.backend.GuiElementType;
 import hu.trigary.iodine.bukkit.gui.IodineGuiImpl;
+import hu.trigary.iodine.bukkit.gui.element.base.GuiElementImpl;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -72,7 +75,24 @@ public class CheckboxGuiElementImpl extends GuiElementImpl<CheckboxGuiElement> i
 	@Override
 	public void serialize(@NotNull ByteBuffer buffer) {
 		super.serialize(buffer);
-		serializeBoolean(buffer, editable);
-		serializeBoolean(buffer, checked);
+		BufferUtils.serializeBoolean(buffer, editable);
+		BufferUtils.serializeBoolean(buffer, checked);
+	}
+	
+	
+	
+	@Override
+	public void handleChangePacket(@NotNull Player player, @NotNull ByteBuffer message) {
+		boolean received = BufferUtils.deserializeBoolean(message);
+		if (!editable || checked == received) {
+			return;
+		}
+		
+		checked = !checked;
+		if (clickedAction == null) {
+			gui.update();
+		} else {
+			gui.atomicUpdate(ignored -> clickedAction.accept(this, player));
+		}
 	}
 }

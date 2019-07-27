@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * The implementation of {@link IodineApi}.
  */
-public class IodineApiImpl extends IodineApi {
+public class IodineApiImpl implements IodineApi {
 	private final IodinePlugin plugin;
 	
 	/**

@@ -14,7 +14,7 @@ import org.jetbrains.annotations.Nullable;
 /**
  * The implementation of {@link IodinePlayer}.
  */
-public class IodinePlayerImpl extends IodinePlayer {
+public class IodinePlayerImpl implements IodinePlayer {
 	private final IodinePlugin plugin;
 	private final Player player;
 	private PlayerState state = PlayerState.VANILLA;

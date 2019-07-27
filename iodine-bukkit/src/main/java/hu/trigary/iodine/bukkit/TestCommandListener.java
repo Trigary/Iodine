@@ -35,13 +35,19 @@ public class TestCommandListener implements Listener {
 		}
 		
 		api.createGui()
-				.addElement(GuiElements.CONTAINER_LINEAR, container -> container.getGui()
-						.addElement(GuiElements.TEXT, e -> container.makeChildLast(e)
-								.setText("Hello, world!"))
-						.addElement(GuiElements.BUTTON, e -> container.makeChildLast(e)
-								.setText("Click me!")
-								.onClicked((b, p) -> p.sendMessage("You clicked the button"))))
-				.onClosed((gui, p) -> p.sendMessage("You closed a GUI"))
+				.addElement(GuiElements.TEXT, e -> e.setText("0"), 0, 0)
+				.addElement(GuiElements.TEXT, e -> e.setText("300"), 300, 0)
+				.addElement(GuiElements.TEXT, e -> e.setText("200"), 0, 200)
+				.addElement(GuiElements.TEXT, e -> e.setText("50"), 50, 50)
+				.addElement(GuiElements.TEXT, e -> e.setText("100"), 100, 100)
+				.addElement(GuiElements.TEXT, e -> e.setText("150"), 150, 150)
+				.addElement(GuiElements.TEXT, e -> e.setText("200"), 200, 200)
+				.addElement(GuiElements.BUTTON, e -> e.setText("Click me!")
+						.onClicked((ignored, p) -> p.sendMessage("You clicked me, good job!")), 50, 100)
+				.addElement(GuiElements.CHECKBOX, e -> e.setChecked(true)
+						.onClicked((ignored, p) -> p.sendMessage("The checkbox is checked: " + e.isChecked())), 100, 50)
+				.addElement(GuiElements.BUTTON, e -> e.setText("Not editable").setEditable(false), 200, 100)
+				.onClosed((gui, p) -> p.sendMessage("You closed the GUI"))
 				.openFor(player);
 	}
 }

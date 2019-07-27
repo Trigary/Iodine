@@ -1,9 +1,12 @@
 package hu.trigary.iodine.bukkit.gui.element;
 
 import hu.trigary.iodine.api.gui.element.DropdownGuiElement;
+import hu.trigary.iodine.backend.BufferUtils;
 import hu.trigary.iodine.backend.GuiElementType;
 import hu.trigary.iodine.bukkit.gui.IodineGuiImpl;
+import hu.trigary.iodine.bukkit.gui.element.base.GuiElementImpl;
 import org.apache.commons.lang.Validate;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -16,6 +19,7 @@ import java.util.*;
  */
 public class DropdownGuiElementImpl extends GuiElementImpl<DropdownGuiElement> implements DropdownGuiElement {
 	private final List<String> choices = new ArrayList<>(Collections.singletonList(""));
+	private int width = 100;
 	private boolean editable = true;
 	private int selected;
 	private ChosenAction chosenAction;
@@ -32,6 +36,11 @@ public class DropdownGuiElementImpl extends GuiElementImpl<DropdownGuiElement> i
 	}
 	
 	
+	
+	@Override
+	public int getWidth() {
+		return width;
+	}
 	
 	@Contract(pure = true)
 	@Override
@@ -54,6 +63,15 @@ public class DropdownGuiElementImpl extends GuiElementImpl<DropdownGuiElement> i
 	}
 	
 	
+	
+	@NotNull
+	@Override
+	public DropdownGuiElementImpl setWidth(int width) {
+		Validate.isTrue(width > 0 && width <= Short.MAX_VALUE, "The width must be positive and at most Short.MAX_VALUE");
+		this.width = width;
+		gui.update();
+		return this;
+	}
 	
 	@NotNull
 	@Override
@@ -96,11 +114,35 @@ public class DropdownGuiElementImpl extends GuiElementImpl<DropdownGuiElement> i
 	@Override
 	public void serialize(@NotNull ByteBuffer buffer) {
 		super.serialize(buffer);
-		serializeBoolean(buffer, editable);
+		buffer.putShort((short) width);
+		BufferUtils.serializeBoolean(buffer, editable);
 		buffer.putInt(choices.size());
 		for (String choice : choices) {
-			serializeString(buffer, choice);
+			BufferUtils.serializeString(buffer, choice);
 		}
 		buffer.putInt(selected);
+	}
+	
+	
+	
+	@Override
+	public void handleChangePacket(@NotNull Player player, @NotNull ByteBuffer message) {
+		if (!editable) {
+			return;
+		}
+		
+		int newSelected = message.getInt();
+		if (newSelected < 0 || newSelected >= choices.size()) {
+			return;
+		}
+		
+		int oldSelected = selected;
+		selected = newSelected;
+		if (chosenAction == null) {
+			gui.update();
+		} else {
+			gui.atomicUpdate(ignored -> chosenAction.accept(this,
+					choices.get(oldSelected), choices.get(selected), player));
+		}
 	}
 }

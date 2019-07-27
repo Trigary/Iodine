@@ -8,8 +8,9 @@ import org.jetbrains.annotations.Nullable;
 /**
  * A GUI element that is a slider, with text on top of it.
  */
-public interface SliderGuiElement extends GuiElement<SliderGuiElement>, GuiTextable<SliderGuiElement>,
-		GuiProgressable<SliderGuiElement>, GuiOrientable<SliderGuiElement>, GuiEditable<SliderGuiElement> {
+public interface SliderGuiElement extends GuiElement<SliderGuiElement>, GuiWidthSettable<SliderGuiElement>,
+		GuiTextable<SliderGuiElement>, GuiProgressable<SliderGuiElement>,
+		GuiOrientable<SliderGuiElement>, GuiEditable<SliderGuiElement> {
 	/**
 	 * Sets the action that should be executed when
 	 * this GUI element's progress is changed by a player.

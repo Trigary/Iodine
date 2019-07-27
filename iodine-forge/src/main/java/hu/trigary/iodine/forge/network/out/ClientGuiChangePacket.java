@@ -5,10 +5,12 @@ import org.jetbrains.annotations.NotNull;
 
 public class ClientGuiChangePacket extends OutPacket {
 	private final int guiId;
+	private final int elementId;
 	private final byte[] data;
 	
-	public ClientGuiChangePacket(int guiId, @NotNull byte[] data) {
+	public ClientGuiChangePacket(int guiId, int elementId, @NotNull byte[] data) {
 		this.guiId = guiId;
+		this.elementId = elementId;
 		//noinspection AssignmentOrReturnOfFieldWithMutableType
 		this.data = data;
 	}
@@ -16,7 +18,7 @@ public class ClientGuiChangePacket extends OutPacket {
 	@Override
 	protected void serialize(ByteBuf buffer) {
 		buffer.writeInt(guiId);
-		buffer.writeInt(data.length);
+		buffer.writeInt(elementId);
 		buffer.writeBytes(data);
 	}
 }

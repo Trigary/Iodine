@@ -1,7 +1,7 @@
-package hu.trigary.iodine.bukkit.gui.container;
+package hu.trigary.iodine.bukkit.gui.container.base;
 
 import hu.trigary.iodine.api.gui.container.base.GuiParent;
-import hu.trigary.iodine.bukkit.gui.element.GuiElementImpl;
+import hu.trigary.iodine.bukkit.gui.element.base.GuiElementImpl;
 import org.jetbrains.annotations.NotNull;
 
 /**

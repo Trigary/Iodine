@@ -2,10 +2,14 @@ package hu.trigary.iodine.bukkit.gui.container;
 
 import hu.trigary.iodine.api.gui.container.LinearGuiContainer;
 import hu.trigary.iodine.api.gui.element.base.GuiElement;
+import hu.trigary.iodine.backend.BufferUtils;
 import hu.trigary.iodine.backend.GuiElementType;
 import hu.trigary.iodine.bukkit.gui.IodineGuiImpl;
-import hu.trigary.iodine.bukkit.gui.element.GuiElementImpl;
+import hu.trigary.iodine.bukkit.gui.container.base.GuiParentPlus;
+import hu.trigary.iodine.bukkit.gui.element.base.GuiElementImpl;
+import org.apache.commons.lang.NotImplementedException;
 import org.apache.commons.lang.Validate;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -31,6 +35,7 @@ public class LinearGuiContainerImpl extends GuiElementImpl<LinearGuiContainer>
 	 */
 	public LinearGuiContainerImpl(@NotNull IodineGuiImpl gui, int internalId, @NotNull Object id) {
 		super(gui, GuiElementType.CONTAINER_LINEAR, internalId, id);
+		throw new NotImplementedException();
 	}
 	
 	
@@ -115,10 +120,15 @@ public class LinearGuiContainerImpl extends GuiElementImpl<LinearGuiContainer>
 	@Override
 	public void serialize(@NotNull ByteBuffer buffer) {
 		super.serialize(buffer);
-		serializeBoolean(buffer, verticalOrientation);
+		BufferUtils.serializeBoolean(buffer, verticalOrientation);
 		buffer.putInt(children.size());
 		for (GuiElementImpl<?> element : children) {
 			buffer.putInt(element.getInternalId());
 		}
+	}
+	
+	@Override
+	public void handleChangePacket(@NotNull Player player, @NotNull ByteBuffer message) {
+		throw new NotImplementedException();
 	}
 }

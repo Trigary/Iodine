@@ -9,6 +9,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
+import java.util.Set;
 import java.util.function.Consumer;
 
 /**
@@ -18,13 +19,13 @@ import java.util.function.Consumer;
 public interface IodineGui extends GuiParent<IodineGui> {
 	/**
 	 * Gets the players who have this GUI opened.
-	 * The returned collection is an unmodifiable view of the underlying data.
+	 * The returned set is an unmodifiable view of the underlying data.
 	 *
 	 * @return the players who have this GUI opened
 	 */
 	@NotNull
 	@Contract(pure = true)
-	Collection<Player> getViewers();
+	Set<Player> getViewers();
 	
 	/**
 	 * Gets the element which has the specified ID.

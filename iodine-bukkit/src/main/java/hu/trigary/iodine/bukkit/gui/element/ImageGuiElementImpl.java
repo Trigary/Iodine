@@ -3,6 +3,9 @@ package hu.trigary.iodine.bukkit.gui.element;
 import hu.trigary.iodine.api.gui.element.ImageGuiElement;
 import hu.trigary.iodine.backend.GuiElementType;
 import hu.trigary.iodine.bukkit.gui.IodineGuiImpl;
+import hu.trigary.iodine.bukkit.gui.element.base.GuiElementImpl;
+import org.apache.commons.lang.NotImplementedException;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -32,7 +35,7 @@ public class ImageGuiElementImpl extends GuiElementImpl<ImageGuiElement> impleme
 	@Contract(pure = true)
 	@Override
 	public byte[] getImage() {
-		throw new UnsupportedOperationException();
+		throw new NotImplementedException();
 	}
 	
 	
@@ -40,7 +43,7 @@ public class ImageGuiElementImpl extends GuiElementImpl<ImageGuiElement> impleme
 	@NotNull
 	@Override
 	public ImageGuiElementImpl setImage(@NotNull byte[] image) {
-		throw new UnsupportedOperationException();
+		throw new NotImplementedException();
 	}
 	
 	@NotNull
@@ -55,6 +58,15 @@ public class ImageGuiElementImpl extends GuiElementImpl<ImageGuiElement> impleme
 	@Override
 	public void serialize(@NotNull ByteBuffer buffer) {
 		super.serialize(buffer);
-		throw new UnsupportedOperationException();
+		throw new NotImplementedException();
+	}
+	
+	
+	
+	@Override
+	public void handleChangePacket(@NotNull Player player, @NotNull ByteBuffer message) {
+		if (clickedAction != null) {
+			clickedAction.accept(this, player);
+		}
 	}
 }

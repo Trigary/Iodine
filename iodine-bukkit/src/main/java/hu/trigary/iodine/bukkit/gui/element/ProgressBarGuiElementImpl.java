@@ -1,9 +1,12 @@
 package hu.trigary.iodine.bukkit.gui.element;
 
 import hu.trigary.iodine.api.gui.element.ProgressBarGuiElement;
+import hu.trigary.iodine.backend.BufferUtils;
 import hu.trigary.iodine.backend.GuiElementType;
 import hu.trigary.iodine.bukkit.gui.IodineGuiImpl;
+import hu.trigary.iodine.bukkit.gui.element.base.GuiElementImpl;
 import org.apache.commons.lang.Validate;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -101,9 +104,14 @@ public class ProgressBarGuiElementImpl extends GuiElementImpl<ProgressBarGuiElem
 	@Override
 	public void serialize(@NotNull ByteBuffer buffer) {
 		super.serialize(buffer);
-		serializeBoolean(buffer, verticalOrientation);
-		serializeString(buffer, text);
+		BufferUtils.serializeBoolean(buffer, verticalOrientation);
+		BufferUtils.serializeString(buffer, text);
 		buffer.putInt(maxProgress);
 		buffer.putInt(progress);
 	}
+	
+	
+	
+	@Override
+	public void handleChangePacket(@NotNull Player player, @NotNull ByteBuffer message) {}
 }

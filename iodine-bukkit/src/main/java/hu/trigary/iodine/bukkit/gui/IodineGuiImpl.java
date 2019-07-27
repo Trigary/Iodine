@@ -5,8 +5,8 @@ import hu.trigary.iodine.api.gui.IodineGui;
 import hu.trigary.iodine.api.gui.element.base.GuiElement;
 import hu.trigary.iodine.backend.PacketType;
 import hu.trigary.iodine.bukkit.IodinePlugin;
-import hu.trigary.iodine.bukkit.gui.container.GuiParentPlus;
-import hu.trigary.iodine.bukkit.gui.element.GuiElementImpl;
+import hu.trigary.iodine.bukkit.gui.container.base.GuiParentPlus;
+import hu.trigary.iodine.bukkit.gui.element.base.GuiElementImpl;
 import hu.trigary.iodine.bukkit.network.NetworkManager;
 import hu.trigary.iodine.bukkit.player.IodinePlayerImpl;
 import org.apache.commons.lang.Validate;
@@ -61,8 +61,14 @@ public class IodineGuiImpl implements IodineGui, GuiParentPlus<IodineGui> {
 	@NotNull
 	@Contract(pure = true)
 	@Override
-	public Collection<Player> getViewers() {
-		return Collections.unmodifiableCollection(viewers);
+	public Set<Player> getViewers() {
+		return Collections.unmodifiableSet(viewers);
+	}
+	
+	@Nullable
+	@Contract(pure = true)
+	public GuiElementImpl<?> getElement(int id) { //TODO javadocs
+		return elements.get(id);
 	}
 	
 	@Nullable
@@ -96,7 +102,7 @@ public class IodineGuiImpl implements IodineGui, GuiParentPlus<IodineGui> {
 				"The element's render position must be at least 0 and at most Short.MAX_VALUE");
 		//TODO can it fit into 8 bits instead?
 		GuiElementImpl<?> impl = (GuiElementImpl<?>) element;
-		Validate.isTrue(children.put(impl, new Position((short) x, (short) y)) == null,
+		Validate.isTrue(children.put(impl, new Position(x, y)) == null,
 				"The specified element is already the child of this GUI");
 		impl.setParent(this);
 		update();
@@ -249,22 +255,22 @@ public class IodineGuiImpl implements IodineGui, GuiParentPlus<IodineGui> {
 		
 		children.forEach((element, position) -> {
 			BUFFER.putInt(element.getInternalId());
-			BUFFER.putShort(position.x);
-			BUFFER.putShort(position.y);
+			BUFFER.putShort((short) position.x);
+			BUFFER.putShort((short) position.y);
 		});
 		
 		byte[] result = new byte[BUFFER.flip().remaining()];
-		BUFFER.get(result).rewind();
+		BUFFER.get(result).clear();
 		return result;
 	}
 	
 	
 	
 	private static class Position {
-		final short x;
-		final short y;
+		final int x;
+		final int y;
 		
-		Position(short x, short y) {
+		Position(int x, int y) {
 			this.x = x;
 			this.y = y;
 		}

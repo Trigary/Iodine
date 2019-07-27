@@ -1,9 +1,13 @@
 package hu.trigary.iodine.bukkit.gui.element;
 
 import hu.trigary.iodine.api.gui.element.SliderGuiElement;
+import hu.trigary.iodine.backend.BufferUtils;
 import hu.trigary.iodine.backend.GuiElementType;
 import hu.trigary.iodine.bukkit.gui.IodineGuiImpl;
+import hu.trigary.iodine.bukkit.gui.element.base.GuiElementImpl;
+import org.apache.commons.lang.NotImplementedException;
 import org.apache.commons.lang.Validate;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -14,6 +18,7 @@ import java.nio.ByteBuffer;
  * The implementation of {@link SliderGuiElement}.
  */
 public class SliderGuiElementImpl extends GuiElementImpl<SliderGuiElement> implements SliderGuiElement {
+	private int width = 150;
 	private boolean editable = true;
 	private boolean verticalOrientation;
 	private String text = "";
@@ -33,6 +38,11 @@ public class SliderGuiElementImpl extends GuiElementImpl<SliderGuiElement> imple
 	}
 	
 	
+	
+	@Override
+	public int getWidth() {
+		return width;
+	}
 	
 	@Contract(pure = true)
 	@Override
@@ -66,6 +76,15 @@ public class SliderGuiElementImpl extends GuiElementImpl<SliderGuiElement> imple
 	}
 	
 	
+	
+	@NotNull
+	@Override
+	public SliderGuiElementImpl setWidth(int width) {
+		Validate.isTrue(width > 0 && width <= Short.MAX_VALUE, "The width must be positive and at most Short.MAX_VALUE");
+		this.width = width;
+		gui.update();
+		return this;
+	}
 	
 	@NotNull
 	@Override
@@ -125,10 +144,18 @@ public class SliderGuiElementImpl extends GuiElementImpl<SliderGuiElement> imple
 	@Override
 	public void serialize(@NotNull ByteBuffer buffer) {
 		super.serialize(buffer);
-		serializeBoolean(buffer, editable);
-		serializeBoolean(buffer, verticalOrientation);
-		serializeString(buffer, text);
+		buffer.putShort((short) width);
+		BufferUtils.serializeBoolean(buffer, editable);
+		BufferUtils.serializeBoolean(buffer, verticalOrientation);
+		BufferUtils.serializeString(buffer, text);
 		buffer.putInt(maxProgress);
 		buffer.putInt(progress);
+	}
+	
+	
+	
+	@Override
+	public void handleChangePacket(@NotNull Player player, @NotNull ByteBuffer message) {
+		throw new NotImplementedException();
 	}
 }

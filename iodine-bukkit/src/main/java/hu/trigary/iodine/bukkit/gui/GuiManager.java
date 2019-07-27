@@ -8,6 +8,7 @@ import hu.trigary.iodine.bukkit.IodinePlugin;
 import hu.trigary.iodine.bukkit.gui.container.GridGuiContainerImpl;
 import hu.trigary.iodine.bukkit.gui.container.LinearGuiContainerImpl;
 import hu.trigary.iodine.bukkit.gui.element.*;
+import hu.trigary.iodine.bukkit.gui.element.base.GuiElementImpl;
 import org.apache.commons.lang.Validate;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;

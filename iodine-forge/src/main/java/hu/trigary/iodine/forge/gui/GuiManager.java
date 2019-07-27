@@ -2,9 +2,8 @@ package hu.trigary.iodine.forge.gui;
 
 import hu.trigary.iodine.backend.GuiElementType;
 import hu.trigary.iodine.forge.IodineMod;
-import hu.trigary.iodine.forge.gui.element.ButtonGuiElement;
-import hu.trigary.iodine.forge.gui.element.GuiElement;
-import hu.trigary.iodine.forge.gui.element.TextGuiElement;
+import hu.trigary.iodine.forge.gui.element.*;
+import hu.trigary.iodine.forge.gui.element.base.GuiElement;
 import org.jetbrains.annotations.NotNull;
 
 import java.nio.ByteBuffer;
@@ -18,8 +17,15 @@ public class GuiManager {
 	public GuiManager(@NotNull IodineMod mod) {
 		this.mod = mod;
 		
-		constructors.put(GuiElementType.TEXT, TextGuiElement::new);
 		constructors.put(GuiElementType.BUTTON, ButtonGuiElement::new);
+		constructors.put(GuiElementType.CHECKBOX, CheckboxGuiElement::new);
+		constructors.put(GuiElementType.DROPDOWN, DropdownGuiElement::new);
+		constructors.put(GuiElementType.IMAGE, ImageGuiElement::new);
+		constructors.put(GuiElementType.PROGRESS_BAR, ProgressBarGuiElement::new);
+		constructors.put(GuiElementType.RADIO_BUTTON, RadioButtonGuiElement::new);
+		constructors.put(GuiElementType.SLIDER, SliderGuiElement::new);
+		constructors.put(GuiElementType.TEXT_FIELD, TextFieldGuiElement::new);
+		constructors.put(GuiElementType.TEXT, TextGuiElement::new);
 	}
 	
 	
@@ -35,7 +41,6 @@ public class GuiManager {
 		GuiElement element = storage.computeIfAbsent(buffer.getInt(),
 				id -> constructors.get(type).apply(gui, id));
 		element.deserialize(buffer);
-		element.update();
 	}
 	
 	

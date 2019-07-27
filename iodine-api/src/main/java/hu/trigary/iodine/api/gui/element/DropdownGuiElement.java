@@ -2,6 +2,7 @@ package hu.trigary.iodine.api.gui.element;
 
 import hu.trigary.iodine.api.gui.element.base.GuiEditable;
 import hu.trigary.iodine.api.gui.element.base.GuiElement;
+import hu.trigary.iodine.api.gui.element.base.GuiWidthSettable;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -14,7 +15,8 @@ import java.util.List;
 /**
  * A GUI element that allows viewers to select a single value from a list of choices.
  */
-public interface DropdownGuiElement extends GuiElement<DropdownGuiElement>, GuiEditable<DropdownGuiElement> {
+public interface DropdownGuiElement extends GuiElement<DropdownGuiElement>,
+		GuiWidthSettable<DropdownGuiElement>, GuiEditable<DropdownGuiElement> {
 	/**
 	 * Gets the values that can be selected.
 	 * The returned list is an unmodifiable view of the underlying data.

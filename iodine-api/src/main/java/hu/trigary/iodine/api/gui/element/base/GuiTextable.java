@@ -1,12 +1,11 @@
 package hu.trigary.iodine.api.gui.element.base;
 
-import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * Represents a {@link GuiElement} that can display text.
- * Elements have a text of {@link StringUtils#EMPTY} by default.
+ * The text of the elements are empty {@link String}s by default.
  *
  * @param <T> the class implementing this interface
  */
