@@ -10,6 +10,7 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.nio.ByteBuffer;
+import java.util.function.Consumer;
 
 /**
  * The implementation of {@link GuiElement}.
@@ -99,5 +100,17 @@ public abstract class GuiElementImpl<T extends GuiElement<T>> implements GuiElem
 		buffer.putInt(internalId);
 	}
 	
-	public abstract void handleChangePacket(@NotNull Player player, @NotNull ByteBuffer message); //TODO javadocs
+	/**
+	 * Called by {@link hu.trigary.iodine.bukkit.network.handler.GuiChangePacketHandler}
+	 * when a viewer acts upon this element.
+	 * Malicious intent should be assumed, everything should be validated.
+	 * Network delays and multiple viewers should be kept in mind.
+	 * It should be assumed that callbacks change the GUI,
+	 * so if both a callback and {@link IodineGuiImpl#update()} are called,
+	 * then {@link IodineGuiImpl#atomicUpdate(Consumer)} should be used.
+	 *
+	 * @param player the sender of the packet
+	 * @param message the packet's contents
+	 */
+	public abstract void handleChangePacket(@NotNull Player player, @NotNull ByteBuffer message);
 }

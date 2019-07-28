@@ -65,9 +65,16 @@ public class IodineGuiImpl implements IodineGui, GuiParentPlus<IodineGui> {
 		return Collections.unmodifiableSet(viewers);
 	}
 	
+	/**
+	 * Gets the element which has the specified internal ID.
+	 * Returns null if no matching elements were found.
+	 *
+	 * @param id the ID to search for
+	 * @return the matching element or null, if none were found
+	 */
 	@Nullable
 	@Contract(pure = true)
-	public GuiElementImpl<?> getElement(int id) { //TODO javadocs
+	public GuiElementImpl<?> getElement(int id) {
 		return elements.get(id);
 	}
 	
@@ -100,7 +107,7 @@ public class IodineGuiImpl implements IodineGui, GuiParentPlus<IodineGui> {
 	public <E extends GuiElement<E>> E makeChild(@NotNull E element, int x, int y) {
 		Validate.isTrue(x >= 0 && y >= 0 && x <= Short.MAX_VALUE && y <= Short.MAX_VALUE,
 				"The element's render position must be at least 0 and at most Short.MAX_VALUE");
-		//TODO can it fit into 8 bits instead?
+		//TODO actually allow negative values, as long as it can't crash the client
 		GuiElementImpl<?> impl = (GuiElementImpl<?>) element;
 		Validate.isTrue(children.put(impl, new Position(x, y)) == null,
 				"The specified element is already the child of this GUI");
