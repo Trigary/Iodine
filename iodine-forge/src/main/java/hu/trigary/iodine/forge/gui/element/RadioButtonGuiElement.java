@@ -3,9 +3,7 @@ package hu.trigary.iodine.forge.gui.element;
 import hu.trigary.iodine.backend.BufferUtils;
 import hu.trigary.iodine.backend.GuiElementType;
 import hu.trigary.iodine.forge.gui.IodineGui;
-import hu.trigary.iodine.forge.gui.element.base.ClickableElement;
 import hu.trigary.iodine.forge.gui.element.base.GuiElement;
-import net.minecraft.client.gui.Gui;
 import org.apache.commons.lang3.NotImplementedException;
 import org.jetbrains.annotations.NotNull;
 
@@ -13,7 +11,7 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RadioButtonGuiElement extends GuiElement implements ClickableElement {
+public class RadioButtonGuiElement extends GuiElement {
 	private boolean editable;
 	private boolean checked;
 	private RadioButtonGroupData groupData;
@@ -42,22 +40,30 @@ public class RadioButtonGuiElement extends GuiElement implements ClickableElemen
 		if (checked) {
 			groupData.checked = this;
 		}
-		
-		if (editable) {
-			getGui().registerClickable(this, -1, -1);
-		}
 	}
 	
+	
+	
 	@Override
-	public Gui updateImpl() {
+	public void update() {
 		throw new NotImplementedException(""); //TODO a custom texture is needed for this I think
 	}
 	
+	@Override
+	public void draw(int mouseX, int mouseY, float partialTicks) {
+	
+	}
+	
 	
 	
 	@Override
-	public void onClicked() {
-	
+	public boolean onMousePressed(int mouseX, int mouseY) {
+		/*if (!element.mousePressed(MC, mouseX, mouseY)) {
+			return false;
+		}
+		
+		return true;*/
+		throw new NotImplementedException("");
 	}
 	
 	

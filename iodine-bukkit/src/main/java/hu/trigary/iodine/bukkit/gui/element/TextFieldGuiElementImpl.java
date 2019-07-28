@@ -5,7 +5,6 @@ import hu.trigary.iodine.backend.BufferUtils;
 import hu.trigary.iodine.backend.GuiElementType;
 import hu.trigary.iodine.bukkit.gui.IodineGuiImpl;
 import hu.trigary.iodine.bukkit.gui.element.base.GuiElementImpl;
-import org.apache.commons.lang.NotImplementedException;
 import org.apache.commons.lang.Validate;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Contract;
@@ -13,19 +12,20 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.nio.ByteBuffer;
+import java.util.regex.Pattern;
 
 /**
  * The implementation of {@link TextFieldGuiElement}.
  */
 public class TextFieldGuiElementImpl extends GuiElementImpl<TextFieldGuiElement> implements TextFieldGuiElement {
+	private static final int MAX_TEXT_LENGTH = 32;
 	private int width = 200;
 	private int height = 20;
 	private boolean editable = true;
 	private String text = "";
 	private String regex = "";
 	private TextChangedAction textChangedAction;
-	//TODO use the regex internally or not? client could cheat, but there are also network delays...
-	//also there's a text length limit built-in
+	private Pattern compiledRegex;
 	
 	/**
 	 * Creates a new instance.
@@ -110,6 +110,7 @@ public class TextFieldGuiElementImpl extends GuiElementImpl<TextFieldGuiElement>
 	public TextFieldGuiElement setRegex(@NotNull String regex) {
 		Validate.notNull(regex, "The regex must be non-null");
 		this.regex = regex;
+		compiledRegex = regex.isEmpty() ? null : Pattern.compile(regex);
 		gui.update();
 		return this;
 	}
@@ -137,6 +138,23 @@ public class TextFieldGuiElementImpl extends GuiElementImpl<TextFieldGuiElement>
 	
 	@Override
 	public void handleChangePacket(@NotNull Player player, @NotNull ByteBuffer message) {
-		throw new NotImplementedException();
+		if (!editable) {
+			return;
+		}
+		
+		String newText = BufferUtils.deserializeString(message);
+		if (text.equals(newText)
+				|| newText.length() > MAX_TEXT_LENGTH
+				|| (compiledRegex != null && !compiledRegex.matcher(newText).matches())) {
+			return;
+		}
+		
+		String oldText = text;
+		text = newText;
+		if (textChangedAction == null) {
+			gui.update();
+		} else {
+			gui.atomicUpdate(ignored -> textChangedAction.accept(this, oldText, text, player));
+		}
 	}
 }

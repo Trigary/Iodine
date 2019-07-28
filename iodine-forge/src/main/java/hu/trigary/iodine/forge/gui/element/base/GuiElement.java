@@ -5,12 +5,8 @@ import hu.trigary.iodine.forge.gui.IodineGui;
 import hu.trigary.iodine.forge.gui.container.base.GuiParent;
 import hu.trigary.iodine.forge.network.out.ClientGuiChangePacket;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.Gui;
-import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.gui.GuiLabel;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.nio.ByteBuffer;
 import java.util.function.Consumer;
@@ -23,8 +19,6 @@ public abstract class GuiElement {
 	private GuiParent parent;
 	private int xOffset;
 	private int yOffset;
-	private Gui minecraftGuiObject;
-	private boolean isButton;
 	
 	protected GuiElement(@NotNull IodineGui gui, @NotNull GuiElementType type, int id) {
 		this.gui = gui;
@@ -75,21 +69,17 @@ public abstract class GuiElement {
 	
 	
 	
-	public final void update() {
-		minecraftGuiObject = updateImpl();
-		isButton = minecraftGuiObject instanceof GuiButton;
+	public abstract void update();
+	
+	public abstract void draw(int mouseX, int mouseY, float partialTicks);
+	
+	
+	
+	public boolean onMousePressed(int mouseX, int mouseY) {
+		return false;
 	}
 	
-	@Nullable
-	protected abstract Gui updateImpl();
+	public void onMouseReleased(int mouseX, int mouseY) {}
 	
-	
-	
-	public void draw(int mouseX, int mouseY, float partialTicks) {
-		if (isButton) {
-			((GuiButton) minecraftGuiObject).drawButton(MC, mouseX, mouseY, partialTicks);
-		} else {
-			((GuiLabel) minecraftGuiObject).drawLabel(MC, mouseX, mouseY);
-		}
-	}
+	public void onKeyTyped(char typedChar, int keyCode) {}
 }

@@ -9,6 +9,7 @@ import org.jetbrains.annotations.NotNull;
 import java.nio.ByteBuffer;
 import java.util.EnumMap;
 import java.util.Map;
+import java.util.Set;
 
 public class GuiManager {
 	private final Map<GuiElementType, ElementConstructor<?>> constructors = new EnumMap<>(GuiElementType.class);
@@ -30,7 +31,7 @@ public class GuiManager {
 	
 	
 	
-	public void deserializeElement(@NotNull IodineGui gui,
+	public void deserializeElement(@NotNull IodineGui gui, @NotNull Set<Integer> deserializedIds,
 			@NotNull Map<Integer, GuiElement> storage, @NotNull ByteBuffer buffer) {
 		GuiElementType type = GuiElementType.fromId(buffer.get());
 		if (type == null) {
@@ -38,8 +39,9 @@ public class GuiManager {
 			return;
 		}
 		
-		GuiElement element = storage.computeIfAbsent(buffer.getInt(),
-				id -> constructors.get(type).apply(gui, id));
+		int id = buffer.getInt();
+		deserializedIds.add(id);
+		GuiElement element = storage.computeIfAbsent(id, ignored -> constructors.get(type).apply(gui, id));
 		element.deserialize(buffer);
 	}
 	

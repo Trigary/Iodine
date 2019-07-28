@@ -47,6 +47,9 @@ public class TestCommandListener implements Listener {
 				.addElement(GuiElements.CHECKBOX, e -> e.setChecked(true)
 						.onClicked((ignored, p) -> p.sendMessage("The checkbox is checked: " + e.isChecked())), 100, 50)
 				.addElement(GuiElements.BUTTON, e -> e.setText("Not editable").setEditable(false), 200, 100)
+				.addElement(GuiElements.TEXT_FIELD, e -> e.setText("Your text here")
+						.onChanged((ignored, oldText, newText, p) -> p.sendMessage("Old text: "
+								+ oldText + ", new text: " + newText)))
 				.onClosed((gui, p) -> p.sendMessage("You closed the GUI"))
 				.openFor(player);
 	}

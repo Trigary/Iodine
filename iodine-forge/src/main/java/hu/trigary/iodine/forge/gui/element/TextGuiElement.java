@@ -4,7 +4,6 @@ import hu.trigary.iodine.backend.BufferUtils;
 import hu.trigary.iodine.backend.GuiElementType;
 import hu.trigary.iodine.forge.gui.IodineGui;
 import hu.trigary.iodine.forge.gui.element.base.GuiElement;
-import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiLabel;
 import org.jetbrains.annotations.NotNull;
 
@@ -14,6 +13,7 @@ public class TextGuiElement extends GuiElement {
 	private int width;
 	private int height;
 	private String text;
+	private GuiLabel element;
 	
 	public TextGuiElement(@NotNull IodineGui gui, int id) {
 		super(gui, GuiElementType.TEXT, id);
@@ -29,11 +29,17 @@ public class TextGuiElement extends GuiElement {
 		text = BufferUtils.deserializeString(buffer);
 	}
 	
+	
+	
 	@Override
-	public Gui updateImpl() {
-		GuiLabel label = new GuiLabel(MC.fontRenderer, getId(), getX(), getY(), width, height, 0xFFFFFF);
+	public void update() {
+		element = new GuiLabel(MC.fontRenderer, getId(), getX(), getY(), width, height, 0xFFFFFF);
 		//label.setCentered();
-		label.addLine(text);
-		return label;
+		element.addLine(text);
+	}
+	
+	@Override
+	public void draw(int mouseX, int mouseY, float partialTicks) {
+		element.drawLabel(MC, mouseX, mouseY);
 	}
 }

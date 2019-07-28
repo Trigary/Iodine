@@ -2,29 +2,22 @@ package hu.trigary.iodine.forge.gui;
 
 import hu.trigary.iodine.forge.IodineMod;
 import hu.trigary.iodine.forge.gui.container.base.GuiParent;
-import hu.trigary.iodine.forge.gui.element.base.ClickableElement;
 import hu.trigary.iodine.forge.gui.element.base.GuiElement;
 import hu.trigary.iodine.forge.network.out.ClientGuiClosePacket;
-import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.init.SoundEvents;
 import org.apache.commons.lang3.Validate;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.IOException;
 import java.nio.ByteBuffer;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class IodineGui extends GuiScreen implements GuiParent {
 	private static final int WIDTH = 300;
 	private static final int HEIGHT = 200;
 	private final Map<Integer, GuiElement> elements = new HashMap<>();
-	private final Map<GuiElement, IntPair> children = new HashMap<>();
-	private final Map<GuiElement, IntPair> clickables = new HashMap<>();
+	private final Map<GuiElement, Position> children = new HashMap<>();
+	private final Set<GuiElement> pressedElements = new HashSet<>();
 	private final IodineMod mod;
 	private final int id;
 	private int left = -1;
@@ -66,17 +59,20 @@ public class IodineGui extends GuiScreen implements GuiParent {
 	
 	
 	public void deserialize(@NotNull byte[] data) {
-		elements.clear();
 		children.clear();
 		ByteBuffer buffer = ByteBuffer.wrap(data);
+		Set<Integer> deserializedIds = new HashSet<>();
 		
 		int elementCount = buffer.getInt();
 		for (int i = 0; i < elementCount; i++) {
-			mod.getGui().deserializeElement(this, elements, buffer);
+			mod.getGui().deserializeElement(this, deserializedIds, elements, buffer);
 		}
 		
+		//TODO instead of this, list IDs that were deleted
+		elements.keySet().removeIf(elementId -> !deserializedIds.contains(elementId));
+		
 		while (buffer.hasRemaining()) {
-			children.put(elements.get(buffer.getInt()), new IntPair(buffer.getShort(), buffer.getShort()));
+			children.put(elements.get(buffer.getInt()), new Position(buffer.getShort(), buffer.getShort()));
 		}
 		
 		children.forEach((child, position) -> child.initialize(this, position.x, position.y));
@@ -85,15 +81,10 @@ public class IodineGui extends GuiScreen implements GuiParent {
 		}
 		
 		//TODO GuiElement call order docs:
-		// constructor, deserialize
+		// constructor -> deserialize
 		// initialize (used for stuff that requires all elements to be deserialized)
-		// update (can be called multiple times for the same instance)
-		//after server change packet:
-		// deserialize -> initGui
-	}
-	
-	public void registerClickable(@NotNull ClickableElement element, int width, int height) {
-		clickables.put((GuiElement) element, new IntPair(width, height));
+		// update (can be called multiple times for the same instance, see line below)
+		//after server change packet: update
 	}
 	
 	
@@ -135,49 +126,48 @@ public class IodineGui extends GuiScreen implements GuiParent {
 	
 	
 	@Override
-	protected void keyTyped(char typedChar, int keyCode) throws IOException {
+	protected void keyTyped(char typedChar, int keyCode) {
 		if (keyCode == 1) {
 			mod.getNetwork().send(new ClientGuiClosePacket(id));
+			mc.displayGuiScreen(null);
+			if (mc.currentScreen == null) {
+				mc.setIngameFocus();
+			}
+		} else {
+			for (GuiElement element : elements.values()) {
+				element.onKeyTyped(typedChar, keyCode);
+			}
 		}
-		super.keyTyped(typedChar, keyCode);
 	}
 	
 	@Override
 	protected void mouseClicked(int mouseX, int mouseY, int mouseButton) {
-		if (mouseButton != 0) {
-			return;
+		if (mouseButton == 0) {
+			for (GuiElement element : elements.values()) {
+				if (element.onMousePressed(mouseX, mouseY)) {
+					pressedElements.add(element);
+				}
+			}
 		}
-		clickables.entrySet().stream()
-				.filter(entry -> {
-					int x = entry.getKey().getX();
-					int y = entry.getKey().getY();
-					IntPair box = entry.getValue();
-					return mouseX >= x && mouseY > y && mouseX < x + box.x && mouseY < y + box.y;
-				})
-				.findFirst()
-				.ifPresent(entry -> {
-					((ClickableElement) entry.getKey()).onClicked();
-					mc.getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0F));
-				});
 	}
 	
 	@Override
 	protected void mouseReleased(int mouseX, int mouseY, int state) {
-		//for slider
+		if (state == 0) {
+			for (GuiElement element : pressedElements) {
+				element.onMouseReleased(mouseX, mouseY);
+			}
+			pressedElements.clear();
+		}
 	}
 	
-	@Override
-	protected void mouseClickMove(int mouseX, int mouseY, int clickedMouseButton, long timeSinceLastClick) {
-		//for slider
-	}
 	
 	
-	
-	private static class IntPair {
+	private static class Position {
 		final int x;
 		final int y;
 		
-		IntPair(int x, int y) {
+		Position(int x, int y) {
 			this.x = x;
 			this.y = y;
 		}

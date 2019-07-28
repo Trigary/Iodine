@@ -4,7 +4,6 @@ import hu.trigary.iodine.backend.BufferUtils;
 import hu.trigary.iodine.backend.GuiElementType;
 import hu.trigary.iodine.forge.gui.IodineGui;
 import hu.trigary.iodine.forge.gui.element.base.GuiElement;
-import net.minecraft.client.gui.Gui;
 import org.apache.commons.lang3.NotImplementedException;
 import org.jetbrains.annotations.NotNull;
 
@@ -31,8 +30,15 @@ public class ProgressBarGuiElement extends GuiElement {
 		progress = buffer.getInt();
 	}
 	
+	
+	
 	@Override
-	public Gui updateImpl() {
+	public void update() {
 		throw new NotImplementedException(""); //TODO boss bar style?
+	}
+	
+	@Override
+	public void draw(int mouseX, int mouseY, float partialTicks) {
+	
 	}
 }

@@ -6,7 +6,6 @@ import hu.trigary.iodine.forge.gui.IodineGui;
 import hu.trigary.iodine.forge.gui.container.base.GuiContainer;
 import hu.trigary.iodine.forge.gui.container.base.GuiParent;
 import hu.trigary.iodine.forge.gui.element.base.GuiElement;
-import net.minecraft.client.gui.Gui;
 import org.apache.commons.lang3.NotImplementedException;
 import org.jetbrains.annotations.NotNull;
 
@@ -45,8 +44,13 @@ public class LinearGuiContainer extends GuiContainer {
 	}
 	
 	@Override
-	public Gui updateImpl() {
+	public void update() {
 		throw new NotImplementedException("");
+	}
+	
+	@Override
+	public void draw(int mouseX, int mouseY, float partialTicks) {
+	
 	}
 	
 	@Override

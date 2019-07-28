@@ -4,7 +4,6 @@ import hu.trigary.iodine.backend.BufferUtils;
 import hu.trigary.iodine.backend.GuiElementType;
 import hu.trigary.iodine.forge.gui.IodineGui;
 import hu.trigary.iodine.forge.gui.element.base.GuiElement;
-import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiPageButtonList;
 import net.minecraft.client.gui.GuiSlider;
 import org.jetbrains.annotations.NotNull;
@@ -19,6 +18,7 @@ public class SliderGuiElement extends GuiElement {
 	private String text;
 	private int maxProgress;
 	private int progress;
+	private GuiSlider element;
 	
 	public SliderGuiElement(@NotNull IodineGui gui, int id) {
 		super(gui, GuiElementType.SLIDER, id);
@@ -37,9 +37,11 @@ public class SliderGuiElement extends GuiElement {
 		progress = buffer.getInt();
 	}
 	
+	
+	
 	@Override
-	public Gui updateImpl() {
-		GuiSlider slider = new GuiSlider(new GuiPageButtonList.GuiResponder() {
+	public void update() {
+		element = new GuiSlider(new GuiPageButtonList.GuiResponder() {
 			@Override
 			public void setEntryValue(int id, boolean value) {
 			
@@ -55,8 +57,31 @@ public class SliderGuiElement extends GuiElement {
 			
 			}
 		}, getId(), getX(), getY(), text, 0, maxProgress, progress, (id, name, value) -> name + ": " + value);
-		slider.setWidth(width);
+		element.enabled = editable;
+		element.setWidth(width);
 		//TODO no setheight, but HEIGHT exists
-		return slider;
+		//TODO vertical?
+	}
+	
+	@Override
+	public void draw(int mouseX, int mouseY, float partialTicks) {
+		element.drawButton(MC, mouseX, mouseY, partialTicks);
+	}
+	
+	
+	
+	@Override
+	public boolean onMousePressed(int mouseX, int mouseY) {
+		if (!element.mousePressed(MC, mouseX, mouseY)) {
+			return false;
+		}
+		
+		//TODO something here or on release? or in that anonymous class above?
+		return true;
+	}
+	
+	@Override
+	public void onMouseReleased(int mouseX, int mouseY) {
+		element.mouseReleased(mouseX, mouseY);
 	}
 }
