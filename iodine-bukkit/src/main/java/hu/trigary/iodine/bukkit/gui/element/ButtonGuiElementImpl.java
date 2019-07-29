@@ -60,7 +60,7 @@ public class ButtonGuiElementImpl extends GuiElementImpl<ButtonGuiElement> imple
 	public ButtonGuiElementImpl setWidth(int width) {
 		Validate.isTrue(width > 0 && width <= Short.MAX_VALUE, "The width must be positive and at most Short.MAX_VALUE");
 		this.width = width;
-		gui.update();
+		getGui().flagAndUpdate(this);
 		return this;
 	}
 	
@@ -68,7 +68,7 @@ public class ButtonGuiElementImpl extends GuiElementImpl<ButtonGuiElement> imple
 	@Override
 	public ButtonGuiElementImpl setEditable(boolean editable) {
 		this.editable = editable;
-		gui.update();
+		getGui().flagAndUpdate(this);
 		return this;
 	}
 	
@@ -76,7 +76,7 @@ public class ButtonGuiElementImpl extends GuiElementImpl<ButtonGuiElement> imple
 	@Override
 	public ButtonGuiElementImpl setText(@NotNull String text) {
 		this.text = text;
-		gui.update();
+		getGui().flagAndUpdate(this);
 		return this;
 	}
 	
@@ -90,8 +90,7 @@ public class ButtonGuiElementImpl extends GuiElementImpl<ButtonGuiElement> imple
 	
 	
 	@Override
-	public void serialize(@NotNull ByteBuffer buffer) {
-		super.serialize(buffer);
+	public void serializeImpl(@NotNull ByteBuffer buffer) {
 		buffer.putShort((short) width);
 		BufferUtils.serializeBoolean(buffer, editable);
 		BufferUtils.serializeString(buffer, text);

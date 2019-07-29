@@ -57,7 +57,7 @@ public class TextGuiElementImpl extends GuiElementImpl<TextGuiElement> implement
 	public TextGuiElementImpl setWidth(int width) {
 		Validate.isTrue(width > 0 && width <= Short.MAX_VALUE, "The width must be positive and at most Short.MAX_VALUE");
 		this.width = width;
-		gui.update();
+		getGui().flagAndUpdate(this);
 		return this;
 	}
 	
@@ -66,7 +66,7 @@ public class TextGuiElementImpl extends GuiElementImpl<TextGuiElement> implement
 	public TextGuiElementImpl setHeight(int height) {
 		Validate.isTrue(height > 0 && height <= Short.MAX_VALUE, "The height must be positive and at most Short.MAX_VALUE");
 		this.height = height;
-		gui.update();
+		getGui().flagAndUpdate(this);
 		return this;
 	}
 	
@@ -74,15 +74,14 @@ public class TextGuiElementImpl extends GuiElementImpl<TextGuiElement> implement
 	@Override
 	public TextGuiElementImpl setText(@NotNull String text) {
 		this.text = text;
-		gui.update();
+		getGui().flagAndUpdate(this);
 		return this;
 	}
 	
 	
 	
 	@Override
-	public void serialize(@NotNull ByteBuffer buffer) {
-		super.serialize(buffer);
+	public void serializeImpl(@NotNull ByteBuffer buffer) {
 		buffer.putShort((short) width);
 		buffer.putShort((short) height);
 		BufferUtils.serializeString(buffer, text);

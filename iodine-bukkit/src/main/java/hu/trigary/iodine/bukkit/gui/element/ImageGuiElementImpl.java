@@ -56,8 +56,7 @@ public class ImageGuiElementImpl extends GuiElementImpl<ImageGuiElement> impleme
 	
 	
 	@Override
-	public void serialize(@NotNull ByteBuffer buffer) {
-		super.serialize(buffer);
+	public void serializeImpl(@NotNull ByteBuffer buffer) {
 		throw new NotImplementedException();
 	}
 	

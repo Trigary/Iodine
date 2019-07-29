@@ -2,6 +2,7 @@ package hu.trigary.iodine.forge.gui;
 
 import hu.trigary.iodine.backend.GuiElementType;
 import hu.trigary.iodine.forge.IodineMod;
+import hu.trigary.iodine.forge.gui.container.RootGuiContainer;
 import hu.trigary.iodine.forge.gui.element.*;
 import hu.trigary.iodine.forge.gui.element.base.GuiElement;
 import org.jetbrains.annotations.NotNull;
@@ -9,7 +10,6 @@ import org.jetbrains.annotations.NotNull;
 import java.nio.ByteBuffer;
 import java.util.EnumMap;
 import java.util.Map;
-import java.util.Set;
 
 public class GuiManager {
 	private final Map<GuiElementType, ElementConstructor<?>> constructors = new EnumMap<>(GuiElementType.class);
@@ -18,6 +18,7 @@ public class GuiManager {
 	public GuiManager(@NotNull IodineMod mod) {
 		this.mod = mod;
 		
+		constructors.put(GuiElementType.CONTAINER_ROOT, RootGuiContainer::new);
 		constructors.put(GuiElementType.BUTTON, ButtonGuiElement::new);
 		constructors.put(GuiElementType.CHECKBOX, CheckboxGuiElement::new);
 		constructors.put(GuiElementType.DROPDOWN, DropdownGuiElement::new);
@@ -31,7 +32,7 @@ public class GuiManager {
 	
 	
 	
-	public void deserializeElement(@NotNull IodineGui gui, @NotNull Set<Integer> deserializedIds,
+	public void deserializeElement(@NotNull IodineGui gui,
 			@NotNull Map<Integer, GuiElement> storage, @NotNull ByteBuffer buffer) {
 		GuiElementType type = GuiElementType.fromId(buffer.get());
 		if (type == null) {
@@ -40,7 +41,6 @@ public class GuiManager {
 		}
 		
 		int id = buffer.getInt();
-		deserializedIds.add(id);
 		GuiElement element = storage.computeIfAbsent(id, ignored -> constructors.get(type).apply(gui, id));
 		element.deserialize(buffer);
 	}

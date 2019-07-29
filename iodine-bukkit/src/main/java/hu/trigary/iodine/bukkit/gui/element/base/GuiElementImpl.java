@@ -1,6 +1,5 @@
 package hu.trigary.iodine.bukkit.gui.element.base;
 
-import hu.trigary.iodine.api.gui.IodineGui;
 import hu.trigary.iodine.api.gui.element.base.GuiElement;
 import hu.trigary.iodine.backend.GuiElementType;
 import hu.trigary.iodine.bukkit.gui.IodineGuiImpl;
@@ -10,13 +9,12 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.nio.ByteBuffer;
-import java.util.function.Consumer;
 
 /**
  * The implementation of {@link GuiElement}.
  */
 public abstract class GuiElementImpl<T extends GuiElement<T>> implements GuiElement<T> {
-	protected final IodineGuiImpl gui;
+	private final IodineGuiImpl gui;
 	private final GuiElementType type;
 	private final int internalId;
 	private final Object id;
@@ -43,7 +41,7 @@ public abstract class GuiElementImpl<T extends GuiElement<T>> implements GuiElem
 	@NotNull
 	@Contract(pure = true)
 	@Override
-	public IodineGui getGui() {
+	public final IodineGuiImpl getGui() {
 		return gui;
 	}
 	
@@ -53,14 +51,14 @@ public abstract class GuiElementImpl<T extends GuiElement<T>> implements GuiElem
 	 * @return the internal ID
 	 */
 	@Contract(pure = true)
-	public int getInternalId() {
+	public final int getInternalId() {
 		return internalId;
 	}
 	
 	@NotNull
 	@Contract(pure = true)
 	@Override
-	public Object getId() {
+	public final Object getId() {
 		return id;
 	}
 	
@@ -69,7 +67,7 @@ public abstract class GuiElementImpl<T extends GuiElement<T>> implements GuiElem
 	@NotNull
 	@Contract(pure = true)
 	@Override
-	public GuiParentPlus<?> getParent() {
+	public final GuiParentPlus<?> getParent() {
 		return parent;
 	}
 	
@@ -79,7 +77,7 @@ public abstract class GuiElementImpl<T extends GuiElement<T>> implements GuiElem
 	 *
 	 * @param parent this element's new parent
 	 */
-	public void setParent(@NotNull GuiParentPlus<?> parent) {
+	public final void setParent(@NotNull GuiParentPlus<?> parent) {
 		if (this.parent != null) {
 			this.parent.removeChild(this);
 		}
@@ -90,15 +88,17 @@ public abstract class GuiElementImpl<T extends GuiElement<T>> implements GuiElem
 	
 	/**
 	 * Serializes this element into the specified buffer.
-	 * Implementations must call the superclass' implementation.
-	 * Other than that, this method should only be called by {@link IodineGuiImpl}.
+	 * This method should only be called by {@link IodineGuiImpl}.
 	 *
 	 * @param buffer the buffer to store the data in
 	 */
-	public void serialize(@NotNull ByteBuffer buffer) {
+	public final void serialize(@NotNull ByteBuffer buffer) {
 		buffer.put(type.getId());
 		buffer.putInt(internalId);
+		serializeImpl(buffer);
 	}
+	
+	protected abstract void serializeImpl(@NotNull ByteBuffer buffer);
 	
 	/**
 	 * Called by {@link hu.trigary.iodine.bukkit.network.handler.GuiChangePacketHandler}
@@ -106,8 +106,8 @@ public abstract class GuiElementImpl<T extends GuiElement<T>> implements GuiElem
 	 * Malicious intent should be assumed, everything should be validated.
 	 * Network delays and multiple viewers should be kept in mind.
 	 * It should be assumed that callbacks change the GUI,
-	 * so if both a callback and {@link IodineGuiImpl#update()} are called,
-	 * then {@link IodineGuiImpl#atomicUpdate(Consumer)} should be used.
+	 * so if both a callback and {@link IodineGuiImpl#flagAndUpdate(GuiElementImpl)}} are called,
+	 * then {@link IodineGuiImpl#flagAndAtomicUpdate(GuiElementImpl, Runnable)} should be used.
 	 *
 	 * @param player the sender of the packet
 	 * @param message the packet's contents

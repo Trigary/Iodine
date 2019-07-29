@@ -60,7 +60,7 @@ public class LinearGuiContainerImpl extends GuiElementImpl<LinearGuiContainer>
 	@Override
 	public LinearGuiContainer setOrientation(boolean vertical) {
 		verticalOrientation = vertical;
-		gui.update();
+		getGui().flagAndUpdate(this);
 		return this;
 	}
 	
@@ -106,20 +106,20 @@ public class LinearGuiContainerImpl extends GuiElementImpl<LinearGuiContainer>
 		GuiElementImpl<?> impl = (GuiElementImpl<?>) element;
 		children.add(index, impl);
 		impl.setParent(this);
-		gui.update();
+		getGui().flagAndUpdate(this);
 	}
 	
 	@Override
 	public void removeChild(@NotNull GuiElementImpl<?> child) {
 		Validate.isTrue(children.remove(child),
 				"The specified element is not a child of this parent");
+		getGui().flagOnly(this);
 	}
 	
 	
 	
 	@Override
-	public void serialize(@NotNull ByteBuffer buffer) {
-		super.serialize(buffer);
+	public void serializeImpl(@NotNull ByteBuffer buffer) {
 		BufferUtils.serializeBoolean(buffer, verticalOrientation);
 		buffer.putInt(children.size());
 		for (GuiElementImpl<?> element : children) {

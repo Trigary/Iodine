@@ -18,6 +18,7 @@ public abstract class GuiContainer extends GuiElement implements GuiParent {
 	@NotNull
 	@Contract(pure = true)
 	protected final GuiElement[] resolveChildren(@NotNull int[] childrenTemp) {
+		//TODO is storing the resolved form necessary?
 		IodineGui gui = getGui();
 		GuiElement[] children = new GuiElement[childrenTemp.length];
 		Arrays.setAll(children, i -> gui.getElement(childrenTemp[i]));

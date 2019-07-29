@@ -1,7 +1,7 @@
 package hu.trigary.iodine.forge.gui;
 
 import hu.trigary.iodine.forge.IodineMod;
-import hu.trigary.iodine.forge.gui.container.base.GuiParent;
+import hu.trigary.iodine.forge.gui.container.RootGuiContainer;
 import hu.trigary.iodine.forge.gui.element.base.GuiElement;
 import hu.trigary.iodine.forge.network.out.ClientGuiClosePacket;
 import net.minecraft.client.gui.GuiScreen;
@@ -12,14 +12,14 @@ import org.jetbrains.annotations.NotNull;
 import java.nio.ByteBuffer;
 import java.util.*;
 
-public class IodineGui extends GuiScreen implements GuiParent {
+public class IodineGui extends GuiScreen {
 	private static final int WIDTH = 300;
 	private static final int HEIGHT = 200;
 	private final Map<Integer, GuiElement> elements = new HashMap<>();
-	private final Map<GuiElement, Position> children = new HashMap<>();
 	private final Set<GuiElement> pressedElements = new HashSet<>();
 	private final IodineMod mod;
 	private final int id;
+	private RootGuiContainer rootElement;
 	private int left = -1;
 	private int top = -1;
 	
@@ -59,32 +59,32 @@ public class IodineGui extends GuiScreen implements GuiParent {
 	
 	
 	public void deserialize(@NotNull byte[] data) {
-		children.clear();
 		ByteBuffer buffer = ByteBuffer.wrap(data);
-		Set<Integer> deserializedIds = new HashSet<>();
 		
-		int elementCount = buffer.getInt();
-		for (int i = 0; i < elementCount; i++) {
-			mod.getGui().deserializeElement(this, deserializedIds, elements, buffer);
+		int removeCount = buffer.getInt();
+		for (int i = 0; i < removeCount; i++) {
+			elements.remove(buffer.getInt());
 		}
-		
-		//TODO instead of this, list IDs that were deleted
-		elements.keySet().removeIf(elementId -> !deserializedIds.contains(elementId));
 		
 		while (buffer.hasRemaining()) {
-			children.put(elements.get(buffer.getInt()), new Position(buffer.getShort(), buffer.getShort()));
+			mod.getGui().deserializeElement(this, elements, buffer);
 		}
 		
-		children.forEach((child, position) -> child.initialize(this, position.x, position.y));
+		if (rootElement == null) {
+			rootElement = (RootGuiContainer) elements.get(0);
+		}
+		rootElement.initialize(null, 0, 0);
+		
 		if (left != -1) {
 			initGui();
 		}
 		
 		//TODO GuiElement call order docs:
-		// constructor -> deserialize
+		// constructor
+		// deserialize
 		// initialize (used for stuff that requires all elements to be deserialized)
 		// update (can be called multiple times for the same instance, see line below)
-		//after server change packet: update
+		//after server change packet, on resolution change: update
 	}
 	
 	
@@ -93,17 +93,8 @@ public class IodineGui extends GuiScreen implements GuiParent {
 	public void initGui() {
 		left = width / 2 - WIDTH / 2;
 		top = height / 2 - HEIGHT / 2;
+		rootElement.onResolutionChanged(left, top);
 		elements.values().forEach(GuiElement::update);
-	}
-	
-	@Override
-	public int getLeft() {
-		return left;
-	}
-	
-	@Override
-	public int getTop() {
-		return top;
 	}
 	
 	
@@ -158,18 +149,6 @@ public class IodineGui extends GuiScreen implements GuiParent {
 				element.onMouseReleased(mouseX, mouseY);
 			}
 			pressedElements.clear();
-		}
-	}
-	
-	
-	
-	private static class Position {
-		final int x;
-		final int y;
-		
-		Position(int x, int y) {
-			this.x = x;
-			this.y = y;
 		}
 	}
 }

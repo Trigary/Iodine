@@ -69,7 +69,7 @@ public class DropdownGuiElementImpl extends GuiElementImpl<DropdownGuiElement> i
 	public DropdownGuiElementImpl setWidth(int width) {
 		Validate.isTrue(width > 0 && width <= Short.MAX_VALUE, "The width must be positive and at most Short.MAX_VALUE");
 		this.width = width;
-		gui.update();
+		getGui().flagAndUpdate(this);
 		return this;
 	}
 	
@@ -77,7 +77,7 @@ public class DropdownGuiElementImpl extends GuiElementImpl<DropdownGuiElement> i
 	@Override
 	public DropdownGuiElementImpl setEditable(boolean editable) {
 		this.editable = editable;
-		gui.update();
+		getGui().flagAndUpdate(this);
 		return this;
 	}
 	
@@ -88,7 +88,7 @@ public class DropdownGuiElementImpl extends GuiElementImpl<DropdownGuiElement> i
 		this.choices.clear();
 		this.choices.addAll(choices);
 		selected = 0;
-		gui.update();
+		getGui().flagAndUpdate(this);
 		return this;
 	}
 	
@@ -98,7 +98,7 @@ public class DropdownGuiElementImpl extends GuiElementImpl<DropdownGuiElement> i
 		int index = choices.indexOf(value);
 		Validate.isTrue(index != -1, "The selected value must be among the choices");
 		selected = index;
-		gui.update();
+		getGui().flagAndUpdate(this);
 		return this;
 	}
 	
@@ -112,8 +112,7 @@ public class DropdownGuiElementImpl extends GuiElementImpl<DropdownGuiElement> i
 	
 	
 	@Override
-	public void serialize(@NotNull ByteBuffer buffer) {
-		super.serialize(buffer);
+	public void serializeImpl(@NotNull ByteBuffer buffer) {
 		buffer.putShort((short) width);
 		BufferUtils.serializeBoolean(buffer, editable);
 		buffer.putInt(choices.size());
@@ -139,9 +138,9 @@ public class DropdownGuiElementImpl extends GuiElementImpl<DropdownGuiElement> i
 		int oldSelected = selected;
 		selected = newSelected;
 		if (chosenAction == null) {
-			gui.update();
+			getGui().flagAndUpdate(this);
 		} else {
-			gui.atomicUpdate(ignored -> chosenAction.accept(this,
+			getGui().flagAndAtomicUpdate(this, () -> chosenAction.accept(this,
 					choices.get(oldSelected), choices.get(selected), player));
 		}
 	}

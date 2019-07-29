@@ -2,11 +2,15 @@ package hu.trigary.iodine.bukkit;
 
 import hu.trigary.iodine.api.IodineApi;
 import hu.trigary.iodine.api.gui.GuiElements;
+import hu.trigary.iodine.api.gui.element.ButtonGuiElement;
+import hu.trigary.iodine.api.gui.element.TextFieldGuiElement;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.function.Consumer;
 
 /**
  * A class which exists solely for testing purposes.
@@ -34,20 +38,25 @@ public class TestCommandListener implements Listener {
 			return;
 		}
 		
+		Object id = new Object();
+		
+		Consumer<ButtonGuiElement> initializer = e -> e
+				.setText("Click me!")
+				.onClicked((ignored, p) -> {
+					p.sendMessage("Button clicked");
+					e.getGui().atomicUpdate(gui -> {
+						gui.removeElement(e.getId());
+						TextFieldGuiElement text = (TextFieldGuiElement) gui.getElement(id);
+						text.setText(text.getText() + ".");
+					});
+				});
+		
 		api.createGui()
-				.addElement(GuiElements.TEXT, e -> e.setText("0"), 0, 0)
-				.addElement(GuiElements.TEXT, e -> e.setText("300"), 300, 0)
-				.addElement(GuiElements.TEXT, e -> e.setText("200"), 0, 200)
-				.addElement(GuiElements.TEXT, e -> e.setText("50"), 50, 50)
-				.addElement(GuiElements.TEXT, e -> e.setText("100"), 100, 100)
-				.addElement(GuiElements.TEXT, e -> e.setText("150"), 150, 150)
-				.addElement(GuiElements.TEXT, e -> e.setText("200"), 200, 200)
-				.addElement(GuiElements.BUTTON, e -> e.setText("Click me!")
-						.onClicked((ignored, p) -> p.sendMessage("You clicked me, good job!")), 50, 100)
-				.addElement(GuiElements.CHECKBOX, e -> e.setChecked(true)
-						.onClicked((ignored, p) -> p.sendMessage("The checkbox is checked: " + e.isChecked())), 100, 50)
-				.addElement(GuiElements.BUTTON, e -> e.setText("Not editable").setEditable(false), 200, 100)
-				.addElement(GuiElements.TEXT_FIELD, e -> e.setText("Your text here")
+				.addElement(GuiElements.BUTTON, initializer, 50, 50)
+				.addElement(GuiElements.BUTTON, initializer, 100, 50)
+				.addElement(GuiElements.BUTTON, initializer, 50, 100)
+				.addElement(GuiElements.BUTTON, initializer, 100, 100)
+				.addElement(id, GuiElements.TEXT_FIELD, e -> e.setText("Your text here")
 						.onChanged((ignored, oldText, newText, p) -> p.sendMessage("Old text: "
 								+ oldText + ", new text: " + newText)))
 				.onClosed((gui, p) -> p.sendMessage("You closed the GUI"))

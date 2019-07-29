@@ -5,6 +5,7 @@ import hu.trigary.iodine.api.gui.IodineGui;
 import hu.trigary.iodine.api.gui.element.base.GuiElement;
 import hu.trigary.iodine.backend.PacketType;
 import hu.trigary.iodine.bukkit.IodinePlugin;
+import hu.trigary.iodine.bukkit.gui.container.RootGuiContainer;
 import hu.trigary.iodine.bukkit.gui.container.base.GuiParentPlus;
 import hu.trigary.iodine.bukkit.gui.element.base.GuiElementImpl;
 import hu.trigary.iodine.bukkit.network.NetworkManager;
@@ -27,10 +28,12 @@ public class IodineGuiImpl implements IodineGui, GuiParentPlus<IodineGui> {
 	private final Set<Player> viewers = new HashSet<>();
 	private final Map<Integer, GuiElementImpl<?>> elements = new HashMap<>();
 	private final Map<Object, GuiElementImpl<?>> apiIdElements = new HashMap<>();
-	private final Map<GuiElementImpl<?>, Position> children = new HashMap<>();
+	private final Set<GuiElementImpl<?>> flaggedForUpdate = new HashSet<>();
+	private final Set<GuiElementImpl<?>> flaggedForRemove = new HashSet<>();
 	private final IodinePlugin plugin;
 	private final int id;
-	private int nextElementId;
+	private final RootGuiContainer root;
+	private int nextElementId = 1;
 	private int atomicUpdateLock;
 	private ClosedAction closedAction;
 	
@@ -44,6 +47,8 @@ public class IodineGuiImpl implements IodineGui, GuiParentPlus<IodineGui> {
 	public IodineGuiImpl(@NotNull IodinePlugin plugin, int id) {
 		this.plugin = plugin;
 		this.id = id;
+		root = new RootGuiContainer(this);
+		elements.put(0, root);
 	}
 	
 	
@@ -97,7 +102,7 @@ public class IodineGuiImpl implements IodineGui, GuiParentPlus<IodineGui> {
 	@Contract(pure = true)
 	@Override
 	public Collection<GuiElement<?>> getChildren() {
-		return Collections.unmodifiableCollection(children.keySet());
+		return root.getChildren();
 	}
 	
 	
@@ -105,21 +110,12 @@ public class IodineGuiImpl implements IodineGui, GuiParentPlus<IodineGui> {
 	@NotNull
 	@Override
 	public <E extends GuiElement<E>> E makeChild(@NotNull E element, int x, int y) {
-		Validate.isTrue(x >= 0 && y >= 0 && x <= Short.MAX_VALUE && y <= Short.MAX_VALUE,
-				"The element's render position must be at least 0 and at most Short.MAX_VALUE");
-		//TODO actually allow negative values, as long as it can't crash the client
-		GuiElementImpl<?> impl = (GuiElementImpl<?>) element;
-		Validate.isTrue(children.put(impl, new Position(x, y)) == null,
-				"The specified element is already the child of this GUI");
-		impl.setParent(this);
-		update();
-		return element;
+		return root.makeChild(element, x, y);
 	}
 	
 	@Override
 	public void removeChild(@NotNull GuiElementImpl<?> child) {
-		Validate.notNull(children.remove(child),
-				"The specified element is not a child of this parent");
+		root.removeChild(child);
 	}
 	
 	
@@ -133,7 +129,7 @@ public class IodineGuiImpl implements IodineGui, GuiParentPlus<IodineGui> {
 		GuiElementImpl<E> impl = plugin.getGui().createElement(type.getType(), this, nextElementId, id);
 		elements.put(nextElementId++, impl);
 		apiIdElements.put(id, impl);
-		atomicUpdate(gui -> {
+		flagAndAtomicUpdate(impl, () -> {
 			//noinspection unchecked
 			E element = (E) impl;
 			makeChild(element, x, y);
@@ -148,12 +144,31 @@ public class IodineGuiImpl implements IodineGui, GuiParentPlus<IodineGui> {
 		Validate.notNull(id, "IDs must be non-null");
 		GuiElementImpl<?> element = apiIdElements.remove(id);
 		if (element != null) {
-			update();
+			flaggedForRemove.add(element);
+			executeUpdate();
 		}
 		return this;
+	} //TODO removeElement which takes IodineGui instance
+	
+	
+	
+	private void executeUpdate() {
+		if (atomicUpdateLock != 0) {
+			return;
+		}
+		
+		if (!viewers.isEmpty()) {
+			flaggedForUpdate.removeAll(flaggedForRemove);
+			byte[] payload = serializeUpdate();
+			NetworkManager network = plugin.getNetwork();
+			for (Player player : viewers) {
+				network.send(player, payload);
+			}
+		}
+		
+		flaggedForUpdate.clear();
+		flaggedForRemove.clear();
 	}
-	
-	
 	
 	@NotNull
 	@Override
@@ -161,23 +176,34 @@ public class IodineGuiImpl implements IodineGui, GuiParentPlus<IodineGui> {
 		atomicUpdateLock++;
 		updater.accept(this);
 		atomicUpdateLock--;
-		update();
+		executeUpdate();
 		return this;
 	}
 	
+	
+	
 	/**
-	 * Updates this GUI for all of its viewers if
-	 * there is no atomic update in progress.
-	 * Otherwise does nothing.
+	 * @param element
 	 */
-	public void update() {
-		if (atomicUpdateLock == 0 && !viewers.isEmpty()) {
-			byte[] payload = serialize(false);
-			NetworkManager network = plugin.getNetwork();
-			for (Player player : viewers) {
-				network.send(player, payload);
-			}
-		}
+	public void flagOnly(@NotNull GuiElementImpl<?> element) {
+		flaggedForUpdate.add(element);
+	}
+	
+	/**
+	 * @param element
+	 */
+	public void flagAndUpdate(@NotNull GuiElementImpl<?> element) {
+		flagOnly(element);
+		executeUpdate();
+	}
+	
+	/**
+	 * @param element
+	 * @param updater
+	 */
+	public void flagAndAtomicUpdate(@NotNull GuiElementImpl<?> element, @NotNull Runnable updater) {
+		flagOnly(element);
+		atomicUpdate(ignored -> updater.run());
 	}
 	
 	
@@ -201,7 +227,7 @@ public class IodineGuiImpl implements IodineGui, GuiParentPlus<IodineGui> {
 		}
 		
 		iodinePlayer.setOpenGui(this);
-		plugin.getNetwork().send(player, serialize(true));
+		plugin.getNetwork().send(player, serializeOpen());
 		return this;
 	}
 	
@@ -247,39 +273,30 @@ public class IodineGuiImpl implements IodineGui, GuiParentPlus<IodineGui> {
 	
 	
 	
-	private byte[] serialize(boolean opening) {
-		if (opening) {
-			BUFFER.put(PacketType.SERVER_GUI_OPEN.getId());
-			BUFFER.putInt(id);
-		} else {
-			BUFFER.put(PacketType.SERVER_GUI_CHANGE.getId());
+	private byte[] serializeOpen() {
+		BUFFER.put(PacketType.SERVER_GUI_OPEN.getId());
+		BUFFER.putInt(id);
+		return serialize(Collections.emptyList(), elements.values());
+	}
+	
+	private byte[] serializeUpdate() {
+		BUFFER.put(PacketType.SERVER_GUI_CHANGE.getId());
+		return serialize(flaggedForRemove, flaggedForUpdate);
+	}
+	
+	private static byte[] serialize(@NotNull Collection<GuiElementImpl<?>> remove,
+			@NotNull Collection<GuiElementImpl<?>> add) {
+		BUFFER.putInt(remove.size());
+		for (GuiElementImpl<?> element : remove) {
+			BUFFER.putInt(element.getInternalId());
 		}
 		
-		BUFFER.putInt(elements.size());
-		for (GuiElementImpl<?> element : elements.values()) {
+		for (GuiElementImpl<?> element : add) {
 			element.serialize(BUFFER);
 		}
-		
-		children.forEach((element, position) -> {
-			BUFFER.putInt(element.getInternalId());
-			BUFFER.putShort((short) position.x);
-			BUFFER.putShort((short) position.y);
-		});
 		
 		byte[] result = new byte[BUFFER.flip().remaining()];
 		BUFFER.get(result).clear();
 		return result;
-	}
-	
-	
-	
-	private static class Position {
-		final int x;
-		final int y;
-		
-		Position(int x, int y) {
-			this.x = x;
-			this.y = y;
-		}
 	}
 }

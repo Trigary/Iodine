@@ -76,7 +76,7 @@ public class TextFieldGuiElementImpl extends GuiElementImpl<TextFieldGuiElement>
 	public TextFieldGuiElementImpl setWidth(int width) {
 		Validate.isTrue(width > 0 && width <= Short.MAX_VALUE, "The width must be positive and at most Short.MAX_VALUE");
 		this.width = width;
-		gui.update();
+		getGui().flagAndUpdate(this);
 		return this;
 	}
 	
@@ -85,7 +85,7 @@ public class TextFieldGuiElementImpl extends GuiElementImpl<TextFieldGuiElement>
 	public TextFieldGuiElementImpl setHeight(int height) {
 		Validate.isTrue(height > 0 && height <= Short.MAX_VALUE, "The height must be positive and at most Short.MAX_VALUE");
 		this.height = height;
-		gui.update();
+		getGui().flagAndUpdate(this);
 		return this;
 	}
 	
@@ -93,7 +93,7 @@ public class TextFieldGuiElementImpl extends GuiElementImpl<TextFieldGuiElement>
 	@Override
 	public TextFieldGuiElementImpl setEditable(boolean editable) {
 		this.editable = editable;
-		gui.update();
+		getGui().flagAndUpdate(this);
 		return this;
 	}
 	
@@ -101,7 +101,7 @@ public class TextFieldGuiElementImpl extends GuiElementImpl<TextFieldGuiElement>
 	@Override
 	public TextFieldGuiElementImpl setText(@NotNull String text) {
 		this.text = text;
-		gui.update();
+		getGui().flagAndUpdate(this);
 		return this;
 	}
 	
@@ -111,7 +111,7 @@ public class TextFieldGuiElementImpl extends GuiElementImpl<TextFieldGuiElement>
 		Validate.notNull(regex, "The regex must be non-null");
 		this.regex = regex;
 		compiledRegex = regex.isEmpty() ? null : Pattern.compile(regex);
-		gui.update();
+		getGui().flagAndUpdate(this);
 		return this;
 	}
 	
@@ -125,8 +125,7 @@ public class TextFieldGuiElementImpl extends GuiElementImpl<TextFieldGuiElement>
 	
 	
 	@Override
-	public void serialize(@NotNull ByteBuffer buffer) {
-		super.serialize(buffer);
+	public void serializeImpl(@NotNull ByteBuffer buffer) {
 		buffer.putShort((short) width);
 		buffer.putShort((short) height);
 		BufferUtils.serializeBoolean(buffer, editable);
@@ -152,9 +151,9 @@ public class TextFieldGuiElementImpl extends GuiElementImpl<TextFieldGuiElement>
 		String oldText = text;
 		text = newText;
 		if (textChangedAction == null) {
-			gui.update();
+			getGui().flagAndUpdate(this);
 		} else {
-			gui.atomicUpdate(ignored -> textChangedAction.accept(this, oldText, text, player));
+			getGui().flagAndAtomicUpdate(this, () -> textChangedAction.accept(this, oldText, text, player));
 		}
 	}
 }

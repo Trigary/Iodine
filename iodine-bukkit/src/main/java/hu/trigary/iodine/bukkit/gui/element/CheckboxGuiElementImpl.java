@@ -51,7 +51,7 @@ public class CheckboxGuiElementImpl extends GuiElementImpl<CheckboxGuiElement> i
 	@Override
 	public CheckboxGuiElementImpl setEditable(boolean editable) {
 		this.editable = editable;
-		gui.update();
+		getGui().flagAndUpdate(this);
 		return this;
 	}
 	
@@ -59,7 +59,7 @@ public class CheckboxGuiElementImpl extends GuiElementImpl<CheckboxGuiElement> i
 	@Override
 	public CheckboxGuiElementImpl setChecked(boolean checked) {
 		this.checked = checked;
-		gui.update();
+		getGui().flagAndUpdate(this);
 		return this;
 	}
 	
@@ -73,8 +73,7 @@ public class CheckboxGuiElementImpl extends GuiElementImpl<CheckboxGuiElement> i
 	
 	
 	@Override
-	public void serialize(@NotNull ByteBuffer buffer) {
-		super.serialize(buffer);
+	public void serializeImpl(@NotNull ByteBuffer buffer) {
 		BufferUtils.serializeBoolean(buffer, editable);
 		BufferUtils.serializeBoolean(buffer, checked);
 	}
@@ -90,9 +89,9 @@ public class CheckboxGuiElementImpl extends GuiElementImpl<CheckboxGuiElement> i
 		
 		checked = !checked;
 		if (clickedAction == null) {
-			gui.update();
+			getGui().flagAndUpdate(this);
 		} else {
-			gui.atomicUpdate(ignored -> clickedAction.accept(this, player));
+			getGui().flagAndAtomicUpdate(this, () -> clickedAction.accept(this, player));
 		}
 	}
 }

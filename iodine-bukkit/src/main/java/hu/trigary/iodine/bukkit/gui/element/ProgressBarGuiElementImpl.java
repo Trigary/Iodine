@@ -65,7 +65,7 @@ public class ProgressBarGuiElementImpl extends GuiElementImpl<ProgressBarGuiElem
 	@Override
 	public ProgressBarGuiElementImpl setOrientation(boolean vertical) {
 		verticalOrientation = vertical;
-		gui.update();
+		getGui().flagAndUpdate(this);
 		return this;
 	}
 	
@@ -73,7 +73,7 @@ public class ProgressBarGuiElementImpl extends GuiElementImpl<ProgressBarGuiElem
 	@Override
 	public ProgressBarGuiElementImpl setText(@NotNull String text) {
 		this.text = text;
-		gui.update();
+		getGui().flagAndUpdate(this);
 		return this;
 	}
 	
@@ -85,7 +85,7 @@ public class ProgressBarGuiElementImpl extends GuiElementImpl<ProgressBarGuiElem
 		if (progress > maxProgress) {
 			progress = maxProgress;
 		}
-		gui.update();
+		getGui().flagAndUpdate(this);
 		return this;
 	}
 	
@@ -95,15 +95,14 @@ public class ProgressBarGuiElementImpl extends GuiElementImpl<ProgressBarGuiElem
 		Validate.isTrue(progress >= 0 && progress <= maxProgress,
 				"Progress must be at least 0 and at most maxProgress");
 		this.progress = progress;
-		gui.update();
+		getGui().flagAndUpdate(this);
 		return this;
 	}
 	
 	
 	
 	@Override
-	public void serialize(@NotNull ByteBuffer buffer) {
-		super.serialize(buffer);
+	public void serializeImpl(@NotNull ByteBuffer buffer) {
 		BufferUtils.serializeBoolean(buffer, verticalOrientation);
 		BufferUtils.serializeString(buffer, text);
 		buffer.putInt(maxProgress);

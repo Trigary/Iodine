@@ -35,6 +35,6 @@ public interface GuiClickable<T extends GuiClickable<T>> {
 		 * @param element the element that was clicked
 		 * @param player the player who clicked the element
 		 */
-		void accept(@NotNull GuiClickable<T> element, @NotNull Player player);
+		void accept(@NotNull T element, @NotNull Player player);
 	}
 }

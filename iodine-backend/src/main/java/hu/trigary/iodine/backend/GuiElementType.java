@@ -9,8 +9,9 @@ import java.util.Arrays;
  * A list of all element types that can be displayed.
  */
 public enum GuiElementType {
-	CONTAINER_GRID(0x00),
-	CONTAINER_LINEAR(0x01),
+	CONTAINER_ROOT(0x00),
+	CONTAINER_GRID(0x01),
+	CONTAINER_LINEAR(0x02),
 	BUTTON(0x10),
 	CHECKBOX(0x11),
 	DROPDOWN(0x12),

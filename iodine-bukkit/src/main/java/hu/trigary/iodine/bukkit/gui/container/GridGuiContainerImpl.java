@@ -99,7 +99,7 @@ public class GridGuiContainerImpl extends GuiElementImpl<GridGuiContainer>
 		
 		columnCount = columns;
 		rowCount = rows;
-		gui.update();
+		getGui().flagAndUpdate(this);
 		return this;
 	}
 	
@@ -113,7 +113,7 @@ public class GridGuiContainerImpl extends GuiElementImpl<GridGuiContainer>
 		GuiElementImpl<?> impl = (GuiElementImpl<?>) element;
 		children.set(column * rowCount + row, impl);
 		impl.setParent(this);
-		gui.update();
+		getGui().flagAndUpdate(this);
 		return element;
 	}
 	
@@ -122,13 +122,13 @@ public class GridGuiContainerImpl extends GuiElementImpl<GridGuiContainer>
 		int index = children.indexOf(child);
 		Validate.isTrue(index != -1, "The specified element is not a child of this parent");
 		children.set(index, null);
+		getGui().flagOnly(this);
 	}
 	
 	
 	
 	@Override
-	public void serialize(@NotNull ByteBuffer buffer) {
-		super.serialize(buffer);
+	public void serializeImpl(@NotNull ByteBuffer buffer) {
 		buffer.putInt(columnCount);
 		buffer.putInt(rowCount);
 		for (GuiElementImpl<?> element : children) {

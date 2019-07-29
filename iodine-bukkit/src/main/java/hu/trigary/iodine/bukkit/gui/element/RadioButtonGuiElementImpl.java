@@ -63,7 +63,7 @@ public class RadioButtonGuiElementImpl extends GuiElementImpl<RadioButtonGuiElem
 	@Override
 	public RadioButtonGuiElementImpl setEditable(boolean editable) {
 		this.editable = editable;
-		gui.update();
+		getGui().flagAndUpdate(this);
 		return this;
 	}
 	
@@ -71,7 +71,7 @@ public class RadioButtonGuiElementImpl extends GuiElementImpl<RadioButtonGuiElem
 	@Override
 	public RadioButtonGuiElementImpl setChecked(boolean checked) {
 		this.checked = checked;
-		gui.update();
+		getGui().flagAndUpdate(this);
 		return this;
 	}
 	
@@ -90,7 +90,7 @@ public class RadioButtonGuiElementImpl extends GuiElementImpl<RadioButtonGuiElem
 			}
 		}
 		
-		RadioButtonGuiElementImpl other = gui.getAllElements().stream()
+		RadioButtonGuiElementImpl other = getGui().getAllElements().stream()
 				.filter(RadioButtonGuiElementImpl.class::isInstance)
 				.map(RadioButtonGuiElementImpl.class::cast)
 				.filter(e -> e.groupData.id == groupId)
@@ -105,7 +105,7 @@ public class RadioButtonGuiElementImpl extends GuiElementImpl<RadioButtonGuiElem
 		}
 		
 		groupData.elements.add(this);
-		gui.update();
+		getGui().flagAndUpdate(this);
 		return this;
 	}
 	
@@ -128,8 +128,7 @@ public class RadioButtonGuiElementImpl extends GuiElementImpl<RadioButtonGuiElem
 	
 	
 	@Override
-	public void serialize(@NotNull ByteBuffer buffer) {
-		super.serialize(buffer);
+	public void serializeImpl(@NotNull ByteBuffer buffer) {
 		BufferUtils.serializeBoolean(buffer, editable);
 		BufferUtils.serializeBoolean(buffer, checked);
 		buffer.putInt(groupData.id);

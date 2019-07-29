@@ -82,7 +82,7 @@ public class SliderGuiElementImpl extends GuiElementImpl<SliderGuiElement> imple
 	public SliderGuiElementImpl setWidth(int width) {
 		Validate.isTrue(width > 0 && width <= Short.MAX_VALUE, "The width must be positive and at most Short.MAX_VALUE");
 		this.width = width;
-		gui.update();
+		getGui().flagAndUpdate(this);
 		return this;
 	}
 	
@@ -90,7 +90,7 @@ public class SliderGuiElementImpl extends GuiElementImpl<SliderGuiElement> imple
 	@Override
 	public SliderGuiElementImpl setEditable(boolean editable) {
 		this.editable = editable;
-		gui.update();
+		getGui().flagAndUpdate(this);
 		return this;
 	}
 	
@@ -98,7 +98,7 @@ public class SliderGuiElementImpl extends GuiElementImpl<SliderGuiElement> imple
 	@Override
 	public SliderGuiElementImpl setOrientation(boolean vertical) {
 		verticalOrientation = vertical;
-		gui.update();
+		getGui().flagAndUpdate(this);
 		return this;
 	}
 	
@@ -106,7 +106,7 @@ public class SliderGuiElementImpl extends GuiElementImpl<SliderGuiElement> imple
 	@Override
 	public SliderGuiElementImpl setText(@NotNull String text) {
 		this.text = text;
-		gui.update();
+		getGui().flagAndUpdate(this);
 		return this;
 	}
 	
@@ -118,7 +118,7 @@ public class SliderGuiElementImpl extends GuiElementImpl<SliderGuiElement> imple
 		if (progress > maxProgress) {
 			progress = maxProgress;
 		}
-		gui.update();
+		getGui().flagAndUpdate(this);
 		return this;
 	}
 	
@@ -128,7 +128,7 @@ public class SliderGuiElementImpl extends GuiElementImpl<SliderGuiElement> imple
 		Validate.isTrue(progress >= 0 && progress <= maxProgress,
 				"Progress must be at least 0 and at most maxProgress");
 		this.progress = progress;
-		gui.update();
+		getGui().flagAndUpdate(this);
 		return this;
 	}
 	
@@ -142,8 +142,7 @@ public class SliderGuiElementImpl extends GuiElementImpl<SliderGuiElement> imple
 	
 	
 	@Override
-	public void serialize(@NotNull ByteBuffer buffer) {
-		super.serialize(buffer);
+	public void serializeImpl(@NotNull ByteBuffer buffer) {
 		buffer.putShort((short) width);
 		BufferUtils.serializeBoolean(buffer, editable);
 		BufferUtils.serializeBoolean(buffer, verticalOrientation);
