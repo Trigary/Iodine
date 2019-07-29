@@ -1,12 +1,14 @@
 package hu.trigary.iodine.bukkit.player;
 
 import hu.trigary.iodine.api.player.IodinePlayer;
+import hu.trigary.iodine.api.player.IodinePlayerStateChangedEvent;
 import hu.trigary.iodine.api.player.PlayerState;
 import hu.trigary.iodine.bukkit.IodinePlugin;
 import hu.trigary.iodine.bukkit.gui.IodineGuiImpl;
 import hu.trigary.iodine.bukkit.network.PacketListener;
 import hu.trigary.iodine.bukkit.network.handler.LoginPacketHandler;
 import org.apache.commons.lang.Validate;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -55,7 +57,9 @@ public class IodinePlayerImpl implements IodinePlayer {
 	 * @param state the new state of the player
 	 */
 	public void setState(@NotNull PlayerState state) {
+		PlayerState oldState = this.state;
 		this.state = state;
+		Bukkit.getPluginManager().callEvent(new IodinePlayerStateChangedEvent(this, oldState, state));
 	}
 	
 	@Override

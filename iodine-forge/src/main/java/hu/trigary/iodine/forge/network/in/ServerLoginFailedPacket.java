@@ -28,9 +28,9 @@ public class ServerLoginFailedPacket extends InPacket {
 			
 			String text = message.outdatedClient
 					? "You have an outdated version of Iodine installed. "
-					+ "Features will not work, you must update."
+					+ "Iodine will not work, you must update."
 					: "The server has an outdated version of Iodine installed. "
-					+ "Features will not work, ask the owner to update.";
+					+ "Iodine will not work for you, ask the server staff to update.";
 			
 			text = TextFormatting.GRAY + "[" + TextFormatting.YELLOW + "Iodine"
 					+ TextFormatting.GRAY + "] " + TextFormatting.RED + text;
