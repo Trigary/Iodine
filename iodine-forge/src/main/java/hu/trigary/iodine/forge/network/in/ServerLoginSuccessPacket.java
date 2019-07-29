@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class ServerLoginSuccessPacket extends InPacket {
 	@Override
-	public void deserialize(ByteBuf buf) { }
+	public void deserialize(ByteBuf buffer) {}
 	
 	public static class Handler extends InPacket.Handler<ServerLoginSuccessPacket> {
 		public Handler(@NotNull IodineMod mod) {

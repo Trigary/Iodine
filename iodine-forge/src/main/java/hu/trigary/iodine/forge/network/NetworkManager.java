@@ -27,6 +27,8 @@ public class NetworkManager {
 				new ServerLoginSuccessPacket.Handler(mod));
 		registerIn(PacketType.SERVER_LOGIN_FAILED, ServerLoginFailedPacket.class,
 				new ServerLoginFailedPacket.Handler(mod));
+		registerIn(PacketType.SERVER_LOGIN_REQUEST, ServerLoginRequest.class,
+				new ServerLoginRequest.Handler(mod));
 		
 		registerIn(PacketType.SERVER_GUI_OPEN, ServerGuiOpenPacket.class,
 				new ServerGuiOpenPacket.Handler(mod));

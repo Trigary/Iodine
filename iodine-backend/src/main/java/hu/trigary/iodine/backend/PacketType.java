@@ -33,6 +33,12 @@ public enum PacketType {
 	SERVER_LOGIN_FAILED(0x02),
 	
 	/**
+	 * Sent to all online players when the plugin enables.
+	 * Clients who have the mod installed are going to reply with {@link #CLIENT_LOGIN}.
+	 */
+	SERVER_LOGIN_REQUEST(0x03),
+	
+	/**
 	 * Instructs the client to open the GUI specified in the payload.
 	 */
 	SERVER_GUI_OPEN(0x10),

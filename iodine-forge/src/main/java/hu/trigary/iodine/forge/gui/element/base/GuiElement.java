@@ -41,17 +41,17 @@ public abstract class GuiElement {
 	
 	
 	
-	public final int getX() {
+	protected final int getX() {
 		return parent.getLeft() + xOffset;
 	}
 	
-	public final int getY() {
+	protected final int getY() {
 		return parent.getTop() + yOffset;
 	}
 	
 	
 	
-	public void deserialize(@NotNull ByteBuffer buffer) { }
+	public void deserialize(@NotNull ByteBuffer buffer) {}
 	
 	protected final void sendChangePacket(int dataLength, @NotNull Consumer<ByteBuffer> dataProvider) {
 		byte[] data = new byte[dataLength];

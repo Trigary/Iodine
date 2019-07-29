@@ -1,6 +1,7 @@
 package hu.trigary.iodine.bukkit;
 
 import hu.trigary.iodine.api.IodineApi;
+import hu.trigary.iodine.backend.PacketType;
 import hu.trigary.iodine.bukkit.gui.GuiManager;
 import hu.trigary.iodine.bukkit.player.IodinePlayerImpl;
 import hu.trigary.iodine.bukkit.network.NetworkManager;
@@ -38,6 +39,8 @@ public class IodinePlugin extends JavaPlugin implements Listener {
 		guiManager = new GuiManager(this);
 		
 		Bukkit.getPluginManager().registerEvents(new TestCommandListener(this), this);
+		
+		Bukkit.getOnlinePlayers().forEach(p -> networkManager.send(p, PacketType.SERVER_LOGIN_REQUEST));
 	}
 	
 	@EventHandler(priority = EventPriority.HIGHEST)

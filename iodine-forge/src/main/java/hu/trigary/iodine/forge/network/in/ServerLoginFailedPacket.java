@@ -12,8 +12,8 @@ public class ServerLoginFailedPacket extends InPacket {
 	private boolean outdatedClient;
 	
 	@Override
-	public void deserialize(ByteBuf buf) {
-		outdatedClient = buf.readByte() == 0;
+	public void deserialize(ByteBuf buffer) {
+		outdatedClient = buffer.readByte() == 0;
 	}
 	
 	public static class Handler extends InPacket.Handler<ServerLoginFailedPacket> {

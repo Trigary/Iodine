@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class ServerGuiClosePacket extends InPacket {
 	@Override
-	protected void deserialize(ByteBuf buffer) { }
+	protected void deserialize(ByteBuf buffer) {}
 	
 	public static class Handler extends InPacket.Handler<ServerGuiClosePacket> {
 		public Handler(@NotNull IodineMod mod) {
