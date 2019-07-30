@@ -87,7 +87,7 @@ public class IodineGuiImpl implements IodineGui, GuiParentPlus<IodineGui> {
 	@Contract(pure = true)
 	@Override
 	public GuiElementImpl<?> getElement(@NotNull Object id) {
-		Validate.notNull(id, "IDs must be non-null");
+		Validate.notNull(id, "ID must be non-null");
 		return apiIdElements.get(id);
 	}
 	
@@ -124,7 +124,7 @@ public class IodineGuiImpl implements IodineGui, GuiParentPlus<IodineGui> {
 	@Override
 	public <E extends GuiElement<E>> IodineGui addElement(@NotNull Object id,
 			@NotNull GuiElements<E> type, @NotNull Consumer<E> initializer, int x, int y) {
-		Validate.notNull(id, "IDs must be non-null");
+		Validate.notNull(id, "ID must be non-null");
 		Validate.isTrue(!apiIdElements.containsKey(id), "IDs must be unique");
 		GuiElementImpl<E> impl = plugin.getGui().createElement(type.getType(), this, nextElementId, id);
 		elements.put(nextElementId++, impl);
@@ -141,14 +141,22 @@ public class IodineGuiImpl implements IodineGui, GuiParentPlus<IodineGui> {
 	@NotNull
 	@Override
 	public IodineGuiImpl removeElement(@NotNull Object id) {
-		Validate.notNull(id, "IDs must be non-null");
+		Validate.notNull(id, "ID must be non-null");
 		GuiElementImpl<?> element = apiIdElements.remove(id);
 		if (element != null) {
+			elements.remove(element.getInternalId());
 			flaggedForRemove.add(element);
 			executeUpdate();
 		}
 		return this;
-	} //TODO removeElement which takes IodineGui instance
+	}
+	
+	@NotNull
+	@Override
+	public IodineGuiImpl removeElement(@NotNull GuiElement<?> element) {
+		Validate.notNull(element, "Element must be non-null");
+		return removeElement(element.getId());
+	}
 	
 	
 	
@@ -183,14 +191,20 @@ public class IodineGuiImpl implements IodineGui, GuiParentPlus<IodineGui> {
 	
 	
 	/**
-	 * @param element
+	 * Flags the specified element for update.
+	 * No errors are thrown, even if the element has already been flagged or removed.
+	 *
+	 * @param element the element to flag
 	 */
 	public void flagOnly(@NotNull GuiElementImpl<?> element) {
 		flaggedForUpdate.add(element);
 	}
 	
 	/**
-	 * @param element
+	 * Flags the specified element for update and then executes an update.
+	 * No errors are thrown, even if the element has already been flagged or removed.
+	 *
+	 * @param element the element to flag
 	 */
 	public void flagAndUpdate(@NotNull GuiElementImpl<?> element) {
 		flagOnly(element);
@@ -198,8 +212,11 @@ public class IodineGuiImpl implements IodineGui, GuiParentPlus<IodineGui> {
 	}
 	
 	/**
-	 * @param element
-	 * @param updater
+	 * Flags the specified element for update and then executes an atomic update with the specified callback.
+	 * No errors are thrown, even if the element has already been flagged or removed.
+	 *
+	 * @param element the element to flag
+	 * @param updater the callback that updates this GUI
 	 */
 	public void flagAndAtomicUpdate(@NotNull GuiElementImpl<?> element, @NotNull Runnable updater) {
 		flagOnly(element);

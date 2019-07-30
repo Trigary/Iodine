@@ -2,6 +2,7 @@ package hu.trigary.iodine.api.gui.element;
 
 import hu.trigary.iodine.api.gui.element.base.*;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -19,7 +20,17 @@ public interface TextFieldGuiElement extends GuiElement<TextFieldGuiElement>,
 	 * @return the validator regex or an empty {@link String}, if there is none
 	 */
 	@NotNull
+	@Contract(pure = true)
 	String getRegex();
+	
+	/**
+	 * Gets the maximum amount of characters the user can have in this text field.
+	 * The default value is 32.
+	 *
+	 * @return the maximum length of the text when it comes to user input
+	 */
+	@Contract(pure = true)
+	int getMaxLength();
 	
 	
 	
@@ -32,6 +43,16 @@ public interface TextFieldGuiElement extends GuiElement<TextFieldGuiElement>,
 	 */
 	@NotNull
 	TextFieldGuiElement setRegex(@NotNull String regex);
+	
+	/**
+	 * Sets the maximum amount of characters the user can have in this text field.
+	 * The value must be positive and at most 250.
+	 *
+	 * @param maxLength the new length limit to use
+	 * @return the current instance (for chaining)
+	 */
+	@NotNull
+	TextFieldGuiElement setMaxLength(int maxLength);
 	
 	/**
 	 * Sets the action that should be executed when

@@ -47,10 +47,12 @@ public class ButtonGuiElement extends GuiElement {
 	
 	@Override
 	public boolean onMousePressed(int mouseX, int mouseY) {
-		if (element.mousePressed(MC, mouseX, mouseY)) {
-			sendChangePacket(0, buffer -> {});
-			return true;
+		if (!element.mousePressed(MC, mouseX, mouseY)) {
+			return false;
 		}
-		return false;
+		
+		element.playPressSound(MC.getSoundHandler());
+		sendChangePacket(0, buffer -> {});
+		return true;
 	}
 }

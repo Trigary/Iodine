@@ -55,10 +55,11 @@ public class DropdownGuiElement extends GuiElement {
 			return false;
 		}
 		
+		element.playPressSound(MC.getSoundHandler());
 		selected = (selected + 1) % choices.length;
 		element.displayString = choices[selected];
 		sendChangePacket(4, buffer -> buffer.putInt(selected));
-		//TODO 1 byte should be enough, especially if we use the whole range, not just half
+		//TODO short should be enough
 		return true;
 	}
 }

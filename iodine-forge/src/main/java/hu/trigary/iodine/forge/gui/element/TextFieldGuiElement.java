@@ -17,6 +17,7 @@ public class TextFieldGuiElement extends GuiElement {
 	private boolean editable;
 	private String text;
 	private Pattern regex;
+	private int maxLength;
 	private GuiTextField element;
 	private boolean focused;
 	
@@ -35,6 +36,7 @@ public class TextFieldGuiElement extends GuiElement {
 		text = BufferUtils.deserializeString(buffer);
 		String rawRegex = BufferUtils.deserializeString(buffer);
 		regex = rawRegex.isEmpty() ? null : Pattern.compile(rawRegex);
+		maxLength =  buffer.get() & 0xFF;
 	}
 	
 	
@@ -49,6 +51,7 @@ public class TextFieldGuiElement extends GuiElement {
 			//noinspection ConstantConditions
 			element.setValidator(input -> regex.matcher(input).matches());
 		}
+		element.setMaxStringLength(maxLength);
 	}
 	
 	@Override

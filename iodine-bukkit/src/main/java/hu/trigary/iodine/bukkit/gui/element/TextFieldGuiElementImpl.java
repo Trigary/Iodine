@@ -18,12 +18,12 @@ import java.util.regex.Pattern;
  * The implementation of {@link TextFieldGuiElement}.
  */
 public class TextFieldGuiElementImpl extends GuiElementImpl<TextFieldGuiElement> implements TextFieldGuiElement {
-	private static final int MAX_TEXT_LENGTH = 32;
 	private int width = 200;
 	private int height = 20;
 	private boolean editable = true;
 	private String text = "";
 	private String regex = "";
+	private int maxLength = 32;
 	private TextChangedAction textChangedAction;
 	private Pattern compiledRegex;
 	
@@ -64,9 +64,16 @@ public class TextFieldGuiElementImpl extends GuiElementImpl<TextFieldGuiElement>
 	}
 	
 	@NotNull
+	@Contract(pure = true)
 	@Override
 	public String getRegex() {
 		return regex;
+	}
+	
+	@Contract(pure = true)
+	@Override
+	public int getMaxLength() {
+		return maxLength;
 	}
 	
 	
@@ -117,6 +124,15 @@ public class TextFieldGuiElementImpl extends GuiElementImpl<TextFieldGuiElement>
 	
 	@NotNull
 	@Override
+	public TextFieldGuiElement setMaxLength(int maxLength) {
+		Validate.isTrue(maxLength > 0 && maxLength <= 250, "The max length must be positive and at most 250");
+		this.maxLength = maxLength;
+		getGui().flagAndUpdate(this);
+		return this;
+	}
+	
+	@NotNull
+	@Override
 	public TextFieldGuiElementImpl onChanged(@Nullable TextChangedAction action) {
 		textChangedAction = action;
 		return this;
@@ -131,6 +147,7 @@ public class TextFieldGuiElementImpl extends GuiElementImpl<TextFieldGuiElement>
 		BufferUtils.serializeBoolean(buffer, editable);
 		BufferUtils.serializeString(buffer, text);
 		BufferUtils.serializeString(buffer, regex);
+		buffer.put((byte) maxLength);
 	}
 	
 	
@@ -143,7 +160,7 @@ public class TextFieldGuiElementImpl extends GuiElementImpl<TextFieldGuiElement>
 		
 		String newText = BufferUtils.deserializeString(message);
 		if (text.equals(newText)
-				|| newText.length() > MAX_TEXT_LENGTH
+				|| newText.length() > maxLength
 				|| (compiledRegex != null && !compiledRegex.matcher(newText).matches())) {
 			return;
 		}

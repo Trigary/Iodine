@@ -45,7 +45,7 @@ public class TestCommandListener implements Listener {
 				.onClicked((ignored, p) -> {
 					p.sendMessage("Button clicked");
 					e.getGui().atomicUpdate(gui -> {
-						gui.removeElement(e.getId());
+						gui.removeElement(e);
 						TextFieldGuiElement text = (TextFieldGuiElement) gui.getElement(id);
 						text.setText(text.getText() + ".");
 					});

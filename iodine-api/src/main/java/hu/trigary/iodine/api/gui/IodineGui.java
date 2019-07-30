@@ -61,6 +61,8 @@ public interface IodineGui extends GuiParent<IodineGui> {
 	 */
 	@NotNull <E extends GuiElement<E>> E makeChild(@NotNull E element, int x, int y);
 	
+	
+	
 	/**
 	 * Adds a new element of the specified type to this GUI.
 	 * The parent of the element will be this GUI.
@@ -132,6 +134,8 @@ public interface IodineGui extends GuiParent<IodineGui> {
 		return addElement(new Object(), type, initializer, 0, 0);
 	}
 	
+	
+	
 	/**
 	 * Deletes the element with the specified ID from this GUI.
 	 * If no element is found with that ID, then this method does nothing.
@@ -141,6 +145,15 @@ public interface IodineGui extends GuiParent<IodineGui> {
 	 */
 	@NotNull
 	IodineGui removeElement(@NotNull Object id);
+	
+	/**
+	 * Deletes the specified element from this GUI.
+	 * If the element is not part of this GUI, then this method does nothing.
+	 *
+	 * @param element the element to remove
+	 * @return the current instance (for chaining)
+	 */
+	IodineGui removeElement(@NotNull GuiElement<?> element);
 	
 	
 	

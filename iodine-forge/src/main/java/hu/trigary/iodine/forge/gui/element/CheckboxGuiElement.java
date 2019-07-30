@@ -49,6 +49,7 @@ public class CheckboxGuiElement extends GuiElement {
 			return false;
 		}
 		
+		element.playPressSound(MC.getSoundHandler());
 		checked = !checked;
 		element.setIsChecked(checked);
 		sendChangePacket(1, buffer -> BufferUtils.serializeBoolean(buffer, checked));

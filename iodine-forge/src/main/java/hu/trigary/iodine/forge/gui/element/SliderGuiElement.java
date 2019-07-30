@@ -58,8 +58,8 @@ public class SliderGuiElement extends GuiElement {
 			}
 		}, getId(), getX(), getY(), text, 0, maxProgress, progress, (id, name, value) -> name + ": " + value);
 		element.enabled = editable;
-		element.setWidth(width);
-		//TODO no setheight, but HEIGHT exists
+		element.width = width;
+		element.height = HEIGHT;
 		//TODO vertical?
 	}
 	
@@ -77,6 +77,7 @@ public class SliderGuiElement extends GuiElement {
 		}
 		
 		//TODO something here or on release? or in that anonymous class above?
+		element.playPressSound(MC.getSoundHandler());
 		return true;
 	}
 	

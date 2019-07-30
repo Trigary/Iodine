@@ -43,6 +43,7 @@ public class ImageGuiElementImpl extends GuiElementImpl<ImageGuiElement> impleme
 	@NotNull
 	@Override
 	public ImageGuiElementImpl setImage(@NotNull byte[] image) {
+		//TODO these should be optionally cached client-side through a namespace-like system
 		throw new NotImplementedException();
 	}
 	
