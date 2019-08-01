@@ -6,6 +6,7 @@ import hu.trigary.iodine.backend.GuiElementType;
 import hu.trigary.iodine.bukkit.gui.IodineGuiImpl;
 import hu.trigary.iodine.bukkit.gui.container.base.GuiParentPlus;
 import hu.trigary.iodine.bukkit.gui.element.base.GuiElementImpl;
+import hu.trigary.iodine.bukkit.network.ResizingByteBuffer;
 import org.apache.commons.lang.NotImplementedException;
 import org.apache.commons.lang.Validate;
 import org.bukkit.entity.Player;
@@ -128,7 +129,7 @@ public class GridGuiContainerImpl extends GuiElementImpl<GridGuiContainer>
 	
 	
 	@Override
-	public void serializeImpl(@NotNull ByteBuffer buffer) {
+	public void serializeImpl(@NotNull ResizingByteBuffer buffer) {
 		buffer.putInt(columnCount);
 		buffer.putInt(rowCount);
 		for (GuiElementImpl<?> element : children) {

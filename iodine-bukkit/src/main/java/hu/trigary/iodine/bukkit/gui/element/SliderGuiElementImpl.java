@@ -1,10 +1,10 @@
 package hu.trigary.iodine.bukkit.gui.element;
 
 import hu.trigary.iodine.api.gui.element.SliderGuiElement;
-import hu.trigary.iodine.backend.BufferUtils;
 import hu.trigary.iodine.backend.GuiElementType;
 import hu.trigary.iodine.bukkit.gui.IodineGuiImpl;
 import hu.trigary.iodine.bukkit.gui.element.base.GuiElementImpl;
+import hu.trigary.iodine.bukkit.network.ResizingByteBuffer;
 import org.apache.commons.lang.NotImplementedException;
 import org.apache.commons.lang.Validate;
 import org.bukkit.entity.Player;
@@ -142,11 +142,11 @@ public class SliderGuiElementImpl extends GuiElementImpl<SliderGuiElement> imple
 	
 	
 	@Override
-	public void serializeImpl(@NotNull ByteBuffer buffer) {
+	public void serializeImpl(@NotNull ResizingByteBuffer buffer) {
 		buffer.putShort((short) width);
-		BufferUtils.serializeBoolean(buffer, editable);
-		BufferUtils.serializeBoolean(buffer, verticalOrientation);
-		BufferUtils.serializeString(buffer, text);
+		buffer.putBool(editable);
+		buffer.putBool(verticalOrientation);
+		buffer.putString(text);
 		buffer.putInt(maxProgress);
 		buffer.putInt(progress);
 	}

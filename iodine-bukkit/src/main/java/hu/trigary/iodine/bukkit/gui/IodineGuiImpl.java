@@ -9,6 +9,7 @@ import hu.trigary.iodine.bukkit.gui.container.RootGuiContainer;
 import hu.trigary.iodine.bukkit.gui.container.base.GuiParentPlus;
 import hu.trigary.iodine.bukkit.gui.element.base.GuiElementImpl;
 import hu.trigary.iodine.bukkit.network.NetworkManager;
+import hu.trigary.iodine.bukkit.network.ResizingByteBuffer;
 import hu.trigary.iodine.bukkit.player.IodinePlayerImpl;
 import org.apache.commons.lang.Validate;
 import org.bukkit.entity.Player;
@@ -16,7 +17,6 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.nio.ByteBuffer;
 import java.util.*;
 import java.util.function.Consumer;
 
@@ -24,7 +24,7 @@ import java.util.function.Consumer;
  * The implementation of {@link IodineGui}.
  */
 public class IodineGuiImpl implements IodineGui, GuiParentPlus<IodineGui> {
-	private static final ByteBuffer BUFFER = ByteBuffer.wrap(new byte[0xFFF]); //a GUI surely fits in ~4kB
+	private static final ResizingByteBuffer BUFFER = new ResizingByteBuffer(1000);
 	private final Set<Player> viewers = new HashSet<>();
 	private final Map<Integer, GuiElementImpl<?>> elements = new HashMap<>();
 	private final Map<Object, GuiElementImpl<?>> apiIdElements = new HashMap<>();
@@ -291,13 +291,13 @@ public class IodineGuiImpl implements IodineGui, GuiParentPlus<IodineGui> {
 	
 	
 	private byte[] serializeOpen() {
-		BUFFER.put(PacketType.SERVER_GUI_OPEN.getId());
+		BUFFER.putByte(PacketType.SERVER_GUI_OPEN.getId());
 		BUFFER.putInt(id);
 		return serialize(Collections.emptyList(), elements.values());
 	}
 	
 	private byte[] serializeUpdate() {
-		BUFFER.put(PacketType.SERVER_GUI_CHANGE.getId());
+		BUFFER.putByte(PacketType.SERVER_GUI_CHANGE.getId());
 		return serialize(flaggedForRemove, flaggedForUpdate);
 	}
 	
@@ -312,8 +312,6 @@ public class IodineGuiImpl implements IodineGui, GuiParentPlus<IodineGui> {
 			element.serialize(BUFFER);
 		}
 		
-		byte[] result = new byte[BUFFER.flip().remaining()];
-		BUFFER.get(result).clear();
-		return result;
+		return BUFFER.toArrayAndReset();
 	}
 }

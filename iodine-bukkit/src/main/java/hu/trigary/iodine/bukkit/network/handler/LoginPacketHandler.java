@@ -1,6 +1,5 @@
 package hu.trigary.iodine.bukkit.network.handler;
 
-import com.google.common.base.Charsets;
 import hu.trigary.iodine.api.player.PlayerState;
 import hu.trigary.iodine.bukkit.IodinePlugin;
 import hu.trigary.iodine.backend.PacketType;
@@ -12,6 +11,7 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.regex.Pattern;
 
@@ -54,7 +54,7 @@ public class LoginPacketHandler extends PacketHandler {
 	@Override
 	public void handle(@NotNull Player player, @NotNull ByteBuffer message) {
 		byte[] array = message.array();
-		String clientVersion = new String(array, 1, array.length - 1, Charsets.UTF_8);
+		String clientVersion = new String(array, 1, array.length - 1, StandardCharsets.UTF_8);
 		
 		//if (serverVersion.equals(clientVersion)) {
 		if (serverVersion.equals(clientVersion) || clientVersion.equals("${version}")) {

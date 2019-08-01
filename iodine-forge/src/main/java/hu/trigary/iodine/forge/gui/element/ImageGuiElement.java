@@ -31,7 +31,7 @@ public class ImageGuiElement extends GuiElement {
 	
 	@Override
 	public void draw(int mouseX, int mouseY, float partialTicks) {
-	
+		//TODO turns out AWT doesn't work with LWJGL3 or something like that -> shouldn't use BufferedImage
 	}
 	
 	

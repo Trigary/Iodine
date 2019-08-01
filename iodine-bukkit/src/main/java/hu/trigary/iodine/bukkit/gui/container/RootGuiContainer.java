@@ -6,6 +6,7 @@ import hu.trigary.iodine.backend.GuiElementType;
 import hu.trigary.iodine.bukkit.gui.IodineGuiImpl;
 import hu.trigary.iodine.bukkit.gui.container.base.GuiParentPlus;
 import hu.trigary.iodine.bukkit.gui.element.base.GuiElementImpl;
+import hu.trigary.iodine.bukkit.network.ResizingByteBuffer;
 import org.apache.commons.lang.Validate;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -64,7 +65,7 @@ public class RootGuiContainer extends GuiElementImpl<RootGuiContainer>
 	
 	
 	@Override
-	public void serializeImpl(@NotNull ByteBuffer buffer) {
+	public void serializeImpl(@NotNull ResizingByteBuffer buffer) {
 		buffer.putInt(children.size());
 		children.forEach((element, position) -> {
 			buffer.putInt(element.getInternalId());

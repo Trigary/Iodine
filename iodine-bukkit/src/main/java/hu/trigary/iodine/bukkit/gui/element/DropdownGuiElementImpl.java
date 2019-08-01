@@ -1,10 +1,10 @@
 package hu.trigary.iodine.bukkit.gui.element;
 
 import hu.trigary.iodine.api.gui.element.DropdownGuiElement;
-import hu.trigary.iodine.backend.BufferUtils;
 import hu.trigary.iodine.backend.GuiElementType;
 import hu.trigary.iodine.bukkit.gui.IodineGuiImpl;
 import hu.trigary.iodine.bukkit.gui.element.base.GuiElementImpl;
+import hu.trigary.iodine.bukkit.network.ResizingByteBuffer;
 import org.apache.commons.lang.Validate;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Contract;
@@ -112,12 +112,12 @@ public class DropdownGuiElementImpl extends GuiElementImpl<DropdownGuiElement> i
 	
 	
 	@Override
-	public void serializeImpl(@NotNull ByteBuffer buffer) {
+	public void serializeImpl(@NotNull ResizingByteBuffer buffer) {
 		buffer.putShort((short) width);
-		BufferUtils.serializeBoolean(buffer, editable);
+		buffer.putBool(editable);
 		buffer.putInt(choices.size());
 		for (String choice : choices) {
-			BufferUtils.serializeString(buffer, choice);
+			buffer.putString(choice);
 		}
 		buffer.putInt(selected);
 	}
@@ -130,7 +130,7 @@ public class DropdownGuiElementImpl extends GuiElementImpl<DropdownGuiElement> i
 			return;
 		}
 		
-		int newSelected = message.getInt();
+		int newSelected = message.getShort();
 		if (newSelected < 0 || newSelected >= choices.size()) {
 			return;
 		}

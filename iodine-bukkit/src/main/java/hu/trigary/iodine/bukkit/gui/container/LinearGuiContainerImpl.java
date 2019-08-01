@@ -2,11 +2,11 @@ package hu.trigary.iodine.bukkit.gui.container;
 
 import hu.trigary.iodine.api.gui.container.LinearGuiContainer;
 import hu.trigary.iodine.api.gui.element.base.GuiElement;
-import hu.trigary.iodine.backend.BufferUtils;
 import hu.trigary.iodine.backend.GuiElementType;
 import hu.trigary.iodine.bukkit.gui.IodineGuiImpl;
 import hu.trigary.iodine.bukkit.gui.container.base.GuiParentPlus;
 import hu.trigary.iodine.bukkit.gui.element.base.GuiElementImpl;
+import hu.trigary.iodine.bukkit.network.ResizingByteBuffer;
 import org.apache.commons.lang.NotImplementedException;
 import org.apache.commons.lang.Validate;
 import org.bukkit.entity.Player;
@@ -119,8 +119,8 @@ public class LinearGuiContainerImpl extends GuiElementImpl<LinearGuiContainer>
 	
 	
 	@Override
-	public void serializeImpl(@NotNull ByteBuffer buffer) {
-		BufferUtils.serializeBoolean(buffer, verticalOrientation);
+	public void serializeImpl(@NotNull ResizingByteBuffer buffer) {
+		buffer.putBool(verticalOrientation);
 		buffer.putInt(children.size());
 		for (GuiElementImpl<?> element : children) {
 			buffer.putInt(element.getInternalId());

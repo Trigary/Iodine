@@ -66,13 +66,6 @@ public class TextFieldGuiElement extends GuiElement {
 		boolean result = element.mouseClicked(mouseX, mouseY, 0);
 		focused = element.isFocused();
 		return result;
-		/*boolean focused = element.isFocused();
-		boolean result = element.mouseClicked(mouseX, mouseY, 0);
-		if (focused && !element.isFocused() && !serverSideText.equals(text)) {
-			byte[] bytes = text.getBytes(StandardCharsets.UTF_8);
-			sendChangePacket(4 + bytes.length, buffer -> buffer.putInt(bytes.length).put(bytes));
-		}
-		return result;*/
 	}
 	
 	@Override
@@ -82,7 +75,7 @@ public class TextFieldGuiElement extends GuiElement {
 			if (!text.equals(newText)) {
 				text = newText;
 				byte[] bytes = text.getBytes(StandardCharsets.UTF_8);
-				sendChangePacket(4 + bytes.length, buffer -> buffer.putInt(bytes.length).put(bytes));
+				sendChangePacket(2 + bytes.length, buffer -> buffer.putShort((short) bytes.length).put(bytes));
 			}
 		}
 	}

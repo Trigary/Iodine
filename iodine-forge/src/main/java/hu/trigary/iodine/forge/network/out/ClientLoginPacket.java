@@ -1,8 +1,9 @@
 package hu.trigary.iodine.forge.network.out;
 
-import com.google.common.base.Charsets;
 import io.netty.buffer.ByteBuf;
 import org.jetbrains.annotations.NotNull;
+
+import java.nio.charset.StandardCharsets;
 
 public class ClientLoginPacket extends OutPacket {
 	private final String version;
@@ -13,6 +14,6 @@ public class ClientLoginPacket extends OutPacket {
 	
 	@Override
 	protected void serialize(ByteBuf buffer) {
-		buffer.writeCharSequence(version, Charsets.UTF_8);
+		buffer.writeCharSequence(version, StandardCharsets.UTF_8);
 	}
 }

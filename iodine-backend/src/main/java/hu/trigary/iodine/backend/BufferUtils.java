@@ -28,14 +28,14 @@ public final class BufferUtils {
 	
 	/**
 	 * Serializes the specified text by converting it to an UTF-8 encoded byte array.
-	 * The length of this array and the array itself is then put into the buffer.
+	 * The length of this array (as a short) and the array itself is then put into the buffer.
 	 *
 	 * @param buffer the buffer to serialize into
 	 * @param value the value to serialize
 	 */
 	public static void serializeString(@NotNull ByteBuffer buffer, @NotNull String value) {
 		byte[] textBytes = value.getBytes(StandardCharsets.UTF_8);
-		buffer.putInt(textBytes.length);
+		buffer.putShort((short) textBytes.length);
 		buffer.put(textBytes);
 	}
 	
@@ -62,7 +62,7 @@ public final class BufferUtils {
 	
 	/**
 	 * Deserializes an UTF-8 string from the buffer.
-	 * The first 4 bytes indicate the length of the byte array
+	 * The first 2 bytes indicate the length of the byte array
 	 * that is then interpreted as an UTF-8 string.
 	 *
 	 * @param buffer the buffer to deserialize from
@@ -70,7 +70,7 @@ public final class BufferUtils {
 	 */
 	@NotNull
 	public static String deserializeString(@NotNull ByteBuffer buffer) {
-		byte[] bytes = new byte[buffer.getInt()];
+		byte[] bytes = new byte[buffer.getShort()];
 		buffer.get(bytes);
 		return new String(bytes, StandardCharsets.UTF_8);
 	}

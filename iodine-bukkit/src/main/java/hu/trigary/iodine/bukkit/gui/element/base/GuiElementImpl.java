@@ -4,6 +4,7 @@ import hu.trigary.iodine.api.gui.element.base.GuiElement;
 import hu.trigary.iodine.backend.GuiElementType;
 import hu.trigary.iodine.bukkit.gui.IodineGuiImpl;
 import hu.trigary.iodine.bukkit.gui.container.base.GuiParentPlus;
+import hu.trigary.iodine.bukkit.network.ResizingByteBuffer;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -92,13 +93,13 @@ public abstract class GuiElementImpl<T extends GuiElement<T>> implements GuiElem
 	 *
 	 * @param buffer the buffer to store the data in
 	 */
-	public final void serialize(@NotNull ByteBuffer buffer) {
-		buffer.put(type.getId());
+	public final void serialize(@NotNull ResizingByteBuffer buffer) {
+		buffer.putByte(type.getId());
 		buffer.putInt(internalId);
 		serializeImpl(buffer);
 	}
 	
-	protected abstract void serializeImpl(@NotNull ByteBuffer buffer);
+	protected abstract void serializeImpl(@NotNull ResizingByteBuffer buffer);
 	
 	/**
 	 * Called by {@link hu.trigary.iodine.bukkit.network.handler.GuiChangePacketHandler}

@@ -58,8 +58,7 @@ public class DropdownGuiElement extends GuiElement {
 		element.playPressSound(MC.getSoundHandler());
 		selected = (selected + 1) % choices.length;
 		element.displayString = choices[selected];
-		sendChangePacket(4, buffer -> buffer.putInt(selected));
-		//TODO short should be enough
+		sendChangePacket(2, buffer -> buffer.putShort((short) selected));
 		return true;
 	}
 }

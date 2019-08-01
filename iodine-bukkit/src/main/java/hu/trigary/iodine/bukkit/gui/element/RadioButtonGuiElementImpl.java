@@ -1,10 +1,10 @@
 package hu.trigary.iodine.bukkit.gui.element;
 
 import hu.trigary.iodine.api.gui.element.RadioButtonGuiElement;
-import hu.trigary.iodine.backend.BufferUtils;
 import hu.trigary.iodine.backend.GuiElementType;
 import hu.trigary.iodine.bukkit.gui.IodineGuiImpl;
 import hu.trigary.iodine.bukkit.gui.element.base.GuiElementImpl;
+import hu.trigary.iodine.bukkit.network.ResizingByteBuffer;
 import org.apache.commons.lang.NotImplementedException;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Contract;
@@ -128,9 +128,9 @@ public class RadioButtonGuiElementImpl extends GuiElementImpl<RadioButtonGuiElem
 	
 	
 	@Override
-	public void serializeImpl(@NotNull ByteBuffer buffer) {
-		BufferUtils.serializeBoolean(buffer, editable);
-		BufferUtils.serializeBoolean(buffer, checked);
+	public void serializeImpl(@NotNull ResizingByteBuffer buffer) {
+		buffer.putBool(editable);
+		buffer.putBool(checked);
 		buffer.putInt(groupData.id);
 	}
 	
