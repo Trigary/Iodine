@@ -1,0 +1,10 @@
+[
+{
+  "modid": "iodine",
+  "name": "Iodine",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "${url}",
+  "authorList": ["${authors}"]
+}
+]

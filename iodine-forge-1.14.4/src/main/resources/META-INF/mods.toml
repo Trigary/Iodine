@@ -1,0 +1,18 @@
+modLoader="javafml"
+
+# A version range to match for said mod loader - for regular FML @Mod it will be the forge version
+loaderVersion="[28,)" #mandatory (24 is current forge version)
+
+# A list of mods - how many allowed here is determined by the individual mod loader
+[[mods]] #mandatory
+
+modId="iodine"
+version="${project.version}"
+displayName="Iodine"
+displayURL="${project.url}"
+authors="${project.authors}"
+
+# The description text for the mod (multi line!) (#mandatory)
+description='''
+This is a long description, please create an Iodine-wide placeholder for me
+'''

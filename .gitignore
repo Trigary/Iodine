@@ -7,4 +7,5 @@
 /*/out
 /*/build
 
-iodine-forge/run
+/run
+/iodine-forge-*/run

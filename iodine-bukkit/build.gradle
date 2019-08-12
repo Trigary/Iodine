@@ -8,7 +8,7 @@ dependencies {
     compile project(':iodine-api')
 }
 
-processResources { //TODO copy how forge does this
+processResources { //TODO is this necessary? can't I set the exact placeholders directly in the file?
     include 'plugin.yml'
     expand 'version': project.version,
             'authors': project.authors,
