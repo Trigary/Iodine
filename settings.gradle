@@ -1,3 +1,3 @@
 rootProject.name = 'iodine'
 include 'iodine-common', 'iodine-backend', 'iodine-bukkit', 'iodine-api', 'iodine-forge',
-		'iodine-forge-1.12.2', 'iodine-forge-1.13.2', 'iodine-forge-1.14.4'
+		'iodine-forge-1_12_2', 'iodine-forge-1_13_2', 'iodine-forge-1_14_4'

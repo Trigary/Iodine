@@ -30,5 +30,5 @@ dependencies {
 }
 
 shadowJar {
-	archiveName = "iodine-1.14.4-${version}.${extension}"
+	archiveName = "iodine-1_14_4-${version}.${extension}"
 }

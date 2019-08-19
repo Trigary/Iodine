@@ -49,5 +49,5 @@ processResources { //TODO is this necessary? the other forge files don't need it
 }
 
 shadowJar {
-	archiveName = "iodine-1.12.2-${version}.${extension}"
+	archiveName = "iodine-1_12_2-${version}.${extension}"
 }
