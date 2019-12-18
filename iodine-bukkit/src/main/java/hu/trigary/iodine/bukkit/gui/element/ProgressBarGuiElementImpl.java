@@ -28,7 +28,7 @@ public class ProgressBarGuiElementImpl extends GuiElementImpl<ProgressBarGuiElem
 	 * @param internalId the internal ID of this element
 	 * @param id the API-friendly ID of this element
 	 */
-	public ProgressBarGuiElementImpl(@NotNull IodineGuiImpl gui, int internalId, @NotNull Object id) {
+	public ProgressBarGuiElementImpl(@NotNull IodineGuiImpl gui, short internalId, @NotNull Object id) {
 		super(gui, GuiElementType.PROGRESS_BAR, internalId, id);
 	}
 	

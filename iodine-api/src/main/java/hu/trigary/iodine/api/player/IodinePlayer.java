@@ -35,7 +35,7 @@ public interface IodinePlayer {
 	 * Gets the GUI that this player currently has opened.
 	 * Returns null if this player doesn't have any opened.
 	 * This operation is also valid for non-modded players,
-	 * but will always return null.
+	 * and will always return null.
 	 *
 	 * @return the GUI this player is viewing or null,
 	 * if the player doesn't have one opened
@@ -49,7 +49,8 @@ public interface IodinePlayer {
 	/**
 	 * Closes this player's currently opened {@link IodineGui}.
 	 * Doesn't do anything if the player doesn't have one opened.
-	 * This operation is only valid for modded players.
+	 * This operation is also valid for non-modded players,
+	 * and will always do nothing.
 	 */
 	void closeOpenGui();
 }

@@ -16,7 +16,7 @@ import java.util.function.Consumer;
  * Represents a GUI (General User Interface) that can be opened
  * for players who are in the {@link PlayerState#MODDED} state.
  */
-public interface IodineGui extends GuiParent<IodineGui> {
+public interface IodineGui extends GuiParent<IodineGui>, AttachmentHolder {
 	/**
 	 * Gets the players who have this GUI opened.
 	 * The returned set is an unmodifiable view of the underlying data.

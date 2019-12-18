@@ -7,7 +7,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -34,7 +33,6 @@ public class PlayerManager implements Listener {
 	public PlayerManager(@NotNull IodinePlugin plugin) {
 		this.plugin = plugin;
 		Bukkit.getPluginManager().registerEvents(this, plugin);
-		Bukkit.getOnlinePlayers().forEach(p -> onPlayerJoin(new PlayerJoinEvent(p, null)));
 	}
 	
 	
@@ -48,21 +46,19 @@ public class PlayerManager implements Listener {
 	@NotNull
 	@Contract(pure = true)
 	public IodinePlayerImpl getPlayer(@NotNull Player player) {
-		IodinePlayerImpl impl = players.get(player.getUniqueId());
-		Validate.notNull(impl, "IodinePlayer instances only exist for online players");
-		return impl;
+		Validate.isTrue(player.isOnline(), "IodinePlayer instances only exist for online players");
+		return players.computeIfAbsent(player.getUniqueId(), k -> new IodinePlayerImpl(plugin, player));
 	}
 	
 	
 	
-	@EventHandler(priority = EventPriority.LOWEST)
-	private void onPlayerJoin(PlayerJoinEvent event) {
-		players.put(event.getPlayer().getUniqueId(), new IodinePlayerImpl(plugin, event.getPlayer()));
-	}
-	
-	@EventHandler(priority = EventPriority.HIGHEST)
+	@EventHandler(priority = EventPriority.MONITOR)
 	private void onPlayerQuit(PlayerQuitEvent event) {
 		IodinePlayerImpl player = players.get(event.getPlayer().getUniqueId());
+		if (player == null) {
+			return;
+		}
+		
 		//can't call remove yet: the gui close callback might still require the instance
 		if (player.getOpenGui() != null) {
 			player.getOpenGui().closeForNoPacket(player, true);

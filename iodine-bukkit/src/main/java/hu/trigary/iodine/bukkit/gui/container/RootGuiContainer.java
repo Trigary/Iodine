@@ -1,10 +1,9 @@
 package hu.trigary.iodine.bukkit.gui.container;
 
-import hu.trigary.iodine.api.gui.container.base.GuiContainer;
 import hu.trigary.iodine.api.gui.element.base.GuiElement;
 import hu.trigary.iodine.backend.GuiElementType;
 import hu.trigary.iodine.bukkit.gui.IodineGuiImpl;
-import hu.trigary.iodine.bukkit.gui.container.base.GuiParentPlus;
+import hu.trigary.iodine.bukkit.gui.container.base.GuiContainerImpl;
 import hu.trigary.iodine.bukkit.gui.element.base.GuiElementImpl;
 import hu.trigary.iodine.bukkit.network.ResizingByteBuffer;
 import org.apache.commons.lang.Validate;
@@ -17,8 +16,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-public class RootGuiContainer extends GuiElementImpl<RootGuiContainer>
-		implements GuiContainer<RootGuiContainer>, GuiParentPlus<RootGuiContainer> {
+public class RootGuiContainer extends GuiContainerImpl<RootGuiContainer> {
 	private final Map<GuiElementImpl<?>, Position> children = new HashMap<>();
 	
 	/**
@@ -28,7 +26,7 @@ public class RootGuiContainer extends GuiElementImpl<RootGuiContainer>
 	 * @param gui the GUI which will contain this element
 	 */
 	public RootGuiContainer(@NotNull IodineGuiImpl gui) {
-		super(gui, GuiElementType.CONTAINER_ROOT, 0, new Object());
+		super(gui, GuiElementType.CONTAINER_ROOT, (short) 0, new Object());
 	}
 	
 	
@@ -68,7 +66,7 @@ public class RootGuiContainer extends GuiElementImpl<RootGuiContainer>
 	public void serializeImpl(@NotNull ResizingByteBuffer buffer) {
 		buffer.putInt(children.size());
 		children.forEach((element, position) -> {
-			buffer.putInt(element.getInternalId());
+			buffer.putShort(element.getInternalId());
 			buffer.putShort((short) position.x);
 			buffer.putShort((short) position.y);
 		});

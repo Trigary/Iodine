@@ -88,7 +88,7 @@ public class GuiManager {
 	@NotNull
 	@Contract(pure = true)
 	public <T extends GuiElement<T>> GuiElementImpl<T> createElement(@NotNull Class<T> type,
-			@NotNull IodineGuiImpl gui, int internalId, @NotNull Object id) {
+			@NotNull IodineGuiImpl gui, short internalId, @NotNull Object id) {
 		ElementConstructor<?> constructor = elements.get(type);
 		Validate.notNull(constructor, "A valid Class<? extends GuiElement> must be provided");
 		//noinspection unchecked
@@ -136,6 +136,6 @@ public class GuiManager {
 	
 	@FunctionalInterface
 	private interface ElementConstructor<R extends GuiElement<R>> {
-		R apply(IodineGuiImpl gui, int internalId, Object id);
+		R apply(IodineGuiImpl gui, short internalId, Object id);
 	}
 }

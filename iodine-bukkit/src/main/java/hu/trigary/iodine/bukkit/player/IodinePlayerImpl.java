@@ -85,7 +85,6 @@ public class IodinePlayerImpl implements IodinePlayer {
 	
 	@Override
 	public void closeOpenGui() {
-		assertModded();
 		if (openGui != null) {
 			openGui.closeFor(player);
 		}

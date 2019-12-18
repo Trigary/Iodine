@@ -76,15 +76,4 @@ public final class IodinePlayerStateChangedEvent extends Event {
 	public PlayerState getNewState() {
 		return newState;
 	}
-	
-	/**
-	 * Utility methods, returns whether this event represents a successful Iodine login.
-	 *
-	 * @return true if {@link #getOldState()} is {@link PlayerState#VANILLA}
-	 * and {@link #getNewState()} is {@link PlayerState#MODDED}
-	 */
-	@Contract(pure = true)
-	public boolean isFromVanillaToModded() {
-		return oldState == PlayerState.VANILLA && newState == PlayerState.MODDED;
-	}
 }

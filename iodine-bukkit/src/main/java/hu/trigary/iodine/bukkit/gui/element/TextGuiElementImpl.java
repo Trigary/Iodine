@@ -27,7 +27,7 @@ public class TextGuiElementImpl extends GuiElementImpl<TextGuiElement> implement
 	 * @param internalId the internal ID of this element
 	 * @param id the API-friendly ID of this element
 	 */
-	public TextGuiElementImpl(@NotNull IodineGuiImpl gui, int internalId, @NotNull Object id) {
+	public TextGuiElementImpl(@NotNull IodineGuiImpl gui, short internalId, @NotNull Object id) {
 		super(gui, GuiElementType.TEXT, internalId, id);
 	}
 	

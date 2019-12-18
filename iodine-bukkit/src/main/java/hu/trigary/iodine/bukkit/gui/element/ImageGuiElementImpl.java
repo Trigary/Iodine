@@ -30,7 +30,7 @@ public class ImageGuiElementImpl extends GuiElementImpl<ImageGuiElement> impleme
 	 * @param internalId the internal ID of this element
 	 * @param id the API-friendly ID of this element
 	 */
-	public ImageGuiElementImpl(@NotNull IodineGuiImpl gui, int internalId, @NotNull Object id) {
+	public ImageGuiElementImpl(@NotNull IodineGuiImpl gui, short internalId, @NotNull Object id) {
 		super(gui, GuiElementType.IMAGE, internalId, id);
 	}
 	

@@ -26,14 +26,14 @@ import java.util.function.Consumer;
 public class IodineGuiImpl implements IodineGui, GuiParentPlus<IodineGui> {
 	private static final ResizingByteBuffer BUFFER = new ResizingByteBuffer(1000);
 	private final Set<Player> viewers = new HashSet<>();
-	private final Map<Integer, GuiElementImpl<?>> elements = new HashMap<>();
+	private final Map<Short, GuiElementImpl<?>> elements = new HashMap<>();
 	private final Map<Object, GuiElementImpl<?>> apiIdElements = new HashMap<>();
 	private final Set<GuiElementImpl<?>> flaggedForUpdate = new HashSet<>();
 	private final Set<GuiElementImpl<?>> flaggedForRemove = new HashSet<>();
 	private final IodinePlugin plugin;
 	private final int id;
 	private final RootGuiContainer root;
-	private int nextElementId = 1;
+	private short nextElementId = 1;
 	private int atomicUpdateLock;
 	private ClosedAction closedAction;
 	
@@ -48,7 +48,7 @@ public class IodineGuiImpl implements IodineGui, GuiParentPlus<IodineGui> {
 		this.plugin = plugin;
 		this.id = id;
 		root = new RootGuiContainer(this);
-		elements.put(0, root);
+		elements.put((short) 0, root);
 	}
 	
 	
@@ -61,6 +61,18 @@ public class IodineGuiImpl implements IodineGui, GuiParentPlus<IodineGui> {
 	@Contract(pure = true)
 	public int getId() {
 		return id;
+	}
+	
+	@Override
+	public void setAttachment(@Nullable Object attachment) {
+		root.setAttachment(attachment);
+	}
+	
+	@Nullable
+	@Contract(pure = true)
+	@Override
+	public Object getAttachment() {
+		return root.getAttachment();
 	}
 	
 	@NotNull
@@ -79,7 +91,7 @@ public class IodineGuiImpl implements IodineGui, GuiParentPlus<IodineGui> {
 	 */
 	@Nullable
 	@Contract(pure = true)
-	public GuiElementImpl<?> getElement(int id) {
+	public GuiElementImpl<?> getElement(short id) {
 		return elements.get(id);
 	}
 	
@@ -290,28 +302,29 @@ public class IodineGuiImpl implements IodineGui, GuiParentPlus<IodineGui> {
 	
 	
 	
+	@NotNull
 	private byte[] serializeOpen() {
 		BUFFER.putByte(PacketType.SERVER_GUI_OPEN.getId());
 		BUFFER.putInt(id);
 		return serialize(Collections.emptyList(), elements.values());
 	}
 	
+	@NotNull
 	private byte[] serializeUpdate() {
 		BUFFER.putByte(PacketType.SERVER_GUI_CHANGE.getId());
 		return serialize(flaggedForRemove, flaggedForUpdate);
 	}
 	
+	@NotNull
 	private static byte[] serialize(@NotNull Collection<GuiElementImpl<?>> remove,
 			@NotNull Collection<GuiElementImpl<?>> add) {
 		BUFFER.putInt(remove.size());
 		for (GuiElementImpl<?> element : remove) {
-			BUFFER.putInt(element.getInternalId());
+			BUFFER.putShort(element.getInternalId());
 		}
-		
 		for (GuiElementImpl<?> element : add) {
 			element.serialize(BUFFER);
 		}
-		
 		return BUFFER.toArrayAndReset();
 	}
 }

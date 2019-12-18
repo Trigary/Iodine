@@ -35,7 +35,7 @@ public class TextFieldGuiElementImpl extends GuiElementImpl<TextFieldGuiElement>
 	 * @param internalId the internal ID of this element
 	 * @param id the API-friendly ID of this element
 	 */
-	public TextFieldGuiElementImpl(@NotNull IodineGuiImpl gui, int internalId, @NotNull Object id) {
+	public TextFieldGuiElementImpl(@NotNull IodineGuiImpl gui, short internalId, @NotNull Object id) {
 		super(gui, GuiElementType.TEXT_FIELD, internalId, id);
 	}
 	

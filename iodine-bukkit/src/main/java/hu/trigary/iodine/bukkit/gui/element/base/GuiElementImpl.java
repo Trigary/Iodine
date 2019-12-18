@@ -8,18 +8,23 @@ import hu.trigary.iodine.bukkit.network.ResizingByteBuffer;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.nio.ByteBuffer;
 
 /**
  * The implementation of {@link GuiElement}.
+ *
+ * @param <T> the class implementing this abstract class
  */
 public abstract class GuiElementImpl<T extends GuiElement<T>> implements GuiElement<T> {
 	private final IodineGuiImpl gui;
 	private final GuiElementType type;
-	private final int internalId;
+	private final short internalId;
 	private final Object id;
+	private Object attachment;
 	private GuiParentPlus<?> parent;
+	private short drawPriority;
 	
 	/**
 	 * Creates a new instance.
@@ -30,7 +35,7 @@ public abstract class GuiElementImpl<T extends GuiElement<T>> implements GuiElem
 	 * @param id the API-friendly ID of this element
 	 */
 	protected GuiElementImpl(@NotNull IodineGuiImpl gui,
-			@NotNull GuiElementType type, int internalId, @NotNull Object id) {
+			@NotNull GuiElementType type, short internalId, @NotNull Object id) {
 		this.gui = gui;
 		this.internalId = internalId;
 		this.id = id;
@@ -52,7 +57,7 @@ public abstract class GuiElementImpl<T extends GuiElement<T>> implements GuiElem
 	 * @return the internal ID
 	 */
 	@Contract(pure = true)
-	public final int getInternalId() {
+	public final short getInternalId() {
 		return internalId;
 	}
 	
@@ -61,6 +66,18 @@ public abstract class GuiElementImpl<T extends GuiElement<T>> implements GuiElem
 	@Override
 	public final Object getId() {
 		return id;
+	}
+	
+	@Override
+	public void setAttachment(@Nullable Object attachment) {
+		this.attachment = attachment;
+	}
+	
+	@Nullable
+	@Contract(pure = true)
+	@Override
+	public Object getAttachment() {
+		return attachment;
 	}
 	
 	
@@ -87,6 +104,19 @@ public abstract class GuiElementImpl<T extends GuiElement<T>> implements GuiElem
 	
 	
 	
+	@Override
+	@Contract(pure = true)
+	public short getDrawPriority() {
+		return drawPriority;
+	}
+	
+	@Override
+	public void setDrawPriority(short priority) {
+		drawPriority = priority; //TODO client-side: (priority << 16) | internalId
+	}
+	
+	
+	
 	/**
 	 * Serializes this element into the specified buffer.
 	 * This method should only be called by {@link IodineGuiImpl}.
@@ -95,7 +125,8 @@ public abstract class GuiElementImpl<T extends GuiElement<T>> implements GuiElem
 	 */
 	public final void serialize(@NotNull ResizingByteBuffer buffer) {
 		buffer.putByte(type.getId());
-		buffer.putInt(internalId);
+		buffer.putShort(internalId);
+		buffer.putShort(drawPriority);
 		serializeImpl(buffer);
 	}
 	

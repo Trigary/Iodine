@@ -31,7 +31,7 @@ public class DropdownGuiElementImpl extends GuiElementImpl<DropdownGuiElement> i
 	 * @param internalId the internal ID of this element
 	 * @param id the API-friendly ID of this element
 	 */
-	public DropdownGuiElementImpl(@NotNull IodineGuiImpl gui, int internalId, @NotNull Object id) {
+	public DropdownGuiElementImpl(@NotNull IodineGuiImpl gui, short internalId, @NotNull Object id) {
 		super(gui, GuiElementType.DROPDOWN, internalId, id);
 	}
 	

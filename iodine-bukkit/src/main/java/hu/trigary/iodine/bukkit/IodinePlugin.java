@@ -43,7 +43,7 @@ public class IodinePlugin extends JavaPlugin implements Listener {
 		Bukkit.getOnlinePlayers().forEach(p -> networkManager.send(p, PacketType.SERVER_LOGIN_REQUEST));
 	}
 	
-	@EventHandler(priority = EventPriority.HIGHEST)
+	@EventHandler(priority = EventPriority.MONITOR)
 	private void onDisable(PluginDisableEvent event) {
 		//this fires before the plugin is disabled, therefore eg. packets can still be sent
 		if (event.getPlugin() == this) {

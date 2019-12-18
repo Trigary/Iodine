@@ -4,6 +4,7 @@ import hu.trigary.iodine.api.gui.container.LinearGuiContainer;
 import hu.trigary.iodine.api.gui.element.base.GuiElement;
 import hu.trigary.iodine.backend.GuiElementType;
 import hu.trigary.iodine.bukkit.gui.IodineGuiImpl;
+import hu.trigary.iodine.bukkit.gui.container.base.GuiContainerImpl;
 import hu.trigary.iodine.bukkit.gui.container.base.GuiParentPlus;
 import hu.trigary.iodine.bukkit.gui.element.base.GuiElementImpl;
 import hu.trigary.iodine.bukkit.network.ResizingByteBuffer;
@@ -21,8 +22,7 @@ import java.util.List;
 /**
  * The implementation of {@link LinearGuiContainer}.
  */
-public class LinearGuiContainerImpl extends GuiElementImpl<LinearGuiContainer>
-		implements LinearGuiContainer, GuiParentPlus<LinearGuiContainer> {
+public class LinearGuiContainerImpl extends GuiContainerImpl<LinearGuiContainer> implements LinearGuiContainer {
 	private final List<GuiElementImpl<?>> children = new ArrayList<>();
 	private boolean verticalOrientation;
 	
@@ -33,7 +33,7 @@ public class LinearGuiContainerImpl extends GuiElementImpl<LinearGuiContainer>
 	 * @param internalId the internal ID of this element
 	 * @param id the API-friendly ID of this element
 	 */
-	public LinearGuiContainerImpl(@NotNull IodineGuiImpl gui, int internalId, @NotNull Object id) {
+	public LinearGuiContainerImpl(@NotNull IodineGuiImpl gui, short internalId, @NotNull Object id) {
 		super(gui, GuiElementType.CONTAINER_LINEAR, internalId, id);
 		throw new NotImplementedException();
 	}
@@ -123,7 +123,7 @@ public class LinearGuiContainerImpl extends GuiElementImpl<LinearGuiContainer>
 		buffer.putBool(verticalOrientation);
 		buffer.putInt(children.size());
 		for (GuiElementImpl<?> element : children) {
-			buffer.putInt(element.getInternalId());
+			buffer.putShort(element.getInternalId());
 		}
 	}
 	
