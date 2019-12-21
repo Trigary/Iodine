@@ -2,7 +2,7 @@ package hu.trigary.iodine.bukkit.gui.element;
 
 import hu.trigary.iodine.api.gui.element.ProgressBarGuiElement;
 import hu.trigary.iodine.backend.GuiElementType;
-import hu.trigary.iodine.bukkit.gui.IodineGuiImpl;
+import hu.trigary.iodine.bukkit.gui.container.base.GuiBaseImpl;
 import hu.trigary.iodine.bukkit.gui.element.base.GuiElementImpl;
 import hu.trigary.iodine.bukkit.network.ResizingByteBuffer;
 import org.apache.commons.lang.Validate;
@@ -28,7 +28,7 @@ public class ProgressBarGuiElementImpl extends GuiElementImpl<ProgressBarGuiElem
 	 * @param internalId the internal ID of this element
 	 * @param id the API-friendly ID of this element
 	 */
-	public ProgressBarGuiElementImpl(@NotNull IodineGuiImpl gui, short internalId, @NotNull Object id) {
+	public ProgressBarGuiElementImpl(@NotNull GuiBaseImpl<?> gui, short internalId, @NotNull Object id) {
 		super(gui, GuiElementType.PROGRESS_BAR, internalId, id);
 	}
 	

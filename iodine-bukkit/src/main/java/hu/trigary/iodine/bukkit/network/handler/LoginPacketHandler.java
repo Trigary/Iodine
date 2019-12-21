@@ -1,6 +1,6 @@
 package hu.trigary.iodine.bukkit.network.handler;
 
-import hu.trigary.iodine.api.player.PlayerState;
+import hu.trigary.iodine.api.player.IodinePlayer;
 import hu.trigary.iodine.bukkit.IodinePlugin;
 import hu.trigary.iodine.backend.PacketType;
 import hu.trigary.iodine.bukkit.network.PacketListener;
@@ -47,8 +47,8 @@ public class LoginPacketHandler extends PacketHandler {
 	@NotNull
 	@Contract(pure = true)
 	@Override
-	public PlayerState getTargetState() {
-		return PlayerState.VANILLA;
+	public IodinePlayer.State getTargetState() {
+		return IodinePlayer.State.VANILLA;
 	}
 	
 	@Override
@@ -93,20 +93,20 @@ public class LoginPacketHandler extends PacketHandler {
 	
 	private void versionMatches(Player player) {
 		plugin.logDebug("Logged in successfully: {0}", player.getName());
-		plugin.getPlayer(player).setState(PlayerState.MODDED);
+		plugin.getPlayer(player).setState(IodinePlayer.State.MODDED);
 		plugin.getNetwork().send(player, PacketType.SERVER_LOGIN_SUCCESS);
 	}
 	
 	private void outdatedParty(Player player, boolean outdatedClient) {
 		plugin.logDebug("Login failed for: {0} (outdated {1})",
 				player.getName(), outdatedClient ? "client" : "server");
-		plugin.getPlayer(player).setState(PlayerState.INVALID);
+		plugin.getPlayer(player).setState(IodinePlayer.State.INVALID);
 		plugin.getNetwork().send(player, PacketType.SERVER_LOGIN_FAILED, outdatedClient ? (byte) 0 : 1);
 	}
 	
 	private void unexpectedInput(Player player) {
 		plugin.logDebug("Login failed for: {0} (invalid LoginPacket)", player.getName());
-		plugin.getPlayer(player).setState(PlayerState.INVALID);
+		plugin.getPlayer(player).setState(IodinePlayer.State.INVALID);
 		plugin.getNetwork().send(player, PacketType.SERVER_LOGIN_FAILED, (byte) 0);
 	}
 }

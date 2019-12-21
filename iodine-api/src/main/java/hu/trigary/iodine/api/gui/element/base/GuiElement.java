@@ -2,6 +2,7 @@ package hu.trigary.iodine.api.gui.element.base;
 
 import hu.trigary.iodine.api.gui.AttachmentHolder;
 import hu.trigary.iodine.api.gui.IodineGui;
+import hu.trigary.iodine.api.gui.container.base.GuiBase;
 import hu.trigary.iodine.api.gui.container.base.GuiParent;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -20,7 +21,7 @@ public interface GuiElement<T extends GuiElement<T>> extends AttachmentHolder {
 	 */
 	@NotNull
 	@Contract(pure = true)
-	IodineGui getGui();
+	GuiBase<?> getGui();
 	
 	/**
 	 * Gets the ID of this element that was specified during creation.

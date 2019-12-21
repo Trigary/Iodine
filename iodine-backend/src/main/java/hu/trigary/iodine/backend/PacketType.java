@@ -44,15 +44,25 @@ public enum PacketType {
 	SERVER_GUI_OPEN(0x10),
 	
 	/**
-	 * Instructs the client to close the currently open GUI,
-	 * if its ID matches the one in the payload.
+	 * Instructs the client to open the overlay specified in the payload.
 	 */
-	SERVER_GUI_CLOSE(0x11),
+	SERVER_OVERLAY_OPEN(0x11),
 	
 	/**
 	 * Instructs the client to update its GUI based on the changes specified in the payload.
 	 */
 	SERVER_GUI_CHANGE(0x12),
+	
+	/**
+	 * Instructs the client to update the overlay based on the changes specified in the payload.
+	 */
+	SERVER_OVERLAY_CHANGE(0x13),
+	
+	/**
+	 * Instructs the client to close the gui/overlay,
+	 * if its ID matches the one in the payload.
+	 */
+	SERVER_GUI_OVERLAY_CLOSE(0x14),
 	
 	/**
 	 * Informs the server that the player has closed the GUI.

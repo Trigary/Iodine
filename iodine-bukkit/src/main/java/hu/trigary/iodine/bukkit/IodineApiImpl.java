@@ -2,6 +2,7 @@ package hu.trigary.iodine.bukkit;
 
 import hu.trigary.iodine.api.IodineApi;
 import hu.trigary.iodine.api.gui.IodineGui;
+import hu.trigary.iodine.api.gui.IodineOverlay;
 import hu.trigary.iodine.api.player.IodinePlayer;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Contract;
@@ -36,5 +37,11 @@ public class IodineApiImpl implements IodineApi {
 	@Override
 	public IodineGui createGui() {
 		return plugin.getGui().createGui();
+	}
+	
+	@NotNull
+	@Override
+	public IodineOverlay createOverlay(@NotNull IodineOverlay.Anchor anchor) {
+		return plugin.getGui().createOverlay(anchor);
 	}
 }

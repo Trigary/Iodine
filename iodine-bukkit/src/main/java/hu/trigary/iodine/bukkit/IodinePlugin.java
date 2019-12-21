@@ -2,7 +2,7 @@ package hu.trigary.iodine.bukkit;
 
 import hu.trigary.iodine.api.IodineApi;
 import hu.trigary.iodine.backend.PacketType;
-import hu.trigary.iodine.bukkit.gui.GuiManager;
+import hu.trigary.iodine.bukkit.gui.GuiBaseManager;
 import hu.trigary.iodine.bukkit.player.IodinePlayerImpl;
 import hu.trigary.iodine.bukkit.network.NetworkManager;
 import hu.trigary.iodine.bukkit.player.PlayerManager;
@@ -26,7 +26,7 @@ public class IodinePlugin extends JavaPlugin implements Listener {
 	private static final boolean DEBUG_LOG = true;
 	private NetworkManager networkManager;
 	private PlayerManager playerManager;
-	private GuiManager guiManager;
+	private GuiBaseManager guiBaseManager;
 	
 	@Override
 	public void onEnable() {
@@ -36,7 +36,7 @@ public class IodinePlugin extends JavaPlugin implements Listener {
 		Bukkit.getPluginManager().registerEvents(this, this);
 		networkManager = new NetworkManager(this);
 		playerManager = new PlayerManager(this);
-		guiManager = new GuiManager(this);
+		guiBaseManager = new GuiBaseManager(this);
 		
 		Bukkit.getPluginManager().registerEvents(new TestCommandListener(this), this);
 		
@@ -47,7 +47,7 @@ public class IodinePlugin extends JavaPlugin implements Listener {
 	private void onDisable(PluginDisableEvent event) {
 		//this fires before the plugin is disabled, therefore eg. packets can still be sent
 		if (event.getPlugin() == this) {
-			guiManager.closeAllGuiInstances();
+			guiBaseManager.closeAllGuiInstances();
 		}
 	}
 	
@@ -83,8 +83,8 @@ public class IodinePlugin extends JavaPlugin implements Listener {
 	 */
 	@NotNull
 	@Contract(pure = true)
-	public GuiManager getGui() {
-		return guiManager;
+	public GuiBaseManager getGui() {
+		return guiBaseManager;
 	}
 	
 	

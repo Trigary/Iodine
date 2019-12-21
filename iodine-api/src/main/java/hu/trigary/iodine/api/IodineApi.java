@@ -1,8 +1,8 @@
 package hu.trigary.iodine.api;
 
 import hu.trigary.iodine.api.gui.IodineGui;
+import hu.trigary.iodine.api.gui.IodineOverlay;
 import hu.trigary.iodine.api.player.IodinePlayer;
-import hu.trigary.iodine.api.player.PlayerState;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.ServicesManager;
 import org.bukkit.entity.Player;
@@ -40,14 +40,14 @@ public interface IodineApi {
 	
 	/**
 	 * Gets whether the player is using the Iodine mod.
-	 * For more information regarding edge cases see {@link PlayerState}.
+	 * For more information regarding edge cases see {@link IodinePlayer.State}.
 	 *
 	 * @param player the player to check
-	 * @return whether the player's state is {@link PlayerState#MODDED}
+	 * @return whether the player's state is {@link IodinePlayer.State#MODDED}
 	 */
 	@Contract(pure = true)
 	default boolean isModded(@NotNull Player player) {
-		return getPlayer(player).getState() == PlayerState.MODDED;
+		return getPlayer(player).getState() == IodinePlayer.State.MODDED;
 	}
 	
 	
@@ -60,4 +60,14 @@ public interface IodineApi {
 	@NotNull
 	@Contract(pure = true)
 	IodineGui createGui();
+	
+	/**
+	 * Creates a new, empty overlay.
+	 *
+	 * @param anchor the specified anchor
+	 * @return a new overlay
+	 */
+	@NotNull
+	@Contract(pure = true)
+	IodineOverlay createOverlay(@NotNull IodineOverlay.Anchor anchor);
 }

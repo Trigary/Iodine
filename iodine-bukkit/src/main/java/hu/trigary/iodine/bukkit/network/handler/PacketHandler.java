@@ -1,6 +1,6 @@
 package hu.trigary.iodine.bukkit.network.handler;
 
-import hu.trigary.iodine.api.player.PlayerState;
+import hu.trigary.iodine.api.player.IodinePlayer;
 import hu.trigary.iodine.bukkit.IodinePlugin;
 import hu.trigary.iodine.bukkit.network.PacketListener;
 import hu.trigary.iodine.backend.PacketType;
@@ -36,14 +36,14 @@ public abstract class PacketHandler {
 	 */
 	@NotNull
 	@Contract(pure = true)
-	public PlayerState getTargetState() {
-		return PlayerState.MODDED;
+	public IodinePlayer.State getTargetState() {
+		return IodinePlayer.State.MODDED;
 	}
 	
 	/**
 	 * Handles an incoming packet.
 	 * If an exception is thrown by this method,
-	 * then the sender becomes {@link PlayerState#INVALID}.
+	 * then the sender becomes {@link IodinePlayer.State#INVALID}.
 	 *
 	 * @param player the sender of the packet
 	 * @param message the payload of the packet

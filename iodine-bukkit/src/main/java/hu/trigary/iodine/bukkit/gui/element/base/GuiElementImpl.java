@@ -3,6 +3,7 @@ package hu.trigary.iodine.bukkit.gui.element.base;
 import hu.trigary.iodine.api.gui.element.base.GuiElement;
 import hu.trigary.iodine.backend.GuiElementType;
 import hu.trigary.iodine.bukkit.gui.IodineGuiImpl;
+import hu.trigary.iodine.bukkit.gui.container.base.GuiBaseImpl;
 import hu.trigary.iodine.bukkit.gui.container.base.GuiParentPlus;
 import hu.trigary.iodine.bukkit.network.ResizingByteBuffer;
 import org.bukkit.entity.Player;
@@ -18,7 +19,7 @@ import java.nio.ByteBuffer;
  * @param <T> the class implementing this abstract class
  */
 public abstract class GuiElementImpl<T extends GuiElement<T>> implements GuiElement<T> {
-	private final IodineGuiImpl gui;
+	private final GuiBaseImpl<?> gui;
 	private final GuiElementType type;
 	private final short internalId;
 	private final Object id;
@@ -34,8 +35,7 @@ public abstract class GuiElementImpl<T extends GuiElement<T>> implements GuiElem
 	 * @param internalId the internal ID of this element
 	 * @param id the API-friendly ID of this element
 	 */
-	protected GuiElementImpl(@NotNull IodineGuiImpl gui,
-			@NotNull GuiElementType type, short internalId, @NotNull Object id) {
+	protected GuiElementImpl(@NotNull GuiBaseImpl<?> gui, @NotNull GuiElementType type, short internalId, @NotNull Object id) {
 		this.gui = gui;
 		this.internalId = internalId;
 		this.id = id;
@@ -47,7 +47,7 @@ public abstract class GuiElementImpl<T extends GuiElement<T>> implements GuiElem
 	@NotNull
 	@Contract(pure = true)
 	@Override
-	public final IodineGuiImpl getGui() {
+	public final GuiBaseImpl<?> getGui() {
 		return gui;
 	}
 	

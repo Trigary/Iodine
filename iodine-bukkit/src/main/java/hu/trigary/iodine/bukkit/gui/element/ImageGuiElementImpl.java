@@ -2,7 +2,7 @@ package hu.trigary.iodine.bukkit.gui.element;
 
 import hu.trigary.iodine.api.gui.element.ImageGuiElement;
 import hu.trigary.iodine.backend.GuiElementType;
-import hu.trigary.iodine.bukkit.gui.IodineGuiImpl;
+import hu.trigary.iodine.bukkit.gui.container.base.GuiBaseImpl;
 import hu.trigary.iodine.bukkit.gui.element.base.GuiElementImpl;
 import hu.trigary.iodine.bukkit.network.ResizingByteBuffer;
 import org.apache.commons.lang.NotImplementedException;
@@ -30,7 +30,7 @@ public class ImageGuiElementImpl extends GuiElementImpl<ImageGuiElement> impleme
 	 * @param internalId the internal ID of this element
 	 * @param id the API-friendly ID of this element
 	 */
-	public ImageGuiElementImpl(@NotNull IodineGuiImpl gui, short internalId, @NotNull Object id) {
+	public ImageGuiElementImpl(@NotNull GuiBaseImpl<?> gui, short internalId, @NotNull Object id) {
 		super(gui, GuiElementType.IMAGE, internalId, id);
 	}
 	

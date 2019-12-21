@@ -8,13 +8,13 @@ import org.jetbrains.annotations.NotNull;
 /**
  * An event that gets called when the state of a player just changed.
  * In most cases, this is going to be a change
- * from {@link PlayerState#VANILLA} to {@link PlayerState#MODDED}.
+ * from {@link IodinePlayer.State#VANILLA} to {@link IodinePlayer.State#MODDED}.
  */
 public final class IodinePlayerStateChangedEvent extends Event {
 	private static final HandlerList handlers = new HandlerList();
 	private final IodinePlayer player;
-	private final PlayerState oldState;
-	private final PlayerState newState;
+	private final IodinePlayer.State oldState;
+	private final IodinePlayer.State newState;
 	
 	/**
 	 * Creates a new instance of this event.
@@ -25,7 +25,7 @@ public final class IodinePlayerStateChangedEvent extends Event {
 	 * @param newState the current state of the player
 	 */
 	public IodinePlayerStateChangedEvent(@NotNull IodinePlayer player,
-			@NotNull PlayerState oldState, @NotNull PlayerState newState) {
+			@NotNull IodinePlayer.State oldState, @NotNull IodinePlayer.State newState) {
 		this.player = player;
 		this.oldState = oldState;
 		this.newState = newState;
@@ -62,7 +62,7 @@ public final class IodinePlayerStateChangedEvent extends Event {
 	 * @return the previous state of the player
 	 */
 	@Contract(pure = true)
-	public PlayerState getOldState() {
+	public IodinePlayer.State getOldState() {
 		return oldState;
 	}
 	
@@ -73,7 +73,7 @@ public final class IodinePlayerStateChangedEvent extends Event {
 	 * @return the current state of the player
 	 */
 	@Contract(pure = true)
-	public PlayerState getNewState() {
+	public IodinePlayer.State getNewState() {
 		return newState;
 	}
 }

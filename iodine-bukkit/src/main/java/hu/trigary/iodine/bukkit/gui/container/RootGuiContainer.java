@@ -3,6 +3,7 @@ package hu.trigary.iodine.bukkit.gui.container;
 import hu.trigary.iodine.api.gui.element.base.GuiElement;
 import hu.trigary.iodine.backend.GuiElementType;
 import hu.trigary.iodine.bukkit.gui.IodineGuiImpl;
+import hu.trigary.iodine.bukkit.gui.container.base.GuiBaseImpl;
 import hu.trigary.iodine.bukkit.gui.container.base.GuiContainerImpl;
 import hu.trigary.iodine.bukkit.gui.element.base.GuiElementImpl;
 import hu.trigary.iodine.bukkit.network.ResizingByteBuffer;
@@ -25,7 +26,7 @@ public class RootGuiContainer extends GuiContainerImpl<RootGuiContainer> {
 	 *
 	 * @param gui the GUI which will contain this element
 	 */
-	public RootGuiContainer(@NotNull IodineGuiImpl gui) {
+	public RootGuiContainer(@NotNull GuiBaseImpl<?> gui) {
 		super(gui, GuiElementType.CONTAINER_ROOT, (short) 0, new Object());
 	}
 	

@@ -30,4 +30,4 @@ To recap which modules depend on which:
  - **iodine-bukkit:** backend + api (inherited: common)
  - **iodine-api:** common
  - **iodine-client:** backend (inherited: common)
- - **iodine-forge-VERSION:** forge (inherited: common, backend)
+ - **iodine-forge-VERSION:** forge (inherited: backend, common)

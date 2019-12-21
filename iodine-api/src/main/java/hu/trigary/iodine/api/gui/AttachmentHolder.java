@@ -19,7 +19,7 @@ public interface AttachmentHolder {
 	
 	/**
 	 * Gets the attached value.
-	 * This is a quality-of-life method that allows attaching any data to this class instance.
+	 * This is a quality-of-life method that allows retrieving attached data to this class instance.
 	 *
 	 * @return the currently attached value
 	 */

@@ -1,19 +1,15 @@
 package hu.trigary.iodine.bukkit.gui;
 
-import hu.trigary.iodine.api.gui.IodineGui;
+import hu.trigary.iodine.api.gui.IodineOverlay;
 import hu.trigary.iodine.backend.PacketType;
 import hu.trigary.iodine.bukkit.IodinePlugin;
 import hu.trigary.iodine.bukkit.gui.container.base.GuiBaseImpl;
 import hu.trigary.iodine.bukkit.network.ResizingByteBuffer;
 import hu.trigary.iodine.bukkit.player.IodinePlayerImpl;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-/**
- * The implementation of {@link IodineGui}.
- */
-public class IodineGuiImpl extends GuiBaseImpl<IodineGui> implements IodineGui {
-	private ClosedAction closedAction;
+public class IodineOverlayImpl extends GuiBaseImpl<IodineOverlay> implements IodineOverlay {
+	private final Anchor anchor;
 	
 	/**
 	 * Creates a new instance.
@@ -21,53 +17,47 @@ public class IodineGuiImpl extends GuiBaseImpl<IodineGui> implements IodineGui {
 	 *
 	 * @param plugin the plugin instance
 	 * @param id the unique identifier of this GUI instance
+	 * @param anchor the specified anchor
 	 */
-	public IodineGuiImpl(@NotNull IodinePlugin plugin, int id) {
+	public IodineOverlayImpl(@NotNull IodinePlugin plugin, int id, @NotNull Anchor anchor) {
 		super(plugin, id);
+		this.anchor = anchor;
 	}
 	
 	
 	
 	@NotNull
 	@Override
-	public IodineGuiImpl onClosed(@Nullable ClosedAction action) {
-		closedAction = action;
-		return this;
+	public Anchor getAnchor() {
+		return anchor;
 	}
 	
 	
 	
 	@Override
-	protected void onPreOpened(@NotNull IodinePlayerImpl iodinePlayer) {
-		IodineGuiImpl previous = iodinePlayer.getOpenGui();
-		if (previous != null) {
-			previous.closeForNoPacket(iodinePlayer, false);
-		}
-	}
+	protected void onPreOpened(@NotNull IodinePlayerImpl iodinePlayer) {}
 	
 	@Override
 	protected void onOpened(@NotNull IodinePlayerImpl iodinePlayer) {
-		iodinePlayer.setOpenGui(this);
+		iodinePlayer.addDisplayedOverlay(this);
 	}
 	
 	@Override
 	protected void onClosed(@NotNull IodinePlayerImpl iodinePlayer, boolean byPlayer) {
-		iodinePlayer.setOpenGui(null);
-		if (byPlayer && closedAction != null) {
-			closedAction.accept(this, iodinePlayer.getPlayer());
-		}
+		iodinePlayer.removeDisplayedOverlay(this);
 	}
 	
 	
 	
 	@Override
 	protected void serializeOpenStart(@NotNull ResizingByteBuffer buffer) {
-		buffer.putByte(PacketType.SERVER_GUI_OPEN.getId());
+		buffer.putByte(PacketType.SERVER_OVERLAY_OPEN.getId());
 		buffer.putInt(getId());
 	}
 	
 	@Override
 	protected void serializeUpdateStart(@NotNull ResizingByteBuffer buffer) {
-		buffer.putByte(PacketType.SERVER_GUI_CHANGE.getId());
+		buffer.putByte(PacketType.SERVER_OVERLAY_CHANGE.getId());
+		buffer.putInt(getId());
 	}
 }

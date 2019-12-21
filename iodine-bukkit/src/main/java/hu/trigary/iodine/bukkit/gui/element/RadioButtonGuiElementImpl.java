@@ -2,7 +2,7 @@ package hu.trigary.iodine.bukkit.gui.element;
 
 import hu.trigary.iodine.api.gui.element.RadioButtonGuiElement;
 import hu.trigary.iodine.backend.GuiElementType;
-import hu.trigary.iodine.bukkit.gui.IodineGuiImpl;
+import hu.trigary.iodine.bukkit.gui.container.base.GuiBaseImpl;
 import hu.trigary.iodine.bukkit.gui.element.base.GuiElementImpl;
 import hu.trigary.iodine.bukkit.network.ResizingByteBuffer;
 import org.apache.commons.lang.NotImplementedException;
@@ -32,7 +32,7 @@ public class RadioButtonGuiElementImpl extends GuiElementImpl<RadioButtonGuiElem
 	 * @param internalId the internal ID of this element
 	 * @param id the API-friendly ID of this element
 	 */
-	public RadioButtonGuiElementImpl(@NotNull IodineGuiImpl gui, short internalId, @NotNull Object id) {
+	public RadioButtonGuiElementImpl(@NotNull GuiBaseImpl<?> gui, short internalId, @NotNull Object id) {
 		super(gui, GuiElementType.RADIO_BUTTON, internalId, id);
 		setGroupId(0);
 	}

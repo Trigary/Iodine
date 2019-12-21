@@ -3,7 +3,6 @@ package hu.trigary.iodine.bukkit.gui.container.base;
 import hu.trigary.iodine.api.gui.container.base.GuiContainer;
 import hu.trigary.iodine.api.gui.element.base.GuiElement;
 import hu.trigary.iodine.backend.GuiElementType;
-import hu.trigary.iodine.bukkit.gui.IodineGuiImpl;
 import hu.trigary.iodine.bukkit.gui.element.base.GuiElementImpl;
 import org.jetbrains.annotations.NotNull;
 
@@ -23,7 +22,7 @@ public abstract class GuiContainerImpl<T extends GuiContainer<T>> extends GuiEle
 	 * @param internalId the internal ID of this element
 	 * @param id the API-friendly ID of this element
 	 */
-	protected GuiContainerImpl(@NotNull IodineGuiImpl gui, @NotNull GuiElementType type, short internalId, @NotNull Object id) {
+	protected GuiContainerImpl(@NotNull GuiBaseImpl<?> gui, @NotNull GuiElementType type, short internalId, @NotNull Object id) {
 		super(gui, type, internalId, id);
 	}
 	
