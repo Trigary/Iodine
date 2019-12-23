@@ -1,5 +1,5 @@
 name: Iodine
 version: ${version}
-authors: ["${authors}"]
-website: "${url}"
+authors: ["Trigary"]
+website: "https://github.com/Trigary/Iodine"
 main: hu.trigary.iodine.bukkit.IodinePlugin

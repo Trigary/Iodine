@@ -20,7 +20,7 @@ import java.util.regex.Pattern;
  * The handler of {@link PacketType#CLIENT_LOGIN}.
  */
 public class LoginPacketHandler extends PacketHandler {
-	private final Pattern versionPattern = Pattern.compile("\\d+.\\d+.\\d+");
+	private final Pattern versionPattern = Pattern.compile("\\d+\\.\\d+\\.\\d+");
 	private final String serverVersion;
 	private final int serverMajor;
 	private final int serverMinor;
@@ -57,9 +57,8 @@ public class LoginPacketHandler extends PacketHandler {
 		byte[] array = message.array(); //backing array's first element is the PacketType
 		String clientVersion = new String(array, 1, array.length - 1, StandardCharsets.UTF_8);
 		
-		//if (serverVersion.equals(clientVersion)) {
-		if (serverVersion.equals(clientVersion) || clientVersion.equals("${version}")) {
-			//TODO remove this as soon as placeholders start getting replaced when launching MC from IDE
+		if (serverVersion.equals(clientVersion) || clientVersion.equals("${version}") || clientVersion.equals("version")) {
+			//Forge is weird... let's call this a feature, not like this affects anyone apart from the developers
 			versionMatches(player);
 			return;
 		}

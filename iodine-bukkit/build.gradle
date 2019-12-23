@@ -8,11 +8,9 @@ dependencies {
     compile project(':iodine-api')
 }
 
-processResources { //TODO is this necessary? can't I set the exact placeholders directly in the file?
+processResources {
     include 'plugin.yml'
-    expand 'version': project.version,
-            'authors': project.authors,
-            'url': project.url
+    expand 'version': project.version
 }
 
 shadowJar {

@@ -1,10 +1,11 @@
 /.idea
+/iodine-forge-*/.idea
 
-.gradle
-/*/.gradle
+/.gradle
+/iodine-*/.gradle
 
 /out
-/*/out
-/*/build
+/iodine-*/out
+/iodine-*/build
 
 /iodine-forge-*/run

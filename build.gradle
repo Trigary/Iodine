@@ -10,14 +10,12 @@ buildscript {
 
 subprojects {
     apply plugin: 'java'
+    apply plugin: 'maven'
     apply plugin: 'com.github.johnrengelman.shadow'
 
     group 'hu.trigary'
     version '1.0.0' //The version must follow the #.#.# pattern.
     //Changes which do not break the forge-bukkit protocol should increase only the third number in the version.
-
-    ext.url = 'https://github.com/Trigary/Iodine' //TODO fix this
-    ext.authors = 'Trigary' //TODO fix this
 
     sourceCompatibility = 1.8
     targetCompatibility = 1.8
