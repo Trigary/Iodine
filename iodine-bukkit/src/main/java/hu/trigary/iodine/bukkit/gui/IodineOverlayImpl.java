@@ -3,13 +3,16 @@ package hu.trigary.iodine.bukkit.gui;
 import hu.trigary.iodine.api.gui.IodineOverlay;
 import hu.trigary.iodine.backend.PacketType;
 import hu.trigary.iodine.bukkit.IodinePlugin;
+import hu.trigary.iodine.bukkit.IodineUtil;
 import hu.trigary.iodine.bukkit.gui.container.base.GuiBaseImpl;
 import hu.trigary.iodine.bukkit.network.ResizingByteBuffer;
 import hu.trigary.iodine.bukkit.player.IodinePlayerImpl;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 public class IodineOverlayImpl extends GuiBaseImpl<IodineOverlay> implements IodineOverlay {
 	private final Anchor anchor;
+	private byte drawPriority;
 	
 	/**
 	 * Creates a new instance.
@@ -30,6 +33,19 @@ public class IodineOverlayImpl extends GuiBaseImpl<IodineOverlay> implements Iod
 	@Override
 	public Anchor getAnchor() {
 		return anchor;
+	}
+	
+	@Override
+	@Contract(pure = true)
+	public int getDrawPriority() {
+		return drawPriority;
+	}
+	
+	@Override
+	public void setDrawPriority(int priority) {
+		IodineUtil.validateRange(PRIORITY_LOWER_BOUND, PRIORITY_UPPER_BOUND, priority, "draw priority");
+		drawPriority = (byte) priority; //TODO client-side: long p = (priority << 32) | internalId
+		executeUpdate();
 	}
 	
 	
@@ -53,11 +69,14 @@ public class IodineOverlayImpl extends GuiBaseImpl<IodineOverlay> implements Iod
 	protected void serializeOpenStart(@NotNull ResizingByteBuffer buffer) {
 		buffer.putByte(PacketType.SERVER_OVERLAY_OPEN.getId());
 		buffer.putInt(getId());
+		buffer.putByte((byte) anchor.getNumber());
+		buffer.putByte(drawPriority);
 	}
 	
 	@Override
 	protected void serializeUpdateStart(@NotNull ResizingByteBuffer buffer) {
 		buffer.putByte(PacketType.SERVER_OVERLAY_CHANGE.getId());
 		buffer.putInt(getId());
+		buffer.putByte(drawPriority);
 	}
 }

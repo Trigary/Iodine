@@ -2,6 +2,7 @@ package hu.trigary.iodine.bukkit.gui.element;
 
 import hu.trigary.iodine.api.gui.element.SliderGuiElement;
 import hu.trigary.iodine.backend.GuiElementType;
+import hu.trigary.iodine.bukkit.IodineUtil;
 import hu.trigary.iodine.bukkit.gui.container.base.GuiBaseImpl;
 import hu.trigary.iodine.bukkit.gui.element.base.GuiElementImpl;
 import hu.trigary.iodine.bukkit.network.ResizingByteBuffer;
@@ -18,7 +19,8 @@ import java.nio.ByteBuffer;
  * The implementation of {@link SliderGuiElement}.
  */
 public class SliderGuiElementImpl extends GuiElementImpl<SliderGuiElement> implements SliderGuiElement {
-	private int width = 150;
+	private short width = 150;
+	private short height;
 	private boolean editable = true;
 	private boolean verticalOrientation;
 	private String text = "";
@@ -33,7 +35,7 @@ public class SliderGuiElementImpl extends GuiElementImpl<SliderGuiElement> imple
 	 * @param internalId the internal ID of this element
 	 * @param id the API-friendly ID of this element
 	 */
-	public SliderGuiElementImpl(@NotNull GuiBaseImpl<?> gui, short internalId, @NotNull Object id) {
+	public SliderGuiElementImpl(@NotNull GuiBaseImpl<?> gui, int internalId, @NotNull Object id) {
 		super(gui, GuiElementType.SLIDER, internalId, id);
 	}
 	
@@ -42,6 +44,11 @@ public class SliderGuiElementImpl extends GuiElementImpl<SliderGuiElement> imple
 	@Override
 	public int getWidth() {
 		return width;
+	}
+	
+	@Override
+	public int getHeight() {
+		return height;
 	}
 	
 	@Contract(pure = true)
@@ -80,8 +87,19 @@ public class SliderGuiElementImpl extends GuiElementImpl<SliderGuiElement> imple
 	@NotNull
 	@Override
 	public SliderGuiElementImpl setWidth(int width) {
-		Validate.isTrue(width > 0 && width <= Short.MAX_VALUE, "The width must be positive and at most Short.MAX_VALUE");
-		this.width = width;
+		Validate.isTrue(!verticalOrientation, "The width is only configurable in horizontal orientation");
+		IodineUtil.validateWidth(width);
+		this.width = (short) width;
+		getGui().flagAndUpdate(this);
+		return this;
+	}
+	
+	@NotNull
+	@Override
+	public SliderGuiElementImpl setHeight(int height) {
+		Validate.isTrue(verticalOrientation, "The height is only configurable in vertical orientation");
+		IodineUtil.validateHeight(height);
+		this.height = (short) height;
 		getGui().flagAndUpdate(this);
 		return this;
 	}
@@ -97,6 +115,14 @@ public class SliderGuiElementImpl extends GuiElementImpl<SliderGuiElement> imple
 	@NotNull
 	@Override
 	public SliderGuiElementImpl setOrientation(boolean vertical) {
+		if (verticalOrientation == vertical) {
+			return this;
+		}
+		
+		short temp = width;
+		//noinspection SuspiciousNameCombination
+		width = height;
+		height = temp;
 		verticalOrientation = vertical;
 		getGui().flagAndUpdate(this);
 		return this;
@@ -143,7 +169,8 @@ public class SliderGuiElementImpl extends GuiElementImpl<SliderGuiElement> imple
 	
 	@Override
 	public void serializeImpl(@NotNull ResizingByteBuffer buffer) {
-		buffer.putShort((short) width);
+		buffer.putShort(width);
+		buffer.putShort(height);
 		buffer.putBool(editable);
 		buffer.putBool(verticalOrientation);
 		buffer.putString(text);

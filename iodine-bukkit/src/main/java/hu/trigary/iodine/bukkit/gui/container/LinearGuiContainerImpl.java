@@ -32,7 +32,7 @@ public class LinearGuiContainerImpl extends GuiContainerImpl<LinearGuiContainer>
 	 * @param internalId the internal ID of this element
 	 * @param id the API-friendly ID of this element
 	 */
-	public LinearGuiContainerImpl(@NotNull GuiBaseImpl<?> gui, short internalId, @NotNull Object id) {
+	public LinearGuiContainerImpl(@NotNull GuiBaseImpl<?> gui, int internalId, @NotNull Object id) {
 		super(gui, GuiElementType.CONTAINER_LINEAR, internalId, id);
 		throw new NotImplementedException();
 	}
@@ -122,7 +122,7 @@ public class LinearGuiContainerImpl extends GuiContainerImpl<LinearGuiContainer>
 		buffer.putBool(verticalOrientation);
 		buffer.putInt(children.size());
 		for (GuiElementImpl<?> element : children) {
-			buffer.putShort(element.getInternalId());
+			buffer.putInt(element.getInternalId());
 		}
 	}
 	

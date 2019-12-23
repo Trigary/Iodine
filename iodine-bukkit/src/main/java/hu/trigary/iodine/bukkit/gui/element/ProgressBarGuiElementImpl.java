@@ -2,6 +2,7 @@ package hu.trigary.iodine.bukkit.gui.element;
 
 import hu.trigary.iodine.api.gui.element.ProgressBarGuiElement;
 import hu.trigary.iodine.backend.GuiElementType;
+import hu.trigary.iodine.bukkit.IodineUtil;
 import hu.trigary.iodine.bukkit.gui.container.base.GuiBaseImpl;
 import hu.trigary.iodine.bukkit.gui.element.base.GuiElementImpl;
 import hu.trigary.iodine.bukkit.network.ResizingByteBuffer;
@@ -16,6 +17,8 @@ import java.nio.ByteBuffer;
  * The implementation of {@link ProgressBarGuiElement}.
  */
 public class ProgressBarGuiElementImpl extends GuiElementImpl<ProgressBarGuiElement> implements ProgressBarGuiElement {
+	private short width = 150;
+	private short height;
 	private boolean verticalOrientation;
 	private String text = "";
 	private int maxProgress;
@@ -28,11 +31,21 @@ public class ProgressBarGuiElementImpl extends GuiElementImpl<ProgressBarGuiElem
 	 * @param internalId the internal ID of this element
 	 * @param id the API-friendly ID of this element
 	 */
-	public ProgressBarGuiElementImpl(@NotNull GuiBaseImpl<?> gui, short internalId, @NotNull Object id) {
+	public ProgressBarGuiElementImpl(@NotNull GuiBaseImpl<?> gui, int internalId, @NotNull Object id) {
 		super(gui, GuiElementType.PROGRESS_BAR, internalId, id);
 	}
 	
 	
+	
+	@Override
+	public int getWidth() {
+		return width;
+	}
+	
+	@Override
+	public int getHeight() {
+		return height;
+	}
 	
 	@Contract(pure = true)
 	@Override
@@ -63,7 +76,35 @@ public class ProgressBarGuiElementImpl extends GuiElementImpl<ProgressBarGuiElem
 	
 	@NotNull
 	@Override
+	public ProgressBarGuiElementImpl setWidth(int width) {
+		Validate.isTrue(!verticalOrientation, "The width is only configurable in horizontal orientation");
+		IodineUtil.validateWidth(width);
+		this.width = (short) width;
+		getGui().flagAndUpdate(this);
+		return this;
+	}
+	
+	@NotNull
+	@Override
+	public ProgressBarGuiElementImpl setHeight(int height) {
+		Validate.isTrue(verticalOrientation, "The height is only configurable in vertical orientation");
+		IodineUtil.validateHeight(height);
+		this.height = (short) height;
+		getGui().flagAndUpdate(this);
+		return this;
+	}
+	
+	@NotNull
+	@Override
 	public ProgressBarGuiElementImpl setOrientation(boolean vertical) {
+		if (verticalOrientation == vertical) {
+			return this;
+		}
+		
+		short temp = width;
+		//noinspection SuspiciousNameCombination
+		width = height;
+		height = temp;
 		verticalOrientation = vertical;
 		getGui().flagAndUpdate(this);
 		return this;
@@ -103,6 +144,8 @@ public class ProgressBarGuiElementImpl extends GuiElementImpl<ProgressBarGuiElem
 	
 	@Override
 	public void serializeImpl(@NotNull ResizingByteBuffer buffer) {
+		buffer.putShort(width);
+		buffer.putShort(height);
 		buffer.putBool(verticalOrientation);
 		buffer.putString(text);
 		buffer.putInt(maxProgress);

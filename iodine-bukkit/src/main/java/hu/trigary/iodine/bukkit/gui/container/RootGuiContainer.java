@@ -1,5 +1,6 @@
 package hu.trigary.iodine.bukkit.gui.container;
 
+import hu.trigary.iodine.api.gui.container.base.GuiBase;
 import hu.trigary.iodine.api.gui.element.base.GuiElement;
 import hu.trigary.iodine.backend.GuiElementType;
 import hu.trigary.iodine.bukkit.gui.IodineGuiImpl;
@@ -27,7 +28,7 @@ public class RootGuiContainer extends GuiContainerImpl<RootGuiContainer> {
 	 * @param gui the GUI which will contain this element
 	 */
 	public RootGuiContainer(@NotNull GuiBaseImpl<?> gui) {
-		super(gui, GuiElementType.CONTAINER_ROOT, (short) 0, new Object());
+		super(gui, GuiElementType.CONTAINER_ROOT, 0, new Object());
 	}
 	
 	
@@ -43,9 +44,8 @@ public class RootGuiContainer extends GuiContainerImpl<RootGuiContainer> {
 	
 	@NotNull
 	public <E extends GuiElement<E>> E makeChild(@NotNull E element, int x, int y) {
-		Validate.isTrue(x >= 0 && y >= 0 && x <= Short.MAX_VALUE && y <= Short.MAX_VALUE,
-				"The element's render position must be at least 0 and at most Short.MAX_VALUE");
-		//TODO actually allow negative values, as long as it can't crash the client
+		validateRange(GuiBase.COORDINATE_LOWER_BOUND, GuiBase.COORDINATE_UPPER_BOUND, x, "position");
+		validateRange(GuiBase.COORDINATE_LOWER_BOUND, GuiBase.COORDINATE_UPPER_BOUND, y, "position");
 		GuiElementImpl<?> impl = (GuiElementImpl<?>) element;
 		Validate.isTrue(children.put(impl, new Position(x, y)) == null,
 				"The specified element is already the child of this GUI");
@@ -67,7 +67,7 @@ public class RootGuiContainer extends GuiContainerImpl<RootGuiContainer> {
 	public void serializeImpl(@NotNull ResizingByteBuffer buffer) {
 		buffer.putInt(children.size());
 		children.forEach((element, position) -> {
-			buffer.putShort(element.getInternalId());
+			buffer.putInt(element.getInternalId());
 			buffer.putShort((short) position.x);
 			buffer.putShort((short) position.y);
 		});

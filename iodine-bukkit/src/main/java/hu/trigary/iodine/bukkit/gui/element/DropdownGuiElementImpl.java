@@ -2,6 +2,7 @@ package hu.trigary.iodine.bukkit.gui.element;
 
 import hu.trigary.iodine.api.gui.element.DropdownGuiElement;
 import hu.trigary.iodine.backend.GuiElementType;
+import hu.trigary.iodine.bukkit.IodineUtil;
 import hu.trigary.iodine.bukkit.gui.container.base.GuiBaseImpl;
 import hu.trigary.iodine.bukkit.gui.element.base.GuiElementImpl;
 import hu.trigary.iodine.bukkit.network.ResizingByteBuffer;
@@ -19,7 +20,7 @@ import java.util.*;
  */
 public class DropdownGuiElementImpl extends GuiElementImpl<DropdownGuiElement> implements DropdownGuiElement {
 	private final List<String> choices = new ArrayList<>(Collections.singletonList(""));
-	private int width = 100;
+	private short width = 100;
 	private boolean editable = true;
 	private int selected;
 	private ChosenAction chosenAction;
@@ -31,7 +32,7 @@ public class DropdownGuiElementImpl extends GuiElementImpl<DropdownGuiElement> i
 	 * @param internalId the internal ID of this element
 	 * @param id the API-friendly ID of this element
 	 */
-	public DropdownGuiElementImpl(@NotNull GuiBaseImpl<?> gui, short internalId, @NotNull Object id) {
+	public DropdownGuiElementImpl(@NotNull GuiBaseImpl<?> gui, int internalId, @NotNull Object id) {
 		super(gui, GuiElementType.DROPDOWN, internalId, id);
 	}
 	
@@ -67,8 +68,8 @@ public class DropdownGuiElementImpl extends GuiElementImpl<DropdownGuiElement> i
 	@NotNull
 	@Override
 	public DropdownGuiElementImpl setWidth(int width) {
-		Validate.isTrue(width > 0 && width <= Short.MAX_VALUE, "The width must be positive and at most Short.MAX_VALUE");
-		this.width = width;
+		IodineUtil.validateWidth(width);
+		this.width = (short) width;
 		getGui().flagAndUpdate(this);
 		return this;
 	}
@@ -113,7 +114,7 @@ public class DropdownGuiElementImpl extends GuiElementImpl<DropdownGuiElement> i
 	
 	@Override
 	public void serializeImpl(@NotNull ResizingByteBuffer buffer) {
-		buffer.putShort((short) width);
+		buffer.putShort(width);
 		buffer.putBool(editable);
 		buffer.putInt(choices.size());
 		for (String choice : choices) {

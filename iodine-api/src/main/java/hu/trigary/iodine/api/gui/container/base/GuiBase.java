@@ -22,6 +22,16 @@ import java.util.function.Consumer;
  */
 public interface GuiBase<T extends GuiBase<T>> extends GuiParent<T>, AttachmentHolder {
 	/**
+	 * The inclusive lower bound for element coordinates.
+	 */
+	int COORDINATE_LOWER_BOUND = Short.MIN_VALUE;
+	
+	/**
+	 * The inclusive upper bound for element coordinates.
+	 */
+	int COORDINATE_UPPER_BOUND = Short.MAX_VALUE;
+	
+	/**
 	 * Gets the players who have this GUI opened.
 	 * The returned set is an unmodifiable view of the underlying data.
 	 *
@@ -56,7 +66,8 @@ public interface GuiBase<T extends GuiBase<T>> extends GuiParent<T>, AttachmentH
 	
 	/**
 	 * Makes the specified element a direct child of this GUI.
-	 * The element's render position must be at least 0 and at most {@link Short#MAX_VALUE}.
+	 * The element's coordinates must be at least {@link #COORDINATE_LOWER_BOUND}
+	 * and at most {@link #COORDINATE_UPPER_BOUND}.
 	 *
 	 * @param element the element to add as a child
 	 * @param x the X component of the element's render position
@@ -73,7 +84,8 @@ public interface GuiBase<T extends GuiBase<T>> extends GuiParent<T>, AttachmentH
 	 * The initializer function atomically initializes the new element.
 	 * The element will be accessible using the specified ID.
 	 * This ID must be unique.
-	 * The element's render position must be at least 0 and at most {@link Short#MAX_VALUE}.
+	 * The element's coordinates must be at least {@link #COORDINATE_LOWER_BOUND}
+	 * and at most {@link #COORDINATE_UPPER_BOUND}.
 	 * If ID-based access is not required, then optionally
 	 * {@link #addElement(GuiElements, Consumer, int, int)} can be used instead.
 	 *

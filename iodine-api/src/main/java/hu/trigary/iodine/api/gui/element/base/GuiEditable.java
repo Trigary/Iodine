@@ -4,7 +4,7 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Represents a {@link GuiElement} that can be optionally editable by viewers.
+ * Represents a {@link GuiElement} that can be optionally interacted with by viewers.
  * Elements that do not implement this interface are not editable by the viewers.
  * Elements are editable by default.
  *

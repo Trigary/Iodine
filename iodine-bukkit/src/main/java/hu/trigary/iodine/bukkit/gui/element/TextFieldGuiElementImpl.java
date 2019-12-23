@@ -3,6 +3,7 @@ package hu.trigary.iodine.bukkit.gui.element;
 import hu.trigary.iodine.api.gui.element.TextFieldGuiElement;
 import hu.trigary.iodine.backend.BufferUtils;
 import hu.trigary.iodine.backend.GuiElementType;
+import hu.trigary.iodine.bukkit.IodineUtil;
 import hu.trigary.iodine.bukkit.gui.container.base.GuiBaseImpl;
 import hu.trigary.iodine.bukkit.gui.element.base.GuiElementImpl;
 import hu.trigary.iodine.bukkit.network.ResizingByteBuffer;
@@ -19,8 +20,8 @@ import java.util.regex.Pattern;
  * The implementation of {@link TextFieldGuiElement}.
  */
 public class TextFieldGuiElementImpl extends GuiElementImpl<TextFieldGuiElement> implements TextFieldGuiElement {
-	private int width = 200;
-	private int height = 20;
+	private short width = 200;
+	private short height = 20;
 	private boolean editable = true;
 	private String text = "";
 	private String regex = "";
@@ -35,7 +36,7 @@ public class TextFieldGuiElementImpl extends GuiElementImpl<TextFieldGuiElement>
 	 * @param internalId the internal ID of this element
 	 * @param id the API-friendly ID of this element
 	 */
-	public TextFieldGuiElementImpl(@NotNull GuiBaseImpl<?> gui, short internalId, @NotNull Object id) {
+	public TextFieldGuiElementImpl(@NotNull GuiBaseImpl<?> gui, int internalId, @NotNull Object id) {
 		super(gui, GuiElementType.TEXT_FIELD, internalId, id);
 	}
 	
@@ -82,8 +83,8 @@ public class TextFieldGuiElementImpl extends GuiElementImpl<TextFieldGuiElement>
 	@NotNull
 	@Override
 	public TextFieldGuiElementImpl setWidth(int width) {
-		Validate.isTrue(width > 0 && width <= Short.MAX_VALUE, "The width must be positive and at most Short.MAX_VALUE");
-		this.width = width;
+		IodineUtil.validateWidth(width);
+		this.width = (short) width;
 		getGui().flagAndUpdate(this);
 		return this;
 	}
@@ -91,8 +92,8 @@ public class TextFieldGuiElementImpl extends GuiElementImpl<TextFieldGuiElement>
 	@NotNull
 	@Override
 	public TextFieldGuiElementImpl setHeight(int height) {
-		Validate.isTrue(height > 0 && height <= Short.MAX_VALUE, "The height must be positive and at most Short.MAX_VALUE");
-		this.height = height;
+		IodineUtil.validateHeight(height);
+		this.height = (short) height;
 		getGui().flagAndUpdate(this);
 		return this;
 	}
@@ -126,6 +127,7 @@ public class TextFieldGuiElementImpl extends GuiElementImpl<TextFieldGuiElement>
 	@NotNull
 	@Override
 	public TextFieldGuiElement setMaxLength(int maxLength) {
+		//TODO explain why this limit exists (I also kind of forgot - probably to make sure the players can't cause packet loss)
 		Validate.isTrue(maxLength > 0 && maxLength <= 250, "The max length must be positive and at most 250");
 		this.maxLength = maxLength;
 		getGui().flagAndUpdate(this);
@@ -143,8 +145,8 @@ public class TextFieldGuiElementImpl extends GuiElementImpl<TextFieldGuiElement>
 	
 	@Override
 	public void serializeImpl(@NotNull ResizingByteBuffer buffer) {
-		buffer.putShort((short) width);
-		buffer.putShort((short) height);
+		buffer.putShort(width);
+		buffer.putShort(height);
 		buffer.putBool(editable);
 		buffer.putString(text);
 		buffer.putString(regex);

@@ -1,11 +1,15 @@
 package hu.trigary.iodine.bukkit.gui.element.base;
 
 import hu.trigary.iodine.api.gui.element.base.GuiElement;
+import hu.trigary.iodine.api.gui.element.base.GuiHeightSettable;
+import hu.trigary.iodine.api.gui.element.base.GuiWidthSettable;
 import hu.trigary.iodine.backend.GuiElementType;
+import hu.trigary.iodine.bukkit.IodineUtil;
 import hu.trigary.iodine.bukkit.gui.IodineGuiImpl;
 import hu.trigary.iodine.bukkit.gui.container.base.GuiBaseImpl;
 import hu.trigary.iodine.bukkit.gui.container.base.GuiParentPlus;
 import hu.trigary.iodine.bukkit.network.ResizingByteBuffer;
+import org.apache.commons.lang.Validate;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -19,13 +23,14 @@ import java.nio.ByteBuffer;
  * @param <T> the class implementing this abstract class
  */
 public abstract class GuiElementImpl<T extends GuiElement<T>> implements GuiElement<T> {
+	private final byte[] padding = new byte[4];
 	private final GuiBaseImpl<?> gui;
 	private final GuiElementType type;
-	private final short internalId;
+	private final int internalId;
 	private final Object id;
 	private Object attachment;
 	private GuiParentPlus<?> parent;
-	private short drawPriority;
+	private byte drawPriority;
 	
 	/**
 	 * Creates a new instance.
@@ -35,7 +40,7 @@ public abstract class GuiElementImpl<T extends GuiElement<T>> implements GuiElem
 	 * @param internalId the internal ID of this element
 	 * @param id the API-friendly ID of this element
 	 */
-	protected GuiElementImpl(@NotNull GuiBaseImpl<?> gui, @NotNull GuiElementType type, short internalId, @NotNull Object id) {
+	protected GuiElementImpl(@NotNull GuiBaseImpl<?> gui, @NotNull GuiElementType type, int internalId, @NotNull Object id) {
 		this.gui = gui;
 		this.internalId = internalId;
 		this.id = id;
@@ -57,7 +62,7 @@ public abstract class GuiElementImpl<T extends GuiElement<T>> implements GuiElem
 	 * @return the internal ID
 	 */
 	@Contract(pure = true)
-	public final short getInternalId() {
+	public final int getInternalId() {
 		return internalId;
 	}
 	
@@ -104,15 +109,40 @@ public abstract class GuiElementImpl<T extends GuiElement<T>> implements GuiElem
 	
 	
 	
+	@NotNull
+	@Contract(pure = true)
+	@Override
+	public int[] getPadding() {
+		return new int[]{padding[0], padding[1], padding[2], padding[3]};
+	}
+	
+	@NotNull
+	@Override
+	public GuiElementImpl<T> setPadding(@NotNull int[] padding) {
+		Validate.isTrue(padding.length == 4, "The array containing the padding values must have a length of 4");
+		for (int i = 0; i < 4; i++) {
+			int value = padding[i];
+			if (value != -1) {
+				IodineUtil.validateRange(0, PADDING_UPPER_BOUND, value, "padding");
+				this.padding[i] = (byte) value;
+			}
+		}
+		return this;
+	}
+	
+	
+	
 	@Override
 	@Contract(pure = true)
-	public short getDrawPriority() {
+	public int getDrawPriority() {
 		return drawPriority;
 	}
 	
 	@Override
-	public void setDrawPriority(short priority) {
-		drawPriority = priority; //TODO client-side: (priority << 16) | internalId
+	public void setDrawPriority(int priority) {
+		IodineUtil.validateRange(PRIORITY_LOWER_BOUND, PRIORITY_UPPER_BOUND, priority, "draw priority");
+		drawPriority = (byte) priority; //TODO client-side: long p = (priority << 32) | internalId
+		getGui().flagAndUpdate(this);
 	}
 	
 	
@@ -125,8 +155,9 @@ public abstract class GuiElementImpl<T extends GuiElement<T>> implements GuiElem
 	 */
 	public final void serialize(@NotNull ResizingByteBuffer buffer) {
 		buffer.putByte(type.getId());
-		buffer.putShort(internalId);
-		buffer.putShort(drawPriority);
+		buffer.putInt(internalId);
+		buffer.putBytes(padding);
+		buffer.putByte(drawPriority);
 		serializeImpl(buffer);
 	}
 	

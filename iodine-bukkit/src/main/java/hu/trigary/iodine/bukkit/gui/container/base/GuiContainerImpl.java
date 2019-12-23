@@ -22,14 +22,14 @@ public abstract class GuiContainerImpl<T extends GuiContainer<T>> extends GuiEle
 	 * @param internalId the internal ID of this element
 	 * @param id the API-friendly ID of this element
 	 */
-	protected GuiContainerImpl(@NotNull GuiBaseImpl<?> gui, @NotNull GuiElementType type, short internalId, @NotNull Object id) {
+	protected GuiContainerImpl(@NotNull GuiBaseImpl<?> gui, @NotNull GuiElementType type, int internalId, @NotNull Object id) {
 		super(gui, type, internalId, id);
 	}
 	
 	
 	
 	@Override
-	public void setDrawPriority(short priority) {
+	public void setDrawPriority(byte priority) {
 		super.setDrawPriority(priority);
 		for (GuiElement<?> child : getChildren()) {
 			if (child.getDrawPriority() < priority) {

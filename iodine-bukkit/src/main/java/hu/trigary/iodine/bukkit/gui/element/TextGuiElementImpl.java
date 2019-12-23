@@ -2,10 +2,10 @@ package hu.trigary.iodine.bukkit.gui.element;
 
 import hu.trigary.iodine.api.gui.element.TextGuiElement;
 import hu.trigary.iodine.backend.GuiElementType;
+import hu.trigary.iodine.bukkit.IodineUtil;
 import hu.trigary.iodine.bukkit.gui.container.base.GuiBaseImpl;
 import hu.trigary.iodine.bukkit.gui.element.base.GuiElementImpl;
 import hu.trigary.iodine.bukkit.network.ResizingByteBuffer;
-import org.apache.commons.lang.Validate;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -16,8 +16,8 @@ import java.nio.ByteBuffer;
  * The implementation of {@link TextGuiElement}.
  */
 public class TextGuiElementImpl extends GuiElementImpl<TextGuiElement> implements TextGuiElement {
-	private int width = 200;
-	private int height = 20;
+	private short width = 200;
+	private short height = 20;
 	private String text = "";
 	
 	/**
@@ -27,7 +27,7 @@ public class TextGuiElementImpl extends GuiElementImpl<TextGuiElement> implement
 	 * @param internalId the internal ID of this element
 	 * @param id the API-friendly ID of this element
 	 */
-	public TextGuiElementImpl(@NotNull GuiBaseImpl<?> gui, short internalId, @NotNull Object id) {
+	public TextGuiElementImpl(@NotNull GuiBaseImpl<?> gui, int internalId, @NotNull Object id) {
 		super(gui, GuiElementType.TEXT, internalId, id);
 	}
 	
@@ -55,8 +55,8 @@ public class TextGuiElementImpl extends GuiElementImpl<TextGuiElement> implement
 	@NotNull
 	@Override
 	public TextGuiElementImpl setWidth(int width) {
-		Validate.isTrue(width > 0 && width <= Short.MAX_VALUE, "The width must be positive and at most Short.MAX_VALUE");
-		this.width = width;
+		IodineUtil.validateWidth(width);
+		this.width = (short) width;
 		getGui().flagAndUpdate(this);
 		return this;
 	}
@@ -64,8 +64,8 @@ public class TextGuiElementImpl extends GuiElementImpl<TextGuiElement> implement
 	@NotNull
 	@Override
 	public TextGuiElementImpl setHeight(int height) {
-		Validate.isTrue(height > 0 && height <= Short.MAX_VALUE, "The height must be positive and at most Short.MAX_VALUE");
-		this.height = height;
+		IodineUtil.validateHeight(height);
+		this.height = (short) height;
 		getGui().flagAndUpdate(this);
 		return this;
 	}
@@ -82,8 +82,8 @@ public class TextGuiElementImpl extends GuiElementImpl<TextGuiElement> implement
 	
 	@Override
 	public void serializeImpl(@NotNull ResizingByteBuffer buffer) {
-		buffer.putShort((short) width);
-		buffer.putShort((short) height);
+		buffer.putShort(width);
+		buffer.putShort(height);
 		buffer.putString(text);
 	}
 	

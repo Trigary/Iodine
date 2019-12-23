@@ -1,7 +1,7 @@
 package hu.trigary.iodine.api.gui.element.base;
 
 import hu.trigary.iodine.api.gui.AttachmentHolder;
-import hu.trigary.iodine.api.gui.IodineGui;
+import hu.trigary.iodine.api.gui.DrawPrioritizeable;
 import hu.trigary.iodine.api.gui.container.base.GuiBase;
 import hu.trigary.iodine.api.gui.container.base.GuiParent;
 import org.jetbrains.annotations.Contract;
@@ -13,7 +13,12 @@ import org.jetbrains.annotations.NotNull;
  *
  * @param <T> the class implementing this interface
  */
-public interface GuiElement<T extends GuiElement<T>> extends AttachmentHolder {
+public interface GuiElement<T extends GuiElement<T>> extends AttachmentHolder, DrawPrioritizeable {
+	/**
+	 * The inclusive upper bound for padding values.
+	 */
+	int PADDING_UPPER_BOUND = Byte.MAX_VALUE;
+	
 	/**
 	 * Gets the GUI that contains this element.
 	 *
@@ -42,28 +47,24 @@ public interface GuiElement<T extends GuiElement<T>> extends AttachmentHolder {
 	GuiParent<?> getParent();
 	
 	/**
-	 * Gets this element's draw priority.
+	 * Gets the current padding values.
+	 * The elements in the array are the top, bottom, left, right padding values in this order.
 	 *
-	 * @return the current draw priority
-	 * @see #setDrawPriority(short)
+	 * @return the current padding values
 	 */
+	@NotNull
 	@Contract(pure = true)
-	short getDrawPriority();
+	int[] getPadding();
 	
 	/**
-	 * Sets the draw priority of this element.
-	 * <br><br>
-	 * This number determines whether this element should
-	 * be rendered behind or in front of other elements.
-	 * The element with the highest value is drawn on top of all other elements.
-	 * <br><br>
-	 * By default elements are drawn in the order they are added to the {@link IodineGui},
-	 * so the default draw priority is an internal incrementing counter.
-	 * <br><br>
-	 * Changing the draw priority of a {@link hu.trigary.iodine.api.gui.container.base.GuiContainer}
-	 * causes all of its children to update their priority:
-	 * the child's draw priority is set to the container's draw priority
-	 * if its previous value is less than this new value.
+	 * Sets the padding values.
+	 * The elements in the array must be the top, bottom, left, right padding values in this order.
+	 * The values must be at least 0 and at most {@link #PADDING_UPPER_BOUND}.
+	 * {@code -1} is also allowed as a way to indicate to leave that specific padding value unchanged.
+	 *
+	 * @param padding the new padding value
+	 * @return the current instance (for chaining)
 	 */
-	void setDrawPriority(short priority);
+	@NotNull
+	GuiElement<T> setPadding(@NotNull int[] padding);
 }

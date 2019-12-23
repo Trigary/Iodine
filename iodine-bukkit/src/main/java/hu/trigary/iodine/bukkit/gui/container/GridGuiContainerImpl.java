@@ -32,7 +32,7 @@ public class GridGuiContainerImpl extends GuiContainerImpl<GridGuiContainer> imp
 	 * @param internalId the internal ID of this element
 	 * @param id the API-friendly ID of this element
 	 */
-	public GridGuiContainerImpl(@NotNull GuiBaseImpl<?> gui, short internalId, @NotNull Object id) {
+	public GridGuiContainerImpl(@NotNull GuiBaseImpl<?> gui, int internalId, @NotNull Object id) {
 		super(gui, GuiElementType.CONTAINER_GRID, internalId, id);
 		setGridSize(0, 0);
 		throw new NotImplementedException();
@@ -132,7 +132,7 @@ public class GridGuiContainerImpl extends GuiContainerImpl<GridGuiContainer> imp
 		buffer.putInt(columnCount);
 		buffer.putInt(rowCount);
 		for (GuiElementImpl<?> element : children) {
-			buffer.putShort(element == null ? getInternalId() : element.getInternalId());
+			buffer.putInt(element == null ? getInternalId() : element.getInternalId());
 		}
 	}
 	

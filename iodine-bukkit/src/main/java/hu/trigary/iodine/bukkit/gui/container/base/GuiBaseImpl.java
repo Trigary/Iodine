@@ -27,14 +27,14 @@ import java.util.function.Consumer;
 public abstract class GuiBaseImpl<T extends GuiBase<T>> implements GuiBase<T>, GuiParentPlus<T> {
 	private static final ResizingByteBuffer BUFFER = new ResizingByteBuffer(1000);
 	private final Set<Player> viewers = new HashSet<>();
-	private final Map<Short, GuiElementImpl<?>> elements = new HashMap<>();
+	private final Map<Integer, GuiElementImpl<?>> elements = new HashMap<>();
 	private final Map<Object, GuiElementImpl<?>> apiIdElements = new HashMap<>();
 	private final Set<GuiElementImpl<?>> flaggedForUpdate = new HashSet<>();
 	private final Set<GuiElementImpl<?>> flaggedForRemove = new HashSet<>();
 	private final IodinePlugin plugin;
 	private final int id;
 	private final RootGuiContainer root;
-	private short nextElementId = 1;
+	private int nextElementId = 1;
 	private int atomicUpdateLock;
 	
 	/**
@@ -48,7 +48,7 @@ public abstract class GuiBaseImpl<T extends GuiBase<T>> implements GuiBase<T>, G
 		this.plugin = plugin;
 		this.id = id;
 		root = new RootGuiContainer(this);
-		elements.put((short) 0, root);
+		elements.put(0, root);
 	}
 	
 	
@@ -91,7 +91,7 @@ public abstract class GuiBaseImpl<T extends GuiBase<T>> implements GuiBase<T>, G
 	 */
 	@Nullable
 	@Contract(pure = true)
-	public final GuiElementImpl<?> getElement(short id) {
+	public final GuiElementImpl<?> getElement(int id) {
 		return elements.get(id);
 	}
 	
@@ -172,7 +172,10 @@ public abstract class GuiBaseImpl<T extends GuiBase<T>> implements GuiBase<T>, G
 	
 	
 	
-	private void executeUpdate() {
+	/**
+	 * Updates this GUI for all of its viewers except in currently in an atomic update block.
+	 */
+	protected final void executeUpdate() {
 		if (atomicUpdateLock != 0) {
 			return;
 		}
@@ -257,10 +260,20 @@ public abstract class GuiBaseImpl<T extends GuiBase<T>> implements GuiBase<T>, G
 		return thisT();
 	}
 	
-	//TODO docs
+	/**
+	 * Called before this GUI has been opened for the specified player.
+	 * Should be used to ensure that this GUI can opened without causing any issues.
+	 *
+	 * @param iodinePlayer the target player
+	 */
 	protected abstract void onPreOpened(@NotNull IodinePlayerImpl iodinePlayer);
 	
-	//TODO docs
+	/**
+	 * Called after this GUI has been opened for the specified player.
+	 * Should be used to ensure that this GUI is listed in the {@link IodinePlayerImpl} instance.
+	 *
+	 * @param iodinePlayer the target player
+	 */
 	protected abstract void onOpened(@NotNull IodinePlayerImpl iodinePlayer);
 	
 	@NotNull
@@ -279,6 +292,7 @@ public abstract class GuiBaseImpl<T extends GuiBase<T>> implements GuiBase<T>, G
 	 * is not sent to the client instructing it to close the GUI.
 	 *
 	 * @param iodinePlayer the target player
+	 * @param byPlayer whether the player or a server-side method closed the GUI
 	 */
 	public final void closeForNoPacket(@NotNull IodinePlayerImpl iodinePlayer, boolean byPlayer) {
 		Player player = iodinePlayer.getPlayer();
@@ -290,7 +304,13 @@ public abstract class GuiBaseImpl<T extends GuiBase<T>> implements GuiBase<T>, G
 		}
 	}
 	
-	//TODO docs
+	/**
+	 * Called after this GUI has been closed for the specified player.
+	 * Should be used to ensure that this GUI is no longer listed in the {@link IodinePlayerImpl} instance.
+	 *
+	 * @param iodinePlayer the target player
+	 * @param byPlayer whether the player or a server-side method closed the GUI
+	 */
 	protected abstract void onClosed(@NotNull IodinePlayerImpl iodinePlayer, boolean byPlayer);
 	
 	
@@ -301,7 +321,6 @@ public abstract class GuiBaseImpl<T extends GuiBase<T>> implements GuiBase<T>, G
 		return serialize(Collections.emptyList(), elements.values());
 	}
 	
-	//TODO docs
 	protected abstract void serializeOpenStart(@NotNull ResizingByteBuffer buffer);
 	
 	@NotNull
@@ -310,7 +329,6 @@ public abstract class GuiBaseImpl<T extends GuiBase<T>> implements GuiBase<T>, G
 		return serialize(flaggedForRemove, flaggedForUpdate);
 	}
 	
-	//TODO docs
 	protected abstract void serializeUpdateStart(@NotNull ResizingByteBuffer buffer);
 	
 	@NotNull
@@ -318,7 +336,7 @@ public abstract class GuiBaseImpl<T extends GuiBase<T>> implements GuiBase<T>, G
 			@NotNull Collection<GuiElementImpl<?>> add) {
 		BUFFER.putInt(remove.size());
 		for (GuiElementImpl<?> element : remove) {
-			BUFFER.putShort(element.getInternalId());
+			BUFFER.putInt(element.getInternalId());
 		}
 		for (GuiElementImpl<?> element : add) {
 			element.serialize(BUFFER);

@@ -31,7 +31,7 @@ public class GuiChangePacketHandler extends PacketHandler {
 	public void handle(@NotNull Player player, @NotNull ByteBuffer message) {
 		IodineGuiImpl gui = plugin.getPlayer(player).getOpenGui();
 		if (gui != null && gui.getId() == message.getInt()) {
-			GuiElementImpl<?> element = gui.getElement(message.getShort());
+			GuiElementImpl<?> element = gui.getElement(message.getInt());
 			if (element != null) {
 				element.handleChangePacket(player, message);
 			}
