@@ -7,11 +7,13 @@ import hu.trigary.iodine.bukkit.network.handler.GuiClosePacketHandler;
 import hu.trigary.iodine.bukkit.network.handler.LoginPacketHandler;
 import hu.trigary.iodine.backend.PacketType;
 import hu.trigary.iodine.bukkit.network.handler.PacketHandler;
+import hu.trigary.iodine.bukkit.player.IodinePlayerImpl;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.messaging.PluginMessageListener;
 import org.jetbrains.annotations.NotNull;
 
 import java.nio.ByteBuffer;
+import java.util.logging.Level;
 
 /**
  * A class which listens to incoming messages and handles them,
@@ -38,44 +40,45 @@ public class PacketListener implements PluginMessageListener {
 	
 	@Override
 	public void onPluginMessageReceived(String channel, Player player, byte[] message) {
-		IodinePlayer.State state = plugin.getPlayer(player).getState();
+		IodinePlayerImpl iodinePlayer = plugin.getPlayer(player);
+		IodinePlayer.State state = iodinePlayer.getState();
 		if (state == IodinePlayer.State.INVALID) {
-			plugin.logDebug("Ignoring message from invalid player {0}", player.getName());
+			plugin.log(Level.OFF, "Ignoring message from invalid player {0}", player.getName());
 			return;
 		}
 		
 		if (message.length == 0) {
-			plugin.logDebug("Received empty message from {0}, ignoring player", player.getName());
-			plugin.getPlayer(player).setState(IodinePlayer.State.INVALID);
+			plugin.log(Level.INFO, "Received empty message from {0}, ignoring player", player.getName());
+			iodinePlayer.setState(IodinePlayer.State.INVALID);
 			return;
 		}
 		
 		PacketType type = PacketType.fromId(message[0]);
 		if (type == null) {
-			plugin.logDebug("Received message with invalid type-id from {0}, ignoring player", player.getName());
-			plugin.getPlayer(player).setState(IodinePlayer.State.INVALID);
+			plugin.log(Level.INFO, "Received message with invalid type-id from {0}, ignoring player", player.getName());
+			iodinePlayer.setState(IodinePlayer.State.INVALID);
 			return;
 		}
 		
 		PacketHandler handler = handlers[type.getUnsignedId()];
 		if (handler == null) {
-			plugin.logDebug("Received message with invalid type ({0}) from {1}, ignoring player", type, player.getName());
-			plugin.getPlayer(player).setState(IodinePlayer.State.INVALID);
+			plugin.log(Level.INFO, "Received message with invalid type {0} from {1}, ignoring player", type, player.getName());
+			iodinePlayer.setState(IodinePlayer.State.INVALID);
 			return;
 		}
 		
 		if (handler.getTargetState() != state) {
-			plugin.logDebug("Received message of type {0} from {1} with (invalid) state: {2}",
+			plugin.log(Level.INFO, "Received message of type {0} from {1} in (invalid) state: {2}",
 					type, player.getName(), state);
 			return;
 		}
 		
 		try {
-			plugin.logDebug("Received message with from {0} of type {1}, handling it", player.getName(), type);
-			handler.handle(player, ByteBuffer.wrap(message, 1, message.length - 1));
-		} catch (RuntimeException e) {
-			plugin.logDebug("Error while handling message, ignoring player", e);
-			plugin.getPlayer(player).setState(IodinePlayer.State.INVALID);
+			plugin.log(Level.OFF, "Received message with from {0} of type {1}, handling it", player.getName(), type);
+			handler.handle(iodinePlayer, ByteBuffer.wrap(message, 1, message.length - 1));
+		} catch (Throwable e) {
+			plugin.log(Level.INFO, "Error while handling message, ignoring player", e);
+			iodinePlayer.setState(IodinePlayer.State.INVALID);
 		}
 	}
 }

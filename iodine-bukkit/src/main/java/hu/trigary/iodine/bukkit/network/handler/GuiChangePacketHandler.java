@@ -5,7 +5,7 @@ import hu.trigary.iodine.bukkit.gui.IodineGuiImpl;
 import hu.trigary.iodine.bukkit.gui.element.base.GuiElementImpl;
 import hu.trigary.iodine.bukkit.network.PacketListener;
 import hu.trigary.iodine.backend.PacketType;
-import org.bukkit.entity.Player;
+import hu.trigary.iodine.bukkit.player.IodinePlayerImpl;
 import org.jetbrains.annotations.NotNull;
 
 import java.nio.ByteBuffer;
@@ -28,12 +28,12 @@ public class GuiChangePacketHandler extends PacketHandler {
 	
 	
 	@Override
-	public void handle(@NotNull Player player, @NotNull ByteBuffer message) {
-		IodineGuiImpl gui = plugin.getPlayer(player).getOpenGui();
+	public void handle(@NotNull IodinePlayerImpl player, @NotNull ByteBuffer message) {
+		IodineGuiImpl gui = player.getOpenGui();
 		if (gui != null && gui.getId() == message.getInt()) {
 			GuiElementImpl<?> element = gui.getElement(message.getInt());
 			if (element != null) {
-				element.handleChangePacket(player, message);
+				element.handleChangePacket(player.getPlayer(), message);
 			}
 		}
 	}

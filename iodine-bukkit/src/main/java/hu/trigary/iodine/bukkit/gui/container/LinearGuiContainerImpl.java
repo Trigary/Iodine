@@ -127,7 +127,5 @@ public class LinearGuiContainerImpl extends GuiContainerImpl<LinearGuiContainer>
 	}
 	
 	@Override
-	public void handleChangePacket(@NotNull Player player, @NotNull ByteBuffer message) {
-		throw new NotImplementedException();
-	}
+	public void handleChangePacket(@NotNull Player player, @NotNull ByteBuffer message) {}
 }

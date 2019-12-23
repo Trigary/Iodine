@@ -61,22 +61,8 @@ public class GridGuiContainerImpl extends GuiContainerImpl<GridGuiContainer> imp
 	@NotNull
 	@Override
 	public GridGuiContainerImpl setGridSize(int columns, int rows) {
-		if (columnCount > columns) {
-			for (int column = columns; column < columnCount; column++) {
-				for (int row = 0; row < rowCount; row++) {
-					Validate.isTrue(children.get(column * rowCount + row) == null,
-							"Each child must fit into the new grid");
-				}
-			}
-		}
-		if (rowCount > rows) {
-			for (int row = rows; row < rowCount; row++) {
-				for (int column = 0; column < columnCount; column++) {
-					Validate.isTrue(children.get(column * rowCount + row) == null,
-							"Each child must fit into the new grid");
-				}
-			}
-		}
+		validateGrid(columnCount, columns);
+		validateGrid(rowCount, rows);
 		
 		GuiElementImpl<?>[] old = children.toArray(new GuiElementImpl<?>[0]);
 		children.clear();
@@ -137,7 +123,18 @@ public class GridGuiContainerImpl extends GuiContainerImpl<GridGuiContainer> imp
 	}
 	
 	@Override
-	public void handleChangePacket(@NotNull Player player, @NotNull ByteBuffer message) {
-		throw new NotImplementedException();
+	public void handleChangePacket(@NotNull Player player, @NotNull ByteBuffer message) {}
+	
+
+	
+	private void validateGrid(int currentCount, int newCount) {
+		if (currentCount > newCount) {
+			for (int row = newCount; row < currentCount; row++) {
+				for (int column = 0; column < columnCount; column++) {
+					Validate.isTrue(children.get(column * currentCount + row) == null,
+							"Each child must fit into the new grid");
+				}
+			}
+		}
 	}
 }

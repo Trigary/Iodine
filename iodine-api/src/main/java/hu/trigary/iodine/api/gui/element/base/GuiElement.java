@@ -17,7 +17,7 @@ public interface GuiElement<T extends GuiElement<T>> extends AttachmentHolder, D
 	/**
 	 * The inclusive upper bound for padding values.
 	 */
-	int PADDING_UPPER_BOUND = Byte.MAX_VALUE;
+	int PADDING_UPPER_BOUND = Short.MAX_VALUE;
 	
 	/**
 	 * Gets the GUI that contains this element.

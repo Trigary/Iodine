@@ -3,6 +3,7 @@ package hu.trigary.iodine.bukkit.gui.container;
 import hu.trigary.iodine.api.gui.container.base.GuiBase;
 import hu.trigary.iodine.api.gui.element.base.GuiElement;
 import hu.trigary.iodine.backend.GuiElementType;
+import hu.trigary.iodine.bukkit.IodineUtil;
 import hu.trigary.iodine.bukkit.gui.IodineGuiImpl;
 import hu.trigary.iodine.bukkit.gui.container.base.GuiBaseImpl;
 import hu.trigary.iodine.bukkit.gui.container.base.GuiContainerImpl;
@@ -41,13 +42,12 @@ public class RootGuiContainer extends GuiContainerImpl<RootGuiContainer> {
 	
 	
 	
-	
 	@NotNull
 	public <E extends GuiElement<E>> E makeChild(@NotNull E element, int x, int y) {
-		validateRange(GuiBase.COORDINATE_LOWER_BOUND, GuiBase.COORDINATE_UPPER_BOUND, x, "position");
-		validateRange(GuiBase.COORDINATE_LOWER_BOUND, GuiBase.COORDINATE_UPPER_BOUND, y, "position");
+		IodineUtil.validateRange(GuiBase.COORDINATE_LOWER_BOUND, GuiBase.COORDINATE_UPPER_BOUND, x, "position");
+		IodineUtil.validateRange(GuiBase.COORDINATE_LOWER_BOUND, GuiBase.COORDINATE_UPPER_BOUND, y, "position");
 		GuiElementImpl<?> impl = (GuiElementImpl<?>) element;
-		Validate.isTrue(children.put(impl, new Position(x, y)) == null,
+		Validate.isTrue(children.put(impl, new Position((short) x, (short) y)) == null,
 				"The specified element is already the child of this GUI");
 		impl.setParent(this);
 		getGui().flagAndUpdate(this);
@@ -68,8 +68,8 @@ public class RootGuiContainer extends GuiContainerImpl<RootGuiContainer> {
 		buffer.putInt(children.size());
 		children.forEach((element, position) -> {
 			buffer.putInt(element.getInternalId());
-			buffer.putShort((short) position.x);
-			buffer.putShort((short) position.y);
+			buffer.putShort(position.x);
+			buffer.putShort(position.y);
 		});
 	}
 	
@@ -81,10 +81,10 @@ public class RootGuiContainer extends GuiContainerImpl<RootGuiContainer> {
 	
 	
 	private static class Position {
-		final int x;
-		final int y;
+		final short x;
+		final short y;
 		
-		Position(int x, int y) {
+		Position(short x, short y) {
 			this.x = x;
 			this.y = y;
 		}

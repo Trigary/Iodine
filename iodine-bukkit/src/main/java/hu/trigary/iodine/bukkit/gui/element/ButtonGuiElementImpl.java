@@ -17,7 +17,7 @@ import java.nio.ByteBuffer;
  * The implementation of {@link ButtonGuiElement}.
  */
 public class ButtonGuiElementImpl extends GuiElementImpl<ButtonGuiElement> implements ButtonGuiElement {
-	private int width = 100;
+	private short width = 100;
 	private boolean editable = true;
 	private String text = "";
 	private ClickedAction<ButtonGuiElement> clickedAction;
@@ -59,7 +59,7 @@ public class ButtonGuiElementImpl extends GuiElementImpl<ButtonGuiElement> imple
 	@Override
 	public ButtonGuiElementImpl setWidth(int width) {
 		IodineUtil.validateWidth(width);
-		this.width = width;
+		this.width = (short) width;
 		getGui().flagAndUpdate(this);
 		return this;
 	}
@@ -91,7 +91,7 @@ public class ButtonGuiElementImpl extends GuiElementImpl<ButtonGuiElement> imple
 	
 	@Override
 	public void serializeImpl(@NotNull ResizingByteBuffer buffer) {
-		buffer.putShort((short) width);
+		buffer.putShort(width);
 		buffer.putBool(editable);
 		buffer.putString(text);
 	}

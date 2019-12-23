@@ -144,9 +144,8 @@ public class ProgressBarGuiElementImpl extends GuiElementImpl<ProgressBarGuiElem
 	
 	@Override
 	public void serializeImpl(@NotNull ResizingByteBuffer buffer) {
-		buffer.putShort(width);
-		buffer.putShort(height);
 		buffer.putBool(verticalOrientation);
+		buffer.putShort(verticalOrientation ? height : width);
 		buffer.putString(text);
 		buffer.putInt(maxProgress);
 		buffer.putInt(progress);

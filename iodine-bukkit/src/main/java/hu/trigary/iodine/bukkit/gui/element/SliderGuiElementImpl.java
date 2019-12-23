@@ -169,10 +169,9 @@ public class SliderGuiElementImpl extends GuiElementImpl<SliderGuiElement> imple
 	
 	@Override
 	public void serializeImpl(@NotNull ResizingByteBuffer buffer) {
-		buffer.putShort(width);
-		buffer.putShort(height);
-		buffer.putBool(editable);
 		buffer.putBool(verticalOrientation);
+		buffer.putShort(verticalOrientation ? height : width);
+		buffer.putBool(editable);
 		buffer.putString(text);
 		buffer.putInt(maxProgress);
 		buffer.putInt(progress);

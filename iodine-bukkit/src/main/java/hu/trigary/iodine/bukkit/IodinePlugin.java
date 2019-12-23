@@ -90,26 +90,24 @@ public class IodinePlugin extends JavaPlugin implements Listener {
 	
 	
 	/**
-	 * Logs the specified message if debug logging is enabled.
+	 * Logs the specified message.
 	 *
 	 * @param message the message to log
 	 * @param params the message's parameters
 	 */
-	public void logDebug(String message, Object... params) {
-		if (DEBUG_LOG) {
-			getLogger().log(Level.INFO, message, params);
-		}
+	public void log(@NotNull Level level, @NotNull String message, @NotNull Object... params) {
+		level = level == Level.OFF && DEBUG_LOG ? Level.INFO : level;
+		getLogger().log(level, message, params);
 	}
 	
 	/**
-	 * Logs the specified message if debug logging is enabled.
+	 * Logs the specified message.
 	 *
 	 * @param message the message to log
 	 * @param cause the {@link Throwable} associated with the log message
 	 */
-	public void logDebug(String message, Throwable cause) {
-		if (DEBUG_LOG) {
-			getLogger().log(Level.INFO, message, cause);
-		}
+	public void log(@NotNull Level level, @NotNull String message, @NotNull Throwable cause) {
+		level = level == Level.OFF && DEBUG_LOG ? Level.INFO : level;
+		getLogger().log(level, message, cause);
 	}
 }

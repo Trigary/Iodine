@@ -1,8 +1,6 @@
 package hu.trigary.iodine.bukkit.gui.element.base;
 
 import hu.trigary.iodine.api.gui.element.base.GuiElement;
-import hu.trigary.iodine.api.gui.element.base.GuiHeightSettable;
-import hu.trigary.iodine.api.gui.element.base.GuiWidthSettable;
 import hu.trigary.iodine.backend.GuiElementType;
 import hu.trigary.iodine.bukkit.IodineUtil;
 import hu.trigary.iodine.bukkit.gui.IodineGuiImpl;
@@ -23,7 +21,7 @@ import java.nio.ByteBuffer;
  * @param <T> the class implementing this abstract class
  */
 public abstract class GuiElementImpl<T extends GuiElement<T>> implements GuiElement<T> {
-	private final byte[] padding = new byte[4];
+	private final short[] padding = new short[4];
 	private final GuiBaseImpl<?> gui;
 	private final GuiElementType type;
 	private final int internalId;
@@ -124,7 +122,7 @@ public abstract class GuiElementImpl<T extends GuiElement<T>> implements GuiElem
 			int value = padding[i];
 			if (value != -1) {
 				IodineUtil.validateRange(0, PADDING_UPPER_BOUND, value, "padding");
-				this.padding[i] = (byte) value;
+				this.padding[i] = (short) value;
 			}
 		}
 		return this;
@@ -156,7 +154,10 @@ public abstract class GuiElementImpl<T extends GuiElement<T>> implements GuiElem
 	public final void serialize(@NotNull ResizingByteBuffer buffer) {
 		buffer.putByte(type.getId());
 		buffer.putInt(internalId);
-		buffer.putBytes(padding);
+		buffer.putShort(padding[0]);
+		buffer.putShort(padding[1]);
+		buffer.putShort(padding[2]);
+		buffer.putShort(padding[3]);
 		buffer.putByte(drawPriority);
 		serializeImpl(buffer);
 	}

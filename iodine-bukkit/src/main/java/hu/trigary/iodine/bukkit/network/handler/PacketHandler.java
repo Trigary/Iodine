@@ -4,7 +4,7 @@ import hu.trigary.iodine.api.player.IodinePlayer;
 import hu.trigary.iodine.bukkit.IodinePlugin;
 import hu.trigary.iodine.bukkit.network.PacketListener;
 import hu.trigary.iodine.backend.PacketType;
-import org.bukkit.entity.Player;
+import hu.trigary.iodine.bukkit.player.IodinePlayerImpl;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -48,5 +48,5 @@ public abstract class PacketHandler {
 	 * @param player the sender of the packet
 	 * @param message the payload of the packet
 	 */
-	public abstract void handle(@NotNull Player player, @NotNull ByteBuffer message);
+	public abstract void handle(@NotNull IodinePlayerImpl player, @NotNull ByteBuffer message);
 }

@@ -1,10 +1,10 @@
 package hu.trigary.iodine.bukkit.network.handler;
 
-import hu.trigary.iodine.bukkit.IodinePlugin;
-import hu.trigary.iodine.bukkit.gui.IodineGuiImpl;
-import hu.trigary.iodine.bukkit.network.PacketListener;
 import hu.trigary.iodine.backend.PacketType;
-import org.bukkit.entity.Player;
+import hu.trigary.iodine.bukkit.IodinePlugin;
+import hu.trigary.iodine.bukkit.gui.container.base.GuiBaseImpl;
+import hu.trigary.iodine.bukkit.network.PacketListener;
+import hu.trigary.iodine.bukkit.player.IodinePlayerImpl;
 import org.jetbrains.annotations.NotNull;
 
 import java.nio.ByteBuffer;
@@ -27,10 +27,10 @@ public class GuiClosePacketHandler extends PacketHandler {
 	
 	
 	@Override
-	public void handle(@NotNull Player player, @NotNull ByteBuffer message) {
-		IodineGuiImpl gui = plugin.getGui().getGui(message.getInt());
+	public void handle(@NotNull IodinePlayerImpl player, @NotNull ByteBuffer message) {
+		GuiBaseImpl<?> gui = plugin.getGui().getGui(message.getInt());
 		if (gui != null) {
-			gui.closeForNoPacket(plugin.getPlayer(player), true);
+			gui.closeForNoPacket(player, true);
 		}
 	}
 }

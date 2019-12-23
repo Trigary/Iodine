@@ -4,15 +4,16 @@ import hu.trigary.iodine.api.player.IodinePlayer;
 import hu.trigary.iodine.bukkit.IodinePlugin;
 import hu.trigary.iodine.backend.PacketType;
 import hu.trigary.iodine.bukkit.network.PacketListener;
+import hu.trigary.iodine.bukkit.player.IodinePlayerImpl;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.Validate;
-import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
+import java.util.logging.Level;
 import java.util.regex.Pattern;
 
 /**
@@ -52,8 +53,8 @@ public class LoginPacketHandler extends PacketHandler {
 	}
 	
 	@Override
-	public void handle(@NotNull Player player, @NotNull ByteBuffer message) {
-		byte[] array = message.array();
+	public void handle(@NotNull IodinePlayerImpl player, @NotNull ByteBuffer message) {
+		byte[] array = message.array(); //backing array's first element is the PacketType
 		String clientVersion = new String(array, 1, array.length - 1, StandardCharsets.UTF_8);
 		
 		//if (serverVersion.equals(clientVersion)) {
@@ -91,22 +92,22 @@ public class LoginPacketHandler extends PacketHandler {
 	
 	
 	
-	private void versionMatches(Player player) {
-		plugin.logDebug("Logged in successfully: {0}", player.getName());
-		plugin.getPlayer(player).setState(IodinePlayer.State.MODDED);
-		plugin.getNetwork().send(player, PacketType.SERVER_LOGIN_SUCCESS);
+	private void unexpectedInput(@NotNull IodinePlayerImpl player) {
+		plugin.log(Level.INFO, "Login failed for: {0} (invalid LoginPacket)", player.getPlayer().getName());
+		player.setState(IodinePlayer.State.INVALID);
+		plugin.getNetwork().send(player.getPlayer(), PacketType.SERVER_LOGIN_FAILED, (byte) 0);
 	}
 	
-	private void outdatedParty(Player player, boolean outdatedClient) {
-		plugin.logDebug("Login failed for: {0} (outdated {1})",
-				player.getName(), outdatedClient ? "client" : "server");
-		plugin.getPlayer(player).setState(IodinePlayer.State.INVALID);
-		plugin.getNetwork().send(player, PacketType.SERVER_LOGIN_FAILED, outdatedClient ? (byte) 0 : 1);
+	private void outdatedParty(@NotNull IodinePlayerImpl player, boolean outdatedClient) {
+		plugin.log(Level.INFO, "Login failed for: {0} (outdated {1})",
+				player.getPlayer().getName(), outdatedClient ? "client" : "server");
+		player.setState(IodinePlayer.State.INVALID);
+		plugin.getNetwork().send(player.getPlayer(), PacketType.SERVER_LOGIN_FAILED, outdatedClient ? (byte) 0 : 1);
 	}
 	
-	private void unexpectedInput(Player player) {
-		plugin.logDebug("Login failed for: {0} (invalid LoginPacket)", player.getName());
-		plugin.getPlayer(player).setState(IodinePlayer.State.INVALID);
-		plugin.getNetwork().send(player, PacketType.SERVER_LOGIN_FAILED, (byte) 0);
+	private void versionMatches(@NotNull IodinePlayerImpl player) {
+		plugin.log(Level.INFO, "Logged in successfully: {0}", player.getPlayer().getName());
+		player.setState(IodinePlayer.State.MODDED);
+		plugin.getNetwork().send(player.getPlayer(), PacketType.SERVER_LOGIN_SUCCESS);
 	}
 }
