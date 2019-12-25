@@ -3,7 +3,6 @@ package hu.trigary.iodine.bukkit.gui.container.base;
 import hu.trigary.iodine.api.gui.GuiElements;
 import hu.trigary.iodine.api.gui.container.base.GuiBase;
 import hu.trigary.iodine.api.gui.element.base.GuiElement;
-import hu.trigary.iodine.backend.PacketType;
 import hu.trigary.iodine.bukkit.IodinePlugin;
 import hu.trigary.iodine.bukkit.gui.container.RootGuiContainer;
 import hu.trigary.iodine.bukkit.gui.element.base.GuiElementImpl;
@@ -282,9 +281,17 @@ public abstract class GuiBaseImpl<T extends GuiBase<T>> implements GuiBase<T>, G
 		IodinePlayerImpl iodinePlayer = plugin.getPlayer(player);
 		iodinePlayer.assertModded();
 		closeForNoPacket(iodinePlayer, false);
-		plugin.getNetwork().send(player, PacketType.SERVER_GUI_OVERLAY_CLOSE);
+		sendClosePacket(plugin.getNetwork(), player);
 		return thisT();
 	}
+	
+	/**
+	 * Sends a packet that informs the player that it should close this GUI.
+	 *
+	 * @param network the network manager instance
+	 * @param player the target player
+	 */
+	protected abstract void sendClosePacket(@NotNull NetworkManager network, @NotNull Player player);
 	
 	/**
 	 * Closes this GUI for the specified player.

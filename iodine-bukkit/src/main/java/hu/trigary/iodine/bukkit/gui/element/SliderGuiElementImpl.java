@@ -2,7 +2,7 @@ package hu.trigary.iodine.bukkit.gui.element;
 
 import hu.trigary.iodine.api.gui.element.SliderGuiElement;
 import hu.trigary.iodine.backend.GuiElementType;
-import hu.trigary.iodine.bukkit.IodineUtil;
+import hu.trigary.iodine.bukkit.IodineUtils;
 import hu.trigary.iodine.bukkit.gui.container.base.GuiBaseImpl;
 import hu.trigary.iodine.bukkit.gui.element.base.GuiElementImpl;
 import hu.trigary.iodine.bukkit.network.ResizingByteBuffer;
@@ -88,7 +88,7 @@ public class SliderGuiElementImpl extends GuiElementImpl<SliderGuiElement> imple
 	@Override
 	public SliderGuiElementImpl setWidth(int width) {
 		Validate.isTrue(!verticalOrientation, "The width is only configurable in horizontal orientation");
-		IodineUtil.validateWidth(width);
+		IodineUtils.validateWidth(width);
 		this.width = (short) width;
 		getGui().flagAndUpdate(this);
 		return this;
@@ -98,7 +98,7 @@ public class SliderGuiElementImpl extends GuiElementImpl<SliderGuiElement> imple
 	@Override
 	public SliderGuiElementImpl setHeight(int height) {
 		Validate.isTrue(verticalOrientation, "The height is only configurable in vertical orientation");
-		IodineUtil.validateHeight(height);
+		IodineUtils.validateHeight(height);
 		this.height = (short) height;
 		getGui().flagAndUpdate(this);
 		return this;

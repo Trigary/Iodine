@@ -9,8 +9,8 @@ import org.jetbrains.annotations.NotNull;
 /**
  * A collection of static utility methods used internally.
  */
-public final class IodineUtil {
-	private IodineUtil() {}
+public final class IodineUtils {
+	private IodineUtils() {}
 	
 	
 	

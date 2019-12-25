@@ -54,12 +54,12 @@ public class PlayerManager implements Listener {
 	
 	@EventHandler(priority = EventPriority.MONITOR)
 	private void onPlayerQuit(PlayerQuitEvent event) {
+		//can't call remove yet: the gui close callback might still require the instance
 		IodinePlayerImpl player = players.get(event.getPlayer().getUniqueId());
 		if (player == null) {
 			return;
 		}
 		
-		//can't call remove yet: the gui close callback might still require the instance
 		if (player.getOpenGui() != null) {
 			player.getOpenGui().closeForNoPacket(player, true);
 		}

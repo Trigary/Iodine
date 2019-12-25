@@ -15,6 +15,7 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
@@ -61,12 +62,22 @@ public class IodinePlayerImpl implements IodinePlayer {
 	 * the rules described in the {@link IodinePlayer.State} values should be followed.
 	 * Should only be called by {@link PacketListener} and {@link LoginPacketHandler}.
 	 *
-	 * @param state the new state of the player
+	 * @param newState the new state of the player
 	 */
-	public void setState(@NotNull IodinePlayer.State state) {
-		IodinePlayer.State oldState = this.state;
-		this.state = state;
-		Bukkit.getPluginManager().callEvent(new IodinePlayerStateChangedEvent(this, oldState, state));
+	public void setState(@NotNull IodinePlayer.State newState) {
+		Validate.isTrue(state != newState, "Old and new state mustn't be the same");
+		if (state == State.MODDED) {
+			if (openGui != null) {
+				openGui.closeForNoPacket(this, true);
+			}
+			for (IodineOverlayImpl overlay : new ArrayList<>(overlays)) {
+				overlay.closeForNoPacket(this, true);
+			}
+		}
+		
+		IodinePlayer.State oldState = state;
+		state = newState;
+		Bukkit.getPluginManager().callEvent(new IodinePlayerStateChangedEvent(this, oldState, newState));
 	}
 	
 	

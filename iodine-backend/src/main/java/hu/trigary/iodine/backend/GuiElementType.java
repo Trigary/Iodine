@@ -3,46 +3,24 @@ package hu.trigary.iodine.backend;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Arrays;
-
 /**
  * A list of all element types that can be displayed.
  */
 public enum GuiElementType {
-	CONTAINER_ROOT(0x00),
-	CONTAINER_GRID(0x01),
-	CONTAINER_LINEAR(0x02),
-	BUTTON(0x10),
-	CHECKBOX(0x11),
-	DROPDOWN(0x12),
-	IMAGE(0x13),
-	PROGRESS_BAR(0x14),
-	RADIO_BUTTON(0x15),
-	SLIDER(0x16),
-	TEXT_FIELD(0x17),
-	TEXT(0x18);
+	CONTAINER_ROOT,
+	CONTAINER_GRID,
+	CONTAINER_LINEAR,
+	BUTTON,
+	CHECKBOX,
+	DROPDOWN,
+	IMAGE,
+	PROGRESS_BAR,
+	RADIO_BUTTON,
+	SLIDER,
+	TEXT_FIELD,
+	TEXT;
 	
-	private static final GuiElementType[] VALUES;
-	
-	static {
-		VALUES = new GuiElementType[Arrays.stream(values())
-				.mapToInt(type -> type.getId() & 0xFF)
-				.max().orElse(-1) + 1];
-		Arrays.stream(values()).forEach(type -> {
-			int id = type.getId() & 0xFF;
-			if (VALUES[id] != null) {
-				throw new AssertionError("Multiple GuiElementTypes must not share the same ID");
-			}
-			VALUES[id] = type;
-		});
-	}
-	
-	private final byte id;
-	
-	GuiElementType(int id) {
-		//not using #ordinal() for independence of declaration order (future compatibility)
-		this.id = (byte) id;
-	}
+	private static final GuiElementType[] VALUES = values();
 	
 	
 	
@@ -67,6 +45,6 @@ public enum GuiElementType {
 	 */
 	@Contract(pure = true)
 	public byte getId() {
-		return id;
+		return (byte) ordinal();
 	}
 }

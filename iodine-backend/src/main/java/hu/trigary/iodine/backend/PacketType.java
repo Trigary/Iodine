@@ -3,8 +3,6 @@ package hu.trigary.iodine.backend;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Arrays;
-
 /**
  * A list of all packet types which can be sent through the messaging channel.
  * <br><br>
@@ -16,90 +14,76 @@ public enum PacketType {
 	 * Sent by the client as soon as possible to indicate that it has the mod installed.
 	 * The payload is the client's mod version string.
 	 */
-	CLIENT_LOGIN(0x00),
+	CLIENT_LOGIN,
 	
 	/**
 	 * Sent as a reply to {@link #CLIENT_LOGIN}, indicating that the client's mod
 	 * and the server's plugin are compatible protocol version-wise.
 	 * There is no payload.
 	 */
-	SERVER_LOGIN_SUCCESS(0x01),
+	SERVER_LOGIN_SUCCESS,
 	
 	/**
 	 * Sent as a reply to {@link #CLIENT_LOGIN}, indicating that the client's mod
 	 * and the server's plugin are incompatible protocol version-wise.
-	 * Contains whether the client or the server is using the older version.
+	 * Contains whether the client or the server is using the older version,
+	 * or if the packet is of invalid format.
 	 */
-	SERVER_LOGIN_FAILED(0x02),
+	SERVER_LOGIN_FAILED,
 	
 	/**
 	 * Sent to all online players when the plugin enables.
 	 * Clients who have the mod installed are going to reply with {@link #CLIENT_LOGIN}.
 	 */
-	SERVER_LOGIN_REQUEST(0x03),
+	SERVER_LOGIN_REQUEST,
 	
 	/**
 	 * Instructs the client to open the GUI specified in the payload.
 	 */
-	SERVER_GUI_OPEN(0x10),
+	SERVER_GUI_OPEN,
 	
 	/**
 	 * Instructs the client to open the overlay specified in the payload.
 	 */
-	SERVER_OVERLAY_OPEN(0x11),
+	SERVER_OVERLAY_OPEN,
 	
 	/**
 	 * Instructs the client to update its GUI based on the changes specified in the payload.
 	 */
-	SERVER_GUI_CHANGE(0x12),
+	SERVER_GUI_CHANGE,
 	
 	/**
 	 * Instructs the client to update the overlay based on the changes specified in the payload.
 	 */
-	SERVER_OVERLAY_CHANGE(0x13),
+	SERVER_OVERLAY_CHANGE,
 	
 	/**
-	 * Instructs the client to close the gui/overlay,
-	 * if its ID matches the one in the payload.
+	 * Instructs the client to close its open GUI.
 	 */
-	SERVER_GUI_OVERLAY_CLOSE(0x14),
+	SERVER_GUI_CLOSE,
+	
+	/**
+	 * Instructs the client to close the overlay with the ID specified in the payload.
+	 */
+	SERVER_OVERLAY_CLOSE,
 	
 	/**
 	 * Informs the server that the player has closed the GUI.
 	 * The payload contains the GUI's ID.
 	 */
-	CLIENT_GUI_CLOSE(0x21),
+	CLIENT_GUI_CLOSE,
 	
 	/**
 	 * Informs the server that the player has changed a value in the GUI.
 	 * The payload contains the changes.
 	 */
-	CLIENT_GUI_CHANGE(0x22);
+	CLIENT_GUI_CHANGE;
 	
 	/**
 	 * The name of the messaging channel that this plugin and mod use.
 	 */
 	public static final String NETWORK_CHANNEL = "hu.trigary:iodine";
-	private static final PacketType[] VALUES;
-	
-	static {
-		VALUES = new PacketType[Arrays.stream(values())
-				.mapToInt(PacketType::getUnsignedId)
-				.max().orElse(-1) + 1];
-		Arrays.stream(values()).forEach(type -> {
-			if (VALUES[type.getUnsignedId()] != null) {
-				throw new AssertionError("Multiple PacketTypes must not share the same ID");
-			}
-			VALUES[type.getUnsignedId()] = type;
-		});
-	}
-	
-	private final byte id;
-	
-	PacketType(int id) {
-		//not using #ordinal() for independence of declaration order (future compatibility)
-		this.id = (byte) id;
-	}
+	private static final PacketType[] VALUES = values();
 	
 	
 	
@@ -134,7 +118,7 @@ public enum PacketType {
 	 */
 	@Contract(pure = true)
 	public byte getId() {
-		return id;
+		return (byte) ordinal();
 	}
 	
 	/**
@@ -146,6 +130,6 @@ public enum PacketType {
 	 */
 	@Contract(pure = true)
 	public int getUnsignedId() {
-		return id & 0xFF;
+		return ordinal();
 	}
 }

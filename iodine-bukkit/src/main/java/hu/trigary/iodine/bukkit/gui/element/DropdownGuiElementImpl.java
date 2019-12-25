@@ -2,7 +2,7 @@ package hu.trigary.iodine.bukkit.gui.element;
 
 import hu.trigary.iodine.api.gui.element.DropdownGuiElement;
 import hu.trigary.iodine.backend.GuiElementType;
-import hu.trigary.iodine.bukkit.IodineUtil;
+import hu.trigary.iodine.bukkit.IodineUtils;
 import hu.trigary.iodine.bukkit.gui.container.base.GuiBaseImpl;
 import hu.trigary.iodine.bukkit.gui.element.base.GuiElementImpl;
 import hu.trigary.iodine.bukkit.network.ResizingByteBuffer;
@@ -68,7 +68,7 @@ public class DropdownGuiElementImpl extends GuiElementImpl<DropdownGuiElement> i
 	@NotNull
 	@Override
 	public DropdownGuiElementImpl setWidth(int width) {
-		IodineUtil.validateWidth(width);
+		IodineUtils.validateWidth(width);
 		this.width = (short) width;
 		getGui().flagAndUpdate(this);
 		return this;

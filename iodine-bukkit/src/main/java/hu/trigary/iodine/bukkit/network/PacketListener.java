@@ -1,6 +1,7 @@
 package hu.trigary.iodine.bukkit.network;
 
 import hu.trigary.iodine.api.player.IodinePlayer;
+import hu.trigary.iodine.backend.ChatUtils;
 import hu.trigary.iodine.bukkit.IodinePlugin;
 import hu.trigary.iodine.bukkit.network.handler.GuiChangePacketHandler;
 import hu.trigary.iodine.bukkit.network.handler.GuiClosePacketHandler;
@@ -49,21 +50,21 @@ public class PacketListener implements PluginMessageListener {
 		
 		if (message.length == 0) {
 			plugin.log(Level.INFO, "Received empty message from {0}, ignoring player", player.getName());
-			iodinePlayer.setState(IodinePlayer.State.INVALID);
+			ignore(iodinePlayer);
 			return;
 		}
 		
 		PacketType type = PacketType.fromId(message[0]);
 		if (type == null) {
 			plugin.log(Level.INFO, "Received message with invalid type-id from {0}, ignoring player", player.getName());
-			iodinePlayer.setState(IodinePlayer.State.INVALID);
+			ignore(iodinePlayer);
 			return;
 		}
 		
 		PacketHandler handler = handlers[type.getUnsignedId()];
 		if (handler == null) {
 			plugin.log(Level.INFO, "Received message with invalid type {0} from {1}, ignoring player", type, player.getName());
-			iodinePlayer.setState(IodinePlayer.State.INVALID);
+			ignore(iodinePlayer);
 			return;
 		}
 		
@@ -76,9 +77,16 @@ public class PacketListener implements PluginMessageListener {
 		try {
 			plugin.log(Level.OFF, "Received message with from {0} of type {1}, handling it", player.getName(), type);
 			handler.handle(iodinePlayer, ByteBuffer.wrap(message, 1, message.length - 1));
-		} catch (Throwable e) {
-			plugin.log(Level.INFO, "Error while handling message, ignoring player", e);
-			iodinePlayer.setState(IodinePlayer.State.INVALID);
+		} catch (Throwable t) {
+			plugin.log(Level.INFO, "Error while handling message, ignoring player", t);
+			ignore(iodinePlayer);
 		}
+	}
+	
+	private void ignore(@NotNull IodinePlayerImpl player) {
+		player.setState(IodinePlayer.State.INVALID);
+		player.getPlayer().sendMessage(ChatUtils.formatError("An invalid packet has been detected, "
+				+ "mod support has been disabled for this session."));
+		player.getPlayer().sendMessage(ChatUtils.formatError("If you believe this is a bug, please report it."));
 	}
 }

@@ -4,8 +4,10 @@ import hu.trigary.iodine.api.gui.IodineGui;
 import hu.trigary.iodine.backend.PacketType;
 import hu.trigary.iodine.bukkit.IodinePlugin;
 import hu.trigary.iodine.bukkit.gui.container.base.GuiBaseImpl;
+import hu.trigary.iodine.bukkit.network.NetworkManager;
 import hu.trigary.iodine.bukkit.network.ResizingByteBuffer;
 import hu.trigary.iodine.bukkit.player.IodinePlayerImpl;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -48,6 +50,11 @@ public class IodineGuiImpl extends GuiBaseImpl<IodineGui> implements IodineGui {
 	@Override
 	protected void onOpened(@NotNull IodinePlayerImpl iodinePlayer) {
 		iodinePlayer.setOpenGui(this);
+	}
+	
+	@Override
+	protected void sendClosePacket(@NotNull NetworkManager network, @NotNull Player player) {
+		network.send(player, PacketType.SERVER_GUI_CLOSE);
 	}
 	
 	@Override

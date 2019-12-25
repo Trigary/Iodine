@@ -2,7 +2,7 @@ package hu.trigary.iodine.bukkit.gui.element.base;
 
 import hu.trigary.iodine.api.gui.element.base.GuiElement;
 import hu.trigary.iodine.backend.GuiElementType;
-import hu.trigary.iodine.bukkit.IodineUtil;
+import hu.trigary.iodine.bukkit.IodineUtils;
 import hu.trigary.iodine.bukkit.gui.IodineGuiImpl;
 import hu.trigary.iodine.bukkit.gui.container.base.GuiBaseImpl;
 import hu.trigary.iodine.bukkit.gui.container.base.GuiParentPlus;
@@ -72,14 +72,14 @@ public abstract class GuiElementImpl<T extends GuiElement<T>> implements GuiElem
 	}
 	
 	@Override
-	public void setAttachment(@Nullable Object attachment) {
+	public final void setAttachment(@Nullable Object attachment) {
 		this.attachment = attachment;
 	}
 	
 	@Nullable
 	@Contract(pure = true)
 	@Override
-	public Object getAttachment() {
+	public final Object getAttachment() {
 		return attachment;
 	}
 	
@@ -110,18 +110,18 @@ public abstract class GuiElementImpl<T extends GuiElement<T>> implements GuiElem
 	@NotNull
 	@Contract(pure = true)
 	@Override
-	public int[] getPadding() {
+	public final int[] getPadding() {
 		return new int[]{padding[0], padding[1], padding[2], padding[3]};
 	}
 	
 	@NotNull
 	@Override
-	public GuiElementImpl<T> setPadding(@NotNull int[] padding) {
+	public final GuiElementImpl<T> setPadding(@NotNull int[] padding) {
 		Validate.isTrue(padding.length == 4, "The array containing the padding values must have a length of 4");
 		for (int i = 0; i < 4; i++) {
 			int value = padding[i];
 			if (value != -1) {
-				IodineUtil.validateRange(0, PADDING_UPPER_BOUND, value, "padding");
+				IodineUtils.validateRange(0, PADDING_UPPER_BOUND, value, "padding");
 				this.padding[i] = (short) value;
 			}
 		}
@@ -132,14 +132,14 @@ public abstract class GuiElementImpl<T extends GuiElement<T>> implements GuiElem
 	
 	@Override
 	@Contract(pure = true)
-	public int getDrawPriority() {
+	public final int getDrawPriority() {
 		return drawPriority;
 	}
 	
 	@Override
 	public void setDrawPriority(int priority) {
-		IodineUtil.validateRange(PRIORITY_LOWER_BOUND, PRIORITY_UPPER_BOUND, priority, "draw priority");
-		drawPriority = (byte) priority; //TODO client-side: long p = (priority << 32) | internalId
+		IodineUtils.validateRange(PRIORITY_LOWER_BOUND, PRIORITY_UPPER_BOUND, priority, "draw priority");
+		drawPriority = (byte) priority;
 		getGui().flagAndUpdate(this);
 	}
 	

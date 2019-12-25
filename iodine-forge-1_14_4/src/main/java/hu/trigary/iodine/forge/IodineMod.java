@@ -2,6 +2,8 @@ package hu.trigary.iodine.forge;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
+import net.minecraft.util.text.TextComponent;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -25,6 +27,8 @@ public class IodineMod {
 	private static final Logger LOGGER = LogManager.getLogger();
 	
 	public IodineMod() {
+		TextFormatting.getTextWithoutFormattingCodes()
+		
 		// Register the setup method for modloading
 		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
 		// Register the enqueueIMC method for modloading

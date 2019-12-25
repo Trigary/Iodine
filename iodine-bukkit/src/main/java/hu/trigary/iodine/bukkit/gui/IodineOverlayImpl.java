@@ -3,10 +3,12 @@ package hu.trigary.iodine.bukkit.gui;
 import hu.trigary.iodine.api.gui.IodineOverlay;
 import hu.trigary.iodine.backend.PacketType;
 import hu.trigary.iodine.bukkit.IodinePlugin;
-import hu.trigary.iodine.bukkit.IodineUtil;
+import hu.trigary.iodine.bukkit.IodineUtils;
 import hu.trigary.iodine.bukkit.gui.container.base.GuiBaseImpl;
+import hu.trigary.iodine.bukkit.network.NetworkManager;
 import hu.trigary.iodine.bukkit.network.ResizingByteBuffer;
 import hu.trigary.iodine.bukkit.player.IodinePlayerImpl;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -43,8 +45,8 @@ public class IodineOverlayImpl extends GuiBaseImpl<IodineOverlay> implements Iod
 	
 	@Override
 	public void setDrawPriority(int priority) {
-		IodineUtil.validateRange(PRIORITY_LOWER_BOUND, PRIORITY_UPPER_BOUND, priority, "draw priority");
-		drawPriority = (byte) priority; //TODO client-side: long p = (priority << 32) | internalId
+		IodineUtils.validateRange(PRIORITY_LOWER_BOUND, PRIORITY_UPPER_BOUND, priority, "draw priority");
+		drawPriority = (byte) priority;
 		executeUpdate();
 	}
 	
@@ -56,6 +58,11 @@ public class IodineOverlayImpl extends GuiBaseImpl<IodineOverlay> implements Iod
 	@Override
 	protected void onOpened(@NotNull IodinePlayerImpl iodinePlayer) {
 		iodinePlayer.addDisplayedOverlay(this);
+	}
+	
+	@Override
+	protected void sendClosePacket(@NotNull NetworkManager network, @NotNull Player player) {
+		network.send(player, PacketType.SERVER_OVERLAY_CLOSE, 4, b -> b.putInt(getId()));
 	}
 	
 	@Override

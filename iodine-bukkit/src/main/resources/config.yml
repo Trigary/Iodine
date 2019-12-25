@@ -1,0 +1,8 @@
+##################################################
+###        Iodine Plugin Configuration         ###
+###              Author: Trigary               ###
+### Website: https://github.com/Trigary/Iodine ###
+##################################################
+
+# Whether debug-level log messages should be enabled
+debug-log: on

@@ -23,13 +23,16 @@ import java.util.logging.Level;
  * The Iodine plugin's main class.
  */
 public class IodinePlugin extends JavaPlugin implements Listener {
-	private static final boolean DEBUG_LOG = true;
+	private boolean debugLog;
 	private NetworkManager networkManager;
 	private PlayerManager playerManager;
 	private GuiBaseManager guiBaseManager;
 	
 	@Override
 	public void onEnable() {
+		saveDefaultConfig();
+		debugLog = getConfig().getBoolean("debug-log");
+		
 		Bukkit.getServicesManager().register(IodineApi.class,
 				new IodineApiImpl(this), this, ServicePriority.Normal);
 		
@@ -40,7 +43,9 @@ public class IodinePlugin extends JavaPlugin implements Listener {
 		
 		Bukkit.getPluginManager().registerEvents(new TestCommandListener(this), this);
 		
-		Bukkit.getOnlinePlayers().forEach(p -> networkManager.send(p, PacketType.SERVER_LOGIN_REQUEST));
+		for (Player player : Bukkit.getOnlinePlayers()) {
+			networkManager.send(player, PacketType.SERVER_LOGIN_REQUEST);
+		}
 	}
 	
 	@EventHandler(priority = EventPriority.MONITOR)
@@ -96,7 +101,7 @@ public class IodinePlugin extends JavaPlugin implements Listener {
 	 * @param params the message's parameters
 	 */
 	public void log(@NotNull Level level, @NotNull String message, @NotNull Object... params) {
-		level = level == Level.OFF && DEBUG_LOG ? Level.INFO : level;
+		level = level == Level.OFF && debugLog ? Level.INFO : level;
 		getLogger().log(level, message, params);
 	}
 	
@@ -107,7 +112,7 @@ public class IodinePlugin extends JavaPlugin implements Listener {
 	 * @param cause the {@link Throwable} associated with the log message
 	 */
 	public void log(@NotNull Level level, @NotNull String message, @NotNull Throwable cause) {
-		level = level == Level.OFF && DEBUG_LOG ? Level.INFO : level;
+		level = level == Level.OFF && debugLog ? Level.INFO : level;
 		getLogger().log(level, message, cause);
 	}
 }

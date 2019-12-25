@@ -12,6 +12,7 @@ import hu.trigary.iodine.bukkit.gui.container.base.GuiBaseImpl;
 import hu.trigary.iodine.bukkit.gui.element.*;
 import hu.trigary.iodine.bukkit.gui.element.base.GuiElementImpl;
 import org.apache.commons.lang.Validate;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -138,7 +139,11 @@ public class GuiBaseManager {
 	 * Closes all GUIs for all of their viewers.
 	 */
 	public void closeAllGuiInstances() {
-		new ArrayList<>(guiMap.values()).forEach(gui -> gui.getViewers().forEach(gui::closeFor));
+		for (GuiBaseImpl<?> gui : new ArrayList<>(guiMap.values())) {
+			for (Player player : gui.getViewers()) {
+				gui.closeFor(player);
+			}
+		}
 	}
 	
 	

@@ -1,6 +1,7 @@
 package hu.trigary.iodine.bukkit.network.handler;
 
 import hu.trigary.iodine.api.player.IodinePlayer;
+import hu.trigary.iodine.backend.ChatUtils;
 import hu.trigary.iodine.bukkit.IodinePlugin;
 import hu.trigary.iodine.backend.PacketType;
 import hu.trigary.iodine.bukkit.network.PacketListener;
@@ -95,13 +96,20 @@ public class LoginPacketHandler extends PacketHandler {
 		plugin.log(Level.INFO, "Login failed for: {0} (invalid LoginPacket)", player.getPlayer().getName());
 		player.setState(IodinePlayer.State.INVALID);
 		plugin.getNetwork().send(player.getPlayer(), PacketType.SERVER_LOGIN_FAILED, (byte) 0);
+		player.getPlayer().sendMessage(ChatUtils.formatError("Iodine handshake failed due to invalid packet format."));
+		player.getPlayer().sendMessage(ChatUtils.formatError("We were unable to determine whether the client or the server is outdated."));
+		player.getPlayer().sendMessage(ChatUtils.formatError("If you believe this is a bug, please report it."));
 	}
 	
 	private void outdatedParty(@NotNull IodinePlayerImpl player, boolean outdatedClient) {
 		plugin.log(Level.INFO, "Login failed for: {0} (outdated {1})",
 				player.getPlayer().getName(), outdatedClient ? "client" : "server");
 		player.setState(IodinePlayer.State.INVALID);
-		plugin.getNetwork().send(player.getPlayer(), PacketType.SERVER_LOGIN_FAILED, outdatedClient ? (byte) 0 : 1);
+		plugin.getNetwork().send(player.getPlayer(), PacketType.SERVER_LOGIN_FAILED, outdatedClient ? (byte) 1 : 2);
+		player.getPlayer().sendMessage(ChatUtils.formatError("Iodine handshake failed due to client-server mod version mismatch."));
+		player.getPlayer().sendMessage(ChatUtils.formatError(outdatedClient
+				? "Your client is outdated, please update to be able to use the mod features on this server."
+				: "The server is outdated, consider asking the staff to update to make the mod features are available."));
 	}
 	
 	private void versionMatches(@NotNull IodinePlayerImpl player) {
