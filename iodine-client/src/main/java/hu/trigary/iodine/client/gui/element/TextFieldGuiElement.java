@@ -4,8 +4,8 @@ import hu.trigary.iodine.client.gui.container.base.GuiBase;
 import hu.trigary.iodine.client.gui.element.base.GuiElement;
 import org.jetbrains.annotations.NotNull;
 
-public class TextFieldGuiElement extends GuiElement {
-	public TextFieldGuiElement(@NotNull GuiBase gui, int id) {
+public abstract class TextFieldGuiElement extends GuiElement {
+	protected TextFieldGuiElement(@NotNull GuiBase gui, int id) {
 		super(gui, id);
 	}
 }

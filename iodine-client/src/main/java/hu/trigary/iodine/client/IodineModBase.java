@@ -1,7 +1,10 @@
 package hu.trigary.iodine.client;
 
-import hu.trigary.iodine.client.gui.GuiBaseManager;
+import hu.trigary.iodine.client.gui.GuiElementManager;
+import hu.trigary.iodine.client.gui.GuiManager;
+import hu.trigary.iodine.client.gui.OverlayManager;
 import hu.trigary.iodine.client.network.NetworkManager;
+import hu.trigary.iodine.client.util.IntPair;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -11,7 +14,9 @@ public abstract class IodineModBase {
 	private final Logger logger;
 	private String version;
 	private NetworkManager network;
-	private GuiBaseManager gui;
+	private GuiElementManager element;
+	private GuiManager gui;
+	private OverlayManager overlay;
 	
 	protected IodineModBase(@NotNull Logger logger) {
 		this.logger = logger;
@@ -19,10 +24,13 @@ public abstract class IodineModBase {
 	
 	
 	
-	protected void initialize(@NotNull String version, @NotNull NetworkManager network, @NotNull GuiBaseManager gui) {
+	protected void initialize(@NotNull String version, @NotNull NetworkManager network,
+			@NotNull GuiElementManager element, @NotNull GuiManager gui, @NotNull OverlayManager overlay) {
 		this.version = version;
 		this.network = network;
+		this.element = element;
 		this.gui = gui;
+		this.overlay = overlay;
 	}
 
 	
@@ -47,7 +55,25 @@ public abstract class IodineModBase {
 	
 	@NotNull
 	@Contract(pure = true)
-	public final GuiBaseManager getGui() {
+	public final GuiElementManager getElement() {
+		return element;
+	}
+	
+	@NotNull
+	@Contract(pure = true)
+	public final GuiManager getGui() {
 		return gui;
 	}
+	
+	@NotNull
+	@Contract(pure = true)
+	public final OverlayManager getOverlay() {
+		return overlay;
+	}
+	
+	
+	
+	@NotNull
+	@Contract(pure = true)
+	public abstract IntPair getScreenSize();
 }

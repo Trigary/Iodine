@@ -70,12 +70,14 @@ public class GuiBaseManager {
 	 * Creates a new GUI instance.
 	 *
 	 * @param anchor the specified anchor
+	 * @param horizontalOffset the overlay's horizontal offset
+	 * @param verticalOffset the overlay's vertical offset
 	 * @return a new GUI instance
 	 */
 	@NotNull
 	@Contract(pure = true)
-	public IodineOverlayImpl createOverlay(@NotNull IodineOverlay.Anchor anchor) {
-		return new IodineOverlayImpl(plugin, nextGuiId++, anchor);
+	public IodineOverlayImpl createOverlay(@NotNull IodineOverlay.Anchor anchor, int horizontalOffset, int verticalOffset) {
+		return new IodineOverlayImpl(plugin, nextGuiId++, anchor, horizontalOffset, verticalOffset);
 	}
 	
 	/**

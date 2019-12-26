@@ -58,18 +58,18 @@ public class NetworkManager {
 	/**
 	 * Sends a packet of the specified type to the specified client.
 	 * The payload is set by a {@link Consumer}, which can put
-	 * {@code contentsLength} many bytes into the passed {@link ByteBuffer}.
+	 * {@code dataLength} many bytes into the passed {@link ByteBuffer}.
 	 *
 	 * @param player the recipient
 	 * @param type the type of the packet
-	 * @param contentsLength the length of the payload, in bytes
-	 * @param contentProvider the action which sets the payload
+	 * @param dataLength the length of the payload, in bytes
+	 * @param dataProvider the action which sets the payload
 	 */
 	public void send(@NotNull Player player, @NotNull PacketType type,
-			int contentsLength, @NotNull Consumer<ByteBuffer> contentProvider) {
-		ByteBuffer buffer = ByteBuffer.wrap(new byte[contentsLength + 1]);
+			int dataLength, @NotNull Consumer<ByteBuffer> dataProvider) {
+		ByteBuffer buffer = ByteBuffer.wrap(new byte[dataLength + 1]);
 		buffer.put(type.getId());
-		contentProvider.accept(buffer);
+		dataProvider.accept(buffer);
 		send(player, buffer.array());
 	}
 	

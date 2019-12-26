@@ -14,13 +14,17 @@ public abstract class GuiContainer extends GuiElement implements GuiParent {
 	@Override
 	public abstract void initialize();
 	
-	@Override
-	public final void setPosition(int x, int y) {
-		super.setPosition(x, y);
-		setChildrenPosition(x, y);
+	@NotNull
+	protected final GuiElement[] resolveChildren(@NotNull int[] childrenIdentifiers) {
+		GuiElement[] children = new GuiElement[childrenIdentifiers.length];
+		for (int i = 0; i < children.length; i++) {
+			children[i] = getGui().getElement(childrenIdentifiers[i]);
+		}
+		return children;
 	}
 	
-	protected abstract void setChildrenPosition(int thisX, int thisY);
+	@Override
+	protected abstract void setChildrenPositions(int offsetX, int offsetY);
 	
 	@Override
 	protected void updateImpl(int width, int height, int positionX, int positionY) {}

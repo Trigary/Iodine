@@ -28,9 +28,9 @@ public abstract class NetworkManager {
 	
 	
 	
-	public void send(@NotNull PacketType type, int contentsLength, @NotNull Consumer<ByteBuffer> contentProvider) {
-		byte[] message = new byte[contentsLength];
-		contentProvider.accept(ByteBuffer.wrap(message));
+	public final void send(@NotNull PacketType type, int dataLength, @NotNull Consumer<ByteBuffer> dataProvider) {
+		byte[] message = new byte[dataLength];
+		dataProvider.accept(ByteBuffer.wrap(message));
 		mod.getLogger().info("Sending packet: " + type);
 		sendImpl(type, message);
 	}
@@ -40,7 +40,7 @@ public abstract class NetworkManager {
 	
 	
 	//TODO for simplicity just call this method on the main thread
-	protected void onReceived(@NotNull PacketType type, @NotNull byte[] message) {
+	protected final void onReceived(@NotNull PacketType type, @NotNull byte[] message) {
 		try {
 			handlers[type.getUnsignedId()].handle(ByteBuffer.wrap(message));
 			mod.getLogger().info("Successfully handled received packet: " + type);

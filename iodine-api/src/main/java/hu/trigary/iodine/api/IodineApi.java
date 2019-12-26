@@ -63,11 +63,15 @@ public interface IodineApi {
 	
 	/**
 	 * Creates a new, empty overlay.
+	 * The offsets must be at least {@link IodineOverlay#OFFSET_LOWER_BOUND}
+	 * and at most {@link IodineOverlay#OFFSET_UPPER_BOUND}.
 	 *
 	 * @param anchor the specified anchor
+	 * @param horizontalOffset the overlay's horizontal offset
+	 * @param verticalOffset the overlay's vertical offset
 	 * @return a new overlay
 	 */
 	@NotNull
 	@Contract(pure = true)
-	IodineOverlay createOverlay(@NotNull IodineOverlay.Anchor anchor);
+	IodineOverlay createOverlay(@NotNull IodineOverlay.Anchor anchor, int horizontalOffset, int verticalOffset);
 }

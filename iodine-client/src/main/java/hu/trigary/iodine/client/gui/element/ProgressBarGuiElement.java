@@ -4,8 +4,8 @@ import hu.trigary.iodine.client.gui.container.base.GuiBase;
 import hu.trigary.iodine.client.gui.element.base.GuiElement;
 import org.jetbrains.annotations.NotNull;
 
-public class ProgressBarGuiElement extends GuiElement {
-	public ProgressBarGuiElement(@NotNull GuiBase gui, int id) {
+public abstract class ProgressBarGuiElement extends GuiElement {
+	protected ProgressBarGuiElement(@NotNull GuiBase gui, int id) {
 		super(gui, id);
 	}
 }

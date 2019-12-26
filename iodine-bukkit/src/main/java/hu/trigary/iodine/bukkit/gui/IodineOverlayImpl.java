@@ -14,6 +14,8 @@ import org.jetbrains.annotations.NotNull;
 
 public class IodineOverlayImpl extends GuiBaseImpl<IodineOverlay> implements IodineOverlay {
 	private final Anchor anchor;
+	private final short horizontalOffset;
+	private final short verticalOffset;
 	private byte drawPriority;
 	
 	/**
@@ -23,10 +25,17 @@ public class IodineOverlayImpl extends GuiBaseImpl<IodineOverlay> implements Iod
 	 * @param plugin the plugin instance
 	 * @param id the unique identifier of this GUI instance
 	 * @param anchor the specified anchor
+	 * @param horizontalOffset the overlay's horizontal offset
+	 * @param verticalOffset the overlay's vertical offset
 	 */
-	public IodineOverlayImpl(@NotNull IodinePlugin plugin, int id, @NotNull Anchor anchor) {
+	public IodineOverlayImpl(@NotNull IodinePlugin plugin, int id,
+			@NotNull Anchor anchor, int horizontalOffset, int verticalOffset) {
 		super(plugin, id);
 		this.anchor = anchor;
+		IodineUtils.validateRange(OFFSET_LOWER_BOUND, OFFSET_UPPER_BOUND, horizontalOffset, "offset");
+		IodineUtils.validateRange(OFFSET_LOWER_BOUND, OFFSET_UPPER_BOUND, verticalOffset, "offset");
+		this.horizontalOffset = (short) horizontalOffset;
+		this.verticalOffset = (short) verticalOffset;
 	}
 	
 	
@@ -35,6 +44,16 @@ public class IodineOverlayImpl extends GuiBaseImpl<IodineOverlay> implements Iod
 	@Override
 	public Anchor getAnchor() {
 		return anchor;
+	}
+	
+	@Override
+	public int getHorizontalOffset() {
+		return horizontalOffset;
+	}
+	
+	@Override
+	public int getVerticalOffset() {
+		return verticalOffset;
 	}
 	
 	@Override

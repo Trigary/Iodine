@@ -1,6 +1,8 @@
 package hu.trigary.iodine.client.gui.container.base;
 
 import hu.trigary.iodine.client.IodineModBase;
+import hu.trigary.iodine.client.util.Validator;
+import hu.trigary.iodine.client.util.IntPair;
 import hu.trigary.iodine.client.gui.container.RootGuiContainer;
 import hu.trigary.iodine.client.gui.element.base.GuiElement;
 import org.jetbrains.annotations.Contract;
@@ -14,7 +16,6 @@ public abstract class GuiBase implements GuiParent {
 	private final Collection<GuiElement> drawOrderedElements = new TreeSet<>(Comparator
 			.comparing(GuiElement::getDrawPriority)
 			.thenComparing(GuiElement::getId));
-	private final Set<GuiElement> pressedElements = new HashSet<>();
 	private final IodineModBase mod;
 	private final int id;
 	private RootGuiContainer rootElement;
@@ -37,6 +38,20 @@ public abstract class GuiBase implements GuiParent {
 		return id;
 	}
 	
+	@NotNull
+	@Contract(pure = true)
+	public final Collection<GuiElement> getElements() {
+		return elements.values();
+	}
+	
+	@NotNull
+	@Contract(pure = true)
+	public final GuiElement getElement(int id) {
+		GuiElement element = elements.get(id);
+		Validator.notNull(element, "ID must point to a valid element");
+		return element;
+	}
+	
 	
 	
 	public final void deserialize(@NotNull ByteBuffer buffer) {
@@ -46,11 +61,13 @@ public abstract class GuiBase implements GuiParent {
 		for (int i = 0; i < removeCount; i++) {
 			GuiElement removed = elements.remove(buffer.getInt());
 			drawOrderedElements.remove(removed);
-			pressedElements.remove(removed);
+			onElementRemoved(removed);
 		}
 		
 		while (buffer.hasRemaining()) {
-			GuiElement changed = mod.getGui().deserializeElement(this, elements, buffer);
+			GuiElement changed = mod.getElement().getElement(this, elements, buffer);
+			drawOrderedElements.remove(changed);
+			changed.deserialize(buffer);
 			drawOrderedElements.add(changed);
 		}
 		
@@ -58,23 +75,29 @@ public abstract class GuiBase implements GuiParent {
 			rootElement = (RootGuiContainer) elements.get(0);
 		}
 		rootElement.initialize();
+		updateResolution();
 	}
 	
 	protected abstract void deserializeStart(@NotNull ByteBuffer buffer);
 	
+	protected void onElementRemoved(@NotNull GuiElement element) {}
 	
 	
-	public final void onResolutionChanged(int screenWidth, int screenHeight) {
-		rootElement.calculateSize(screenWidth, screenHeight);
-		int[] position = calculatePosition();
-		rootElement.setPosition(position[0], position[1]);
+	
+	public final void updateResolution() {
+		IntPair screenSize = mod.getScreenSize();
+		rootElement.calculateSize(screenSize.getX(), screenSize.getY());
+		IntPair position = calculatePosition(screenSize.getX(), screenSize.getY(),
+				rootElement.getWidth(), rootElement.getHeight());
+		rootElement.setPosition(position.getX(), position.getY());
 		for (GuiElement element : elements.values()) {
 			element.update();
 		}
 	}
 	
 	@NotNull
-	protected abstract int[] calculatePosition();
+	@Contract(pure = true)
+	protected abstract IntPair calculatePosition(int screenWidth, int screenHeight, int guiWidth, int guiHeight);
 	
 	
 	
