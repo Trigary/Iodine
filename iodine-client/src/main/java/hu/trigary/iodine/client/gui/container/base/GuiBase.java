@@ -80,7 +80,7 @@ public abstract class GuiBase implements GuiParent {
 	
 	protected abstract void deserializeStart(@NotNull ByteBuffer buffer);
 	
-	protected void onElementRemoved(@NotNull GuiElement element) {}
+	protected abstract void onElementRemoved(@NotNull GuiElement element);
 	
 	
 	

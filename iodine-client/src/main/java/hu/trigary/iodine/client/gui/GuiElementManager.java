@@ -11,7 +11,7 @@ import java.nio.ByteBuffer;
 import java.util.*;
 
 public abstract class GuiElementManager {
-	private final Map<GuiElementType, GuiBaseManager.ElementConstructor<?>> constructors = new EnumMap<>(GuiElementType.class);
+	private final Map<GuiElementType, ElementConstructor<?>> constructors = new EnumMap<>(GuiElementType.class);
 	private final IodineModBase mod;
 	
 	protected GuiElementManager(@NotNull IodineModBase mod) {
@@ -33,7 +33,7 @@ public abstract class GuiElementManager {
 	}
 	
 	@NotNull
-	protected abstract GuiBaseManager.ElementConstructor<?> getElementConstructor(@NotNull GuiElementType type);
+	protected abstract ElementConstructor<?> getElementConstructor(@NotNull GuiElementType type);
 	
 	
 	

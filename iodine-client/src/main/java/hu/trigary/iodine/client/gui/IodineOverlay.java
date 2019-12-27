@@ -1,5 +1,6 @@
 package hu.trigary.iodine.client.gui;
 
+import hu.trigary.iodine.client.gui.element.base.GuiElement;
 import hu.trigary.iodine.client.util.IntPair;
 import hu.trigary.iodine.client.IodineModBase;
 import hu.trigary.iodine.client.gui.container.base.GuiBase;
@@ -35,6 +36,9 @@ public class IodineOverlay extends GuiBase {
 	protected final void deserializeStart(@NotNull ByteBuffer buffer) {
 		drawPriority = buffer.get();
 	}
+	
+	@Override
+	protected final void onElementRemoved(@NotNull GuiElement element) {}
 	
 	@NotNull
 	@Contract(pure = true)

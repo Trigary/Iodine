@@ -1,9 +1,9 @@
 package hu.trigary.iodine.client.gui;
 
-import hu.trigary.iodine.client.gui.element.base.GuiElement;
-import hu.trigary.iodine.client.util.IntPair;
 import hu.trigary.iodine.client.IodineModBase;
 import hu.trigary.iodine.client.gui.container.base.GuiBase;
+import hu.trigary.iodine.client.gui.element.base.GuiElement;
+import hu.trigary.iodine.client.util.IntPair;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -22,6 +22,11 @@ public class IodineGui extends GuiBase {
 	
 	@Override
 	protected final void deserializeStart(@NotNull ByteBuffer buffer) {}
+	
+	@Override
+	protected final void onElementRemoved(@NotNull GuiElement element) {
+		pressedElements.remove(element);
+	}
 	
 	@NotNull
 	@Contract(pure = true)

@@ -41,7 +41,7 @@ public class IodineApiImpl implements IodineApi {
 	
 	@NotNull
 	@Override
-	public IodineOverlay createOverlay(@NotNull IodineOverlay.Anchor anchor) {
-		return plugin.getGui().createOverlay(anchor);
+	public IodineOverlay createOverlay(@NotNull IodineOverlay.Anchor anchor, int horizontalOffset, int verticalOffset) {
+		return plugin.getGui().createOverlay(anchor, horizontalOffset, verticalOffset);
 	}
 }
