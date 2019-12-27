@@ -1,0 +1,18 @@
+repositories {
+    maven { url 'https://hub.spigotmc.org/nexus/content/groups/public/' }
+}
+
+dependencies {
+    implementation project(':backend')
+    compileOnly('org.spigotmc:spigot-api:1.14.4-R0.1-SNAPSHOT')
+    implementation project(':api')
+}
+
+processResources {
+    include 'plugin.yml'
+    expand 'version': project.version
+}
+
+shadowJar {
+    archiveFileName = "iodine-${project.version}.jar"
+}

@@ -1,0 +1,59 @@
+buildscript {
+	repositories {
+		maven { url = 'https://files.minecraftforge.net/maven' }
+		jcenter()
+		mavenCentral()
+	}
+
+	dependencies {
+		classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.+', changing: true
+		classpath 'com.github.jengelman.gradle.plugins:shadow:4.0.2'
+	}
+}
+
+apply plugin: 'net.minecraftforge.gradle'
+apply plugin: 'com.github.johnrengelman.shadow'
+
+version = '1.0.0' //The version must be the same as the other iodine projects' version
+group = 'hu.trigary.iodine'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+minecraft {
+	// The mappings can be changed at any time, and must be in the following format.
+	// snapshot_YYYYMMDD   Snapshot are built nightly.
+	// stable_#            Stables are built at the discretion of the MCP team.
+	// Use non-default mappings at your own risk. they may not always work.
+	// Simply re-run your setup task after changing the mappings to update your workspace.
+	mappings channel: 'snapshot', version: '20190719-1.14.3'
+
+	runs {
+		client {
+			workingDirectory project.file('run')
+			property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+			property 'forge.logging.console.level', 'debug'
+
+			mods {
+				iodine {
+					source sourceSets.main
+				}
+			}
+		}
+	}
+}
+
+repositories {
+	mavenCentral()
+	mavenLocal()
+}
+
+dependencies {
+	minecraft 'net.minecraftforge:forge:1.14.4-28.1.0'
+	implementation "hu.trigary.iodine:client:${version}"
+	compileOnly 'org.jetbrains:annotations:17.0.0'
+}
+
+shadowJar { //TODO is the plugin necessary? if not, set the name somewhere else
+	archiveFileName = "iodine-1_14_4-${project.version}.jar"
+}

@@ -10,12 +10,25 @@ buildscript {
 
 subprojects {
     apply plugin: 'java'
-    apply plugin: 'maven'
+    apply plugin: 'maven-publish'
     apply plugin: 'com.github.johnrengelman.shadow'
 
-    group 'hu.trigary'
+    group 'hu.trigary.iodine'
     version '1.0.0' //The version must follow the #.#.# pattern.
     //Changes which do not break the forge-bukkit protocol should increase only the third number in the version.
+
+    java {
+		withJavadocJar()
+		withSourcesJar()
+	}
+
+    publishing {
+        publications {
+            mavenJava(MavenPublication) {
+                from components.java
+            }
+        }
+    }
 
     sourceCompatibility = 1.8
     targetCompatibility = 1.8
