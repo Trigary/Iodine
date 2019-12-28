@@ -2,7 +2,6 @@ package hu.trigary.iodine.bukkit.gui.element;
 
 import hu.trigary.iodine.api.gui.element.ImageGuiElement;
 import hu.trigary.iodine.backend.GuiElementType;
-import hu.trigary.iodine.bukkit.IodineUtils;
 import hu.trigary.iodine.bukkit.gui.container.base.GuiBaseImpl;
 import hu.trigary.iodine.bukkit.gui.element.base.GuiElementImpl;
 import hu.trigary.iodine.bukkit.network.ResizingByteBuffer;
@@ -59,7 +58,6 @@ public class ImageGuiElementImpl extends GuiElementImpl<ImageGuiElement> impleme
 	@NotNull
 	@Override
 	public ImageGuiElement setWidth(int width) {
-		IodineUtils.validateWidth(width);
 		this.width = (short) width;
 		getGui().flagAndUpdate(this);
 		return this;
@@ -68,7 +66,6 @@ public class ImageGuiElementImpl extends GuiElementImpl<ImageGuiElement> impleme
 	@NotNull
 	@Override
 	public ImageGuiElement setHeight(int height) {
-		IodineUtils.validateHeight(height);
 		this.height = (short) height;
 		getGui().flagAndUpdate(this);
 		return this;

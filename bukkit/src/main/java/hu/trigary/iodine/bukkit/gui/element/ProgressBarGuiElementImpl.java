@@ -2,7 +2,6 @@ package hu.trigary.iodine.bukkit.gui.element;
 
 import hu.trigary.iodine.api.gui.element.ProgressBarGuiElement;
 import hu.trigary.iodine.backend.GuiElementType;
-import hu.trigary.iodine.bukkit.IodineUtils;
 import hu.trigary.iodine.bukkit.gui.container.base.GuiBaseImpl;
 import hu.trigary.iodine.bukkit.gui.element.base.GuiElementImpl;
 import hu.trigary.iodine.bukkit.network.ResizingByteBuffer;
@@ -21,8 +20,8 @@ public class ProgressBarGuiElementImpl extends GuiElementImpl<ProgressBarGuiElem
 	private short height;
 	private boolean verticalOrientation;
 	private String text = "";
-	private int maxProgress;
-	private int progress;
+	private short maxProgress;
+	private short progress;
 	
 	/**
 	 * Creates a new instance.
@@ -78,7 +77,6 @@ public class ProgressBarGuiElementImpl extends GuiElementImpl<ProgressBarGuiElem
 	@Override
 	public ProgressBarGuiElementImpl setWidth(int width) {
 		Validate.isTrue(!verticalOrientation, "The width is only configurable in horizontal orientation");
-		IodineUtils.validateWidth(width);
 		this.width = (short) width;
 		getGui().flagAndUpdate(this);
 		return this;
@@ -88,7 +86,6 @@ public class ProgressBarGuiElementImpl extends GuiElementImpl<ProgressBarGuiElem
 	@Override
 	public ProgressBarGuiElementImpl setHeight(int height) {
 		Validate.isTrue(verticalOrientation, "The height is only configurable in vertical orientation");
-		IodineUtils.validateHeight(height);
 		this.height = (short) height;
 		getGui().flagAndUpdate(this);
 		return this;
@@ -122,9 +119,9 @@ public class ProgressBarGuiElementImpl extends GuiElementImpl<ProgressBarGuiElem
 	@Override
 	public ProgressBarGuiElementImpl setMaxProgress(int maxProgress) {
 		Validate.isTrue(maxProgress >= 0, "Max progress must be at least 0");
-		this.maxProgress = maxProgress;
+		this.maxProgress = (short) maxProgress;
 		if (progress > maxProgress) {
-			progress = maxProgress;
+			progress = this.maxProgress;
 		}
 		getGui().flagAndUpdate(this);
 		return this;
@@ -135,7 +132,7 @@ public class ProgressBarGuiElementImpl extends GuiElementImpl<ProgressBarGuiElem
 	public ProgressBarGuiElementImpl setProgress(int progress) {
 		Validate.isTrue(progress >= 0 && progress <= maxProgress,
 				"Progress must be at least 0 and at most maxProgress");
-		this.progress = progress;
+		this.progress = (short) progress;
 		getGui().flagAndUpdate(this);
 		return this;
 	}
@@ -147,8 +144,8 @@ public class ProgressBarGuiElementImpl extends GuiElementImpl<ProgressBarGuiElem
 		buffer.putBool(verticalOrientation);
 		buffer.putShort(verticalOrientation ? height : width);
 		buffer.putString(text);
-		buffer.putInt(maxProgress);
-		buffer.putInt(progress);
+		buffer.putShort(maxProgress);
+		buffer.putShort(progress);
 	}
 	
 	@Override

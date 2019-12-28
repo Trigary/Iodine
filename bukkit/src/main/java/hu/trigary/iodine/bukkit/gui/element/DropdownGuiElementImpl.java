@@ -2,7 +2,6 @@ package hu.trigary.iodine.bukkit.gui.element;
 
 import hu.trigary.iodine.api.gui.element.DropdownGuiElement;
 import hu.trigary.iodine.backend.GuiElementType;
-import hu.trigary.iodine.bukkit.IodineUtils;
 import hu.trigary.iodine.bukkit.gui.container.base.GuiBaseImpl;
 import hu.trigary.iodine.bukkit.gui.element.base.GuiElementImpl;
 import hu.trigary.iodine.bukkit.network.ResizingByteBuffer;
@@ -22,7 +21,7 @@ public class DropdownGuiElementImpl extends GuiElementImpl<DropdownGuiElement> i
 	private final List<String> choices = new ArrayList<>(Collections.singletonList(""));
 	private short width = 100;
 	private boolean editable = true;
-	private int selected;
+	private short selected;
 	private ChosenAction chosenAction;
 	
 	/**
@@ -68,7 +67,6 @@ public class DropdownGuiElementImpl extends GuiElementImpl<DropdownGuiElement> i
 	@NotNull
 	@Override
 	public DropdownGuiElementImpl setWidth(int width) {
-		IodineUtils.validateWidth(width);
 		this.width = (short) width;
 		getGui().flagAndUpdate(this);
 		return this;
@@ -98,7 +96,7 @@ public class DropdownGuiElementImpl extends GuiElementImpl<DropdownGuiElement> i
 	public DropdownGuiElementImpl setSelected(@NotNull String value) {
 		int index = choices.indexOf(value);
 		Validate.isTrue(index != -1, "The selected value must be among the choices");
-		selected = index;
+		selected = (short) index;
 		getGui().flagAndUpdate(this);
 		return this;
 	}
@@ -116,11 +114,11 @@ public class DropdownGuiElementImpl extends GuiElementImpl<DropdownGuiElement> i
 	public void serializeImpl(@NotNull ResizingByteBuffer buffer) {
 		buffer.putShort(width);
 		buffer.putBool(editable);
-		buffer.putInt(choices.size());
+		buffer.putShort((short) choices.size());
 		for (String choice : choices) {
 			buffer.putString(choice);
 		}
-		buffer.putInt(selected);
+		buffer.putShort(selected);
 	}
 	
 	@Override
@@ -129,7 +127,7 @@ public class DropdownGuiElementImpl extends GuiElementImpl<DropdownGuiElement> i
 			return;
 		}
 		
-		int newSelected = message.getInt();
+		short newSelected = message.getShort();
 		if (selected == newSelected || newSelected < 0 || newSelected >= choices.size()) {
 			return;
 		}

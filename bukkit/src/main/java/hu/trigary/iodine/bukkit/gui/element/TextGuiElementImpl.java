@@ -2,7 +2,6 @@ package hu.trigary.iodine.bukkit.gui.element;
 
 import hu.trigary.iodine.api.gui.element.TextGuiElement;
 import hu.trigary.iodine.backend.GuiElementType;
-import hu.trigary.iodine.bukkit.IodineUtils;
 import hu.trigary.iodine.bukkit.gui.container.base.GuiBaseImpl;
 import hu.trigary.iodine.bukkit.gui.element.base.GuiElementImpl;
 import hu.trigary.iodine.bukkit.network.ResizingByteBuffer;
@@ -55,7 +54,6 @@ public class TextGuiElementImpl extends GuiElementImpl<TextGuiElement> implement
 	@NotNull
 	@Override
 	public TextGuiElementImpl setWidth(int width) {
-		IodineUtils.validateWidth(width);
 		this.width = (short) width;
 		getGui().flagAndUpdate(this);
 		return this;
@@ -64,7 +62,6 @@ public class TextGuiElementImpl extends GuiElementImpl<TextGuiElement> implement
 	@NotNull
 	@Override
 	public TextGuiElementImpl setHeight(int height) {
-		IodineUtils.validateHeight(height);
 		this.height = (short) height;
 		getGui().flagAndUpdate(this);
 		return this;

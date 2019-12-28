@@ -3,11 +3,11 @@ package hu.trigary.iodine.bukkit.gui;
 import hu.trigary.iodine.api.gui.IodineOverlay;
 import hu.trigary.iodine.backend.PacketType;
 import hu.trigary.iodine.bukkit.IodinePlugin;
-import hu.trigary.iodine.bukkit.IodineUtils;
 import hu.trigary.iodine.bukkit.gui.container.base.GuiBaseImpl;
 import hu.trigary.iodine.bukkit.network.NetworkManager;
 import hu.trigary.iodine.bukkit.network.ResizingByteBuffer;
 import hu.trigary.iodine.bukkit.player.IodinePlayerImpl;
+import org.apache.commons.lang.Validate;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -32,8 +32,6 @@ public class IodineOverlayImpl extends GuiBaseImpl<IodineOverlay> implements Iod
 			@NotNull Anchor anchor, int horizontalOffset, int verticalOffset) {
 		super(plugin, id);
 		this.anchor = anchor;
-		IodineUtils.validateRange(OFFSET_LOWER_BOUND, OFFSET_UPPER_BOUND, horizontalOffset, "offset");
-		IodineUtils.validateRange(OFFSET_LOWER_BOUND, OFFSET_UPPER_BOUND, verticalOffset, "offset");
 		this.horizontalOffset = (short) horizontalOffset;
 		this.verticalOffset = (short) verticalOffset;
 	}
@@ -64,7 +62,7 @@ public class IodineOverlayImpl extends GuiBaseImpl<IodineOverlay> implements Iod
 	
 	@Override
 	public void setDrawPriority(int priority) {
-		IodineUtils.validateRange(PRIORITY_LOWER_BOUND, PRIORITY_UPPER_BOUND, priority, "draw priority");
+		Validate.isTrue(priority == (priority & 0xFF), "The draw priority must be representable as a byte");
 		drawPriority = (byte) priority;
 		executeUpdate();
 	}

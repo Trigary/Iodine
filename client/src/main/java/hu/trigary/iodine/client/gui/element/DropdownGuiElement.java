@@ -16,7 +16,7 @@ public abstract class DropdownGuiElement extends GuiElement {
 	protected int width;
 	protected boolean editable;
 	protected String[] choices;
-	protected int selected;
+	protected short selected;
 	
 	protected DropdownGuiElement(@NotNull GuiBase gui, int id) {
 		super(gui, id);
@@ -28,11 +28,11 @@ public abstract class DropdownGuiElement extends GuiElement {
 	protected final void deserializeImpl(@NotNull ByteBuffer buffer) {
 		width = buffer.getShort();
 		editable = BufferUtils.deserializeBoolean(buffer);
-		choices = new String[buffer.getInt()];
+		choices = new String[buffer.getShort()];
 		for (int i = 0; i < choices.length; i++) {
 			choices[i] = BufferUtils.deserializeString(buffer);
 		}
-		selected = buffer.getInt();
+		selected = buffer.getShort();
 	}
 	
 	@NotNull
@@ -43,7 +43,7 @@ public abstract class DropdownGuiElement extends GuiElement {
 	
 	protected final void onChanged() {
 		if (editable && choices.length != 1) {
-			sendChangePacket(4, b -> b.putInt(selected + 1 == choices.length ? 0 : selected + 1));
+			sendChangePacket(4, b -> b.putShort((short) (selected + 1 == choices.length ? 0 : selected + 1)));
 		}
 	}
 }

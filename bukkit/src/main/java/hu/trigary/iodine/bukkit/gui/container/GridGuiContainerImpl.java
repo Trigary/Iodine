@@ -7,7 +7,6 @@ import hu.trigary.iodine.bukkit.gui.container.base.GuiBaseImpl;
 import hu.trigary.iodine.bukkit.gui.container.base.GuiContainerImpl;
 import hu.trigary.iodine.bukkit.gui.element.base.GuiElementImpl;
 import hu.trigary.iodine.bukkit.network.ResizingByteBuffer;
-import org.apache.commons.lang.NotImplementedException;
 import org.apache.commons.lang.Validate;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Contract;
@@ -22,8 +21,8 @@ import java.util.*;
  */
 public class GridGuiContainerImpl extends GuiContainerImpl<GridGuiContainer> implements GridGuiContainer {
 	private final List<GuiElementImpl<?>> children = new ArrayList<>();
-	private int columnCount;
-	private int rowCount;
+	private short columnCount;
+	private short rowCount;
 	
 	/**
 	 * Creates a new instance.
@@ -35,7 +34,6 @@ public class GridGuiContainerImpl extends GuiContainerImpl<GridGuiContainer> imp
 	public GridGuiContainerImpl(@NotNull GuiBaseImpl<?> gui, int internalId, @NotNull Object id) {
 		super(gui, GuiElementType.CONTAINER_GRID, internalId, id);
 		setGridSize(0, 0);
-		throw new NotImplementedException();
 	}
 	
 	
@@ -83,8 +81,8 @@ public class GridGuiContainerImpl extends GuiContainerImpl<GridGuiContainer> imp
 			}
 		}
 		
-		columnCount = columns;
-		rowCount = rows;
+		columnCount = (short) columns;
+		rowCount = (short) rows;
 		getGui().flagAndUpdate(this);
 		return this;
 	}
@@ -96,6 +94,7 @@ public class GridGuiContainerImpl extends GuiContainerImpl<GridGuiContainer> imp
 	public <E extends GuiElement<E>> E makeChild(@NotNull E element, int column, int row) {
 		Validate.isTrue(column >= 0 && row >= 0 && column < columnCount && row < rowCount,
 				"The columns and rows must be at least 0 and less than the values specified in #setGridSize");
+		Validate.isTrue(children.get(column * rowCount + row) == null, "That position is already taken by another child");
 		GuiElementImpl<?> impl = (GuiElementImpl<?>) element;
 		children.set(column * rowCount + row, impl);
 		impl.setParent(this);
@@ -115,8 +114,8 @@ public class GridGuiContainerImpl extends GuiContainerImpl<GridGuiContainer> imp
 	
 	@Override
 	public void serializeImpl(@NotNull ResizingByteBuffer buffer) {
-		buffer.putInt(columnCount);
-		buffer.putInt(rowCount);
+		buffer.putShort(columnCount);
+		buffer.putShort(rowCount);
 		for (GuiElementImpl<?> element : children) {
 			buffer.putInt(element == null ? getInternalId() : element.getInternalId());
 		}

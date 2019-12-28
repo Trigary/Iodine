@@ -14,7 +14,7 @@ public class LoginFailedPacketHandler extends PacketHandler {
 	@Override
 	public void handle(@NotNull ByteBuffer buffer) {
 		String text = "Server rejected login: ";
-		byte value = buffer.get();
+		int value = buffer.get();
 		if (value == 0) {
 			text += "client sent invalid login packet";
 		} else if (value == 1) {

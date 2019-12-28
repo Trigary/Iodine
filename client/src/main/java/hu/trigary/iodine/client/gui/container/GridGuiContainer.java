@@ -33,8 +33,8 @@ public final class GridGuiContainer extends GuiContainer {
 	
 	@Override
 	protected void deserializeImpl(@NotNull ByteBuffer buffer) {
-		columnCount = buffer.getInt();
-		rowCount = buffer.getInt();
+		columnCount = buffer.getShort();
+		rowCount = buffer.getShort();
 		childrenTemp = new int[columnCount * rowCount];
 		for (int i = 0; i < childrenTemp.length; i++) {
 			childrenTemp[i] = buffer.getInt();

@@ -8,7 +8,7 @@ import org.jetbrains.annotations.Contract;
  * The draw priority number determines whether this instance should
  * be rendered behind or in front of other instances.
  * The instance with the highest value is drawn on top of all other instances.
- * The number must be at least {@link #PRIORITY_LOWER_BOUND} and at most {@link #PRIORITY_UPPER_BOUND}.
+ * The number must be at least {@link Byte#MIN_VALUE} and at most {@link Byte#MAX_VALUE}.
  * <br><br>
  * By default elements are drawn in the order they are added,
  * so the default draw priority is an internal incrementing counter.
@@ -19,16 +19,6 @@ import org.jetbrains.annotations.Contract;
  * if its previous value is less than this new value.
  */
 public interface DrawPrioritizeable {
-	/**
-	 * The inclusive lower bound for the draw priorities.
-	 */
-	int PRIORITY_LOWER_BOUND = Byte.MIN_VALUE;
-	
-	/**
-	 * The inclusive upper bound for the draw priorities.
-	 */
-	int PRIORITY_UPPER_BOUND = Byte.MAX_VALUE;
-	
 	/**
 	 * Gets this instance's draw priority.
 	 * See the declaring class for more information.

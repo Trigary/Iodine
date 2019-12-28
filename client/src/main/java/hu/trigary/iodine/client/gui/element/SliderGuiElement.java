@@ -15,8 +15,8 @@ public abstract class SliderGuiElement extends GuiElement {
 	protected boolean editable;
 	protected boolean verticalOrientation;
 	protected String text;
-	protected int maxProgress;
-	protected int progress;
+	protected short maxProgress;
+	protected short progress;
 	
 	protected SliderGuiElement(@NotNull GuiBase gui, int id) {
 		super(gui, id);
@@ -31,8 +31,8 @@ public abstract class SliderGuiElement extends GuiElement {
 		height = verticalOrientation ? buffer.getShort() : SIZE;
 		editable = BufferUtils.deserializeBoolean(buffer);
 		text = BufferUtils.deserializeString(buffer);
-		maxProgress = buffer.getInt();
-		progress = buffer.getInt();
+		maxProgress = buffer.getShort();
+		progress = buffer.getShort();
 	}
 	
 	@NotNull
@@ -43,7 +43,7 @@ public abstract class SliderGuiElement extends GuiElement {
 	
 	protected final void onChanged(int newProgress) {
 		if (editable && progress != newProgress && newProgress >= 0 && newProgress <= maxProgress) {
-			sendChangePacket(4, b -> b.putInt(newProgress));
+			sendChangePacket(4, b -> b.putShort((short) newProgress));
 		}
 	}
 }

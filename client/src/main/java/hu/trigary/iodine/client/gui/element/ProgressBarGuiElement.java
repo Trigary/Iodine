@@ -14,8 +14,8 @@ public abstract class ProgressBarGuiElement extends GuiElement {
 	protected int height;
 	protected boolean verticalOrientation;
 	protected String text;
-	protected int maxProgress;
-	protected int progress;
+	protected short maxProgress;
+	protected short progress;
 	
 	protected ProgressBarGuiElement(@NotNull GuiBase gui, int id) {
 		super(gui, id);
@@ -29,8 +29,8 @@ public abstract class ProgressBarGuiElement extends GuiElement {
 		width = verticalOrientation ? SIZE : buffer.getShort();
 		height = verticalOrientation ? buffer.getShort() : SIZE;
 		text = BufferUtils.deserializeString(buffer);
-		maxProgress = buffer.getInt();
-		progress = buffer.getInt();
+		maxProgress = buffer.getShort();
+		progress = buffer.getShort();
 	}
 	
 	@NotNull

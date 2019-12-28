@@ -34,7 +34,6 @@ public class LinearGuiContainerImpl extends GuiContainerImpl<LinearGuiContainer>
 	 */
 	public LinearGuiContainerImpl(@NotNull GuiBaseImpl<?> gui, int internalId, @NotNull Object id) {
 		super(gui, GuiElementType.CONTAINER_LINEAR, internalId, id);
-		throw new NotImplementedException();
 	}
 	
 	
@@ -120,7 +119,7 @@ public class LinearGuiContainerImpl extends GuiContainerImpl<LinearGuiContainer>
 	@Override
 	public void serializeImpl(@NotNull ResizingByteBuffer buffer) {
 		buffer.putBool(verticalOrientation);
-		buffer.putInt(children.size());
+		buffer.putShort((short) children.size());
 		for (GuiElementImpl<?> element : children) {
 			buffer.putInt(element.getInternalId());
 		}

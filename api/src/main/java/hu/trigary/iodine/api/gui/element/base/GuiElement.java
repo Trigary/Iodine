@@ -15,11 +15,6 @@ import org.jetbrains.annotations.NotNull;
  */
 public interface GuiElement<T extends GuiElement<T>> extends AttachmentHolder, DrawPrioritizeable {
 	/**
-	 * The inclusive upper bound for padding values.
-	 */
-	int PADDING_UPPER_BOUND = Short.MAX_VALUE;
-	
-	/**
 	 * Gets the GUI that contains this element.
 	 *
 	 * @return the GUI that contains this element
@@ -46,6 +41,8 @@ public interface GuiElement<T extends GuiElement<T>> extends AttachmentHolder, D
 	@Contract(pure = true)
 	GuiParent<?> getParent();
 	
+	
+	
 	/**
 	 * Gets the current padding values.
 	 * The elements in the array are the top, bottom, left, right padding values in this order.
@@ -59,8 +56,7 @@ public interface GuiElement<T extends GuiElement<T>> extends AttachmentHolder, D
 	/**
 	 * Sets the padding values.
 	 * The elements in the array must be the top, bottom, left, right padding values in this order.
-	 * The values must be at least 0 and at most {@link #PADDING_UPPER_BOUND}.
-	 * {@code -1} is also allowed as a way to indicate to leave that specific padding value unchanged.
+	 * A value of {@code -1} is allowed as a way to indicate to leave that specific padding value unchanged.
 	 *
 	 * @param padding the new padding value
 	 * @return the current instance (for chaining)

@@ -2,11 +2,9 @@ package hu.trigary.iodine.bukkit.gui.element;
 
 import hu.trigary.iodine.api.gui.element.SliderGuiElement;
 import hu.trigary.iodine.backend.GuiElementType;
-import hu.trigary.iodine.bukkit.IodineUtils;
 import hu.trigary.iodine.bukkit.gui.container.base.GuiBaseImpl;
 import hu.trigary.iodine.bukkit.gui.element.base.GuiElementImpl;
 import hu.trigary.iodine.bukkit.network.ResizingByteBuffer;
-import org.apache.commons.lang.NotImplementedException;
 import org.apache.commons.lang.Validate;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Contract;
@@ -24,8 +22,8 @@ public class SliderGuiElementImpl extends GuiElementImpl<SliderGuiElement> imple
 	private boolean editable = true;
 	private boolean verticalOrientation;
 	private String text = "";
-	private int maxProgress;
-	private int progress;
+	private short maxProgress;
+	private short progress;
 	private ProgressedAction progressedAction;
 	
 	/**
@@ -88,7 +86,6 @@ public class SliderGuiElementImpl extends GuiElementImpl<SliderGuiElement> imple
 	@Override
 	public SliderGuiElementImpl setWidth(int width) {
 		Validate.isTrue(!verticalOrientation, "The width is only configurable in horizontal orientation");
-		IodineUtils.validateWidth(width);
 		this.width = (short) width;
 		getGui().flagAndUpdate(this);
 		return this;
@@ -98,7 +95,6 @@ public class SliderGuiElementImpl extends GuiElementImpl<SliderGuiElement> imple
 	@Override
 	public SliderGuiElementImpl setHeight(int height) {
 		Validate.isTrue(verticalOrientation, "The height is only configurable in vertical orientation");
-		IodineUtils.validateHeight(height);
 		this.height = (short) height;
 		getGui().flagAndUpdate(this);
 		return this;
@@ -140,9 +136,9 @@ public class SliderGuiElementImpl extends GuiElementImpl<SliderGuiElement> imple
 	@Override
 	public SliderGuiElementImpl setMaxProgress(int maxProgress) {
 		Validate.isTrue(maxProgress >= 0, "Max progress must be at least 0");
-		this.maxProgress = maxProgress;
+		this.maxProgress = (short) maxProgress;
 		if (progress > maxProgress) {
-			progress = maxProgress;
+			progress = this.maxProgress;
 		}
 		getGui().flagAndUpdate(this);
 		return this;
@@ -153,7 +149,7 @@ public class SliderGuiElementImpl extends GuiElementImpl<SliderGuiElement> imple
 	public SliderGuiElementImpl setProgress(int progress) {
 		Validate.isTrue(progress >= 0 && progress <= maxProgress,
 				"Progress must be at least 0 and at most maxProgress");
-		this.progress = progress;
+		this.progress = (short) progress;
 		getGui().flagAndUpdate(this);
 		return this;
 	}
@@ -173,8 +169,8 @@ public class SliderGuiElementImpl extends GuiElementImpl<SliderGuiElement> imple
 		buffer.putShort(verticalOrientation ? height : width);
 		buffer.putBool(editable);
 		buffer.putString(text);
-		buffer.putInt(maxProgress);
-		buffer.putInt(progress);
+		buffer.putShort(maxProgress);
+		buffer.putShort(progress);
 	}
 	
 	@Override
@@ -183,7 +179,7 @@ public class SliderGuiElementImpl extends GuiElementImpl<SliderGuiElement> imple
 			return;
 		}
 		
-		int newProgress = message.getInt();
+		short newProgress = message.getShort();
 		if (progress == newProgress || newProgress < 0 || newProgress > maxProgress) {
 			return;
 		}

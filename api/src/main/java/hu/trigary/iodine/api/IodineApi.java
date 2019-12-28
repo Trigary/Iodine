@@ -13,6 +13,10 @@ import org.jetbrains.annotations.NotNull;
  * The API plugins should use to have access to Iodine's features.
  * Instances of this class can be obtained through the {@link ServicesManager}.
  * The {@link #getInstance()} method does this internally.
+ * <br><br>
+ * It is worth noting that generally speaking values which are representable on 15 bits are supported,
+ * or 14 bits in case negative values are also valid. While the API works with 32 bit integers,
+ * the implementation prefers 16 bit shorts and variable-length encoding to reduce payload size.
  */
 public interface IodineApi {
 	/**
@@ -63,8 +67,6 @@ public interface IodineApi {
 	
 	/**
 	 * Creates a new, empty overlay.
-	 * The offsets must be at least {@link IodineOverlay#OFFSET_LOWER_BOUND}
-	 * and at most {@link IodineOverlay#OFFSET_UPPER_BOUND}.
 	 *
 	 * @param anchor the specified anchor
 	 * @param horizontalOffset the overlay's horizontal offset

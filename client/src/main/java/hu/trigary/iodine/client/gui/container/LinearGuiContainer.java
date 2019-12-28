@@ -23,7 +23,7 @@ public final class LinearGuiContainer extends GuiContainer {
 	@Override
 	protected void deserializeImpl(@NotNull ByteBuffer buffer) {
 		verticalOrientation = BufferUtils.deserializeBoolean(buffer);
-		childrenTemp = new int[buffer.getInt()];
+		childrenTemp = new int[buffer.getShort()];
 		for (int i = 0; i < childrenTemp.length; i++) {
 			childrenTemp[i] = buffer.getInt();
 		}

@@ -31,7 +31,7 @@ public abstract class TextFieldGuiElement extends GuiElement {
 		text = BufferUtils.deserializeString(buffer);
 		String regexString = BufferUtils.deserializeString(buffer);
 		regex = regexString.isEmpty() ? null : Pattern.compile(regexString);
-		maxLength = buffer.get();
+		maxLength = buffer.get() & 0xFF;
 	}
 	
 	@NotNull

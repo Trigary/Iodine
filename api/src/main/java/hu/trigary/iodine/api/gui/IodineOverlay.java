@@ -11,18 +11,6 @@ import org.jetbrains.annotations.NotNull;
  */
 public interface IodineOverlay extends GuiBase<IodineOverlay>, DrawPrioritizeable {
 	/**
-	 * The inclusive lower bound for the horizontal/vertical offset.
-	 */
-	int OFFSET_LOWER_BOUND = Short.MIN_VALUE;
-	
-	/**
-	 * The inclusive upper bound for the horizontal/vertical offset.
-	 */
-	int OFFSET_UPPER_BOUND = Short.MAX_VALUE;
-	
-	
-	
-	/**
 	 * Gets the position the coordinates are relative to.
 	 *
 	 * @return this overlay's anchor position

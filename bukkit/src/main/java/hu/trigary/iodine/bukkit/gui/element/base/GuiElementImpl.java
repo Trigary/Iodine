@@ -2,7 +2,6 @@ package hu.trigary.iodine.bukkit.gui.element.base;
 
 import hu.trigary.iodine.api.gui.element.base.GuiElement;
 import hu.trigary.iodine.backend.GuiElementType;
-import hu.trigary.iodine.bukkit.IodineUtils;
 import hu.trigary.iodine.bukkit.gui.IodineGuiImpl;
 import hu.trigary.iodine.bukkit.gui.container.base.GuiBaseImpl;
 import hu.trigary.iodine.bukkit.gui.container.base.GuiParentPlus;
@@ -121,7 +120,6 @@ public abstract class GuiElementImpl<T extends GuiElement<T>> implements GuiElem
 		for (int i = 0; i < 4; i++) {
 			int value = padding[i];
 			if (value != -1) {
-				IodineUtils.validateRange(0, PADDING_UPPER_BOUND, value, "padding");
 				this.padding[i] = (short) value;
 			}
 		}
@@ -138,7 +136,7 @@ public abstract class GuiElementImpl<T extends GuiElement<T>> implements GuiElem
 	
 	@Override
 	public void setDrawPriority(int priority) {
-		IodineUtils.validateRange(PRIORITY_LOWER_BOUND, PRIORITY_UPPER_BOUND, priority, "draw priority");
+		Validate.isTrue(priority == (priority & 0xFF), "The draw priority must be representable as a byte");
 		drawPriority = (byte) priority;
 		getGui().flagAndUpdate(this);
 	}
