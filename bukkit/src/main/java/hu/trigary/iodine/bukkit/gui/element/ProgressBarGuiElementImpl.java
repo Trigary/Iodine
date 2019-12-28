@@ -151,8 +151,6 @@ public class ProgressBarGuiElementImpl extends GuiElementImpl<ProgressBarGuiElem
 		buffer.putInt(progress);
 	}
 	
-	
-	
 	@Override
 	public void handleChangePacket(@NotNull Player player, @NotNull ByteBuffer message) {}
 }

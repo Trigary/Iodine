@@ -101,8 +101,6 @@ public class ImageGuiElementImpl extends GuiElementImpl<ImageGuiElement> impleme
 		throw new NotImplementedException();
 	}
 	
-	
-	
 	@Override
 	public void handleChangePacket(@NotNull Player player, @NotNull ByteBuffer message) {
 		if (clickedAction != null) {

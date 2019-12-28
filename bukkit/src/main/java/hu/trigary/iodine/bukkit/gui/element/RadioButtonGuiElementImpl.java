@@ -5,7 +5,6 @@ import hu.trigary.iodine.backend.GuiElementType;
 import hu.trigary.iodine.bukkit.gui.container.base.GuiBaseImpl;
 import hu.trigary.iodine.bukkit.gui.element.base.GuiElementImpl;
 import hu.trigary.iodine.bukkit.network.ResizingByteBuffer;
-import org.apache.commons.lang.NotImplementedException;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -84,9 +83,10 @@ public class RadioButtonGuiElementImpl extends GuiElementImpl<RadioButtonGuiElem
 		
 		if (groupData != null) {
 			groupData.elements.remove(this);
-			if (!groupData.elements.isEmpty() && groupData.checked == this) {
+			if (groupData.checked == this && !groupData.elements.isEmpty()) {
 				groupData.checked = groupData.elements.get(0);
 				groupData.checked.checked = true;
+				getGui().flagOnly(groupData.checked);
 			}
 		}
 		
@@ -131,14 +131,42 @@ public class RadioButtonGuiElementImpl extends GuiElementImpl<RadioButtonGuiElem
 	public void serializeImpl(@NotNull ResizingByteBuffer buffer) {
 		buffer.putBool(editable);
 		buffer.putBool(checked);
-		buffer.putInt(groupData.id);
 	}
-	
-	
 	
 	@Override
 	public void handleChangePacket(@NotNull Player player, @NotNull ByteBuffer message) {
-		throw new NotImplementedException();
+		if (!editable || groupData.checked == this) {
+			return;
+		}
+		
+		RadioButtonGuiElementImpl oldChecked = groupData.checked;
+		groupData.checked.checked = false;
+		groupData.checked = this;
+		checked = true;
+		getGui().flagOnly(oldChecked);
+		
+		if (oldChecked.uncheckedAction == null && checkedAction == null) {
+			getGui().flagAndUpdate(this);
+		} else {
+			getGui().flagAndAtomicUpdate(this, () -> {
+				if (oldChecked.uncheckedAction != null) {
+					oldChecked.uncheckedAction.accept(this, oldChecked, player);
+				}
+				if (checkedAction != null) {
+					checkedAction.accept(this, oldChecked, player);
+				}
+			});
+		}
+	}
+	
+	@Override
+	public void onRemoved() {
+		groupData.elements.remove(this);
+		if (groupData.checked == this && !groupData.elements.isEmpty()) {
+			groupData.checked = groupData.elements.get(0);
+			groupData.checked.checked = true;
+			getGui().flagOnly(groupData.checked);
+		}
 	}
 	
 	

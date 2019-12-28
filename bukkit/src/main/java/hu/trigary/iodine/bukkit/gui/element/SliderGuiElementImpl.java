@@ -177,10 +177,23 @@ public class SliderGuiElementImpl extends GuiElementImpl<SliderGuiElement> imple
 		buffer.putInt(progress);
 	}
 	
-	
-	
 	@Override
 	public void handleChangePacket(@NotNull Player player, @NotNull ByteBuffer message) {
-		throw new NotImplementedException();
+		if (!editable) {
+			return;
+		}
+		
+		int newProgress = message.getInt();
+		if (progress == newProgress || newProgress < 0 || newProgress > maxProgress) {
+			return;
+		}
+		
+		int oldProgress = progress;
+		progress = newProgress;
+		if (progressedAction == null) {
+			getGui().flagAndUpdate(this);
+		} else {
+			getGui().flagAndAtomicUpdate(this, () -> progressedAction.accept(this, oldProgress, progress, player));
+		}
 	}
 }

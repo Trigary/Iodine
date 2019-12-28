@@ -87,8 +87,6 @@ public class TextGuiElementImpl extends GuiElementImpl<TextGuiElement> implement
 		buffer.putString(text);
 	}
 	
-	
-	
 	@Override
 	public void handleChangePacket(@NotNull Player player, @NotNull ByteBuffer message) {}
 }

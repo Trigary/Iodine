@@ -5,6 +5,7 @@ import hu.trigary.iodine.client.util.IntPair;
 import hu.trigary.iodine.forge.gui.GuiElementManagerImpl;
 import hu.trigary.iodine.forge.gui.GuiManagerImpl;
 import hu.trigary.iodine.forge.gui.OverlayManagerImpl;
+import hu.trigary.iodine.forge.network.NetworkManagerImpl;
 import net.minecraft.client.MainWindow;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.client.event.ClientPlayerNetworkEvent;
@@ -43,6 +44,7 @@ public class IodineModBase extends IodineMod {
 	@NotNull
 	@Override
 	public IntPair getScreenSize() {
+		//noinspection resource
 		MainWindow window = Minecraft.getInstance().mainWindow;
 		return new IntPair(window.getScaledWidth(), window.getScaledHeight());
 		//TODO this is probably incorrect, compare it to other callbacks

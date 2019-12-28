@@ -177,4 +177,11 @@ public abstract class GuiElementImpl<T extends GuiElement<T>> implements GuiElem
 	 * @param message the packet's contents
 	 */
 	public abstract void handleChangePacket(@NotNull Player player, @NotNull ByteBuffer message);
+	
+	/**
+	 * A method that is called when this element is removed from its
+	 * {@link hu.trigary.iodine.api.gui.container.base.GuiBase}.
+	 * Does nothing by default, is designed to be overridden if necessary.
+	 */
+	public void onRemoved() {}
 }

@@ -117,7 +117,6 @@ public class TextFieldGuiElementImpl extends GuiElementImpl<TextFieldGuiElement>
 	@NotNull
 	@Override
 	public TextFieldGuiElement setRegex(@NotNull String regex) {
-		Validate.notNull(regex, "The regex must be non-null");
 		this.regex = regex;
 		compiledRegex = regex.isEmpty() ? null : Pattern.compile(regex);
 		getGui().flagAndUpdate(this);
@@ -128,6 +127,7 @@ public class TextFieldGuiElementImpl extends GuiElementImpl<TextFieldGuiElement>
 	@Override
 	public TextFieldGuiElement setMaxLength(int maxLength) {
 		//TODO explain why this limit exists (I also kind of forgot - probably to make sure the players can't cause packet loss)
+		//there might also be a client-side limit
 		Validate.isTrue(maxLength > 0 && maxLength <= 250, "The max length must be positive and at most 250");
 		this.maxLength = maxLength;
 		getGui().flagAndUpdate(this);
@@ -153,8 +153,6 @@ public class TextFieldGuiElementImpl extends GuiElementImpl<TextFieldGuiElement>
 		buffer.putByte((byte) maxLength);
 	}
 	
-	
-	
 	@Override
 	public void handleChangePacket(@NotNull Player player, @NotNull ByteBuffer message) {
 		if (!editable) {
@@ -162,8 +160,7 @@ public class TextFieldGuiElementImpl extends GuiElementImpl<TextFieldGuiElement>
 		}
 		
 		String newText = BufferUtils.deserializeString(message);
-		if (text.equals(newText)
-				|| newText.length() > maxLength
+		if (text.equals(newText) || newText.length() > maxLength
 				|| (compiledRegex != null && !compiledRegex.matcher(newText).matches())) {
 			return;
 		}

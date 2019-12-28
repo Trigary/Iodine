@@ -108,10 +108,8 @@ public class GuiBaseManager {
 	@Contract(pure = true)
 	public <T extends GuiElement<T>> GuiElementImpl<T> createElement(@NotNull Class<T> type,
 			@NotNull GuiBaseImpl<?> gui, int internalId, @NotNull Object id) {
-		ElementConstructor<?> constructor = elements.get(type);
-		Validate.notNull(constructor, "A valid Class<? extends GuiElement> must be provided");
 		//noinspection unchecked
-		return (GuiElementImpl<T>) constructor.apply(gui, internalId, id);
+		return (GuiElementImpl<T>) elements.get(type).apply(gui, internalId, id);
 	}
 	
 	

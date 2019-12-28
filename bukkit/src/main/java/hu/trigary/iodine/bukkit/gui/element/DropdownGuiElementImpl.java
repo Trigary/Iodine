@@ -123,16 +123,14 @@ public class DropdownGuiElementImpl extends GuiElementImpl<DropdownGuiElement> i
 		buffer.putInt(selected);
 	}
 	
-	
-	
 	@Override
 	public void handleChangePacket(@NotNull Player player, @NotNull ByteBuffer message) {
 		if (!editable) {
 			return;
 		}
 		
-		int newSelected = message.getShort();
-		if (newSelected < 0 || newSelected >= choices.size()) {
+		int newSelected = message.getInt();
+		if (selected == newSelected || newSelected < 0 || newSelected >= choices.size()) {
 			return;
 		}
 		

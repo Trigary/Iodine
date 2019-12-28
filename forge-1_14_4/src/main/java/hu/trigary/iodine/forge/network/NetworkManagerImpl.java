@@ -1,4 +1,4 @@
-package hu.trigary.iodine.forge;
+package hu.trigary.iodine.forge.network;
 
 import hu.trigary.iodine.backend.PacketType;
 import hu.trigary.iodine.client.IodineMod;
@@ -27,19 +27,18 @@ public class NetworkManagerImpl extends NetworkManager {
 	public NetworkManagerImpl(@NotNull IodineMod mod) {
 		super(mod);
 		channelName = new ResourceLocation(PacketType.NETWORK_CHANNEL);
-		NetworkInstance network = createNetwork(mod.getVersion(), channelName);
+		NetworkInstance network = createNetwork(mod::getVersion, channelName);
 		network.addListener(this::onNetworkEvent);
 	}
 	
 	
 	
 	@NotNull
-	private static NetworkInstance createNetwork(@NotNull String version, @NotNull ResourceLocation channelName) {
+	private static NetworkInstance createNetwork(@NotNull Supplier<String> versionSupplier, @NotNull ResourceLocation channelName) {
 		try {
 			Method method = NetworkRegistry.class.getDeclaredMethod("createInstance", ResourceLocation.class,
 					Supplier.class, Predicate.class, Predicate.class);
 			method.setAccessible(true);
-			Supplier<String> versionSupplier = () -> version;
 			Predicate<String> versionPredicate = NetworkRegistry.ABSENT::equals;
 			return (NetworkInstance) method.invoke(null, channelName, versionSupplier, versionPredicate, versionPredicate);
 		} catch (ReflectiveOperationException e) {

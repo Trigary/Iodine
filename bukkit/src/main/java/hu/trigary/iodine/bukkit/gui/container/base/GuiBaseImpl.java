@@ -98,7 +98,6 @@ public abstract class GuiBaseImpl<T extends GuiBase<T>> implements GuiBase<T>, G
 	@Contract(pure = true)
 	@Override
 	public final GuiElementImpl<?> getElement(@NotNull Object id) {
-		Validate.notNull(id, "ID must be non-null");
 		return apiIdElements.get(id);
 	}
 	
@@ -152,9 +151,9 @@ public abstract class GuiBaseImpl<T extends GuiBase<T>> implements GuiBase<T>, G
 	@NotNull
 	@Override
 	public final T removeElement(@NotNull Object id) {
-		Validate.notNull(id, "ID must be non-null");
 		GuiElementImpl<?> element = apiIdElements.remove(id);
 		if (element != null) {
+			element.onRemoved();
 			elements.remove(element.getInternalId());
 			flaggedForRemove.add(element);
 			executeUpdate();
@@ -165,7 +164,6 @@ public abstract class GuiBaseImpl<T extends GuiBase<T>> implements GuiBase<T>, G
 	@NotNull
 	@Override
 	public final T removeElement(@NotNull GuiElement<?> element) {
-		Validate.notNull(element, "Element must be non-null");
 		return removeElement(element.getId());
 	}
 	

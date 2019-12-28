@@ -29,7 +29,7 @@ public abstract class GuiContainerImpl<T extends GuiContainer<T>> extends GuiEle
 	
 	
 	@Override
-	public void setDrawPriority(int priority) {
+	public final void setDrawPriority(int priority) {
 		super.setDrawPriority(priority);
 		for (GuiElement<?> child : getChildren()) {
 			if (child.getDrawPriority() < priority) {

@@ -6,8 +6,8 @@ import hu.trigary.iodine.client.gui.GuiElementManager;
 import hu.trigary.iodine.client.gui.container.GridGuiContainer;
 import hu.trigary.iodine.client.gui.container.LinearGuiContainer;
 import hu.trigary.iodine.client.gui.container.RootGuiContainer;
+import hu.trigary.iodine.forge.gui.element.*;
 import org.jetbrains.annotations.NotNull;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 public class GuiElementManagerImpl extends GuiElementManager {
 	public GuiElementManagerImpl(@NotNull IodineMod mod) {
@@ -25,15 +25,23 @@ public class GuiElementManagerImpl extends GuiElementManager {
 			case CONTAINER_LINEAR:
 				return LinearGuiContainer::new;
 			case BUTTON:
+				return ButtonGuiElementImpl::new;
 			case CHECKBOX:
+				return CheckboxGuiElementImpl::new;
 			case DROPDOWN:
+				return DropdownGuiElementImpl::new;
 			case IMAGE:
+				return ImageGuiElementImpl::new;
 			case PROGRESS_BAR:
+				return ProgressBarGuiElementImpl::new;
 			case RADIO_BUTTON:
+				return RadioButtonGuiElementImpl::new;
 			case SLIDER:
+				return SliderGuiElementImpl::new;
 			case TEXT_FIELD:
+				return TextFieldGuiElementImpl::new;
 			case TEXT:
-				throw new NotImplementedException(); //TODO implement them
+				return TextGuiElementImpl::new;
 			default:
 				throw new AssertionError("Invalid GUiElementType: " + type);
 		}

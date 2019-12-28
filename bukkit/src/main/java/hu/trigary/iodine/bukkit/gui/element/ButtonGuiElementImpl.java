@@ -96,8 +96,6 @@ public class ButtonGuiElementImpl extends GuiElementImpl<ButtonGuiElement> imple
 		buffer.putString(text);
 	}
 	
-	
-	
 	@Override
 	public void handleChangePacket(@NotNull Player player, @NotNull ByteBuffer message) {
 		if (editable && clickedAction != null) {

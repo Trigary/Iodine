@@ -79,12 +79,14 @@ public class CheckboxGuiElementImpl extends GuiElementImpl<CheckboxGuiElement> i
 		buffer.putBool(checked);
 	}
 	
-	
-	
 	@Override
 	public void handleChangePacket(@NotNull Player player, @NotNull ByteBuffer message) {
+		if (!editable) {
+			return;
+		}
+		
 		boolean received = BufferUtils.deserializeBoolean(message);
-		if (!editable || checked == received) {
+		if (checked == received) {
 			return;
 		}
 		
