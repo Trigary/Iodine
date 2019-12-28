@@ -56,7 +56,8 @@ public class PacketListener implements PluginMessageListener {
 		
 		PacketType type = PacketType.fromId(message[0]);
 		if (type == null) {
-			plugin.log(Level.INFO, "Received message with invalid type-id from {0}, ignoring player", player.getName());
+			plugin.log(Level.INFO, "Received message with invalid type-id ({0}) from {1}, ignoring player",
+					message[0], player.getName());
 			ignore(iodinePlayer);
 			return;
 		}

@@ -29,7 +29,7 @@ public class IodineModBase extends IodineMod {
 	
 	
 	
-	private void setup(FMLCommonSetupEvent event) {
+	private void setup(@NotNull FMLCommonSetupEvent event) {
 		initialize(Logger.getLogger("Iodine"), //TODO is a java.util logger fine or do I need a slf4j logger?
 				ModLoadingContext.get().getActiveContainer().getModInfo().getVersion().getQualifier(),
 				new NetworkManagerImpl(this),
@@ -51,7 +51,7 @@ public class IodineModBase extends IodineMod {
 	
 	
 	private class ServerJoinListener {
-		private void connected(ClientPlayerNetworkEvent.LoggedInEvent event) {
+		private void connected(@NotNull ClientPlayerNetworkEvent.LoggedInEvent event) {
 			//TODO can packets be sent now, or do I have to wait for EntityJoinWorldEvent?
 			//TODO is this fired async or sync? do I need to switch to the main thread?
 			//noinspection resource
@@ -60,7 +60,7 @@ public class IodineModBase extends IodineMod {
 		}
 	
 		@SubscribeEvent
-		private void joined(EntityJoinWorldEvent event) {
+		private void joined(@NotNull EntityJoinWorldEvent event) {
 			FMLJavaModLoadingContext.get().getModEventBus().unregister(this);
 			//don't let this fire multiple times
 			onJoinedServer();

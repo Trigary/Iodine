@@ -67,10 +67,10 @@ public class NetworkManager {
 	 */
 	public void send(@NotNull Player player, @NotNull PacketType type,
 			int dataLength, @NotNull Consumer<ByteBuffer> dataProvider) {
-		ByteBuffer buffer = ByteBuffer.wrap(new byte[dataLength + 1]);
-		buffer.put(type.getId());
-		dataProvider.accept(buffer);
-		send(player, buffer.array());
+		byte[] message = new byte[dataLength + 1];
+		message[0] = type.getId();
+		dataProvider.accept(ByteBuffer.wrap(message, 1, dataLength));
+		send(player, message);
 	}
 	
 	/**

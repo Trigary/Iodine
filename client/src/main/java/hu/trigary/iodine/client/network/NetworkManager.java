@@ -29,23 +29,31 @@ public abstract class NetworkManager {
 	
 	
 	public final void send(@NotNull PacketType type, int dataLength, @NotNull Consumer<ByteBuffer> dataProvider) {
-		byte[] message = new byte[dataLength];
-		dataProvider.accept(ByteBuffer.wrap(message));
+		byte[] message = new byte[dataLength + 1];
+		message[0] = type.getId();
+		dataProvider.accept(ByteBuffer.wrap(message, 1, dataLength));
 		mod.getLogger().info("Sending packet: " + type);
-		sendImpl(type, message);
+		sendImpl(message);
 	}
 	
-	protected abstract void sendImpl(@NotNull PacketType type, @NotNull byte[] message);
+	protected abstract void sendImpl(@NotNull byte[] message);
 	
 	
 	
-	//TODO for simplicity just call this method on the main thread
-	protected final void onReceived(@NotNull PacketType type, @NotNull byte[] message) {
+	//TODO docs: call this method on the main thread
+	protected final void onReceived(@NotNull ByteBuffer message) {
+		byte id = message.get();
+		PacketType type = PacketType.fromId(id);
+		if (type == null) {
+			mod.getLogger().severe("Received message with invalid type-id: " + id);
+			return;
+		}
+		
 		try {
-			handlers[type.getUnsignedId()].handle(ByteBuffer.wrap(message));
+			handlers[type.getUnsignedId()].handle(message);
 			mod.getLogger().info("Successfully handled received packet: " + type);
 		} catch (Throwable t) {
-			mod.getLogger().log(Level.WARNING, "Error handling received packet: " + type, t);
+			mod.getLogger().log(Level.SEVERE, "Error handling received packet: " + type, t);
 		}
 	}
 }
