@@ -55,5 +55,5 @@ dependencies {
 }
 
 shadowJar { //TODO is the plugin necessary? if not, set the name somewhere else
-	archiveName = "iodine-1_14_4-${project.version}.jar"
+	archiveName = "Iodine-1_14_4-${project.version}.jar"
 }

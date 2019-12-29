@@ -9,10 +9,7 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.IPacket;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.network.NetworkDirection;
-import net.minecraftforge.fml.network.NetworkEvent;
-import net.minecraftforge.fml.network.NetworkInstance;
-import net.minecraftforge.fml.network.NetworkRegistry;
+import net.minecraftforge.fml.network.*;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
 
@@ -28,6 +25,7 @@ public class NetworkManagerImpl extends NetworkManager {
 	public NetworkManagerImpl(@NotNull IodineMod mod) {
 		super(mod);
 		channelName = new ResourceLocation(PacketType.NETWORK_CHANNEL);
+		createNetwork(channelName).addListener(this::onNetworkEvent);
 	}
 	
 	
@@ -36,7 +34,6 @@ public class NetworkManagerImpl extends NetworkManager {
 	public void initialize() {
 		//noinspection ConstantConditions,resource
 		network = Minecraft.getInstance().getConnection().getNetworkManager();
-		createNetwork(mod::getVersion, channelName).addListener(this::onNetworkEvent);
 	}
 	
 	
@@ -49,12 +46,13 @@ public class NetworkManagerImpl extends NetworkManager {
 	}
 	
 	@NotNull
-	private static NetworkInstance createNetwork(@NotNull Supplier<String> versionSupplier, @NotNull ResourceLocation channelName) {
+	private static NetworkInstance createNetwork(@NotNull ResourceLocation channelName) {
 		try {
 			Method method = NetworkRegistry.class.getDeclaredMethod("createInstance", ResourceLocation.class,
 					Supplier.class, Predicate.class, Predicate.class);
 			method.setAccessible(true);
-			Predicate<String> versionPredicate = NetworkRegistry.ABSENT::equals;
+			Supplier<String> versionSupplier = () -> NetworkRegistry.ACCEPTVANILLA;
+			Predicate<String> versionPredicate = NetworkRegistry.ACCEPTVANILLA::equals;
 			return (NetworkInstance) method.invoke(null, channelName, versionSupplier, versionPredicate, versionPredicate);
 		} catch (ReflectiveOperationException e) {
 			throw new RuntimeException(e);
@@ -63,11 +61,18 @@ public class NetworkManagerImpl extends NetworkManager {
 	
 	private void onNetworkEvent(@NotNull NetworkEvent event) {
 		NetworkEvent.Context context = event.getSource().get();
+		context.setPacketHandled(true);
 		ServerPlayerEntity sender = context.getSender();
-		if (sender == null) {
-			context.enqueueWork(() -> onReceived(ByteBuffer.wrap(event.getPayload().array())));
-		} else {
+		if (sender != null) {
 			mod.getLogger().warn("Received packet from another player: " + sender.getScoreboardName());
+			return;
 		}
+		
+		PacketBuffer buffer = event.getPayload();
+		byte[] array = new byte[buffer.readableBytes()];
+		for (int i = 0; i < array.length; i++) {
+			array[i] = buffer.readByte();
+		}
+		context.enqueueWork(() -> onReceived(ByteBuffer.wrap(array)));
 	}
 }

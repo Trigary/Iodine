@@ -3,3 +3,4 @@ version: ${version}
 authors: ["Trigary"]
 website: "https://github.com/Trigary/Iodine"
 main: hu.trigary.iodine.bukkit.IodinePlugin
+api-version: "1.13"

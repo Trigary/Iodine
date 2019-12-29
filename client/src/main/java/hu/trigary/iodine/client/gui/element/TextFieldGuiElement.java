@@ -44,7 +44,10 @@ public abstract class TextFieldGuiElement extends GuiElement {
 		if (editable && !text.equals(newText) && newText.length() <= maxLength
 				&& (regex == null || regex.matcher(newText).matches())) {
 			byte[] array = BufferUtils.serializeString(newText);
-			sendChangePacket(array.length, b -> BufferUtils.serializeString(b, array));
+			sendChangePacket(array.length + 2, buffer -> {
+				buffer.putShort((short) array.length);
+				buffer.put(array);
+			});
 		}
 	}
 }

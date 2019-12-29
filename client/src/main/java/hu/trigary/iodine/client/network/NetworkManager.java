@@ -53,8 +53,8 @@ public abstract class NetworkManager {
 		}
 		
 		try {
+			mod.getLogger().info("Handling received packet: " + type);
 			handlers[type.getUnsignedId()].handle(message);
-			mod.getLogger().info("Successfully handled received packet: " + type);
 		} catch (Throwable t) {
 			mod.getLogger().error("Error handling received packet: " + type, t);
 		}

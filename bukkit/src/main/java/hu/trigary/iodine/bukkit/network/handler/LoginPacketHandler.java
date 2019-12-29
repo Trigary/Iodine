@@ -96,9 +96,11 @@ public class LoginPacketHandler extends PacketHandler {
 		plugin.log(Level.INFO, "Login failed for: {0} (invalid LoginPacket)", player.getPlayer().getName());
 		player.setState(IodinePlayer.State.INVALID);
 		plugin.getNetwork().send(player.getPlayer(), PacketType.SERVER_LOGIN_FAILED, (byte) 0);
-		player.getPlayer().sendMessage(ChatUtils.formatError("Iodine handshake failed due to invalid packet format."));
-		player.getPlayer().sendMessage(ChatUtils.formatError("We were unable to determine whether the client or the server is outdated."));
-		player.getPlayer().sendMessage(ChatUtils.formatError("If you believe this is a bug, please report it."));
+		player.getPlayer().sendMessage(ChatUtils.formatError("Iodine handshake failed",
+				"Mod features have been disabled for this session.",
+				"The handshake has failed due to an invalid packet format.",
+				"Unable to determine which party is outdated.",
+				"If you believe this is a bug, please report it."));
 	}
 	
 	private void outdatedParty(@NotNull IodinePlayerImpl player, boolean outdatedClient) {
@@ -106,10 +108,13 @@ public class LoginPacketHandler extends PacketHandler {
 				player.getPlayer().getName(), outdatedClient ? "client" : "server");
 		player.setState(IodinePlayer.State.INVALID);
 		plugin.getNetwork().send(player.getPlayer(), PacketType.SERVER_LOGIN_FAILED, outdatedClient ? (byte) 1 : 2);
-		player.getPlayer().sendMessage(ChatUtils.formatError("Iodine handshake failed due to client-server mod version mismatch."));
-		player.getPlayer().sendMessage(ChatUtils.formatError(outdatedClient
-				? "Your client is outdated, please update to be able to use the mod features on this server."
-				: "The server is outdated, consider asking the staff to update to make the mod features are available."));
+		String outdated = outdatedClient
+				? "Your client is outdated, please follow the server and update."
+				: "The server is outdated, consider asking them to update.";
+		player.getPlayer().sendMessage(ChatUtils.formatError("Iodine handshake failed",
+				"Mod features have been disabled for this session.",
+				"The handshake has failed due to a mod version mismatch.",
+				outdated));
 	}
 	
 	private void versionMatches(@NotNull IodinePlayerImpl player) {

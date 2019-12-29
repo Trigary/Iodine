@@ -86,8 +86,8 @@ public class PacketListener implements PluginMessageListener {
 	
 	private void ignore(@NotNull IodinePlayerImpl player) {
 		player.setState(IodinePlayer.State.INVALID);
-		player.getPlayer().sendMessage(ChatUtils.formatError("An invalid packet has been detected, "
-				+ "mod support has been disabled for this session."));
-		player.getPlayer().sendMessage(ChatUtils.formatError("If you believe this is a bug, please report it."));
+		player.getPlayer().sendMessage(ChatUtils.formatError("Invalid packet detected",
+				"Mod features have been disabled for this session.",
+				"If you believe this is a bug, please report it."));
 	}
 }

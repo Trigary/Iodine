@@ -9,10 +9,10 @@ dependencies {
 }
 
 processResources {
-    include 'plugin.yml'
+    include 'plugin.yml', 'config.yml'
     expand 'version': project.version
 }
 
 shadowJar {
-    archiveFileName = "iodine-${project.version}.jar"
+    archiveFileName = "Iodine-${project.version}.jar"
 }

@@ -15,7 +15,9 @@ public class LoginRequestPacketHandler extends PacketHandler {
 	@Override
 	public void handle(@NotNull ByteBuffer buffer) {
 		byte[] version = BufferUtils.serializeString(mod.getVersion());
-		mod.getNetwork().send(PacketType.CLIENT_LOGIN, version.length,
-				b -> BufferUtils.serializeString(b, version));
+		mod.getNetwork().send(PacketType.CLIENT_LOGIN, version.length + 2, b -> {
+			b.putShort((short) version.length);
+			b.put(version);
+		});
 	}
 }

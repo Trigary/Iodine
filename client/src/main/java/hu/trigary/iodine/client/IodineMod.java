@@ -21,16 +21,19 @@ public abstract class IodineMod {
 	
 	
 	
-	protected final void initialize(@NotNull Logger logger, @NotNull String version, @NotNull NetworkManager network,
-			@NotNull GuiElementManager element, @NotNull GuiManager gui, @NotNull OverlayManager overlay) {
+	protected final void initializeFirst(@NotNull Logger logger, @NotNull String version) {
 		this.logger = logger;
 		this.version = version;
+	}
+	
+	protected final void initializeSecond(@NotNull NetworkManager network, @NotNull GuiElementManager element,
+			@NotNull GuiManager gui, @NotNull OverlayManager overlay) {
 		this.network = network;
 		this.element = element;
 		this.gui = gui;
 		this.overlay = overlay;
 	}
-
+	
 	
 	
 	@NotNull
@@ -75,8 +78,7 @@ public abstract class IodineMod {
 		logger.info("Joined server, attempting login");
 		network.initialize();
 		byte[] array = BufferUtils.serializeString(version);
-		network.send(PacketType.CLIENT_LOGIN, array.length,
-				b -> BufferUtils.serializeString(b, array));
+		network.send(PacketType.CLIENT_LOGIN, array.length, b -> b.put(array));
 	}
 	
 	@NotNull

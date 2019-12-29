@@ -30,7 +30,8 @@ public final class BufferUtils {
 	
 	/**
 	 * Serializes the specified text by converting it to an UTF-8 encoded byte array.
-	 * The returned value should then be used in {@link #serializeString(ByteBuffer, byte[])}.
+	 * The returned value should then be appended to a buffer with two bytes,
+	 * the length of the array, preceding it.
 	 *
 	 * @param value the value to serialize
 	 * @return the text in serialized form
@@ -39,18 +40,6 @@ public final class BufferUtils {
 	@Contract(pure = true)
 	public static byte[] serializeString(@NotNull String value) {
 		return value.getBytes(StandardCharsets.UTF_8);
-	}
-	
-	/**
-	 * Writes a serialized string (retrieved from {@link #serializeString(String)}).
-	 * The length of this array (as a short) and the array itself are put into the buffer.
-	 *
-	 * @param buffer the buffer to serialize into
-	 * @param value the value to serialize
-	 */
-	public static void serializeString(@NotNull ByteBuffer buffer, @NotNull byte[] value) {
-		buffer.putShort((short) value.length);
-		buffer.put(value);
 	}
 	
 	
