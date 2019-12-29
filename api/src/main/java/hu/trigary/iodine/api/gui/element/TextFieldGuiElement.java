@@ -47,6 +47,7 @@ public interface TextFieldGuiElement extends GuiElement<TextFieldGuiElement>,
 	/**
 	 * Sets the maximum amount of characters the user can have in this text field.
 	 * The value must be positive and at most 250.
+	 * (The limit protects against malicious clients and helps obey possible client-side limits.)
 	 *
 	 * @param maxLength the new length limit to use
 	 * @return the current instance (for chaining)

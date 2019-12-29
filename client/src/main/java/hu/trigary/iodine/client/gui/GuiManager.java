@@ -19,7 +19,7 @@ public abstract class GuiManager {
 	public final void packetOpenGui(@NotNull ByteBuffer buffer) {
 		IodineGui gui = new IodineGui(mod, buffer.getInt());
 		if (openGui != null) {
-			closeOpenGui("Packet: Closed GUI to open another: ");
+			closeOpenGui("Packet: Closed GUI to open another: ", false);
 		}
 		
 		openGui = gui;
@@ -39,7 +39,7 @@ public abstract class GuiManager {
 	
 	public final void packetCloseGui() {
 		if (openGui != null) {
-			closeOpenGui("Packet: Closed GUI: ");
+			closeOpenGui("Packet: Closed GUI: ", false);
 		} else {
 			mod.getLogger().info("Packet: Can't close GUI: it's no longer opened");
 		}
@@ -47,18 +47,18 @@ public abstract class GuiManager {
 	
 	public final void playerCloseGui() {
 		mod.getNetwork().send(PacketType.CLIENT_GUI_CLOSE, 4, b -> b.putInt(openGui.getId()));
-		closeOpenGui("Player closed GUI: ");
+		closeOpenGui("Player closed GUI: ", true);
 	}
 	
 	
 	
-	private void closeOpenGui(@NotNull String message) {
-		closeGuiImpl(openGui);
+	private void closeOpenGui(@NotNull String message, boolean byPlayer) {
+		closeGuiImpl(openGui, byPlayer);
 		mod.getLogger().info(message + openGui.getId());
 		openGui = null;
 	}
 	
 	protected abstract void openGuiImpl(@NotNull IodineGui gui);
 	
-	protected abstract void closeGuiImpl(@NotNull IodineGui gui);
+	protected abstract void closeGuiImpl(@NotNull IodineGui gui, boolean byPlayer);
 }

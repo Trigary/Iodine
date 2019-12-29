@@ -8,11 +8,9 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.nio.ByteBuffer;
-import java.util.HashSet;
-import java.util.Set;
 
-public class IodineGui extends GuiBase {
-	private final Set<GuiElement> pressedElements = new HashSet<>();
+public final class IodineGui extends GuiBase {
+	private GuiElement focused;
 	
 	public IodineGui(@NotNull IodineMod mod, int id) {
 		super(mod, id);
@@ -21,44 +19,69 @@ public class IodineGui extends GuiBase {
 	
 	
 	@Override
-	protected final void deserializeStart(@NotNull ByteBuffer buffer) {}
+	protected void deserializeStart(@NotNull ByteBuffer buffer) {}
 	
 	@Override
-	protected final void onElementRemoved(@NotNull GuiElement element) {
-		pressedElements.remove(element);
+	protected void onElementRemoved(@NotNull GuiElement element) {
+		if (focused == element) {
+			focused = null;
+		}
 	}
 	
 	@NotNull
 	@Contract(pure = true)
 	@Override
-	protected final IntPair calculatePosition(int screenWidth, int screenHeight, int guiWidth, int guiHeight) {
+	protected IntPair calculatePosition(int screenWidth, int screenHeight, int guiWidth, int guiHeight) {
 		return new IntPair(screenWidth / 2 - guiWidth / 2, screenHeight / 2 - guiHeight / 2);
 	}
 	
-	
-	
-	public final void onEscapePressed() {
-		getMod().getGui().playerCloseGui();
-	}
-	
-	public final void onKeyTyped(char typedChar, int keyCode) {
-		for (GuiElement element : getElements()) {
-			element.onKeyTyped(typedChar, keyCode);
+	@Override
+	protected void onUpdatedResolution() {
+		if (focused != null) {
+			focused = getElement(focused.getId());
+			focused.setFocused(true); //can't be null, since onElementRemoved wasn't called
 		}
 	}
 	
-	public final void onMousePressed(int mouseX, int mouseY) {
-		for (GuiElement element : getElements()) {
+	
+	
+	public void onMousePressed(double mouseX, double mouseY) {
+		for (GuiElement element : getAllElements()) {
 			if (element.onMousePressed(mouseX, mouseY)) {
-				pressedElements.add(element);
+				focused.setFocused(false);
+				focused = element;
+				focused.setFocused(true);
 			}
 		}
 	}
 	
-	public final void onMouseReleased(int mouseX, int mouseY) {
-		for (GuiElement element : pressedElements) {
-			element.onMouseReleased(mouseX, mouseY);
+	public void onMouseReleased(double mouseX, double mouseY) {
+		if (focused != null) {
+			focused.onMouseReleased(mouseX, mouseY);
 		}
-		pressedElements.clear();
+	}
+	
+	public void onMouseDragged(double mouseX, double mouseY, double deltaX, double deltaY) {
+		if (focused != null) {
+			focused.onMouseDragged(mouseX, mouseY, deltaX, deltaY);
+		}
+	}
+	
+	public void onKeyPressed(int key, int scanCode, int modifiers) {
+		if (focused != null) {
+			focused.onKeyPressed(key, scanCode, modifiers);
+		}
+	}
+	
+	public void onKeyReleased(int key, int scanCode, int modifiers) {
+		if (focused != null) {
+			focused.onKeyReleased(key, scanCode, modifiers);
+		}
+	}
+	
+	public void onCharTyped(char codePoint, int modifiers) {
+		if (focused != null) {
+			focused.onCharTyped(codePoint, modifiers);
+		}
 	}
 }

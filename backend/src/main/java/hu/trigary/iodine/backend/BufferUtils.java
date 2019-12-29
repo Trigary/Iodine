@@ -2,6 +2,7 @@ package hu.trigary.iodine.backend;
 
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
@@ -84,6 +85,28 @@ public final class BufferUtils {
 	@NotNull
 	public static String deserializeString(@NotNull ByteBuffer buffer) {
 		byte[] bytes = new byte[buffer.getShort()];
+		buffer.get(bytes);
+		return new String(bytes, StandardCharsets.UTF_8);
+	}
+	
+	/**
+	 * Deserializes an UTF-8 string from the buffer.
+	 * The first 2 bytes indicate the length of the byte array
+	 * that is then interpreted as an UTF-8 string.
+	 * Null is returned if the length is greater than the limit value.
+	 *
+	 * @param buffer the buffer to deserialize from
+	 * @param maxByteCount the maximum count of bytes to accept
+	 * @return the deserialized value or null if the read length exceeds the limit
+	 */
+	@Nullable
+	public static String deserializeString(@NotNull ByteBuffer buffer, int maxByteCount) {
+		int length = buffer.getShort();
+		if (length > maxByteCount) {
+			return null;
+		}
+		
+		byte[] bytes = new byte[length];
 		buffer.get(bytes);
 		return new String(bytes, StandardCharsets.UTF_8);
 	}

@@ -111,11 +111,29 @@ public abstract class GuiElement {
 	
 	
 	
-	public void onKeyTyped(char typedChar, int keyCode) {}
+	public void setFocused(boolean focused) {}
 	
-	public boolean onMousePressed(int mouseX, int mouseY) {
-		return false;
+	public boolean onMousePressed(double mouseX, double mouseY) {
+		return false; //returns true -> is now focused
 	}
 	
-	public void onMouseReleased(int mouseX, int mouseY) {}
+	public void onMouseReleased(double mouseX, double mouseY) {
+		//only if focused
+	}
+	
+	public void onMouseDragged(double mouseX, double mouseY, double deltaX, double deltaY) {
+		//only if focused
+	}
+	
+	public void onKeyPressed(int key, int scanCode, int modifiers) {
+		//only if focused
+	}
+	
+	public void onKeyReleased(int key, int scanCode, int modifiers) {
+		//only if focused
+	}
+	
+	public void onCharTyped(char codePoint, int modifiers) {
+		//only if focused
+	}
 }

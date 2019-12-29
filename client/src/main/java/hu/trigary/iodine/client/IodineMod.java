@@ -7,10 +7,9 @@ import hu.trigary.iodine.client.gui.GuiManager;
 import hu.trigary.iodine.client.gui.OverlayManager;
 import hu.trigary.iodine.client.network.NetworkManager;
 import hu.trigary.iodine.client.util.IntPair;
+import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.logging.Logger;
 
 public abstract class IodineMod {
 	private Logger logger;
@@ -74,6 +73,7 @@ public abstract class IodineMod {
 	
 	public final void onJoinedServer() {
 		logger.info("Joined server, attempting login");
+		network.initialize();
 		byte[] array = BufferUtils.serializeString(version);
 		network.send(PacketType.CLIENT_LOGIN, array.length,
 				b -> BufferUtils.serializeString(b, array));

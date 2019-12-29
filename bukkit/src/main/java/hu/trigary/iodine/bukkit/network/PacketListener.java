@@ -40,7 +40,7 @@ public class PacketListener implements PluginMessageListener {
 	
 	
 	@Override
-	public void onPluginMessageReceived(String channel, Player player, byte[] message) {
+	public void onPluginMessageReceived(@NotNull String channel, @NotNull Player player, @NotNull byte[] message) {
 		IodinePlayerImpl iodinePlayer = plugin.getPlayer(player);
 		IodinePlayer.State state = iodinePlayer.getState();
 		if (state == IodinePlayer.State.INVALID) {

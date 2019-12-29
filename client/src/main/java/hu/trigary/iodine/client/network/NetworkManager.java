@@ -7,7 +7,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.nio.ByteBuffer;
 import java.util.function.Consumer;
-import java.util.logging.Level;
 
 public abstract class NetworkManager {
 	protected final IodineMod mod;
@@ -28,6 +27,10 @@ public abstract class NetworkManager {
 	
 	
 	
+	public abstract void initialize();
+	
+	
+	
 	public final void send(@NotNull PacketType type, int dataLength, @NotNull Consumer<ByteBuffer> dataProvider) {
 		byte[] message = new byte[dataLength + 1];
 		message[0] = type.getId();
@@ -45,7 +48,7 @@ public abstract class NetworkManager {
 		byte id = message.get();
 		PacketType type = PacketType.fromId(id);
 		if (type == null) {
-			mod.getLogger().severe("Received message with invalid type-id: " + id);
+			mod.getLogger().error("Received message with invalid type-id: " + id);
 			return;
 		}
 		
@@ -53,7 +56,7 @@ public abstract class NetworkManager {
 			handlers[type.getUnsignedId()].handle(message);
 			mod.getLogger().info("Successfully handled received packet: " + type);
 		} catch (Throwable t) {
-			mod.getLogger().log(Level.SEVERE, "Error handling received packet: " + type, t);
+			mod.getLogger().error("Error handling received packet: " + type, t);
 		}
 	}
 }

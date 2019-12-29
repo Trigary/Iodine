@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.nio.ByteBuffer;
 
-public class IodineOverlay extends GuiBase {
+public final class IodineOverlay extends GuiBase {
 	private final byte anchor;
 	private final short horizontalOffset;
 	private final short verticalOffset;
@@ -26,24 +26,24 @@ public class IodineOverlay extends GuiBase {
 	
 	
 	@Contract(pure = true)
-	public final byte getDrawPriority() {
+	public byte getDrawPriority() {
 		return drawPriority;
 	}
 	
 	
 	
 	@Override
-	protected final void deserializeStart(@NotNull ByteBuffer buffer) {
+	protected void deserializeStart(@NotNull ByteBuffer buffer) {
 		drawPriority = buffer.get();
 	}
 	
 	@Override
-	protected final void onElementRemoved(@NotNull GuiElement element) {}
+	protected void onElementRemoved(@NotNull GuiElement element) {}
 	
 	@NotNull
 	@Contract(pure = true)
 	@Override
-	protected final IntPair calculatePosition(int screenWidth, int screenHeight, int guiWidth, int guiHeight) {
+	protected IntPair calculatePosition(int screenWidth, int screenHeight, int guiWidth, int guiHeight) {
 		switch (anchor) {
 			case 1:
 				return new IntPair(horizontalOffset,
@@ -76,4 +76,7 @@ public class IodineOverlay extends GuiBase {
 				throw new AssertionError("Invalid anchor value: " + anchor);
 		}
 	}
+	
+	@Override
+	protected void onUpdatedResolution() {}
 }

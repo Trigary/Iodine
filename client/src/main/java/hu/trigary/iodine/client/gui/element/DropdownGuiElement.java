@@ -7,9 +7,6 @@ import hu.trigary.iodine.client.util.IntPair;
 import org.jetbrains.annotations.NotNull;
 
 import java.nio.ByteBuffer;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 public abstract class DropdownGuiElement extends GuiElement {
 	protected static final int HEIGHT = 20;

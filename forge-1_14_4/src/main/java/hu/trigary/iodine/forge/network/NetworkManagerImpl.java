@@ -23,15 +23,30 @@ import java.util.function.Supplier;
 
 public class NetworkManagerImpl extends NetworkManager {
 	private final ResourceLocation channelName;
+	private net.minecraft.network.NetworkManager network;
 	
 	public NetworkManagerImpl(@NotNull IodineMod mod) {
 		super(mod);
 		channelName = new ResourceLocation(PacketType.NETWORK_CHANNEL);
-		NetworkInstance network = createNetwork(mod::getVersion, channelName);
-		network.addListener(this::onNetworkEvent);
 	}
 	
 	
+	
+	@Override
+	public void initialize() {
+		//noinspection ConstantConditions,resource
+		network = Minecraft.getInstance().getConnection().getNetworkManager();
+		createNetwork(mod::getVersion, channelName).addListener(this::onNetworkEvent);
+	}
+	
+	
+	
+	@Override
+	protected void sendImpl(@NotNull byte[] message) {
+		Pair<PacketBuffer, Integer> data = Pair.of(new PacketBuffer(Unpooled.wrappedBuffer(message)), Integer.MIN_VALUE);
+		IPacket<?> packet = NetworkDirection.PLAY_TO_SERVER.buildPacket(data, channelName).getThis();
+		network.sendPacket(packet);
+	}
 	
 	@NotNull
 	private static NetworkInstance createNetwork(@NotNull Supplier<String> versionSupplier, @NotNull ResourceLocation channelName) {
@@ -46,21 +61,13 @@ public class NetworkManagerImpl extends NetworkManager {
 		}
 	}
 	
-	@Override
-	protected void sendImpl(@NotNull byte[] message) {
-		PacketBuffer buffer = new PacketBuffer(Unpooled.wrappedBuffer(message));
-		IPacket<?> packet = NetworkDirection.PLAY_TO_SERVER.buildPacket(Pair.of(buffer, Integer.MIN_VALUE), channelName).getThis();
-		//noinspection ConstantConditions,resource
-		Minecraft.getInstance().getConnection().getNetworkManager().sendPacket(packet);
-	}
-	
 	private void onNetworkEvent(@NotNull NetworkEvent event) {
 		NetworkEvent.Context context = event.getSource().get();
 		ServerPlayerEntity sender = context.getSender();
 		if (sender == null) {
 			context.enqueueWork(() -> onReceived(ByteBuffer.wrap(event.getPayload().array())));
 		} else {
-			mod.getLogger().warning("Received packet from another player: " + sender.getScoreboardName());
+			mod.getLogger().warn("Received packet from another player: " + sender.getScoreboardName());
 		}
 	}
 }

@@ -1,10 +1,10 @@
 package hu.trigary.iodine.client.network.handler;
 
 import hu.trigary.iodine.client.IodineMod;
+import org.apache.logging.log4j.Level;
 import org.jetbrains.annotations.NotNull;
 
 import java.nio.ByteBuffer;
-import java.util.logging.Level;
 
 public class LoginFailedPacketHandler extends PacketHandler {
 	public LoginFailedPacketHandler(@NotNull IodineMod mod) {
@@ -24,6 +24,6 @@ public class LoginFailedPacketHandler extends PacketHandler {
 		} else {
 			text += "unknown reason, probably version mismatch";
 		}
-		mod.getLogger().log(value == 2 ? Level.INFO : Level.WARNING, text);
+		mod.getLogger().log(value == 2 ? Level.INFO : Level.WARN, text);
 	}
 }

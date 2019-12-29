@@ -7,7 +7,6 @@ import hu.trigary.iodine.bukkit.gui.container.base.GuiBaseImpl;
 import hu.trigary.iodine.bukkit.gui.container.base.GuiContainerImpl;
 import hu.trigary.iodine.bukkit.gui.element.base.GuiElementImpl;
 import hu.trigary.iodine.bukkit.network.ResizingByteBuffer;
-import org.apache.commons.lang.NotImplementedException;
 import org.apache.commons.lang.Validate;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Contract;

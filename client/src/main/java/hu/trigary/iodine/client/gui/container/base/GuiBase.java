@@ -18,6 +18,7 @@ public abstract class GuiBase implements GuiParent {
 			.thenComparing(GuiElement::getId));
 	private final IodineMod mod;
 	private final int id;
+	private Object attachment;
 	private RootGuiContainer rootElement;
 	
 	protected GuiBase(@NotNull IodineMod mod, int id) {
@@ -38,9 +39,20 @@ public abstract class GuiBase implements GuiParent {
 		return id;
 	}
 	
+	@Contract(pure = true)
+	public final Object getAttachment() {
+		return attachment;
+	}
+	
+	public final void setAttachment(Object attachment) {
+		this.attachment = attachment;
+	}
+	
+	
+	
 	@NotNull
 	@Contract(pure = true)
-	public final Collection<GuiElement> getElements() {
+	public final Collection<GuiElement> getAllElements() {
 		return elements.values();
 	}
 	
@@ -99,9 +111,11 @@ public abstract class GuiBase implements GuiParent {
 	@Contract(pure = true)
 	protected abstract IntPair calculatePosition(int screenWidth, int screenHeight, int guiWidth, int guiHeight);
 	
+	protected abstract void onUpdatedResolution();
 	
 	
-	public void draw(int mouseX, int mouseY, float partialTicks) {
+	
+	public final void draw(int mouseX, int mouseY, float partialTicks) {
 		for (GuiElement element : drawOrderedElements) {
 			element.draw(mouseX, mouseY, partialTicks);
 		}

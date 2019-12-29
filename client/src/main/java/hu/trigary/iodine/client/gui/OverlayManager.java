@@ -43,9 +43,9 @@ public abstract class OverlayManager {
 	
 	
 	
-	public final void drawOverlays(int mouseX, int mouseY, float partialTicks) {
+	public final void drawOverlays(float partialTicks) {
 		for (IodineOverlay overlay : drawOrderedOverlays) {
-			overlay.draw(mouseX, mouseY, partialTicks);
+			overlay.draw(Integer.MAX_VALUE, Integer.MAX_VALUE, partialTicks);
 		}
 	}
 }
