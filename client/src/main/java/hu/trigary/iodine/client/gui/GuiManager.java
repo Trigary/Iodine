@@ -19,43 +19,48 @@ public abstract class GuiManager {
 	public final void packetOpenGui(@NotNull ByteBuffer buffer) {
 		IodineGui gui = new IodineGui(mod, buffer.getInt());
 		if (openGui != null) {
-			closeOpenGui("Packet: Closed GUI to open another: ", false);
+			closeOpenGui(false);
+			mod.getLogger().debug("GuiManager > closing {} to open {}", openGui.getId(), gui.getId());
 		}
 		
+		mod.getLogger().debug("GuiManager > opening {}", gui.getId());
 		openGui = gui;
 		gui.deserialize(buffer);
 		openGuiImpl(gui);
-		mod.getLogger().info("Packet: Opened GUI: " + gui.getId());
 	}
 	
 	public final void packetUpdateGui(@NotNull ByteBuffer buffer) {
 		if (openGui != null) {
+			mod.getLogger().debug("GuiManager > updating {}", openGui.getId());
 			openGui.deserialize(buffer);
-			mod.getLogger().info("Packet: Updated GUI: " + openGui.getId());
 		} else {
-			mod.getLogger().info("Packet: Can't update GUI: it's no longer opened");
+			mod.getLogger().debug("GuiManager > update failed: no open GUIs");
 		}
 	}
 	
 	public final void packetCloseGui() {
 		if (openGui != null) {
-			closeOpenGui("Packet: Closed GUI: ", false);
+			mod.getLogger().debug("GuiManager > packet closing {}", openGui.getId());
+			closeOpenGui(false);
 		} else {
 			mod.getLogger().info("Packet: Can't close GUI: it's no longer opened");
 		}
 	}
 	
 	public final void playerCloseGui() {
-		mod.getNetwork().send(PacketType.CLIENT_GUI_CLOSE, 4, b -> b.putInt(openGui.getId()));
-		closeOpenGui("Player closed GUI: ", true);
+		if (openGui != null) {
+			mod.getLogger().debug("GuiManager > player closing {}", openGui.getId());
+			mod.getNetwork().send(PacketType.CLIENT_GUI_CLOSE, 4, b -> b.putInt(openGui.getId()));
+			closeOpenGui(true);
+		}
 	}
 	
 	
 	
-	private void closeOpenGui(@NotNull String message, boolean byPlayer) {
-		closeGuiImpl(openGui, byPlayer);
-		mod.getLogger().info(message + openGui.getId());
+	private void closeOpenGui(boolean byPlayer) {
+		IodineGui gui = openGui;
 		openGui = null;
+		closeGuiImpl(gui, byPlayer);
 	}
 	
 	protected abstract void openGuiImpl(@NotNull IodineGui gui);

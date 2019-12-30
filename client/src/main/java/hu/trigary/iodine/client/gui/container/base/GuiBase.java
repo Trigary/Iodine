@@ -67,17 +67,20 @@ public abstract class GuiBase implements GuiParent {
 	
 	
 	public final void deserialize(@NotNull ByteBuffer buffer) {
+		mod.getLogger().debug("GUI > deserializing {}", id);
 		deserializeStart(buffer);
 		
 		int removeCount = buffer.getInt();
 		for (int i = 0; i < removeCount; i++) {
 			GuiElement removed = elements.remove(buffer.getInt());
+			mod.getLogger().debug("GUI > removing {} in {}", removed.getId(), id);
 			drawOrderedElements.remove(removed);
 			onElementRemoved(removed);
 		}
 		
 		while (buffer.hasRemaining()) {
 			GuiElement changed = mod.getElement().getElement(this, elements, buffer);
+			mod.getLogger().debug("GUI > deserializing {} in {}", changed.getId(), id);
 			drawOrderedElements.remove(changed);
 			changed.deserialize(buffer);
 			drawOrderedElements.add(changed);
@@ -97,6 +100,7 @@ public abstract class GuiBase implements GuiParent {
 	
 	
 	public final void updateResolution() {
+		mod.getLogger().debug("GUI > updating resolution {}", id);
 		IntPair screenSize = mod.getScreenSize();
 		rootElement.calculateSize(screenSize.getX(), screenSize.getY());
 		IntPair position = calculatePosition(screenSize.getX(), screenSize.getY(),
@@ -105,6 +109,7 @@ public abstract class GuiBase implements GuiParent {
 		for (GuiElement element : elements.values()) {
 			element.update();
 		}
+		onUpdatedResolution();
 	}
 	
 	@NotNull

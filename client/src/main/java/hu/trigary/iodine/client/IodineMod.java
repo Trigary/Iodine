@@ -78,7 +78,10 @@ public abstract class IodineMod {
 		logger.info("Joined server, attempting login");
 		network.initialize();
 		byte[] array = BufferUtils.serializeString(version);
-		network.send(PacketType.CLIENT_LOGIN, array.length, b -> b.put(array));
+		network.send(PacketType.CLIENT_LOGIN, array.length + 2, buffer -> {
+			buffer.putShort((short) array.length);
+			buffer.put(array);
+		});
 	}
 	
 	@NotNull

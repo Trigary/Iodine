@@ -20,6 +20,9 @@ public class TextFieldGuiElementImpl extends TextFieldGuiElement {
 		//noinspection resource
 		widget = new TextFieldWidget(Minecraft.getInstance().fontRenderer, positionX, positionY, width, height, text);
 		widget.active = editable;
+		widget.setText(text);
+		widget.setMaxStringLength(maxLength);
+		widget.setValidator(s -> regex.matcher(s).matches());
 	}
 	
 	@Override
@@ -27,8 +30,8 @@ public class TextFieldGuiElementImpl extends TextFieldGuiElement {
 		widget.render(mouseX, mouseY, partialTicks);
 	}
 	
-
-
+	
+	
 	@Override
 	public void setFocused(boolean focused) {
 		widget.setFocused2(focused);
@@ -44,12 +47,12 @@ public class TextFieldGuiElementImpl extends TextFieldGuiElement {
 		widget.keyPressed(key, scanCode, modifiers);
 		onChanged(widget.getText());
 	}
-
+	
 	@Override
 	public void onCharTyped(char codePoint, int modifiers) {
 		widget.charTyped(codePoint, modifiers);
 		onChanged(widget.getText());
 	}
-
+	
 	//TODO most elements don't update values when the client changes them, but instead wait for the server
 }

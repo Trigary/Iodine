@@ -13,7 +13,7 @@ public interface TextFieldGuiElement extends GuiElement<TextFieldGuiElement>,
 		GuiWidthSettable<TextFieldGuiElement>, GuiHeightSettable<TextFieldGuiElement>,
 		GuiTextable<TextFieldGuiElement>, GuiEditable<TextFieldGuiElement> {
 	/**
-	 * Gets the regex used to determine whether the user input should be accepted client-side.
+	 * Gets the regex used to determine whether the text should be accepted.
 	 * An empty {@link String} stands for no validation.
 	 * The default value is an empty {@link String}.
 	 *
@@ -35,8 +35,9 @@ public interface TextFieldGuiElement extends GuiElement<TextFieldGuiElement>,
 	
 	
 	/**
-	 * Sets the regex used to determine whether the user input should be accepted client-side.
+	 * Sets the regex used to determine whether the text should be accepted.
 	 * An empty {@link String} stands for no validation.
+	 * The current text must match this regex.
 	 *
 	 * @param regex the new regex to use
 	 * @return the current instance (for chaining)
@@ -45,7 +46,8 @@ public interface TextFieldGuiElement extends GuiElement<TextFieldGuiElement>,
 	TextFieldGuiElement setRegex(@NotNull String regex);
 	
 	/**
-	 * Sets the maximum amount of characters the user can have in this text field.
+	 * Sets the maximum amount of characters the can be in this text field.
+	 * The current text must not be longer.
 	 * The value must be positive and at most 250.
 	 * (The limit protects against malicious clients and helps obey possible client-side limits.)
 	 *

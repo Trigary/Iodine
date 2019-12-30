@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class IodineGuiScreen extends Screen {
 	private final IodineGui gui;
-
+	
 	public IodineGuiScreen(@NotNull IodineGui gui) {
 		super(new StringTextComponent("IodineGUI"));
 		this.gui = gui;
@@ -20,9 +20,10 @@ public class IodineGuiScreen extends Screen {
 	public boolean isPauseScreen() {
 		return false;
 	}
-
+	
 	@Override
-	protected void init() {
+	public void resize(@NotNull Minecraft minecraft, int screenWidth, int screenHeight) {
+		setSize(screenWidth, screenHeight);
 		gui.updateResolution();
 	}
 	

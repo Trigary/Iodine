@@ -1,6 +1,7 @@
 package hu.trigary.iodine.bukkit.network.handler;
 
 import hu.trigary.iodine.api.player.IodinePlayer;
+import hu.trigary.iodine.backend.BufferUtils;
 import hu.trigary.iodine.backend.ChatUtils;
 import hu.trigary.iodine.bukkit.IodinePlugin;
 import hu.trigary.iodine.backend.PacketType;
@@ -12,7 +13,6 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.nio.ByteBuffer;
-import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.regex.Pattern;
@@ -55,8 +55,12 @@ public class LoginPacketHandler extends PacketHandler {
 	
 	@Override
 	public void handle(@NotNull IodinePlayerImpl player, @NotNull ByteBuffer message) {
-		byte[] array = message.array(); //backing array's first element is the PacketType
-		String clientVersion = new String(array, 1, array.length - 1, StandardCharsets.UTF_8);
+		String clientVersion = BufferUtils.deserializeString(message, 50);
+		if (clientVersion == null) {
+			plugin.getLogger().log(Level.OFF, "Login > received too long version");
+			unexpectedInput(player);
+			return;
+		}
 		
 		if (serverVersion.equals(clientVersion) || clientVersion.equals("${version}") || clientVersion.equals("version")) {
 			//Forge is weird... let's call this a feature, not like this affects anyone apart from the developers
@@ -93,7 +97,7 @@ public class LoginPacketHandler extends PacketHandler {
 	
 	
 	private void unexpectedInput(@NotNull IodinePlayerImpl player) {
-		plugin.log(Level.INFO, "Login failed for: {0} (invalid LoginPacket)", player.getPlayer().getName());
+		plugin.log(Level.INFO, "Login > failed for {0} (invalid packet)", player.getPlayer().getName());
 		player.setState(IodinePlayer.State.INVALID);
 		plugin.getNetwork().send(player.getPlayer(), PacketType.SERVER_LOGIN_FAILED, (byte) 0);
 		player.getPlayer().sendMessage(ChatUtils.formatError("Iodine handshake failed",
@@ -104,7 +108,7 @@ public class LoginPacketHandler extends PacketHandler {
 	}
 	
 	private void outdatedParty(@NotNull IodinePlayerImpl player, boolean outdatedClient) {
-		plugin.log(Level.INFO, "Login failed for: {0} (outdated {1})",
+		plugin.log(Level.INFO, "Login > failed for {0} (outdated {1})",
 				player.getPlayer().getName(), outdatedClient ? "client" : "server");
 		player.setState(IodinePlayer.State.INVALID);
 		plugin.getNetwork().send(player.getPlayer(), PacketType.SERVER_LOGIN_FAILED, outdatedClient ? (byte) 1 : 2);
@@ -118,7 +122,7 @@ public class LoginPacketHandler extends PacketHandler {
 	}
 	
 	private void versionMatches(@NotNull IodinePlayerImpl player) {
-		plugin.log(Level.INFO, "Logged in successfully: {0}", player.getPlayer().getName());
+		plugin.log(Level.INFO, "Login > successful for {0}", player.getPlayer().getName());
 		player.setState(IodinePlayer.State.MODDED);
 		plugin.getNetwork().send(player.getPlayer(), PacketType.SERVER_LOGIN_SUCCESS);
 	}

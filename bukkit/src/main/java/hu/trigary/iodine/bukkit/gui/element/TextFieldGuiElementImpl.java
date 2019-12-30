@@ -106,6 +106,7 @@ public class TextFieldGuiElementImpl extends GuiElementImpl<TextFieldGuiElement>
 	@NotNull
 	@Override
 	public TextFieldGuiElementImpl setText(@NotNull String text) {
+		Validate.isTrue(validate(compiledRegex, text), "The text must match the regex");
 		this.text = text;
 		getGui().flagAndUpdate(this);
 		return this;
@@ -114,8 +115,10 @@ public class TextFieldGuiElementImpl extends GuiElementImpl<TextFieldGuiElement>
 	@NotNull
 	@Override
 	public TextFieldGuiElement setRegex(@NotNull String regex) {
+		Pattern tempRegex = regex.isEmpty() ? null : Pattern.compile(regex);
+		Validate.isTrue(validate(tempRegex, text), "The text must match the regex");
 		this.regex = regex;
-		compiledRegex = regex.isEmpty() ? null : Pattern.compile(regex);
+		compiledRegex = tempRegex;
 		getGui().flagAndUpdate(this);
 		return this;
 	}
@@ -124,6 +127,7 @@ public class TextFieldGuiElementImpl extends GuiElementImpl<TextFieldGuiElement>
 	@Override
 	public TextFieldGuiElement setMaxLength(int maxLength) {
 		Validate.isTrue(maxLength > 0 && maxLength <= 250, "The max length must be positive and at most 250");
+		Validate.isTrue(text.length() <= maxLength, "The text must not be longer than the max length");
 		this.maxLength = maxLength;
 		getGui().flagAndUpdate(this);
 		return this;
@@ -155,8 +159,7 @@ public class TextFieldGuiElementImpl extends GuiElementImpl<TextFieldGuiElement>
 		}
 		
 		String newText = BufferUtils.deserializeString(message, maxLength * 4);
-		if (newText == null || text.equals(newText) || newText.length() > maxLength
-				|| (compiledRegex != null && !compiledRegex.matcher(newText).matches())) {
+		if (newText == null || text.equals(newText) || newText.length() > maxLength || !validate(compiledRegex, newText)) {
 			return;
 		}
 		
@@ -167,5 +170,10 @@ public class TextFieldGuiElementImpl extends GuiElementImpl<TextFieldGuiElement>
 		} else {
 			getGui().flagAndAtomicUpdate(this, () -> textChangedAction.accept(this, oldText, text, player));
 		}
+	}
+	
+	@Contract(pure = true, value = "null, _ -> true")
+	private static boolean validate(@Nullable Pattern regex, @NotNull String text) {
+		return regex == null || regex.matcher(text).matches();
 	}
 }

@@ -42,4 +42,11 @@ public final class GuiElements<T extends GuiElement<T>> {
 	public Class<T> getType() {
 		return type;
 	}
+	
+	@NotNull
+	@Contract(pure = true)
+	@Override
+	public String toString() {
+		return type.getSimpleName();
+	}
 }

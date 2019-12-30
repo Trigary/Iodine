@@ -14,6 +14,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.logging.Level;
 
 /**
  * The manager whose responsibility is linking {@link Player}
@@ -47,7 +48,10 @@ public class PlayerManager implements Listener {
 	@Contract(pure = true)
 	public IodinePlayerImpl getPlayer(@NotNull Player player) {
 		Validate.isTrue(player.isOnline(), "IodinePlayer instances only exist for online players");
-		return players.computeIfAbsent(player.getUniqueId(), k -> new IodinePlayerImpl(plugin, player));
+		return players.computeIfAbsent(player.getUniqueId(), k -> {
+			plugin.log(Level.OFF, "PlayerManager > creating {0}", player.getName());
+			return new IodinePlayerImpl(plugin, player);
+		});
 	}
 	
 	
@@ -60,9 +64,11 @@ public class PlayerManager implements Listener {
 			return;
 		}
 		
+		plugin.log(Level.OFF, "PlayerManager > removing {0}", player.getPlayer().getName());
 		if (player.getOpenGui() != null) {
 			player.getOpenGui().closeForNoPacket(player, true);
 		}
 		players.remove(event.getPlayer().getUniqueId());
+		plugin.log(Level.OFF, "PlayerManager > removed {0}", player.getPlayer().getName());
 	}
 }

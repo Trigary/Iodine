@@ -20,6 +20,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
 
 /**
  * The manager whose responsibility is keeping track of
@@ -63,6 +64,7 @@ public class GuiBaseManager {
 	@NotNull
 	@Contract(pure = true)
 	public IodineGuiImpl createGui() {
+		plugin.log(Level.OFF, "GuiManager > new GUI {0}", nextGuiId);
 		return new IodineGuiImpl(plugin, nextGuiId++);
 	}
 	
@@ -77,6 +79,7 @@ public class GuiBaseManager {
 	@NotNull
 	@Contract(pure = true)
 	public IodineOverlayImpl createOverlay(@NotNull IodineOverlay.Anchor anchor, int horizontalOffset, int verticalOffset) {
+		plugin.log(Level.OFF, "GuiManager > new overlay {0}", nextGuiId);
 		return new IodineOverlayImpl(plugin, nextGuiId++, anchor, horizontalOffset, verticalOffset);
 	}
 	
@@ -122,6 +125,7 @@ public class GuiBaseManager {
 	 * @param gui the GUI to unregister
 	 */
 	public void forgetGui(@NotNull GuiBaseImpl<?> gui) {
+		plugin.log(Level.OFF, "GuiManager > forgetting {0}", gui.getId());
 		Validate.notNull(guiMap.remove(gui.getId()), "Can only forget registered GUIs");
 	}
 	
@@ -133,6 +137,7 @@ public class GuiBaseManager {
 	 * @param gui the GUI to register
 	 */
 	public void rememberGui(@NotNull GuiBaseImpl<?> gui) {
+		plugin.log(Level.OFF, "GuiManager > remembering {0}", gui.getId());
 		Validate.isTrue(guiMap.put(gui.getId(), gui) == null, "Can't remember registered GUIs");
 	}
 	

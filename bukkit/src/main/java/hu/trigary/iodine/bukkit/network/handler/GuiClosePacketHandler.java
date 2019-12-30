@@ -8,6 +8,7 @@ import hu.trigary.iodine.bukkit.player.IodinePlayerImpl;
 import org.jetbrains.annotations.NotNull;
 
 import java.nio.ByteBuffer;
+import java.util.logging.Level;
 
 /**
  * The handler of {@link PacketType#CLIENT_GUI_CLOSE}.
@@ -29,7 +30,10 @@ public class GuiClosePacketHandler extends PacketHandler {
 	@Override
 	public void handle(@NotNull IodinePlayerImpl player, @NotNull ByteBuffer message) {
 		GuiBaseImpl<?> gui = plugin.getGui().getGui(message.getInt());
-		if (gui != null) {
+		if (gui == null) {
+			plugin.log(Level.OFF, "Network > closing GUI failed: no open GUI by id");
+		} else {
+			plugin.log(Level.OFF, "Network > closing GUI {0}", gui.getId());
 			gui.closeForNoPacket(player, true);
 		}
 	}

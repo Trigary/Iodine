@@ -1,7 +1,6 @@
 package hu.trigary.iodine.client.network.handler;
 
 import hu.trigary.iodine.client.IodineMod;
-import org.apache.logging.log4j.Level;
 import org.jetbrains.annotations.NotNull;
 
 import java.nio.ByteBuffer;
@@ -13,17 +12,15 @@ public class LoginFailedPacketHandler extends PacketHandler {
 	
 	@Override
 	public void handle(@NotNull ByteBuffer buffer) {
-		String text = "Server rejected login: ";
 		int value = buffer.get();
 		if (value == 0) {
-			text += "client sent invalid login packet";
+			mod.getLogger().info("Login > client sent invalid login packet");
 		} else if (value == 1) {
-			text += "outdated client";
+			mod.getLogger().info("Login > outdated client");
 		} else if (value == 2) {
-			text += "outdated server";
+			mod.getLogger().info("Login > outdated server");
 		} else {
-			text += "unknown reason, probably version mismatch";
+			mod.getLogger().info("Login > unknown reason, probably version mismatch");
 		}
-		mod.getLogger().log(value == 2 ? Level.INFO : Level.WARN, text);
 	}
 }

@@ -48,7 +48,9 @@ public final class IodineGui extends GuiBase {
 	public void onMousePressed(double mouseX, double mouseY) {
 		for (GuiElement element : getAllElements()) {
 			if (element.onMousePressed(mouseX, mouseY)) {
-				focused.setFocused(false);
+				if (focused != null) {
+					focused.setFocused(false);
+				}
 				focused = element;
 				focused.setFocused(true);
 			}

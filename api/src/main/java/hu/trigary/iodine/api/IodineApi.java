@@ -14,6 +14,11 @@ import org.jetbrains.annotations.NotNull;
  * Instances of this class can be obtained through the {@link ServicesManager}.
  * The {@link #getInstance()} method does this internally.
  * <br><br>
+ * When the Iodine plugin gets disabled all {@link IodineGui} instances are closed without
+ * calling the {@link IodineGui#onClosed(IodineGui.ClosedAction)} callback.
+ * For this reason some plugins might have to detect the Iodine plugin's
+ * {@link org.bukkit.event.server.PluginDisableEvent} and gracefully close the GUIs there.
+ * <br><br>
  * It is worth noting that generally speaking values which are representable on 15 bits are supported,
  * or 14 bits in case negative values are also valid. While the API works with 32 bit integers,
  * the implementation prefers 16 bit shorts and variable-length encoding to reduce payload size.

@@ -50,6 +50,7 @@ public class IodinePlugin extends JavaPlugin implements Listener {
 	
 	@EventHandler(priority = EventPriority.MONITOR)
 	private void onDisable(PluginDisableEvent event) {
+		log(Level.INFO, "Closing all open GUI instances");
 		//this fires before the plugin is disabled, therefore eg. packets can still be sent
 		if (event.getPlugin() == this) {
 			guiBaseManager.closeAllGuiInstances();

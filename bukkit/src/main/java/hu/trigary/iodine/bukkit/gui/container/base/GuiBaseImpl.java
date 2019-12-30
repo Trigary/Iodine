@@ -17,6 +17,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.function.Consumer;
+import java.util.logging.Level;
 
 /**
  * The implementation of {@link GuiBase}.
@@ -136,6 +137,7 @@ public abstract class GuiBaseImpl<T extends GuiBase<T>> implements GuiBase<T>, G
 			@NotNull GuiElements<E> type, @NotNull Consumer<E> initializer, int x, int y) {
 		Validate.notNull(id, "ID must be non-null");
 		Validate.isTrue(!apiIdElements.containsKey(id), "IDs must be unique");
+		plugin.log(Level.OFF, "GUI > adding element {0} to {1}", type, this.id);
 		GuiElementImpl<E> impl = plugin.getGui().createElement(type.getType(), this, nextElementId, id);
 		elements.put(nextElementId++, impl);
 		apiIdElements.put(id, impl);
@@ -152,8 +154,10 @@ public abstract class GuiBaseImpl<T extends GuiBase<T>> implements GuiBase<T>, G
 	@Override
 	public final T removeElement(@NotNull Object id) {
 		GuiElementImpl<?> element = apiIdElements.remove(id);
+		plugin.log(Level.OFF, "GUI > removing element {0}", element == null ? "null" : element.getId());
 		if (element != null) {
 			element.onRemoved();
+			element.getParent().removeChild(element);
 			elements.remove(element.getInternalId());
 			flaggedForRemove.add(element);
 			executeUpdate();
@@ -177,6 +181,7 @@ public abstract class GuiBaseImpl<T extends GuiBase<T>> implements GuiBase<T>, G
 			return;
 		}
 		
+		plugin.log(Level.OFF, "GUI > updating {0}", id);
 		if (!viewers.isEmpty()) {
 			flaggedForUpdate.removeAll(flaggedForRemove);
 			byte[] payload = serializeUpdate();
@@ -243,9 +248,11 @@ public abstract class GuiBaseImpl<T extends GuiBase<T>> implements GuiBase<T>, G
 		IodinePlayerImpl iodinePlayer = plugin.getPlayer(player);
 		iodinePlayer.assertModded();
 		if (viewers.contains(player)) {
+			plugin.log(Level.OFF, "GUI > {0} already open for {1}", id, player.getName());
 			return thisT();
 		}
 		
+		plugin.log(Level.OFF, "GUI > opening {0} for {1}", id, player.getName());
 		onPreOpened(iodinePlayer);
 		viewers.add(player);
 		if (viewers.size() == 1) {
@@ -301,7 +308,10 @@ public abstract class GuiBaseImpl<T extends GuiBase<T>> implements GuiBase<T>, G
 	 */
 	public final void closeForNoPacket(@NotNull IodinePlayerImpl iodinePlayer, boolean byPlayer) {
 		Player player = iodinePlayer.getPlayer();
-		if (viewers.remove(player)) {
+		if (!viewers.remove(player)) {
+			plugin.log(Level.OFF, "GUI > {0} already closed for {1}", id, player.getName());
+		} else {
+			plugin.log(Level.OFF, "GUI > closing {0} for {1}", id, player.getName());
 			if (viewers.isEmpty()) {
 				plugin.getGui().forgetGui(this);
 			}

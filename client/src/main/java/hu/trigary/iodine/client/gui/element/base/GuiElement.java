@@ -102,6 +102,7 @@ public abstract class GuiElement {
 			int positionY, int mouseX, int mouseY, float partialTicks);
 	
 	protected final void sendChangePacket(int dataLength, @NotNull Consumer<ByteBuffer> dataProvider) {
+		getGui().getMod().getLogger().debug("GUI > {} sending change packet in {}", id, gui.getId());
 		getGui().getMod().getNetwork().send(PacketType.CLIENT_GUI_CHANGE, dataLength + 8, buffer -> {
 			buffer.putInt(gui.getId());
 			buffer.putInt(id);

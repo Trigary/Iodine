@@ -81,7 +81,7 @@ public class NetworkManager {
 	 * @param message the payload
 	 */
 	public void send(@NotNull Player player, @NotNull byte[] message) {
-		plugin.log(Level.OFF, "Sending message of type {0} to {1}", PacketType.fromId(message[0]), player.getName());
+		plugin.log(Level.OFF, "Network > sending {0} to {1}", PacketType.fromId(message[0]), player.getName());
 		player.sendPluginMessage(plugin, PacketType.NETWORK_CHANNEL, message);
 	}
 }

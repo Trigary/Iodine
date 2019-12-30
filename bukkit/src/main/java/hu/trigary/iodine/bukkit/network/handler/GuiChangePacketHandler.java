@@ -9,6 +9,7 @@ import hu.trigary.iodine.bukkit.player.IodinePlayerImpl;
 import org.jetbrains.annotations.NotNull;
 
 import java.nio.ByteBuffer;
+import java.util.logging.Level;
 
 /**
  * The handler of {@link PacketType#CLIENT_GUI_CHANGE}.
@@ -30,11 +31,18 @@ public class GuiChangePacketHandler extends PacketHandler {
 	@Override
 	public void handle(@NotNull IodinePlayerImpl player, @NotNull ByteBuffer message) {
 		IodineGuiImpl gui = player.getOpenGui();
-		if (gui != null && gui.getId() == message.getInt()) {
-			GuiElementImpl<?> element = gui.getElement(message.getInt());
-			if (element != null) {
-				element.handleChangePacket(player.getPlayer(), message);
-			}
+		if (gui == null || gui.getId() != message.getInt()) {
+			plugin.log(Level.OFF, "Network > updating GUI failed: no open GUI by id");
+			return;
+		}
+		
+		plugin.log(Level.OFF, "Network > updating GUI {0}", gui.getId());
+		GuiElementImpl<?> element = gui.getElement(message.getInt());
+		if (element == null) {
+			plugin.log(Level.OFF, "Network > updating element failed: no element by id");
+		} else {
+			plugin.log(Level.OFF, "Network > updating element {0}", element.getId());
+			element.handleChangePacket(player.getPlayer(), message);
 		}
 	}
 }

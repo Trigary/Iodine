@@ -35,7 +35,7 @@ public abstract class NetworkManager {
 		byte[] message = new byte[dataLength + 1];
 		message[0] = type.getId();
 		dataProvider.accept(ByteBuffer.wrap(message, 1, dataLength));
-		mod.getLogger().info("Sending packet: " + type);
+		mod.getLogger().debug("Network > sending {}", type);
 		sendImpl(message);
 	}
 	
@@ -48,15 +48,15 @@ public abstract class NetworkManager {
 		byte id = message.get();
 		PacketType type = PacketType.fromId(id);
 		if (type == null) {
-			mod.getLogger().error("Received message with invalid type-id: " + id);
+			mod.getLogger().error("Network > received invalid type-id {}", id);
 			return;
 		}
 		
 		try {
-			mod.getLogger().info("Handling received packet: " + type);
+			mod.getLogger().debug("Network > handling {}", type);
 			handlers[type.getUnsignedId()].handle(message);
 		} catch (Throwable t) {
-			mod.getLogger().error("Error handling received packet: " + type, t);
+			mod.getLogger().error("Network > error handling {}", type, t);
 		}
 	}
 }

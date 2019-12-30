@@ -26,7 +26,7 @@ public class TestCommandListener implements Listener {
 	
 	
 	@EventHandler(ignoreCancelled = true)
-	public void onCommand(PlayerCommandPreprocessEvent event) {
+	public void onCommand(@NotNull PlayerCommandPreprocessEvent event) {
 		if (!event.getMessage().equals("/iodine")) {
 			return;
 		}
@@ -47,7 +47,7 @@ public class TestCommandListener implements Listener {
 					e.getGui().atomicUpdate(gui -> {
 						gui.removeElement(e);
 						TextFieldGuiElement text = (TextFieldGuiElement) gui.getElement(id);
-						text.setText(text.getText() + ".");
+						text.setText(text.getText() + "x");
 					});
 				});
 		
@@ -57,6 +57,7 @@ public class TestCommandListener implements Listener {
 				.addElement(GuiElements.BUTTON, initializer, 50, 100)
 				.addElement(GuiElements.BUTTON, initializer, 100, 100)
 				.addElement(id, GuiElements.TEXT_FIELD, e -> e.setText("Your text here")
+						.setRegex("[a-zA-Z ]*")
 						.onChanged((ignored, oldText, newText, p) -> p.sendMessage("Old text: "
 								+ oldText + ", new text: " + newText)))
 				.onClosed((gui, p) -> p.sendMessage("You closed the GUI"))
