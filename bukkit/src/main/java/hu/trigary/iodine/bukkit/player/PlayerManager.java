@@ -1,6 +1,8 @@
 package hu.trigary.iodine.bukkit.player;
 
+import hu.trigary.iodine.api.gui.IodineOverlay;
 import hu.trigary.iodine.bukkit.IodinePlugin;
+import hu.trigary.iodine.bukkit.gui.IodineOverlayImpl;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -57,7 +59,7 @@ public class PlayerManager implements Listener {
 	
 	
 	@EventHandler(priority = EventPriority.MONITOR)
-	private void onPlayerQuit(PlayerQuitEvent event) {
+	private void onPlayerQuit(@NotNull PlayerQuitEvent event) {
 		//can't call remove yet: the gui close callback might still require the instance
 		IodinePlayerImpl player = players.get(event.getPlayer().getUniqueId());
 		if (player == null) {
@@ -67,6 +69,9 @@ public class PlayerManager implements Listener {
 		plugin.log(Level.OFF, "PlayerManager > removing {0}", player.getPlayer().getName());
 		if (player.getOpenGui() != null) {
 			player.getOpenGui().closeForNoPacket(player, true);
+		}
+		for (IodineOverlay overlay : player.getOverlays()) {
+			((IodineOverlayImpl) overlay).closeForNoPacket(player, true);
 		}
 		players.remove(event.getPlayer().getUniqueId());
 		plugin.log(Level.OFF, "PlayerManager > removed {0}", player.getPlayer().getName());

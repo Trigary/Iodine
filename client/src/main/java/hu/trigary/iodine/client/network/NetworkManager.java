@@ -3,13 +3,14 @@ package hu.trigary.iodine.client.network;
 import hu.trigary.iodine.backend.PacketType;
 import hu.trigary.iodine.client.IodineMod;
 import hu.trigary.iodine.client.network.handler.*;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.nio.ByteBuffer;
 import java.util.function.Consumer;
 
 public abstract class NetworkManager {
-	protected final IodineMod mod;
+	private final IodineMod mod;
 	private final PacketHandler[] handlers = new PacketHandler[PacketType.getHighestId() + 1];
 	
 	protected NetworkManager(@NotNull IodineMod mod) {
@@ -27,6 +28,12 @@ public abstract class NetworkManager {
 	
 	
 	
+	@NotNull
+	@Contract(pure = true)
+	protected final IodineMod getMod() {
+		return mod;
+	}
+	
 	public abstract void initialize();
 	
 	
@@ -43,7 +50,6 @@ public abstract class NetworkManager {
 	
 	
 	
-	//TODO docs: call this method on the main thread
 	protected final void onReceived(@NotNull ByteBuffer message) {
 		byte id = message.get();
 		PacketType type = PacketType.fromId(id);

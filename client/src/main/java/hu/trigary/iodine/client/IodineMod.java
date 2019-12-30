@@ -84,7 +84,14 @@ public abstract class IodineMod {
 		});
 	}
 	
-	@NotNull
+	public final void onQuitServer() {
+		gui.playerCloseGui();
+		overlay.closeOverlays();
+	}
+	
 	@Contract(pure = true)
-	public abstract IntPair getScreenSize();
+	public abstract int getScreenWidth();
+	
+	@Contract(pure = true)
+	public abstract int getScreenHeight();
 }

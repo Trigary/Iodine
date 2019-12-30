@@ -1,6 +1,7 @@
 package hu.trigary.iodine.client.gui;
 
 import hu.trigary.iodine.client.IodineMod;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.nio.ByteBuffer;
@@ -15,6 +16,14 @@ public abstract class OverlayManager {
 	
 	protected OverlayManager(@NotNull IodineMod mod) {
 		this.mod = mod;
+	}
+	
+	
+	
+	@NotNull
+	@Contract(pure = true)
+	protected final IodineMod getMod() {
+		return mod;
 	}
 	
 	
@@ -43,9 +52,22 @@ public abstract class OverlayManager {
 	
 	
 	
+	public final void updateOverlayResolutions() {
+		mod.getLogger().debug("OverlayManager > updating resolutions");
+		for (IodineOverlay overlay : openOverlays.values()) {
+			overlay.updateResolution();
+		}
+	}
+	
 	public final void drawOverlays(float partialTicks) {
 		for (IodineOverlay overlay : drawOrderedOverlays) {
 			overlay.draw(Integer.MAX_VALUE, Integer.MAX_VALUE, partialTicks);
 		}
+	}
+	
+	public final void closeOverlays() {
+		mod.getLogger().debug("OverlayManager > closing all");
+		openOverlays.clear();
+		drawOrderedOverlays.clear();
 	}
 }

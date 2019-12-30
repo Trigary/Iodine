@@ -57,7 +57,7 @@ public class LoginPacketHandler extends PacketHandler {
 	public void handle(@NotNull IodinePlayerImpl player, @NotNull ByteBuffer message) {
 		String clientVersion = BufferUtils.deserializeString(message, 50);
 		if (clientVersion == null) {
-			plugin.getLogger().log(Level.OFF, "Login > received too long version");
+			getPlugin().getLogger().log(Level.OFF, "Login > received too long version");
 			unexpectedInput(player);
 			return;
 		}
@@ -97,9 +97,9 @@ public class LoginPacketHandler extends PacketHandler {
 	
 	
 	private void unexpectedInput(@NotNull IodinePlayerImpl player) {
-		plugin.log(Level.INFO, "Login > failed for {0} (invalid packet)", player.getPlayer().getName());
+		getPlugin().log(Level.INFO, "Login > failed for {0} (invalid packet)", player.getPlayer().getName());
 		player.setState(IodinePlayer.State.INVALID);
-		plugin.getNetwork().send(player.getPlayer(), PacketType.SERVER_LOGIN_FAILED, (byte) 0);
+		getPlugin().getNetwork().send(player.getPlayer(), PacketType.SERVER_LOGIN_FAILED, (byte) 0);
 		player.getPlayer().sendMessage(ChatUtils.formatError("Iodine handshake failed",
 				"Mod features have been disabled for this session.",
 				"The handshake has failed due to an invalid packet format.",
@@ -108,10 +108,10 @@ public class LoginPacketHandler extends PacketHandler {
 	}
 	
 	private void outdatedParty(@NotNull IodinePlayerImpl player, boolean outdatedClient) {
-		plugin.log(Level.INFO, "Login > failed for {0} (outdated {1})",
+		getPlugin().log(Level.INFO, "Login > failed for {0} (outdated {1})",
 				player.getPlayer().getName(), outdatedClient ? "client" : "server");
 		player.setState(IodinePlayer.State.INVALID);
-		plugin.getNetwork().send(player.getPlayer(), PacketType.SERVER_LOGIN_FAILED, outdatedClient ? (byte) 1 : 2);
+		getPlugin().getNetwork().send(player.getPlayer(), PacketType.SERVER_LOGIN_FAILED, outdatedClient ? (byte) 1 : 2);
 		String outdated = outdatedClient
 				? "Your client is outdated, please follow the server and update."
 				: "The server is outdated, consider asking them to update.";
@@ -122,8 +122,8 @@ public class LoginPacketHandler extends PacketHandler {
 	}
 	
 	private void versionMatches(@NotNull IodinePlayerImpl player) {
-		plugin.log(Level.INFO, "Login > successful for {0}", player.getPlayer().getName());
+		getPlugin().log(Level.INFO, "Login > successful for {0}", player.getPlayer().getName());
 		player.setState(IodinePlayer.State.MODDED);
-		plugin.getNetwork().send(player.getPlayer(), PacketType.SERVER_LOGIN_SUCCESS);
+		getPlugin().getNetwork().send(player.getPlayer(), PacketType.SERVER_LOGIN_SUCCESS);
 	}
 }

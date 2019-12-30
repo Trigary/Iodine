@@ -12,6 +12,6 @@ public class LoginSuccessPacketHandler extends PacketHandler {
 	
 	@Override
 	public void handle(@NotNull ByteBuffer buffer) {
-		mod.getLogger().info("Login > successful");
+		getMod().getLogger().info("Login > successful");
 	}
 }

@@ -32,16 +32,16 @@ public class GuiChangePacketHandler extends PacketHandler {
 	public void handle(@NotNull IodinePlayerImpl player, @NotNull ByteBuffer message) {
 		IodineGuiImpl gui = player.getOpenGui();
 		if (gui == null || gui.getId() != message.getInt()) {
-			plugin.log(Level.OFF, "Network > updating GUI failed: no open GUI by id");
+			getPlugin().log(Level.OFF, "Network > updating GUI failed: no open GUI by id");
 			return;
 		}
 		
-		plugin.log(Level.OFF, "Network > updating GUI {0}", gui.getId());
+		getPlugin().log(Level.OFF, "Network > updating GUI {0}", gui.getId());
 		GuiElementImpl<?> element = gui.getElement(message.getInt());
 		if (element == null) {
-			plugin.log(Level.OFF, "Network > updating element failed: no element by id");
+			getPlugin().log(Level.OFF, "Network > updating element failed: no element by id");
 		} else {
-			plugin.log(Level.OFF, "Network > updating element {0}", element.getId());
+			getPlugin().log(Level.OFF, "Network > updating element {0}", element.getId());
 			element.handleChangePacket(player.getPlayer(), message);
 		}
 	}

@@ -101,9 +101,8 @@ public abstract class GuiBase implements GuiParent {
 	
 	public final void updateResolution() {
 		mod.getLogger().debug("GUI > updating resolution {}", id);
-		IntPair screenSize = mod.getScreenSize();
-		rootElement.calculateSize(screenSize.getX(), screenSize.getY());
-		IntPair position = calculatePosition(screenSize.getX(), screenSize.getY(),
+		rootElement.calculateSize(mod.getScreenWidth(), mod.getScreenHeight());
+		IntPair position = calculatePosition(mod.getScreenWidth(), mod.getScreenHeight(),
 				rootElement.getWidth(), rootElement.getHeight());
 		rootElement.setPosition(position.getX(), position.getY());
 		for (GuiElement element : elements.values()) {

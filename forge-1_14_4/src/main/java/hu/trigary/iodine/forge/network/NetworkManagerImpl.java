@@ -64,7 +64,7 @@ public class NetworkManagerImpl extends NetworkManager {
 		context.setPacketHandled(true);
 		ServerPlayerEntity sender = context.getSender();
 		if (sender != null) {
-			mod.getLogger().warn("Network > Received packet from player {}", sender.getScoreboardName());
+			getMod().getLogger().warn("Network > Received packet from player {}", sender.getScoreboardName());
 			return;
 		}
 		

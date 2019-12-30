@@ -117,12 +117,26 @@ public class IodinePlayerImpl implements IodinePlayer {
 		return Collections.unmodifiableSet(overlays);
 	}
 	
+	/**
+	 * Adds an overlay to the internal open-overlays cache.
+	 * The overlay must not already be in this cache.
+	 * Should only be called by {@link IodineOverlayImpl}.
+	 *
+	 * @param overlay the newly opened overlay
+	 */
 	public void addDisplayedOverlay(@NotNull IodineOverlayImpl overlay) {
-		overlays.add(overlay);
+		Validate.isTrue(overlays.add(overlay), "Overlay must not be present in cache");
 	}
 	
+	/**
+	 * Removes an overlay from the internal open-overlays cache.
+	 * The overlay must be in this cache.
+	 * Should only be called by {@link IodineOverlayImpl}.
+	 *
+	 * @param overlay the newly closed overlay
+	 */
 	public void removeDisplayedOverlay(@NotNull IodineOverlayImpl overlay) {
-		overlays.remove(overlay);
+		Validate.isTrue(overlays.remove(overlay), "Overlay must be present in cache");
 	}
 	
 	@Override

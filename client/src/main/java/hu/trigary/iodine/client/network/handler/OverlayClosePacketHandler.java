@@ -12,6 +12,6 @@ public class OverlayClosePacketHandler extends PacketHandler {
 	
 	@Override
 	public void handle(@NotNull ByteBuffer buffer) {
-		mod.getOverlay().packetCloseOverlay(buffer);
+		getMod().getOverlay().packetCloseOverlay(buffer);
 	}
 }

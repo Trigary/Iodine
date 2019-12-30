@@ -2,6 +2,7 @@ package hu.trigary.iodine.bukkit;
 
 import hu.trigary.iodine.api.IodineApi;
 import hu.trigary.iodine.api.gui.GuiElements;
+import hu.trigary.iodine.api.gui.IodineOverlay;
 import hu.trigary.iodine.api.gui.element.ButtonGuiElement;
 import hu.trigary.iodine.api.gui.element.TextFieldGuiElement;
 import org.bukkit.entity.Player;
@@ -51,7 +52,7 @@ public class TestCommandListener implements Listener {
 					});
 				});
 		
-		api.createGui()
+		api.createOverlay(IodineOverlay.Anchor.TOP_RIGHT, 0, 0)
 				.addElement(GuiElements.BUTTON, initializer, 50, 50)
 				.addElement(GuiElements.BUTTON, initializer, 100, 50)
 				.addElement(GuiElements.BUTTON, initializer, 50, 100)
@@ -60,7 +61,7 @@ public class TestCommandListener implements Listener {
 						.setRegex("[a-zA-Z ]*")
 						.onChanged((ignored, oldText, newText, p) -> p.sendMessage("Old text: "
 								+ oldText + ", new text: " + newText)))
-				.onClosed((gui, p) -> p.sendMessage("You closed the GUI"))
+				//.onClosed((gui, p) -> p.sendMessage("You closed the GUI"))
 				.openFor(player);
 	}
 }

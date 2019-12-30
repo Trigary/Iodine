@@ -29,11 +29,11 @@ public class GuiClosePacketHandler extends PacketHandler {
 	
 	@Override
 	public void handle(@NotNull IodinePlayerImpl player, @NotNull ByteBuffer message) {
-		GuiBaseImpl<?> gui = plugin.getGui().getGui(message.getInt());
+		GuiBaseImpl<?> gui = getPlugin().getGui().getGui(message.getInt());
 		if (gui == null) {
-			plugin.log(Level.OFF, "Network > closing GUI failed: no open GUI by id");
+			getPlugin().log(Level.OFF, "Network > closing GUI failed: no open GUI by id");
 		} else {
-			plugin.log(Level.OFF, "Network > closing GUI {0}", gui.getId());
+			getPlugin().log(Level.OFF, "Network > closing GUI {0}", gui.getId());
 			gui.closeForNoPacket(player, true);
 		}
 	}

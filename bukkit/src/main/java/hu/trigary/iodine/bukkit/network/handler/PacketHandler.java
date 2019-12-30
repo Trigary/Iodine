@@ -14,7 +14,7 @@ import java.nio.ByteBuffer;
  * A class that is able to handle a specific {@link PacketType}.
  */
 public abstract class PacketHandler {
-	protected final IodinePlugin plugin;
+	private final IodinePlugin plugin;
 	
 	/**
 	 * Creates a new instance.
@@ -26,6 +26,18 @@ public abstract class PacketHandler {
 		this.plugin = plugin;
 	}
 	
+	
+	
+	/**
+	 * Gets the plugin instance.
+	 *
+	 * @return the plugin instance
+	 */
+	@NotNull
+	@Contract(pure = true)
+	protected final IodinePlugin getPlugin() {
+		return plugin;
+	}
 	
 	
 	/**

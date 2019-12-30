@@ -94,6 +94,8 @@ public class IodineOverlayImpl extends GuiBaseImpl<IodineOverlay> implements Iod
 		buffer.putByte(PacketType.SERVER_OVERLAY_OPEN.getId());
 		buffer.putInt(getId());
 		buffer.putByte((byte) anchor.getNumber());
+		buffer.putShort(horizontalOffset);
+		buffer.putShort(verticalOffset);
 		buffer.putByte(drawPriority);
 	}
 	
