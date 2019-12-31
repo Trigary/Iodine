@@ -7,7 +7,9 @@ import net.minecraft.client.gui.FontRenderer;
 import org.jetbrains.annotations.NotNull;
 
 public class TextGuiElementImpl extends TextGuiElement {
+	private static final int COLOR = 0xFFFFFF; //16777215
 	private final FontRenderer fontRenderer;
+	private int offset;
 	
 	public TextGuiElementImpl(@NotNull GuiBase gui, int id) {
 		super(gui, id);
@@ -18,11 +20,17 @@ public class TextGuiElementImpl extends TextGuiElement {
 	
 	
 	@Override
-	protected void updateImpl(int width, int height, int positionX, int positionY) {}
+	protected void updateImpl(int width, int height, int positionX, int positionY) {
+		if (alignment != 4) {
+			offset = width - fontRenderer.getStringWidth(text);
+			if (alignment == 6) {
+				offset /= 2;
+			}
+		}
+	}
 	
 	@Override
 	protected void drawImpl(int width, int height, int positionX, int positionY, int mouseX, int mouseY, float partialTicks) {
-		fontRenderer.drawStringWithShadow(text, positionX, positionY, 16777215);
-		//TODO centered or left-aligned? does this draw below or above the position?
+		fontRenderer.drawStringWithShadow(text, positionX + offset, positionY, COLOR);
 	}
 }

@@ -28,6 +28,10 @@ public class GuiElementManagerImpl extends GuiElementManager {
 				return ButtonGuiElementImpl::new;
 			case CHECKBOX:
 				return CheckboxGuiElementImpl::new;
+			case CONTINUOUS_SLIDER:
+				return ContinuousGuiElementImpl::new;
+			case DISCRETE_SLIDER:
+				return DiscreteSliderGuiElementImpl::new;
 			case DROPDOWN:
 				return DropdownGuiElementImpl::new;
 			case IMAGE:
@@ -36,14 +40,14 @@ public class GuiElementManagerImpl extends GuiElementManager {
 				return ProgressBarGuiElementImpl::new;
 			case RADIO_BUTTON:
 				return RadioButtonGuiElementImpl::new;
-			case SLIDER:
-				return SliderGuiElementImpl::new;
+			case RECTANGLE:
+				return RectangleGuiElementImpl::new;
 			case TEXT_FIELD:
 				return TextFieldGuiElementImpl::new;
 			case TEXT:
 				return TextGuiElementImpl::new;
 			default:
-				throw new AssertionError("Invalid GUiElementType: " + type);
+				throw new AssertionError("Invalid GuiElementType: " + type);
 		}
 	}
 }

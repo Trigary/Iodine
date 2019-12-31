@@ -64,6 +64,7 @@ public interface IodineOverlay extends GuiBase<IodineOverlay>, DrawPrioritizeabl
 		 *
 		 * @return the numpad number representing the anchor
 		 */
+		@Contract(pure = true)
 		public int getNumber() {
 			return number;
 		}

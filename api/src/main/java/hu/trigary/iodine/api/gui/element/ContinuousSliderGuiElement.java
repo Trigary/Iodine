@@ -6,14 +6,14 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * A GUI element that is a slider, with text on top of it.
+ * A GUI element that is a continuous, non-discrete slider, with text on top of it.
  * Only the width or the height is customizable (not both) depending on the orientation.
  * The non-configurable dimension's getter returns 0.
  */
-public interface SliderGuiElement extends GuiElement<SliderGuiElement>,
-		GuiWidthSettable<SliderGuiElement>, GuiHeightSettable<SliderGuiElement>,
-		GuiTextable<SliderGuiElement>, GuiProgressable<SliderGuiElement>,
-		GuiOrientable<SliderGuiElement>, GuiEditable<SliderGuiElement> {
+public interface ContinuousSliderGuiElement extends GuiElement<ContinuousSliderGuiElement>,
+		GuiWidthSettable<ContinuousSliderGuiElement>, GuiHeightSettable<ContinuousSliderGuiElement>,
+		GuiTextable<ContinuousSliderGuiElement>, GuiProgressable<ContinuousSliderGuiElement>,
+		GuiOrientable<ContinuousSliderGuiElement>, GuiEditable<ContinuousSliderGuiElement> {
 	/**
 	 * Sets the action that should be executed when
 	 * this GUI element's progress is changed by a player.
@@ -23,23 +23,23 @@ public interface SliderGuiElement extends GuiElement<SliderGuiElement>,
 	 * @return the current instance (for chaining)
 	 */
 	@NotNull
-	SliderGuiElement onProgressed(@Nullable ProgressedAction action);
+	ContinuousSliderGuiElement onProgressed(@Nullable ProgressedAction action);
 	
 	
 	
 	/**
-	 * The handler of the text changed action.
+	 * The handler of the progress changed action.
 	 */
 	@FunctionalInterface
 	interface ProgressedAction {
 		/**
-		 * Handles the text changed action.
+		 * Handles the progress changed action.
 		 *
 		 * @param element the element that progressed
 		 * @param oldProgress the progress before this change
 		 * @param newProgress the progress that was set by the player
 		 * @param player the player who changed the progress
 		 */
-		void accept(@NotNull SliderGuiElement element, int oldProgress, int newProgress, @NotNull Player player);
+		void accept(@NotNull ContinuousSliderGuiElement element, float oldProgress, float newProgress, @NotNull Player player);
 	}
 }

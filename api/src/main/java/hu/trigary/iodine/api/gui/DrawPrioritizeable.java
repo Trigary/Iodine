@@ -1,5 +1,7 @@
 package hu.trigary.iodine.api.gui;
 
+import hu.trigary.iodine.api.gui.container.base.GuiContainer;
+import hu.trigary.iodine.api.gui.element.base.GuiElement;
 import org.jetbrains.annotations.Contract;
 
 /**
@@ -13,8 +15,8 @@ import org.jetbrains.annotations.Contract;
  * By default elements are drawn in the order they are added,
  * so the default draw priority is an internal incrementing counter.
  * <br><br>
- * Changing the draw priority of a {@link hu.trigary.iodine.api.gui.container.base.GuiContainer}
- * causes all of its child {@link hu.trigary.iodine.api.gui.element.base.GuiElement}s to update their priority:
+ * Changing the draw priority of a {@link GuiContainer}
+ * causes all of its child {@link GuiElement}s to update their priority:
  * the child's draw priority is set to the container's draw priority
  * if its previous value is less than this new value.
  */

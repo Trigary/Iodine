@@ -1,6 +1,6 @@
 package hu.trigary.iodine.bukkit.gui.element;
 
-import hu.trigary.iodine.api.gui.element.SliderGuiElement;
+import hu.trigary.iodine.api.gui.element.ContinuousSliderGuiElement;
 import hu.trigary.iodine.backend.GuiElementType;
 import hu.trigary.iodine.bukkit.gui.container.base.GuiBaseImpl;
 import hu.trigary.iodine.bukkit.gui.element.base.GuiElementImpl;
@@ -14,16 +14,15 @@ import org.jetbrains.annotations.Nullable;
 import java.nio.ByteBuffer;
 
 /**
- * The implementation of {@link SliderGuiElement}.
+ * The implementation of {@link ContinuousSliderGuiElement}.
  */
-public class SliderGuiElementImpl extends GuiElementImpl<SliderGuiElement> implements SliderGuiElement {
+public class ContinuousSliderGuiElementImpl extends GuiElementImpl<ContinuousSliderGuiElement> implements ContinuousSliderGuiElement {
 	private short width = 150;
 	private short height;
 	private boolean editable = true;
 	private boolean verticalOrientation;
 	private String text = "";
-	private short maxProgress;
-	private short progress;
+	private float progress;
 	private ProgressedAction progressedAction;
 	
 	/**
@@ -33,8 +32,8 @@ public class SliderGuiElementImpl extends GuiElementImpl<SliderGuiElement> imple
 	 * @param internalId the internal ID of this element
 	 * @param id the API-friendly ID of this element
 	 */
-	public SliderGuiElementImpl(@NotNull GuiBaseImpl<?> gui, int internalId, @NotNull Object id) {
-		super(gui, GuiElementType.SLIDER, internalId, id);
+	public ContinuousSliderGuiElementImpl(@NotNull GuiBaseImpl<?> gui, int internalId, @NotNull Object id) {
+		super(gui, GuiElementType.DISCRETE_SLIDER, internalId, id);
 	}
 	
 	
@@ -70,13 +69,7 @@ public class SliderGuiElementImpl extends GuiElementImpl<SliderGuiElement> imple
 	
 	@Contract(pure = true)
 	@Override
-	public int getMaxProgress() {
-		return maxProgress;
-	}
-	
-	@Contract(pure = true)
-	@Override
-	public int getProgress() {
+	public float getProgress() {
 		return progress;
 	}
 	
@@ -84,7 +77,7 @@ public class SliderGuiElementImpl extends GuiElementImpl<SliderGuiElement> imple
 	
 	@NotNull
 	@Override
-	public SliderGuiElementImpl setWidth(int width) {
+	public ContinuousSliderGuiElementImpl setWidth(int width) {
 		Validate.isTrue(!verticalOrientation, "The width is only configurable in horizontal orientation");
 		this.width = (short) width;
 		getGui().flagAndUpdate(this);
@@ -93,7 +86,7 @@ public class SliderGuiElementImpl extends GuiElementImpl<SliderGuiElement> imple
 	
 	@NotNull
 	@Override
-	public SliderGuiElementImpl setHeight(int height) {
+	public ContinuousSliderGuiElementImpl setHeight(int height) {
 		Validate.isTrue(verticalOrientation, "The height is only configurable in vertical orientation");
 		this.height = (short) height;
 		getGui().flagAndUpdate(this);
@@ -102,7 +95,7 @@ public class SliderGuiElementImpl extends GuiElementImpl<SliderGuiElement> imple
 	
 	@NotNull
 	@Override
-	public SliderGuiElementImpl setEditable(boolean editable) {
+	public ContinuousSliderGuiElementImpl setEditable(boolean editable) {
 		this.editable = editable;
 		getGui().flagAndUpdate(this);
 		return this;
@@ -110,7 +103,7 @@ public class SliderGuiElementImpl extends GuiElementImpl<SliderGuiElement> imple
 	
 	@NotNull
 	@Override
-	public SliderGuiElementImpl setOrientation(boolean vertical) {
+	public ContinuousSliderGuiElementImpl setOrientation(boolean vertical) {
 		if (verticalOrientation == vertical) {
 			return this;
 		}
@@ -126,7 +119,7 @@ public class SliderGuiElementImpl extends GuiElementImpl<SliderGuiElement> imple
 	
 	@NotNull
 	@Override
-	public SliderGuiElementImpl setText(@NotNull String text) {
+	public ContinuousSliderGuiElementImpl setText(@NotNull String text) {
 		this.text = text;
 		getGui().flagAndUpdate(this);
 		return this;
@@ -134,21 +127,8 @@ public class SliderGuiElementImpl extends GuiElementImpl<SliderGuiElement> imple
 	
 	@NotNull
 	@Override
-	public SliderGuiElementImpl setMaxProgress(int maxProgress) {
-		Validate.isTrue(maxProgress >= 0, "Max progress must be at least 0");
-		this.maxProgress = (short) maxProgress;
-		if (progress > maxProgress) {
-			progress = this.maxProgress;
-		}
-		getGui().flagAndUpdate(this);
-		return this;
-	}
-	
-	@NotNull
-	@Override
-	public SliderGuiElementImpl setProgress(int progress) {
-		Validate.isTrue(progress >= 0 && progress <= maxProgress,
-				"Progress must be at least 0 and at most maxProgress");
+	public ContinuousSliderGuiElementImpl setProgress(float progress) {
+		Validate.isTrue(progress >= 0 && progress <= 1, "Progress must be at least 0 and at most 1");
 		this.progress = (short) progress;
 		getGui().flagAndUpdate(this);
 		return this;
@@ -156,7 +136,7 @@ public class SliderGuiElementImpl extends GuiElementImpl<SliderGuiElement> imple
 	
 	@NotNull
 	@Override
-	public SliderGuiElementImpl onProgressed(@Nullable ProgressedAction action) {
+	public ContinuousSliderGuiElementImpl onProgressed(@Nullable ProgressedAction action) {
 		progressedAction = action;
 		return this;
 	}
@@ -169,8 +149,7 @@ public class SliderGuiElementImpl extends GuiElementImpl<SliderGuiElement> imple
 		buffer.putShort(verticalOrientation ? height : width);
 		buffer.putBool(editable);
 		buffer.putString(text);
-		buffer.putShort(maxProgress);
-		buffer.putShort(progress);
+		buffer.putFloat(progress);
 	}
 	
 	@Override
@@ -179,12 +158,12 @@ public class SliderGuiElementImpl extends GuiElementImpl<SliderGuiElement> imple
 			return;
 		}
 		
-		short newProgress = message.getShort();
-		if (progress == newProgress || newProgress < 0 || newProgress > maxProgress) {
+		float newProgress = message.getFloat();
+		if (Float.compare(progress, newProgress) == 0 || newProgress < 0 || newProgress > 1) {
 			return;
 		}
 		
-		int oldProgress = progress;
+		float oldProgress = progress;
 		progress = newProgress;
 		if (progressedAction == null) {
 			getGui().flagAndUpdate(this);

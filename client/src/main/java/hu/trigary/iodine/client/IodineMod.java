@@ -6,7 +6,6 @@ import hu.trigary.iodine.client.gui.GuiElementManager;
 import hu.trigary.iodine.client.gui.GuiManager;
 import hu.trigary.iodine.client.gui.OverlayManager;
 import hu.trigary.iodine.client.network.NetworkManager;
-import hu.trigary.iodine.client.util.IntPair;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;

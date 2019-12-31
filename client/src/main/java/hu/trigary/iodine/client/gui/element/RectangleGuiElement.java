@@ -1,6 +1,5 @@
 package hu.trigary.iodine.client.gui.element;
 
-import hu.trigary.iodine.backend.BufferUtils;
 import hu.trigary.iodine.client.gui.container.base.GuiBase;
 import hu.trigary.iodine.client.gui.element.base.GuiElement;
 import hu.trigary.iodine.client.util.IntPair;
@@ -8,13 +7,12 @@ import org.jetbrains.annotations.NotNull;
 
 import java.nio.ByteBuffer;
 
-public abstract class TextGuiElement extends GuiElement {
-	protected static final int HEIGHT = 20;
+public abstract class RectangleGuiElement extends GuiElement {
 	protected int width;
-	protected String text;
-	protected byte alignment;
+	protected int height;
+	protected int color;
 	
-	protected TextGuiElement(@NotNull GuiBase gui, int id) {
+	protected RectangleGuiElement(@NotNull GuiBase gui, int id) {
 		super(gui, id);
 	}
 	
@@ -23,13 +21,13 @@ public abstract class TextGuiElement extends GuiElement {
 	@Override
 	protected final void deserializeImpl(@NotNull ByteBuffer buffer) {
 		width = buffer.getShort();
-		text = BufferUtils.deserializeString(buffer);
-		alignment = buffer.get();
+		height = buffer.getShort();
+		color = (buffer.get() << 16) | (buffer.get() << 8) | buffer.get();
 	}
 	
 	@NotNull
 	@Override
 	protected final IntPair calculateSizeImpl(int screenWidth, int screenHeight) {
-		return new IntPair(width, HEIGHT);
+		return new IntPair(width, height);
 	}
 }

@@ -81,6 +81,15 @@ public class ResizingByteBuffer {
 	}
 	
 	/**
+	 * Puts the specified float into this buffer as 4 bytes.
+	 *
+	 * @param value the value to write
+	 */
+	public void putFloat(float value) {
+		putInt(Float.floatToRawIntBits(value));
+	}
+	
+	/**
 	 * Puts the specified boolean into this buffer as a bytes.
 	 *
 	 * @param value the value to write

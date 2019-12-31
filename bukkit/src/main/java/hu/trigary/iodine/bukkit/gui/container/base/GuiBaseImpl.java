@@ -4,6 +4,7 @@ import hu.trigary.iodine.api.gui.GuiElements;
 import hu.trigary.iodine.api.gui.container.base.GuiBase;
 import hu.trigary.iodine.api.gui.element.base.GuiElement;
 import hu.trigary.iodine.bukkit.IodinePlugin;
+import hu.trigary.iodine.bukkit.gui.GuiBaseManager;
 import hu.trigary.iodine.bukkit.gui.container.RootGuiContainer;
 import hu.trigary.iodine.bukkit.gui.element.base.GuiElementImpl;
 import hu.trigary.iodine.bukkit.network.NetworkManager;
@@ -39,7 +40,7 @@ public abstract class GuiBaseImpl<T extends GuiBase<T>> implements GuiBase<T>, G
 	
 	/**
 	 * Creates a new instance.
-	 * Should only be called by {@link hu.trigary.iodine.bukkit.gui.GuiBaseManager}.
+	 * Should only be called by {@link GuiBaseManager}.
 	 *
 	 * @param plugin the plugin instance
 	 * @param id the unique identifier of this GUI instance

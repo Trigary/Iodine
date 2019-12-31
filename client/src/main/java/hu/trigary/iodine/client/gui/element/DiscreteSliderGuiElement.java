@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.nio.ByteBuffer;
 
-public abstract class SliderGuiElement extends GuiElement {
+public abstract class DiscreteSliderGuiElement extends GuiElement {
 	private static final int SIZE = 20;
 	protected int width;
 	protected int height;
@@ -18,7 +18,7 @@ public abstract class SliderGuiElement extends GuiElement {
 	protected short maxProgress;
 	protected short progress;
 	
-	protected SliderGuiElement(@NotNull GuiBase gui, int id) {
+	protected DiscreteSliderGuiElement(@NotNull GuiBase gui, int id) {
 		super(gui, id);
 	}
 	

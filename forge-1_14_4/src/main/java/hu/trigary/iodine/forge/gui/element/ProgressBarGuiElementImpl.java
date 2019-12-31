@@ -19,6 +19,6 @@ public class ProgressBarGuiElementImpl extends ProgressBarGuiElement {
 
 	@Override
 	protected void drawImpl(int width, int height, int positionX, int positionY, int mouseX, int mouseY, float partialTicks) {
-
+		//TODO something similar to bossbar/experience bar with the color of the furnace smelting progress
 	}
 }

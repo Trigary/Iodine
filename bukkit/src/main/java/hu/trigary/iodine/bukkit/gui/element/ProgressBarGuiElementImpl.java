@@ -20,8 +20,7 @@ public class ProgressBarGuiElementImpl extends GuiElementImpl<ProgressBarGuiElem
 	private short height;
 	private boolean verticalOrientation;
 	private String text = "";
-	private short maxProgress;
-	private short progress;
+	private float progress;
 	
 	/**
 	 * Creates a new instance.
@@ -61,13 +60,7 @@ public class ProgressBarGuiElementImpl extends GuiElementImpl<ProgressBarGuiElem
 	
 	@Contract(pure = true)
 	@Override
-	public int getMaxProgress() {
-		return maxProgress;
-	}
-	
-	@Contract(pure = true)
-	@Override
-	public int getProgress() {
+	public float getProgress() {
 		return progress;
 	}
 	
@@ -117,22 +110,9 @@ public class ProgressBarGuiElementImpl extends GuiElementImpl<ProgressBarGuiElem
 	
 	@NotNull
 	@Override
-	public ProgressBarGuiElementImpl setMaxProgress(int maxProgress) {
-		Validate.isTrue(maxProgress >= 0, "Max progress must be at least 0");
-		this.maxProgress = (short) maxProgress;
-		if (progress > maxProgress) {
-			progress = this.maxProgress;
-		}
-		getGui().flagAndUpdate(this);
-		return this;
-	}
-	
-	@NotNull
-	@Override
-	public ProgressBarGuiElementImpl setProgress(int progress) {
-		Validate.isTrue(progress >= 0 && progress <= maxProgress,
-				"Progress must be at least 0 and at most maxProgress");
-		this.progress = (short) progress;
+	public ProgressBarGuiElementImpl setProgress(float progress) {
+		Validate.isTrue(progress >= 0 && progress <= 1, "Progress must be at least 0 and at most 1");
+		this.progress = progress;
 		getGui().flagAndUpdate(this);
 		return this;
 	}
@@ -144,8 +124,7 @@ public class ProgressBarGuiElementImpl extends GuiElementImpl<ProgressBarGuiElem
 		buffer.putBool(verticalOrientation);
 		buffer.putShort(verticalOrientation ? height : width);
 		buffer.putString(text);
-		buffer.putShort(maxProgress);
-		buffer.putShort(progress);
+		buffer.putFloat(progress);
 	}
 	
 	@Override

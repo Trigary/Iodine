@@ -17,11 +17,13 @@ public final class GuiElements<T extends GuiElement<T>> {
 	public static final GuiElements<LinearGuiContainer> CONTAINER_LINEAR = new GuiElements<>(LinearGuiContainer.class);
 	public static final GuiElements<ButtonGuiElement> BUTTON = new GuiElements<>(ButtonGuiElement.class);
 	public static final GuiElements<CheckboxGuiElement> CHECKBOX = new GuiElements<>(CheckboxGuiElement.class);
+	public static final GuiElements<ContinuousSliderGuiElement> CONTINUOUS_SLIDER = new GuiElements<>(ContinuousSliderGuiElement.class);
+	public static final GuiElements<DiscreteSliderGuiElement> DISCRETE_SLIDER = new GuiElements<>(DiscreteSliderGuiElement.class);
 	public static final GuiElements<DropdownGuiElement> DROPDOWN = new GuiElements<>(DropdownGuiElement.class);
 	public static final GuiElements<ImageGuiElement> IMAGE = new GuiElements<>(ImageGuiElement.class);
 	public static final GuiElements<ProgressBarGuiElement> PROGRESS_BAR = new GuiElements<>(ProgressBarGuiElement.class);
 	public static final GuiElements<RadioButtonGuiElement> RADIO_BUTTON = new GuiElements<>(RadioButtonGuiElement.class);
-	public static final GuiElements<SliderGuiElement> SLIDER = new GuiElements<>(SliderGuiElement.class);
+	public static final GuiElements<RectangleGuiElement> RECTANGLE = new GuiElements<>(RectangleGuiElement.class);
 	public static final GuiElements<TextFieldGuiElement> TEXT_FIELD = new GuiElements<>(TextFieldGuiElement.class);
 	public static final GuiElements<TextGuiElement> TEXT = new GuiElements<>(TextGuiElement.class);
 	

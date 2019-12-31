@@ -3,9 +3,11 @@ package hu.trigary.iodine.bukkit.gui.element.base;
 import hu.trigary.iodine.api.gui.element.base.GuiElement;
 import hu.trigary.iodine.backend.GuiElementType;
 import hu.trigary.iodine.bukkit.gui.IodineGuiImpl;
+import hu.trigary.iodine.api.gui.container.base.GuiBase;
 import hu.trigary.iodine.bukkit.gui.container.base.GuiBaseImpl;
 import hu.trigary.iodine.bukkit.gui.container.base.GuiParentPlus;
 import hu.trigary.iodine.bukkit.network.ResizingByteBuffer;
+import hu.trigary.iodine.bukkit.network.handler.GuiChangePacketHandler;
 import org.apache.commons.lang.Validate;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Contract;
@@ -163,8 +165,7 @@ public abstract class GuiElementImpl<T extends GuiElement<T>> implements GuiElem
 	protected abstract void serializeImpl(@NotNull ResizingByteBuffer buffer);
 	
 	/**
-	 * Called by {@link hu.trigary.iodine.bukkit.network.handler.GuiChangePacketHandler}
-	 * when a viewer acts upon this element.
+	 * Called by {@link GuiChangePacketHandler} when a viewer acts upon this element.
 	 * Malicious intent should be assumed, everything should be validated.
 	 * Network delays and multiple viewers should be kept in mind.
 	 * It should be assumed that callbacks change the GUI,
@@ -177,8 +178,7 @@ public abstract class GuiElementImpl<T extends GuiElement<T>> implements GuiElem
 	public abstract void handleChangePacket(@NotNull Player player, @NotNull ByteBuffer message);
 	
 	/**
-	 * A method that is called when this element is removed from its
-	 * {@link hu.trigary.iodine.api.gui.container.base.GuiBase}.
+	 * A method that is called when this element is removed from its {@link GuiBase}.
 	 * Does nothing by default, is designed to be overridden if necessary.
 	 */
 	public void onRemoved() {}

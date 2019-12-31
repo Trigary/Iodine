@@ -8,15 +8,16 @@ import org.jetbrains.annotations.NotNull;
 
 import java.nio.ByteBuffer;
 
-public abstract class ProgressBarGuiElement extends GuiElement {
+public abstract class ContinuousSliderGuiElement extends GuiElement {
 	private static final int SIZE = 20;
 	protected int width;
 	protected int height;
+	protected boolean editable;
 	protected boolean verticalOrientation;
 	protected String text;
 	protected float progress;
 	
-	protected ProgressBarGuiElement(@NotNull GuiBase gui, int id) {
+	protected ContinuousSliderGuiElement(@NotNull GuiBase gui, int id) {
 		super(gui, id);
 	}
 	
@@ -27,6 +28,7 @@ public abstract class ProgressBarGuiElement extends GuiElement {
 		verticalOrientation = BufferUtils.deserializeBoolean(buffer);
 		width = verticalOrientation ? SIZE : buffer.getShort();
 		height = verticalOrientation ? buffer.getShort() : SIZE;
+		editable = BufferUtils.deserializeBoolean(buffer);
 		text = BufferUtils.deserializeString(buffer);
 		progress = buffer.getFloat();
 	}
@@ -35,5 +37,11 @@ public abstract class ProgressBarGuiElement extends GuiElement {
 	@Override
 	protected final IntPair calculateSizeImpl(int screenWidth, int screenHeight) {
 		return new IntPair(width, height);
+	}
+	
+	protected final void onChanged(float newProgress) {
+		if (editable && Float.compare(progress, newProgress) != 0 && newProgress >= 0 && newProgress <= 1) {
+			sendChangePacket(4, b -> b.putFloat(newProgress));
+		}
 	}
 }

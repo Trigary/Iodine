@@ -1,35 +1,35 @@
 package hu.trigary.iodine.forge.gui.element;
 
 import hu.trigary.iodine.client.gui.container.base.GuiBase;
-import hu.trigary.iodine.client.gui.element.SliderGuiElement;
+import hu.trigary.iodine.client.gui.element.ContinuousSliderGuiElement;
 import net.minecraft.client.gui.widget.AbstractSlider;
 import org.jetbrains.annotations.NotNull;
 
-public class SliderGuiElementImpl extends SliderGuiElement {
+public class ContinuousGuiElementImpl extends ContinuousSliderGuiElement {
 	private AbstractSlider widget;
 	
-	public SliderGuiElementImpl(@NotNull GuiBase gui, int id) {
+	public ContinuousGuiElementImpl(@NotNull GuiBase gui, int id) {
 		super(gui, id);
 	}
-	
+
 	
 	
 	@Override
 	protected void updateImpl(int width, int height, int positionX, int positionY) {
-		widget = new AbstractSlider(positionX, positionY, width, height, (double) progress / maxProgress) {
+		widget = new AbstractSlider(positionX, positionY, width, height, progress) {
 			@Override
 			protected void updateMessage() {}
 			
 			@Override
 			protected void applyValue() {
-				onChanged((int) (value * maxProgress));
+				onChanged((float) value);
 			}
 		};
 		widget.active = editable;
 		widget.setMessage(text);
 		//TODO verticalOrientation
 	}
-	
+
 	@Override
 	protected void drawImpl(int width, int height, int positionX, int positionY, int mouseX, int mouseY, float partialTicks) {
 		widget.render(mouseX, mouseY, partialTicks);

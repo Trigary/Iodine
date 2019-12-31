@@ -2,16 +2,12 @@ package hu.trigary.iodine.bukkit;
 
 import hu.trigary.iodine.api.IodineApi;
 import hu.trigary.iodine.api.gui.GuiElements;
-import hu.trigary.iodine.api.gui.IodineOverlay;
-import hu.trigary.iodine.api.gui.element.ButtonGuiElement;
-import hu.trigary.iodine.api.gui.element.TextFieldGuiElement;
+import hu.trigary.iodine.api.gui.container.base.GuiBase;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.function.Consumer;
 
 /**
  * A class which exists solely for testing purposes.
@@ -39,29 +35,29 @@ public class TestCommandListener implements Listener {
 			return;
 		}
 		
-		Object id = new Object();
+		//TODO test draw priorities, padding, containers, widths, heights
 		
-		Consumer<ButtonGuiElement> initializer = e -> e
-				.setText("Click me!")
-				.onClicked((ignored, p) -> {
-					p.sendMessage("Button clicked");
-					e.getGui().atomicUpdate(gui -> {
-						gui.removeElement(e);
-						TextFieldGuiElement text = (TextFieldGuiElement) gui.getElement(id);
-						text.setText(text.getText() + "x");
-					});
-				});
-		
-		api.createOverlay(IodineOverlay.Anchor.TOP_RIGHT, 0, 0)
-				.addElement(GuiElements.BUTTON, initializer, 50, 50)
-				.addElement(GuiElements.BUTTON, initializer, 100, 50)
-				.addElement(GuiElements.BUTTON, initializer, 50, 100)
-				.addElement(GuiElements.BUTTON, initializer, 100, 100)
-				.addElement(id, GuiElements.TEXT_FIELD, e -> e.setText("Your text here")
-						.setRegex("[a-zA-Z ]*")
-						.onChanged((ignored, oldText, newText, p) -> p.sendMessage("Old text: "
-								+ oldText + ", new text: " + newText)))
-				//.onClosed((gui, p) -> p.sendMessage("You closed the GUI"))
+		api.createGui().addElement(GuiElements.CONTAINER_LINEAR, c -> {
+			c.setOrientation(true);
+			GuiBase<?> gui = c.getGui();
+			
+			gui.addElement(GuiElements.CHECKBOX, e -> c.makeChildLast(e)
+					.onClicked((ee, p) -> p.sendMessage("Checked: " + e.isChecked())));
+			
+			gui.addElement(GuiElements.DROPDOWN, e -> c.makeChildLast(e)
+					.setChoices("alpha", "beta", "charlie")
+					.setSelected("beta")
+					.onChosen((ee, oldC, newC, p) -> p.sendMessage("Old: " + oldC + " | New: " + newC)));
+			
+			gui.addElement(GuiElements.DISCRETE_SLIDER, e -> c.makeChildLast(e)
+					.setMaxProgress(4)
+					.setProgress(2)
+					.onProgressed((ee, oldP, newP, p) -> p.sendMessage("Old: " + oldP + " | New: " + newP)));
+			
+			gui.addElement(GuiElements.TEXT, e -> c.makeChildLast(e)
+					.setText("Some text..."));
+			
+		}).onClosed((gui, p) -> p.sendMessage("You closed the GUI"))
 				.openFor(player);
 	}
 }
