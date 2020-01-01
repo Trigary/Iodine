@@ -43,8 +43,11 @@ public final class GridGuiContainer extends GuiContainer {
 	
 	@Override
 	public void initialize() {
-		children = resolveChildren(childrenTemp);
-		childrenTemp = null;
+		if (childrenTemp != null) {
+			children = resolveChildren(childrenTemp);
+			childrenTemp = null;
+		}
+		
 		for (GuiElement child : children) {
 			child.initialize();
 		}

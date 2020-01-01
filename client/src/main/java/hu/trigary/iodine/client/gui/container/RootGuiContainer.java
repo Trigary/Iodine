@@ -12,6 +12,7 @@ import java.util.Map;
 
 public final class RootGuiContainer extends GuiContainer {
 	private final Map<Integer, Position> children = new HashMap<>();
+	private boolean childrenDirty;
 	
 	public RootGuiContainer(@NotNull GuiBase gui, int id) {
 		super(gui, id);
@@ -26,11 +27,16 @@ public final class RootGuiContainer extends GuiContainer {
 		for (int i = 0; i < count; i++) {
 			children.put(buffer.getInt(), new Position(buffer.getShort(), buffer.getShort()));
 		}
+		childrenDirty = true;
 	}
 	
 	@Override
 	public void initialize() {
-		children.forEach((id, position) -> position.element = getGui().getElement(id));
+		if (childrenDirty) {
+			children.forEach((id, position) -> position.element = getGui().getElement(id));
+			childrenDirty = false;
+		}
+		
 		for (Position position : children.values()) {
 			position.element.initialize();
 		}

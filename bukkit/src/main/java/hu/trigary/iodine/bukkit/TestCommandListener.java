@@ -3,6 +3,7 @@ package hu.trigary.iodine.bukkit;
 import hu.trigary.iodine.api.IodineApi;
 import hu.trigary.iodine.api.gui.GuiElements;
 import hu.trigary.iodine.api.gui.container.base.GuiBase;
+import hu.trigary.iodine.api.gui.element.TextGuiElement;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -43,19 +44,6 @@ public class TestCommandListener implements Listener {
 			
 			gui.addElement(GuiElements.CHECKBOX, e -> c.makeChildLast(e)
 					.onClicked((ee, p) -> p.sendMessage("Checked: " + e.isChecked())));
-			
-			gui.addElement(GuiElements.DROPDOWN, e -> c.makeChildLast(e)
-					.setChoices("alpha", "beta", "charlie")
-					.setSelected("beta")
-					.onChosen((ee, oldC, newC, p) -> p.sendMessage("Old: " + oldC + " | New: " + newC)));
-			
-			gui.addElement(GuiElements.DISCRETE_SLIDER, e -> c.makeChildLast(e)
-					.setMaxProgress(4)
-					.setProgress(2)
-					.onProgressed((ee, oldP, newP, p) -> p.sendMessage("Old: " + oldP + " | New: " + newP)));
-			
-			gui.addElement(GuiElements.TEXT, e -> c.makeChildLast(e)
-					.setText("Some text..."));
 			
 		}).onClosed((gui, p) -> p.sendMessage("You closed the GUI"))
 				.openFor(player);

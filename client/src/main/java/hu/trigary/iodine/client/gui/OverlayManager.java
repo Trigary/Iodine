@@ -55,7 +55,7 @@ public abstract class OverlayManager {
 	public final void updateOverlayResolutions() {
 		mod.getLogger().debug("OverlayManager > updating resolutions");
 		for (IodineOverlay overlay : openOverlays.values()) {
-			overlay.updateResolution();
+			overlay.update();
 		}
 	}
 	

@@ -23,7 +23,7 @@ public class TextGuiElementImpl extends TextGuiElement {
 	protected void updateImpl(int width, int height, int positionX, int positionY) {
 		if (alignment != 4) {
 			offset = width - fontRenderer.getStringWidth(text);
-			if (alignment == 6) {
+			if (alignment == 5) {
 				offset /= 2;
 			}
 		}

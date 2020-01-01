@@ -36,7 +36,7 @@ public final class IodineGui extends GuiBase {
 	}
 	
 	@Override
-	protected void onUpdatedResolution() {
+	protected void onUpdated() {
 		if (focused != null) {
 			focused = getElement(focused.getId());
 			focused.setFocused(true); //can't be null, since onElementRemoved wasn't called

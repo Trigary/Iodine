@@ -33,7 +33,7 @@ public class ContinuousSliderGuiElementImpl extends GuiElementImpl<ContinuousSli
 	 * @param id the API-friendly ID of this element
 	 */
 	public ContinuousSliderGuiElementImpl(@NotNull GuiBaseImpl<?> gui, int internalId, @NotNull Object id) {
-		super(gui, GuiElementType.DISCRETE_SLIDER, internalId, id);
+		super(gui, GuiElementType.CONTINUOUS_SLIDER, internalId, id);
 	}
 	
 	
@@ -129,7 +129,7 @@ public class ContinuousSliderGuiElementImpl extends GuiElementImpl<ContinuousSli
 	@Override
 	public ContinuousSliderGuiElementImpl setProgress(float progress) {
 		Validate.isTrue(progress >= 0 && progress <= 1, "Progress must be at least 0 and at most 1");
-		this.progress = (short) progress;
+		this.progress = progress;
 		getGui().flagAndUpdate(this);
 		return this;
 	}

@@ -41,7 +41,7 @@ public class GuiChangePacketHandler extends PacketHandler {
 		if (element == null) {
 			getPlugin().log(Level.OFF, "Network > updating element failed: no element by id");
 		} else {
-			getPlugin().log(Level.OFF, "Network > updating element {0}", element.getId());
+			getPlugin().log(Level.OFF, "Network > updating element {0}", element.getInternalId());
 			element.handleChangePacket(player.getPlayer(), message);
 		}
 	}

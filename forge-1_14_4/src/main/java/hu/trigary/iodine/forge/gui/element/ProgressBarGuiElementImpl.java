@@ -9,14 +9,14 @@ public class ProgressBarGuiElementImpl extends ProgressBarGuiElement {
 	public ProgressBarGuiElementImpl(@NotNull GuiBase gui, int id) {
 		super(gui, id);
 	}
-
-
-
+	
+	
+	
 	@Override
 	protected void updateImpl(int width, int height, int positionX, int positionY) {
 		throw new NotImplementedException("");
 	}
-
+	
 	@Override
 	protected void drawImpl(int width, int height, int positionX, int positionY, int mouseX, int mouseY, float partialTicks) {
 		//TODO something similar to bossbar/experience bar with the color of the furnace smelting progress

@@ -6,30 +6,22 @@ import net.minecraft.client.gui.widget.AbstractSlider;
 import org.jetbrains.annotations.NotNull;
 
 public class ContinuousGuiElementImpl extends ContinuousSliderGuiElement {
-	private AbstractSlider widget;
+	private Slider widget;
 	
 	public ContinuousGuiElementImpl(@NotNull GuiBase gui, int id) {
 		super(gui, id);
 	}
-
+	
 	
 	
 	@Override
 	protected void updateImpl(int width, int height, int positionX, int positionY) {
-		widget = new AbstractSlider(positionX, positionY, width, height, progress) {
-			@Override
-			protected void updateMessage() {}
-			
-			@Override
-			protected void applyValue() {
-				onChanged((float) value);
-			}
-		};
+		widget = new Slider(positionX, positionY, width, height, progress);
 		widget.active = editable;
 		widget.setMessage(text);
 		//TODO verticalOrientation
 	}
-
+	
 	@Override
 	protected void drawImpl(int width, int height, int positionX, int positionY, int mouseX, int mouseY, float partialTicks) {
 		widget.render(mouseX, mouseY, partialTicks);
@@ -50,7 +42,24 @@ public class ContinuousGuiElementImpl extends ContinuousSliderGuiElement {
 	@Override
 	public void onMouseReleased(double mouseX, double mouseY) {
 		widget.mouseReleased(mouseX, mouseY, 0);
+		onChanged(widget.getProgress());
 	}
 	
-	//TODO most elements don't update values when the client changes them, but instead wait for the server
+	
+	
+	private static class Slider extends AbstractSlider {
+		protected Slider(int x, int y, int width, int height, float progress) {
+			super(x, y, width, height, progress);
+		}
+		
+		public float getProgress() {
+			return (float) value;
+		}
+		
+		@Override
+		protected void updateMessage() {}
+		
+		@Override
+		protected void applyValue() {}
+	}
 }

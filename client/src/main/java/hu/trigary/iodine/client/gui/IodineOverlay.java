@@ -78,5 +78,5 @@ public final class IodineOverlay extends GuiBase {
 	}
 	
 	@Override
-	protected void onUpdatedResolution() {}
+	protected void onUpdated() {}
 }

@@ -53,6 +53,4 @@ public class TextFieldGuiElementImpl extends TextFieldGuiElement {
 		widget.charTyped(codePoint, modifiers);
 		onChanged(widget.getText());
 	}
-	
-	//TODO most elements don't update values when the client changes them, but instead wait for the server
 }

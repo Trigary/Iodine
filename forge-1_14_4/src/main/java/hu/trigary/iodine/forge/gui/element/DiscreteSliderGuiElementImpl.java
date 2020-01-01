@@ -6,7 +6,7 @@ import net.minecraft.client.gui.widget.AbstractSlider;
 import org.jetbrains.annotations.NotNull;
 
 public class DiscreteSliderGuiElementImpl extends DiscreteSliderGuiElement {
-	private AbstractSlider widget;
+	private Slider widget;
 	
 	public DiscreteSliderGuiElementImpl(@NotNull GuiBase gui, int id) {
 		super(gui, id);
@@ -16,17 +16,7 @@ public class DiscreteSliderGuiElementImpl extends DiscreteSliderGuiElement {
 	
 	@Override
 	protected void updateImpl(int width, int height, int positionX, int positionY) {
-		widget = new AbstractSlider(positionX, positionY, width, height, (double) progress / maxProgress) {
-			@Override
-			protected void updateMessage() {}
-			
-			@Override
-			protected void applyValue() {
-				int newProgress = (int) (value * maxProgress + 0.5);
-				value = (double) newProgress / maxProgress;
-				onChanged(newProgress);
-			}
-		};
+		widget = new Slider(positionX, positionY, width, height, progress, maxProgress);
 		widget.active = editable;
 		widget.setMessage(text);
 		//TODO verticalOrientation
@@ -52,7 +42,29 @@ public class DiscreteSliderGuiElementImpl extends DiscreteSliderGuiElement {
 	@Override
 	public void onMouseReleased(double mouseX, double mouseY) {
 		widget.mouseReleased(mouseX, mouseY, 0);
+		onChanged(widget.getProgress());
 	}
 	
-	//TODO most elements don't update values when the client changes them, but instead wait for the server
+	
+	
+	private static class Slider extends AbstractSlider {
+		private final short maxProgress;
+		
+		protected Slider(int x, int y, int width, int height, short progress, short maxProgress) {
+			super(x, y, width, height, (double) progress / maxProgress);
+			this.maxProgress = maxProgress;
+		}
+		
+		public short getProgress() {
+			return (short) Math.round(value * maxProgress);
+		}
+		
+		@Override
+		protected void updateMessage() {}
+		
+		@Override
+		protected void applyValue() {
+			value = Math.floor(value * maxProgress + 0.5) / maxProgress;
+		}
+	}
 }

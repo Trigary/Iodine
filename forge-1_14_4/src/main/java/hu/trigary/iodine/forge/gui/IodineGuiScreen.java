@@ -24,7 +24,7 @@ public class IodineGuiScreen extends Screen {
 	@Override
 	public void resize(@NotNull Minecraft minecraft, int screenWidth, int screenHeight) {
 		setSize(screenWidth, screenHeight);
-		gui.updateResolution();
+		gui.update();
 	}
 	
 	@Override

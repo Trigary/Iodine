@@ -7,13 +7,13 @@ import org.jetbrains.annotations.NotNull;
 
 public class DropdownGuiElementImpl extends DropdownGuiElement {
 	private AbstractButton widget;
-
+	
 	public DropdownGuiElementImpl(@NotNull GuiBase gui, int id) {
 		super(gui, id);
 	}
-
-
-
+	
+	
+	
 	@Override
 	protected void updateImpl(int width, int height, int positionX, int positionY) {
 		widget = new AbstractButton(positionX, positionY, width, height, choices[selected]) {
@@ -24,7 +24,7 @@ public class DropdownGuiElementImpl extends DropdownGuiElement {
 		};
 		widget.active = editable;
 	}
-
+	
 	@Override
 	protected void drawImpl(int width, int height, int positionX, int positionY, int mouseX, int mouseY, float partialTicks) {
 		widget.render(mouseX, mouseY, partialTicks);

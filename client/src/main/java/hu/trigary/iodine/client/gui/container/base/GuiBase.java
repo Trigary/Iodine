@@ -90,7 +90,7 @@ public abstract class GuiBase implements GuiParent {
 			rootElement = (RootGuiContainer) elements.get(0);
 		}
 		rootElement.initialize();
-		updateResolution();
+		update();
 	}
 	
 	protected abstract void deserializeStart(@NotNull ByteBuffer buffer);
@@ -99,8 +99,8 @@ public abstract class GuiBase implements GuiParent {
 	
 	
 	
-	public final void updateResolution() {
-		mod.getLogger().debug("GUI > updating resolution {}", id);
+	public final void update() {
+		mod.getLogger().debug("GUI > updating {}", id);
 		rootElement.calculateSize(mod.getScreenWidth(), mod.getScreenHeight());
 		IntPair position = calculatePosition(mod.getScreenWidth(), mod.getScreenHeight(),
 				rootElement.getWidth(), rootElement.getHeight());
@@ -108,14 +108,14 @@ public abstract class GuiBase implements GuiParent {
 		for (GuiElement element : elements.values()) {
 			element.update();
 		}
-		onUpdatedResolution();
+		onUpdated();
 	}
 	
 	@NotNull
 	@Contract(pure = true)
 	protected abstract IntPair calculatePosition(int screenWidth, int screenHeight, int guiWidth, int guiHeight);
 	
-	protected abstract void onUpdatedResolution();
+	protected abstract void onUpdated();
 	
 	
 	

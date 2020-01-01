@@ -35,7 +35,7 @@ public abstract class GuiBaseImpl<T extends GuiBase<T>> implements GuiBase<T>, G
 	private final IodinePlugin plugin;
 	private final int id;
 	private final RootGuiContainer root;
-	private int nextElementId = 1;
+	private int nextElementId = 1; //id 0 is root
 	private int atomicUpdateLock;
 	
 	/**
@@ -155,7 +155,7 @@ public abstract class GuiBaseImpl<T extends GuiBase<T>> implements GuiBase<T>, G
 	@Override
 	public final T removeElement(@NotNull Object id) {
 		GuiElementImpl<?> element = apiIdElements.remove(id);
-		plugin.log(Level.OFF, "GUI > removing element {0}", element == null ? "null" : element.getId());
+		plugin.log(Level.OFF, "GUI > removing element {0}", element == null ? "null" : element.getInternalId());
 		if (element != null) {
 			element.onRemoved();
 			element.getParent().removeChild(element);
