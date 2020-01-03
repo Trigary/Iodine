@@ -103,7 +103,7 @@ public abstract class GuiBase implements GuiParent {
 		mod.getLogger().debug("GUI > updating {}", id);
 		rootElement.calculateSize(mod.getScreenWidth(), mod.getScreenHeight());
 		IntPair position = calculatePosition(mod.getScreenWidth(), mod.getScreenHeight(),
-				rootElement.getWidth(), rootElement.getHeight());
+				rootElement.getTotalWidth(), rootElement.getTotalHeight());
 		rootElement.setPosition(position.getX(), position.getY());
 		for (GuiElement element : elements.values()) {
 			element.update();

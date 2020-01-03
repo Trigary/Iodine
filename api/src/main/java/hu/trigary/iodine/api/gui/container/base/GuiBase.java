@@ -74,7 +74,7 @@ public interface GuiBase<T extends GuiBase<T>> extends GuiParent<T>, AttachmentH
 	 * The element will be accessible using the specified ID.
 	 * This ID must be unique.
 	 * If ID-based access is not required, then optionally
-	 * {@link #addElement(GuiElements, Consumer, int, int)} can be used instead.
+	 * {@link #addElement(GuiElements, int, int, Consumer)} can be used instead.
 	 *
 	 * @param id id the identifier of the element which can be used later to retrieve it
 	 * @param type the class of the element to add
@@ -85,11 +85,11 @@ public interface GuiBase<T extends GuiBase<T>> extends GuiParent<T>, AttachmentH
 	 * @return the current instance (for chaining)
 	 */
 	@NotNull <E extends GuiElement<E>> T addElement(@NotNull Object id,
-			@NotNull GuiElements<E> type, @NotNull Consumer<E> initializer, int x, int y);
+			@NotNull GuiElements<E> type, int x, int y, @NotNull Consumer<E> initializer);
 	
 	/**
 	 * Adds a new element of the specified type to this GUI.
-	 * Same as calling {@link #addElement(Object, GuiElements, Consumer, int, int)}
+	 * Same as calling {@link #addElement(Object, GuiElements, int, int, Consumer)}
 	 * with {@code new Object()} as the ID.
 	 *
 	 * @param type the class of the element to add
@@ -101,13 +101,13 @@ public interface GuiBase<T extends GuiBase<T>> extends GuiParent<T>, AttachmentH
 	 */
 	@NotNull
 	default <E extends GuiElement<E>> T addElement(@NotNull GuiElements<E> type,
-			@NotNull Consumer<E> initializer, int x, int y) {
-		return addElement(new Object(), type, initializer, x, y);
+			int x, int y, @NotNull Consumer<E> initializer) {
+		return addElement(new Object(), type, x, y, initializer);
 	}
 	
 	/**
 	 * Adds a new element of the specified type to this GUI.
-	 * Same as calling {@link #addElement(Object, GuiElements, Consumer, int, int)}
+	 * Same as calling {@link #addElement(Object, GuiElements, int, int, Consumer)}
 	 * with 0;0 as the X;Y positions.
 	 *
 	 * @param id id the identifier of the element which can be used later to retrieve it
@@ -119,12 +119,12 @@ public interface GuiBase<T extends GuiBase<T>> extends GuiParent<T>, AttachmentH
 	@NotNull
 	default <E extends GuiElement<E>> T addElement(@NotNull Object id,
 			@NotNull GuiElements<E> type, @NotNull Consumer<E> initializer) {
-		return addElement(id, type, initializer, 0, 0);
+		return addElement(id, type, 0, 0, initializer);
 	}
 	
 	/**
 	 * Adds a new element of the specified type to this GUI.
-	 * Same as calling {@link #addElement(Object, GuiElements, Consumer, int, int)}
+	 * Same as calling {@link #addElement(Object, GuiElements, int, int, Consumer)}
 	 * with {@code new Object()} as the ID and 0;0 as the X;Y positions.
 	 *
 	 * @param type the class of the element to add
@@ -135,7 +135,7 @@ public interface GuiBase<T extends GuiBase<T>> extends GuiParent<T>, AttachmentH
 	@NotNull
 	default <E extends GuiElement<E>> T addElement(@NotNull GuiElements<E> type,
 			@NotNull Consumer<E> initializer) {
-		return addElement(new Object(), type, initializer, 0, 0);
+		return addElement(new Object(), type, 0, 0, initializer);
 	}
 	
 	

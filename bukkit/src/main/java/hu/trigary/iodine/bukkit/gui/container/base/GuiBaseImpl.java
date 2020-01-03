@@ -135,7 +135,7 @@ public abstract class GuiBaseImpl<T extends GuiBase<T>> implements GuiBase<T>, G
 	@NotNull
 	@Override
 	public final <E extends GuiElement<E>> T addElement(@NotNull Object id,
-			@NotNull GuiElements<E> type, @NotNull Consumer<E> initializer, int x, int y) {
+			@NotNull GuiElements<E> type, int x, int y, @NotNull Consumer<E> initializer) {
 		Validate.notNull(id, "ID must be non-null");
 		Validate.isTrue(!apiIdElements.containsKey(id), "IDs must be unique");
 		plugin.log(Level.OFF, "GUI > adding element {0} to {1}", type, this.id);

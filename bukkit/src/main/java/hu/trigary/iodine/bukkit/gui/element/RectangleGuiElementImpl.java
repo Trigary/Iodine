@@ -8,6 +8,7 @@ import hu.trigary.iodine.bukkit.gui.element.base.GuiElementImpl;
 import hu.trigary.iodine.bukkit.network.ResizingByteBuffer;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.nio.ByteBuffer;
 
@@ -15,9 +16,10 @@ import java.nio.ByteBuffer;
  * The implementation of {@link RectangleGuiElement}.
  */
 public class RectangleGuiElementImpl extends GuiElementImpl<RectangleGuiElement> implements RectangleGuiElement {
-	private short width = 150;
-	private short height;
+	private short width = 10;
+	private short height = 10;
 	private IodineColor color;
+	private ClickedAction<RectangleGuiElement> clickedAction;
 	
 	/**
 	 * Creates a new instance.
@@ -68,9 +70,16 @@ public class RectangleGuiElementImpl extends GuiElementImpl<RectangleGuiElement>
 	
 	@NotNull
 	@Override
-	public RectangleGuiElement setColor(@NotNull IodineColor color) {
+	public RectangleGuiElementImpl setColor(@NotNull IodineColor color) {
 		this.color = color;
 		getGui().flagAndUpdate(this);
+		return this;
+	}
+	
+	@NotNull
+	@Override
+	public RectangleGuiElementImpl onClicked(@Nullable ClickedAction<RectangleGuiElement> action) {
+		clickedAction = action;
 		return this;
 	}
 	
@@ -86,5 +95,9 @@ public class RectangleGuiElementImpl extends GuiElementImpl<RectangleGuiElement>
 	}
 	
 	@Override
-	public void handleChangePacket(@NotNull Player player, @NotNull ByteBuffer message) {}
+	public void handleChangePacket(@NotNull Player player, @NotNull ByteBuffer message) {
+		if (clickedAction != null) {
+			clickedAction.accept(this, player);
+		}
+	}
 }

@@ -49,14 +49,14 @@ public final class LinearGuiContainer extends GuiContainer {
 		if (verticalOrientation) {
 			for (GuiElement child : children) {
 				child.calculateSize(screenWidth, screenHeight);
-				width = Math.max(width, child.getWidth());
-				height += child.getHeight();
+				width = Math.max(width, child.getTotalWidth());
+				height += child.getTotalHeight();
 			}
 		} else {
 			for (GuiElement child : children) {
 				child.calculateSize(screenWidth, screenHeight);
-				width += child.getWidth();
-				height = Math.max(height, child.getHeight());
+				width += child.getTotalWidth();
+				height = Math.max(height, child.getTotalHeight());
 			}
 		}
 		return new IntPair(width, height);
@@ -68,13 +68,13 @@ public final class LinearGuiContainer extends GuiContainer {
 			int height = 0;
 			for (GuiElement child : children) {
 				child.setPosition(offsetX, offsetY + height);
-				height += child.getHeight();
+				height += child.getTotalHeight();
 			}
 		} else {
 			int width = 0;
 			for (GuiElement child : children) {
 				child.setPosition(offsetX + width, offsetY);
-				width += child.getWidth();
+				width += child.getTotalWidth();
 			}
 		}
 	}

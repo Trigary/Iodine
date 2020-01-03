@@ -7,13 +7,13 @@ import org.jetbrains.annotations.NotNull;
 
 public class CheckboxGuiElementImpl extends CheckboxGuiElement {
 	private CheckboxButton widget;
-
+	
 	public CheckboxGuiElementImpl(@NotNull GuiBase gui, int id) {
 		super(gui, id);
 	}
-
-
-
+	
+	
+	
 	@Override
 	protected void updateImpl(int width, int height, int positionX, int positionY) {
 		widget = new CheckboxButton(positionX, positionY, width, height, "", checked) {
@@ -24,7 +24,7 @@ public class CheckboxGuiElementImpl extends CheckboxGuiElement {
 		};
 		widget.active = editable;
 	}
-
+	
 	@Override
 	protected void drawImpl(int width, int height, int positionX, int positionY, int mouseX, int mouseY, float partialTicks) {
 		widget.render(mouseX, mouseY, partialTicks);

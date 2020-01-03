@@ -1,10 +1,12 @@
 repositories {
-    maven { url 'https://hub.spigotmc.org/nexus/content/groups/public/' }
+    maven {
+        url 'https://hub.spigotmc.org/nexus/content/groups/public/'
+    }
 }
 
 dependencies {
     implementation project(':backend')
-    compileOnly('org.spigotmc:spigot-api:1.14.4-R0.1-SNAPSHOT')
+    compileOnly('org.bukkit:bukkit:1.14.4-R0.1-SNAPSHOT')
     implementation project(':api')
 }
 

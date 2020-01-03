@@ -30,4 +30,8 @@ public abstract class RectangleGuiElement extends GuiElement {
 	protected final IntPair calculateSizeImpl(int screenWidth, int screenHeight) {
 		return new IntPair(width, height);
 	}
+	
+	protected final void onChanged() {
+		sendChangePacket(0, b -> {});
+	}
 }

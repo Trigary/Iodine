@@ -2,8 +2,8 @@ package hu.trigary.iodine.bukkit;
 
 import hu.trigary.iodine.api.IodineApi;
 import hu.trigary.iodine.api.gui.GuiElements;
+import hu.trigary.iodine.api.gui.IodineColor;
 import hu.trigary.iodine.api.gui.container.base.GuiBase;
-import hu.trigary.iodine.api.gui.element.TextGuiElement;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -36,16 +36,29 @@ public class TestCommandListener implements Listener {
 			return;
 		}
 		
-		//TODO test draw priorities, padding, containers, widths, heights
-		
 		api.createGui().addElement(GuiElements.CONTAINER_LINEAR, c -> {
 			c.setOrientation(true);
 			GuiBase<?> gui = c.getGui();
 			
+			gui.addElement(GuiElements.CONTAINER_GRID, grid -> {
+				grid.setPaddingBottom(50);
+				grid.setGridSize(3, 3);
+				for (int x = 0; x < 3; x++) {
+					for (int y = 0; y < 3; y++) {
+						int finalX = x;
+						int finalY = y;
+						gui.addElement(GuiElements.RECTANGLE, e -> grid.makeChild(e, finalX, finalY)
+								.setColor((finalX + finalY) % 2 == 0 ? IodineColor.BLACK : IodineColor.WHITE));
+					}
+				}
+			});
+			
 			gui.addElement(GuiElements.CHECKBOX, e -> c.makeChildLast(e)
 					.onClicked((ee, p) -> p.sendMessage("Checked: " + e.isChecked())));
-			
-		}).onClosed((gui, p) -> p.sendMessage("You closed the GUI"))
+		})
+				.addElement(GuiElements.TEXT, 5, 10, e -> e.setText("P-1").setDrawPriority(-1))
+				.addElement(GuiElements.TEXT, 10, 5, e -> e.setText("P+1").setDrawPriority(1))
+				.onClosed((gui, p) -> p.sendMessage("You closed the GUI"))
 				.openFor(player);
 	}
 }

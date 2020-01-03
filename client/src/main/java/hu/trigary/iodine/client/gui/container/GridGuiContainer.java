@@ -65,7 +65,7 @@ public final class GridGuiContainer extends GuiContainer {
 		for (int column = 0; column < columnCount; column++) {
 			int maxWidth = 0;
 			for (int row = 0; row < rowCount; row++) {
-				maxWidth = Math.max(maxWidth, getChild(column, row).getWidth());
+				maxWidth = Math.max(maxWidth, getChild(column, row).getTotalWidth());
 			}
 			maxWidths[column] = maxWidth;
 			width += maxWidth;
@@ -76,7 +76,7 @@ public final class GridGuiContainer extends GuiContainer {
 		for (int row = 0; row < rowCount; row++) {
 			int maxHeight = 0;
 			for (int column = 0; column < columnCount; column++) {
-				maxHeight = Math.max(maxHeight, getChild(column, row).getHeight());
+				maxHeight = Math.max(maxHeight, getChild(column, row).getTotalHeight());
 			}
 			maxHeights[row] = maxHeight;
 			height += maxHeight;

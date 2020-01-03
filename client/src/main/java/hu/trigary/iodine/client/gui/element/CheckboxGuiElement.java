@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
 import java.nio.ByteBuffer;
 
 public abstract class CheckboxGuiElement extends GuiElement {
-	protected static final int SIZE = 11;
+	protected static final int SIZE = 20;
 	protected boolean editable;
 	protected boolean checked;
 	

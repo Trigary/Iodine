@@ -14,8 +14,10 @@ public abstract class GuiElement {
 	private final GuiBase gui;
 	private final int id;
 	private byte drawPriority;
-	private int width;
-	private int height;
+	private int elementWidth;
+	private int elementHeight;
+	private int totalWidth;
+	private int totalHeight;
 	private int positionX;
 	private int positionY;
 	
@@ -43,22 +45,22 @@ public abstract class GuiElement {
 	}
 	
 	@Contract(pure = true)
-	public final int getWidth() {
-		return width;
+	public final int getTotalWidth() {
+		return totalWidth;
 	}
 	
 	@Contract(pure = true)
-	public final int getHeight() {
-		return height;
+	public final int getTotalHeight() {
+		return totalHeight;
 	}
 	
 	
 	
 	public final void deserialize(@NotNull ByteBuffer buffer) {
 		padding[0] = buffer.getShort();
-		padding[0] = buffer.getShort();
-		padding[0] = buffer.getShort();
-		padding[0] = buffer.getShort();
+		padding[1] = buffer.getShort();
+		padding[2] = buffer.getShort();
+		padding[3] = buffer.getShort();
 		drawPriority = buffer.get();
 		deserializeImpl(buffer);
 	}
@@ -71,8 +73,10 @@ public abstract class GuiElement {
 	
 	public final void calculateSize(int screenWidth, int screenHeight) { //in case percentage based stuff is added
 		IntPair size = calculateSizeImpl(screenWidth, screenHeight);
-		width = size.getX() + padding[2] + padding[3];
-		height = size.getY() + padding[0] + padding[1];
+		elementWidth = size.getX();
+		elementHeight = size.getY();
+		totalWidth = size.getX() + padding[2] + padding[3];
+		totalHeight = size.getY() + padding[0] + padding[1];
 	}
 	
 	@NotNull
@@ -87,7 +91,7 @@ public abstract class GuiElement {
 	protected void setChildrenPositions(int offsetX, int offsetY) {}
 	
 	public final void update() {
-		updateImpl(width, height, positionX, positionY);
+		updateImpl(elementWidth, elementHeight, positionX, positionY);
 	}
 	
 	protected abstract void updateImpl(int width, int height, int positionX, int positionY);
@@ -95,7 +99,7 @@ public abstract class GuiElement {
 	
 	
 	public final void draw(int mouseX, int mouseY, float partialTicks) {
-		drawImpl(width, height, positionX, positionY, mouseX, mouseY, partialTicks);
+		drawImpl(elementWidth, elementHeight, positionX, positionY, mouseX, mouseY, partialTicks);
 	}
 	
 	protected abstract void drawImpl(int width, int height, int positionX,

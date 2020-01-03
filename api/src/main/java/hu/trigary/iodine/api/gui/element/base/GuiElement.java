@@ -63,4 +63,56 @@ public interface GuiElement<T extends GuiElement<T>> extends AttachmentHolder, D
 	 */
 	@NotNull
 	GuiElement<T> setPadding(@NotNull int[] padding);
+	
+	/**
+	 * Sets a single padding value.
+	 * Same as calling {@link #setPadding(int[])} with -1
+	 * as all array element values except this one.
+	 *
+	 * @param padding the new padding value
+	 * @return the current instance (for chaining)
+	 */
+	@NotNull
+	default GuiElement<T> setPaddingTop(int padding) {
+		return setPadding(new int[]{padding, -1, -1, -1});
+	}
+	
+	/**
+	 * Sets a single padding value.
+	 * Same as calling {@link #setPadding(int[])} with -1
+	 * as all array element values except this one.
+	 *
+	 * @param padding the new padding value
+	 * @return the current instance (for chaining)
+	 */
+	@NotNull
+	default GuiElement<T> setPaddingBottom(int padding) {
+		return setPadding(new int[]{-1, padding, -1, -1});
+	}
+	
+	/**
+	 * Sets a single padding value.
+	 * Same as calling {@link #setPadding(int[])} with -1
+	 * as all array element values except this one.
+	 *
+	 * @param padding the new padding value
+	 * @return the current instance (for chaining)
+	 */
+	@NotNull
+	default GuiElement<T> setPaddingLeft(int padding) {
+		return setPadding(new int[]{-1, -1, padding, -1});
+	}
+	
+	/**
+	 * Sets a single padding value.
+	 * Same as calling {@link #setPadding(int[])} with -1
+	 * as all array element values except this one.
+	 *
+	 * @param padding the new padding value
+	 * @return the current instance (for chaining)
+	 */
+	@NotNull
+	default GuiElement<T> setPaddingRight(int padding) {
+		return setPadding(new int[]{-1, -1, -1, padding});
+	}
 }

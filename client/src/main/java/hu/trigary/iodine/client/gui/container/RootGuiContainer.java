@@ -49,8 +49,8 @@ public final class RootGuiContainer extends GuiContainer {
 		int height = 0;
 		for (Position position : children.values()) {
 			position.element.calculateSize(screenWidth, screenHeight);
-			width = Math.max(width, position.element.getWidth() + position.x);
-			height = Math.max(height, position.element.getHeight() + position.y);
+			width = Math.max(width, position.element.getTotalWidth() + position.x);
+			height = Math.max(height, position.element.getTotalHeight() + position.y);
 		}
 		return new IntPair(width, height);
 	}
