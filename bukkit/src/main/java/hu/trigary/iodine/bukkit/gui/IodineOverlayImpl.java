@@ -60,11 +60,14 @@ public class IodineOverlayImpl extends GuiBaseImpl<IodineOverlay> implements Iod
 		return drawPriority;
 	}
 	
+	@NotNull
 	@Override
-	public void setDrawPriority(int priority) {
-		Validate.isTrue(priority == (priority & 0xFF), "The draw priority must be representable as a byte");
+	public IodineOverlayImpl setDrawPriority(int priority) {
+		Validate.isTrue(priority >= Byte.MIN_VALUE && priority <= Byte.MAX_VALUE,
+				"The draw priority must be representable as a byte");
 		drawPriority = (byte) priority;
 		executeUpdate();
+		return this;
 	}
 	
 	

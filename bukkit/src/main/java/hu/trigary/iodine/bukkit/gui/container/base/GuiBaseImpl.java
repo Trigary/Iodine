@@ -64,9 +64,11 @@ public abstract class GuiBaseImpl<T extends GuiBase<T>> implements GuiBase<T>, G
 		return id;
 	}
 	
+	@NotNull
 	@Override
-	public final void setAttachment(@Nullable Object attachment) {
+	public final T setAttachment(@Nullable Object attachment) {
 		root.setAttachment(attachment);
+		return thisT();
 	}
 	
 	@Nullable

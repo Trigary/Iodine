@@ -10,6 +10,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.jetbrains.annotations.NotNull;
 
+import java.time.Year;
+
 /**
  * A class which exists solely for testing purposes.
  */
@@ -40,7 +42,11 @@ public class TestCommandListener implements Listener {
 			c.setOrientation(true);
 			GuiBase<?> gui = c.getGui();
 			
+			gui.addElement(GuiElements.BUTTON, e -> c.makeChildLast(e)
+					.setText("First"));
+			
 			gui.addElement(GuiElements.CONTAINER_GRID, grid -> {
+				c.makeChildLast(grid);
 				grid.setPaddingBottom(50);
 				grid.setGridSize(3, 3);
 				for (int x = 0; x < 3; x++) {
@@ -48,16 +54,16 @@ public class TestCommandListener implements Listener {
 						int finalX = x;
 						int finalY = y;
 						gui.addElement(GuiElements.RECTANGLE, e -> grid.makeChild(e, finalX, finalY)
-								.setColor((finalX + finalY) % 2 == 0 ? IodineColor.BLACK : IodineColor.WHITE));
+								.setColor((finalX + finalY) % 2 == 0 ? IodineColor.BLACK : IodineColor.DARK_RED));
 					}
 				}
 			});
 			
-			gui.addElement(GuiElements.CHECKBOX, e -> c.makeChildLast(e)
-					.onClicked((ee, p) -> p.sendMessage("Checked: " + e.isChecked())));
+			gui.addElement(GuiElements.BUTTON, e -> c.makeChildLast(e)
+					.setText("Last"));
 		})
-				.addElement(GuiElements.TEXT, 5, 10, e -> e.setText("P-1").setDrawPriority(-1))
-				.addElement(GuiElements.TEXT, 10, 5, e -> e.setText("P+1").setDrawPriority(1))
+				.addElement(GuiElements.BUTTON, 5, 30, e -> e.setText("P-1").setDrawPriority(-1).setWidth(0))
+				.addElement(GuiElements.BUTTON, 10, 25, e -> e.setText("P+1").setDrawPriority(1).setWidth(0))
 				.onClosed((gui, p) -> p.sendMessage("You closed the GUI"))
 				.openFor(player);
 	}

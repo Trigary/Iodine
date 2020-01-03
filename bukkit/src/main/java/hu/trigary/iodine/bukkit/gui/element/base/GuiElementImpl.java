@@ -72,9 +72,11 @@ public abstract class GuiElementImpl<T extends GuiElement<T>> implements GuiElem
 		return id;
 	}
 	
+	@NotNull
 	@Override
-	public final void setAttachment(@Nullable Object attachment) {
+	public final T setAttachment(@Nullable Object attachment) {
 		this.attachment = attachment;
+		return thisT();
 	}
 	
 	@Nullable
@@ -136,11 +138,14 @@ public abstract class GuiElementImpl<T extends GuiElement<T>> implements GuiElem
 		return drawPriority;
 	}
 	
+	@NotNull
 	@Override
-	public void setDrawPriority(int priority) {
-		Validate.isTrue(priority == (priority & 0xFF), "The draw priority must be representable as a byte");
+	public T setDrawPriority(int priority) {
+		Validate.isTrue(priority >= Byte.MIN_VALUE && priority <= Byte.MAX_VALUE,
+				"The draw priority must be representable as a byte");
 		drawPriority = (byte) priority;
 		getGui().flagAndUpdate(this);
+		return thisT();
 	}
 	
 	
@@ -182,4 +187,11 @@ public abstract class GuiElementImpl<T extends GuiElement<T>> implements GuiElem
 	 * Does nothing by default, is designed to be overridden if necessary.
 	 */
 	public void onRemoved() {}
+	
+	@NotNull
+	@Contract(pure = true)
+	private T thisT() {
+		//noinspection unchecked
+		return (T) this;
+	}
 }

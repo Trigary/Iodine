@@ -18,7 +18,8 @@ public abstract class GuiContainer extends GuiElement implements GuiParent {
 	protected final GuiElement[] resolveChildren(@NotNull int[] childrenIdentifiers) {
 		GuiElement[] children = new GuiElement[childrenIdentifiers.length];
 		for (int i = 0; i < children.length; i++) {
-			children[i] = getGui().getElement(childrenIdentifiers[i]);
+			int id = childrenIdentifiers[i];
+			children[i] = id == getId() ? null : getGui().getElement(childrenIdentifiers[i]);
 		}
 		return children;
 	}

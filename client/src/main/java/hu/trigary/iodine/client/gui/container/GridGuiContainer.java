@@ -87,14 +87,14 @@ public final class GridGuiContainer extends GuiContainer {
 	
 	@Override
 	protected void setChildrenPositions(int offsetX, int offsetY) {
-		int x = 0;
+		int x = offsetX;
 		for (int column = 0; column < columnCount; column++) {
-			int y = 0;
+			int y = offsetY;
 			for (int row = 0; row < rowCount; row++) {
-				getChild(column, row).setPosition(offsetX + x, offsetY + y);
+				getChild(column, row).setPosition(x, y);
 				y += maxHeights[row];
 			}
-			column += maxWidths[column];
+			x += maxWidths[column];
 		}
 		
 		maxWidths = null;

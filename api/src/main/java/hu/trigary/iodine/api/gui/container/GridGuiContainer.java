@@ -13,6 +13,7 @@ public interface GridGuiContainer extends GuiContainer<GridGuiContainer> {
 	/**
 	 * Gets the element at the specified column-row pair.
 	 * Returns null if there isn't an element at the specified position.
+	 * Indexing starts at 0.
 	 *
 	 * @param column the column the element is contained in
 	 * @param row the row the element is contained in
@@ -37,6 +38,7 @@ public interface GridGuiContainer extends GuiContainer<GridGuiContainer> {
 	 * Makes the specified element a direct child of this container.
 	 * The element is inserted into the specified column-row pair.
 	 * An exception is thrown if that position already contains an element.
+	 * Indexing starts at 0.
 	 *
 	 * @param element the element to add as as child
 	 * @param column the column the element should be inserted into

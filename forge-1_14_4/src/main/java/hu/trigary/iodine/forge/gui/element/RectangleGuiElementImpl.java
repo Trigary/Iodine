@@ -23,7 +23,7 @@ public class RectangleGuiElementImpl extends RectangleGuiElement {
 	
 	@Override
 	protected void drawImpl(int width, int height, int positionX, int positionY, int mouseX, int mouseY, float partialTicks) {
-		AbstractGui.fill(positionX, positionY, width, height, color);
+		AbstractGui.fill(positionX, positionY, positionX + width, positionY + height, color);
 	}
 	
 	

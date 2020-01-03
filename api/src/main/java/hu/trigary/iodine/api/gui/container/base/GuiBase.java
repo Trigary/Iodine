@@ -20,7 +20,7 @@ import java.util.function.Consumer;
  *
  * @param <T> the class implementing this interface
  */
-public interface GuiBase<T extends GuiBase<T>> extends GuiParent<T>, AttachmentHolder {
+public interface GuiBase<T extends GuiBase<T>> extends GuiParent<T>, AttachmentHolder<T> {
 	/**
 	 * Gets the players who have this GUI opened.
 	 * The returned set is an unmodifiable view of the underlying data.

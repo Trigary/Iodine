@@ -3,6 +3,7 @@ package hu.trigary.iodine.api.gui;
 import hu.trigary.iodine.api.gui.container.base.GuiContainer;
 import hu.trigary.iodine.api.gui.element.base.GuiElement;
 import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Represents something that can be drawn in an environment where overlapping might happen.
@@ -19,8 +20,10 @@ import org.jetbrains.annotations.Contract;
  * causes all of its child {@link GuiElement}s to update their priority:
  * the child's draw priority is set to the container's draw priority
  * if its previous value is less than this new value.
+ *
+ * @param <T> the class implementing this interface
  */
-public interface DrawPrioritizeable {
+public interface DrawPrioritizeable<T> {
 	/**
 	 * Gets this instance's draw priority.
 	 * See the declaring class for more information.
@@ -35,6 +38,8 @@ public interface DrawPrioritizeable {
 	 * See the declaring class for more information.
 	 *
 	 * @param priority the new draw priority
+	 * @return the current instance (for chaining)
 	 */
-	void setDrawPriority(int priority);
+	@NotNull
+	T setDrawPriority(int priority);
 }

@@ -13,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
  *
  * @param <T> the class implementing this interface
  */
-public interface GuiElement<T extends GuiElement<T>> extends AttachmentHolder, DrawPrioritizeable {
+public interface GuiElement<T extends GuiElement<T>> extends AttachmentHolder<T>, DrawPrioritizeable<T> {
 	/**
 	 * Gets the GUI that contains this element.
 	 *

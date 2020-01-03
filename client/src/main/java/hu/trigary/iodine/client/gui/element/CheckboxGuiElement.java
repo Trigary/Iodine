@@ -32,7 +32,7 @@ public abstract class CheckboxGuiElement extends GuiElement {
 	}
 	
 	protected final void onChanged() {
-		if (editable && !checked) {
+		if (editable) {
 			sendChangePacket(1, b -> BufferUtils.serializeBoolean(b, !checked));
 		}
 	}

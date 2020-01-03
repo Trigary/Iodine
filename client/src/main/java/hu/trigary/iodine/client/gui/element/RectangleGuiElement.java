@@ -22,7 +22,7 @@ public abstract class RectangleGuiElement extends GuiElement {
 	protected final void deserializeImpl(@NotNull ByteBuffer buffer) {
 		width = buffer.getShort();
 		height = buffer.getShort();
-		color = (buffer.get() << 16) | (buffer.get() << 8) | buffer.get();
+		color = (0xFF << 24) | ((buffer.get() & 0xFF) << 16) | ((buffer.get() & 0xFF) << 8) | (buffer.get() & 0xFF);
 	}
 	
 	@NotNull

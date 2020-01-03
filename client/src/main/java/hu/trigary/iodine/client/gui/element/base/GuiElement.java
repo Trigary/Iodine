@@ -75,8 +75,8 @@ public abstract class GuiElement {
 		IntPair size = calculateSizeImpl(screenWidth, screenHeight);
 		elementWidth = size.getX();
 		elementHeight = size.getY();
-		totalWidth = size.getX() + padding[2] + padding[3];
-		totalHeight = size.getY() + padding[0] + padding[1];
+		totalWidth = elementWidth + padding[2] + padding[3];
+		totalHeight = elementHeight + padding[0] + padding[1];
 	}
 	
 	@NotNull
