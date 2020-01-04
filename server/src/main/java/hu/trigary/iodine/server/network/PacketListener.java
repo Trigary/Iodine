@@ -9,7 +9,6 @@ import hu.trigary.iodine.server.network.handler.LoginPacketHandler;
 import hu.trigary.iodine.backend.PacketType;
 import hu.trigary.iodine.server.network.handler.PacketHandler;
 import hu.trigary.iodine.server.player.IodinePlayerBase;
-import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.nio.ByteBuffer;
@@ -39,7 +38,12 @@ public abstract class PacketListener {
 	
 	
 	
-	//TODO docs
+	/**
+	 * Should be called when a plugin message on the iodine channel is received.
+	 *
+	 * @param player the sender
+	 * @param message the payload
+	 */
 	protected final void onMessageReceived(@NotNull UUID player, @NotNull byte[] message) {
 		IodinePlayerBase iodinePlayer = plugin.getPlayer(player);
 		IodinePlayer.State state = iodinePlayer.getState();

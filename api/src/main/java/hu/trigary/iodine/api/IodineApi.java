@@ -84,9 +84,24 @@ public abstract class IodineApi {
 	public abstract IodineOverlay createOverlay(@NotNull IodineOverlay.Anchor anchor, int horizontalOffset, int verticalOffset);
 	
 	
-	//TODO docs
+	
+	/**
+	 * Registers an event listener.
+	 * Handler instances can be unregistered using the {@link #removeListener(Class, Consumer)} method.
+	 *
+	 * @param event the event to listen for
+	 * @param handler the handler of the event
+	 * @param <T> the type of the event
+	 */
 	public abstract <T extends IodineEvent> void addListener(@NotNull Class<T> event, @NotNull Consumer<T> handler);
 	
-	//TODO docs
+	/**
+	 * Unregisters an event listener.
+	 * Handler instances can be registered using the {@link #addListener(Class, Consumer)} method.
+	 *
+	 * @param event the event to listen for
+	 * @param handler the handler of the event
+	 * @param <T> the type of the event
+	 */
 	public abstract <T extends IodineEvent> void removeListener(@NotNull Class<T> event, @NotNull Consumer<T> handler);
 }

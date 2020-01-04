@@ -10,6 +10,9 @@ import org.apache.commons.lang3.Validate;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * The implementation of {@link IodineOverlay}.
+ */
 public class IodineOverlayImpl extends IodineRootImpl<IodineOverlay> implements IodineOverlay {
 	private final Anchor anchor;
 	private final short horizontalOffset;

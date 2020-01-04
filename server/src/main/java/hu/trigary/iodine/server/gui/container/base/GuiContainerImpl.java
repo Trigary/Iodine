@@ -18,13 +18,13 @@ public abstract class GuiContainerImpl<T extends GuiContainer<T>> extends GuiEle
 	/**
 	 * Creates a new instance.
 	 *
-	 * @param gui the GUI which will contain this element
+	 * @param root the instance which will contain this element
 	 * @param type the exact type of this element
 	 * @param internalId the internal ID of this element
 	 * @param id the API-friendly ID of this element
 	 */
-	protected GuiContainerImpl(@NotNull IodineRootImpl<?> gui, @NotNull GuiElementType type, int internalId, @NotNull Object id) {
-		super(gui, type, internalId, id);
+	protected GuiContainerImpl(@NotNull IodineRootImpl<?> root, @NotNull GuiElementType type, int internalId, @NotNull Object id) {
+		super(root, type, internalId, id);
 	}
 	
 	

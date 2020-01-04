@@ -49,13 +49,24 @@ public abstract class PlayerManager {
 		return iodinePlayer;
 	}
 	
-	//TODO docs
+	
+	/**
+	 * Creates a new player instance for the specified player.
+	 * Throws an exception if the player is offline.
+	 *
+	 * @param player the player to create a new instance for
+	 * @return the newly created player instance
+	 */
 	@NotNull
 	protected abstract IodinePlayerBase tryCreatePlayer(@NotNull UUID player);
 	
 	
 	
-	//TODO docs
+	/**
+	 * Should be called when a player quits.
+	 *
+	 * @param player the player who quit
+	 */
 	protected final void onPlayerQuit(@NotNull UUID player) {
 		//can't call remove yet: the gui close callback might still require the instance
 		IodinePlayerBase iodinePlayer = players.get(player);

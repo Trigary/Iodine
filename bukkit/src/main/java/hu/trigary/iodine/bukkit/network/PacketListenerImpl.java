@@ -6,6 +6,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.messaging.PluginMessageListener;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * The implementation of {@link PacketListener}.
+ */
 public class PacketListenerImpl extends PacketListener implements PluginMessageListener {
 	/**
 	 * Creates a new instance.

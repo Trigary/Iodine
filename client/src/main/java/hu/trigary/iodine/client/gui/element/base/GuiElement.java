@@ -141,4 +141,13 @@ public abstract class GuiElement {
 	public void onCharTyped(char codePoint, int modifiers) {
 		//only if focused
 	}
+	
+	
+	
+	@NotNull
+	@Contract(pure = true)
+	@Override
+	public String toString() {
+		return getClass().getSimpleName() + "#" + getId();
+	}
 }

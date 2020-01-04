@@ -2,7 +2,6 @@ package hu.trigary.iodine.server.gui.element.base;
 
 import hu.trigary.iodine.api.gui.element.base.GuiElement;
 import hu.trigary.iodine.backend.GuiElementType;
-import hu.trigary.iodine.server.gui.IodineGuiImpl;
 import hu.trigary.iodine.api.gui.IodineRoot;
 import hu.trigary.iodine.server.gui.IodineRootImpl;
 import hu.trigary.iodine.server.gui.container.base.GuiParentPlus;
@@ -23,7 +22,7 @@ import java.nio.ByteBuffer;
  */
 public abstract class GuiElementImpl<T extends GuiElement<T>> implements GuiElement<T> {
 	private final short[] padding = new short[4];
-	private final IodineRootImpl<?> gui;
+	private final IodineRootImpl<?> root;
 	private final GuiElementType type;
 	private final int internalId;
 	private final Object id;
@@ -34,13 +33,13 @@ public abstract class GuiElementImpl<T extends GuiElement<T>> implements GuiElem
 	/**
 	 * Creates a new instance.
 	 *
-	 * @param gui the GUI which will contain this element
+	 * @param root the instance which will contain this element
 	 * @param type the exact type of this element
 	 * @param internalId the internal ID of this element
 	 * @param id the API-friendly ID of this element
 	 */
-	protected GuiElementImpl(@NotNull IodineRootImpl<?> gui, @NotNull GuiElementType type, int internalId, @NotNull Object id) {
-		this.gui = gui;
+	protected GuiElementImpl(@NotNull IodineRootImpl<?> root, @NotNull GuiElementType type, int internalId, @NotNull Object id) {
+		this.root = root;
 		this.internalId = internalId;
 		this.id = id;
 		this.type = type;
@@ -52,7 +51,7 @@ public abstract class GuiElementImpl<T extends GuiElement<T>> implements GuiElem
 	@Contract(pure = true)
 	@Override
 	public final IodineRootImpl<?> getRoot() {
-		return gui;
+		return root;
 	}
 	
 	/**
@@ -132,8 +131,8 @@ public abstract class GuiElementImpl<T extends GuiElement<T>> implements GuiElem
 	
 	
 	
-	@Override
 	@Contract(pure = true)
+	@Override
 	public final int getDrawPriority() {
 		return drawPriority;
 	}
@@ -152,7 +151,7 @@ public abstract class GuiElementImpl<T extends GuiElement<T>> implements GuiElem
 	
 	/**
 	 * Serializes this element into the specified buffer.
-	 * This method should only be called by {@link IodineGuiImpl}.
+	 * This method should only be called by {@link IodineRootImpl}.
 	 *
 	 * @param buffer the buffer to store the data in
 	 */
@@ -167,6 +166,12 @@ public abstract class GuiElementImpl<T extends GuiElement<T>> implements GuiElem
 		serializeImpl(buffer);
 	}
 	
+	/**
+	 * Serializes this element's type specific data into the specified buffer.
+	 * This method should only be called be {@link #serialize(ResizingByteBuffer)}.
+	 *
+	 * @param buffer the buffer to store the data in
+	 */
 	protected abstract void serializeImpl(@NotNull ResizingByteBuffer buffer);
 	
 	/**
@@ -174,8 +179,8 @@ public abstract class GuiElementImpl<T extends GuiElement<T>> implements GuiElem
 	 * Malicious intent should be assumed, everything should be validated.
 	 * Network delays and multiple viewers should be kept in mind.
 	 * It should be assumed that callbacks change the GUI,
-	 * so if both a callback and {@link IodineGuiImpl#flagAndUpdate(GuiElementImpl)}} are called,
-	 * then {@link IodineGuiImpl#flagAndAtomicUpdate(GuiElementImpl, Runnable)} should be used.
+	 * so if both a callback and {@link IodineRootImpl#flagAndUpdate(GuiElementImpl)}} are called,
+	 * then {@link IodineRootImpl#flagAndAtomicUpdate(GuiElementImpl, Runnable)} should be used.
 	 *
 	 * @param player the sender of the packet
 	 * @param message the packet's contents
@@ -193,5 +198,14 @@ public abstract class GuiElementImpl<T extends GuiElement<T>> implements GuiElem
 	private T thisT() {
 		//noinspection unchecked
 		return (T) this;
+	}
+	
+	
+	
+	@NotNull
+	@Contract(pure = true)
+	@Override
+	public String toString() {
+		return getClass().getSimpleName() + "#" + getInternalId() + "#" + getId();
 	}
 }

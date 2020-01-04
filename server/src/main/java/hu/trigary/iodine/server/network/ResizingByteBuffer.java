@@ -16,7 +16,8 @@ public final class ResizingByteBuffer {
 	 *
 	 * @param initialCapacity the starting byte capacity of the buffer
 	 */
-	public ResizingByteBuffer(int initialCapacity) { //TODO is there a packet length limit?
+	public ResizingByteBuffer(int initialCapacity) {
+		//There doesn't seem to be a server -> client packet length limit
 		stream = new ByteArrayOutputStream(initialCapacity);
 	}
 	

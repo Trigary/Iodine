@@ -20,8 +20,6 @@ public interface GuiClickable<T extends GuiClickable<T>> {
 	@NotNull
 	T onClicked(@Nullable ClickedAction<T> action);
 	
-	
-	
 	/**
 	 * The handler of the clicked action.
 	 *

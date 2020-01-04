@@ -27,12 +27,12 @@ public class RadioButtonGuiElementImpl extends GuiElementImpl<RadioButtonGuiElem
 	/**
 	 * Creates a new instance.
 	 *
-	 * @param gui the GUI which will contain this element
+	 * @param root the instance which will contain this element
 	 * @param internalId the internal ID of this element
 	 * @param id the API-friendly ID of this element
 	 */
-	public RadioButtonGuiElementImpl(@NotNull IodineRootImpl<?> gui, int internalId, @NotNull Object id) {
-		super(gui, GuiElementType.RADIO_BUTTON, internalId, id);
+	public RadioButtonGuiElementImpl(@NotNull IodineRootImpl<?> root, int internalId, @NotNull Object id) {
+		super(root, GuiElementType.RADIO_BUTTON, internalId, id);
 		setGroupId(0);
 	}
 	

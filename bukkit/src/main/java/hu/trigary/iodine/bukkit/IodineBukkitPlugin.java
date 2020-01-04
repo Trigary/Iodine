@@ -6,6 +6,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
+/**
+ * The actual Bukkit plugin's main class.
+ */
 public class IodineBukkitPlugin extends JavaPlugin {
 	private IodinePluginImpl plugin;
 	

@@ -25,12 +25,12 @@ public class ImageGuiElementImpl extends GuiElementImpl<ImageGuiElement> impleme
 	/**
 	 * Creates a new instance.
 	 *
-	 * @param gui the GUI which will contain this element
+	 * @param root the instance which will contain this element
 	 * @param internalId the internal ID of this element
 	 * @param id the API-friendly ID of this element
 	 */
-	public ImageGuiElementImpl(@NotNull IodineRootImpl<?> gui, int internalId, @NotNull Object id) {
-		super(gui, GuiElementType.IMAGE, internalId, id);
+	public ImageGuiElementImpl(@NotNull IodineRootImpl<?> root, int internalId, @NotNull Object id) {
+		super(root, GuiElementType.IMAGE, internalId, id);
 	}
 	
 	

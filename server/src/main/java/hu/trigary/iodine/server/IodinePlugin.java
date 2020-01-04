@@ -16,7 +16,7 @@ import java.util.logging.Logger;
 import java.util.stream.Stream;
 
 /**
- * The Iodine plugin's main class. //TODO docs
+ * A base class for Iodine plugin main classes.
  */
 public abstract class IodinePlugin {
 	private Map<Class<? extends IodineEvent>, List<Consumer<? extends IodineEvent>>> eventListeners;
@@ -25,39 +25,59 @@ public abstract class IodinePlugin {
 	private NetworkManager networkManager;
 	private PlayerManager playerManager;
 	private IodineRootManager rootManager;
+	private IodineApiImpl api;
 	
 	
 	
-	//TODO docs
+	/**
+	 * Should be called just before {@link #onEnabled(NetworkManager, PlayerManager, Stream)}
+	 * to initialize the most basic functionality.
+	 *
+	 * @param debugLog whether debugging logging should be enabled
+	 * @param version the plugin's version
+	 */
 	public final void initialize(boolean debugLog, @NotNull String version) {
 		eventListeners = new HashMap<>();
 		this.debugLog = debugLog;
 		this.version = version;
 	}
 	
-	//TODO docs
+	/**
+	 * Should be called when the plugin is activated.
+	 *
+	 * @param networkManager the network manager implementation instance
+	 * @param playerManager the player manager implementation instance
+	 * @param onlinePlayers the currently online players
+	 */
 	public final void onEnabled(@NotNull NetworkManager networkManager,
 			@NotNull PlayerManager playerManager, @NotNull Stream<UUID> onlinePlayers) {
 		this.networkManager = networkManager;
 		this.playerManager = playerManager;
 		rootManager = new IodineRootManager(this);
 		
-		new IodineApiImpl(this).installInstance();
+		api = new IodineApiImpl(this);
 		
 		onlinePlayers
 				.map(playerManager::getPlayer)
 				.forEach(player -> networkManager.send(player, PacketType.SERVER_LOGIN_REQUEST));
 	}
 	
-	//TODO docs, must be able to send packets her
+	/**
+	 * Should be called when the plugin is deactivated.
+	 */
 	public final void onDisabled() {
 		log(Level.INFO, "Closing all open GUI instances");
 		rootManager.closeAllGuiInstances();
+		api.clearInstance();
 	}
 	
 	
 	
-	//TODO docs
+	/**
+	 * Gets this plugin's version.
+	 *
+	 * @return the plugin's version
+	 */
 	@NotNull
 	@Contract(pure = true)
 	public final String getVersion() {
@@ -100,7 +120,12 @@ public abstract class IodinePlugin {
 	
 	
 	
-	//TODO docs
+	/**
+	 * Notifies the event listeners of the specified event.
+	 *
+	 * @param event the event to announce
+	 * @param <T> the type of the event
+	 */
 	public final <T extends IodineEvent> void postEvent(@NotNull T event) {
 		List<Consumer<? extends IodineEvent>> consumers = eventListeners.get(event.getClass());
 		if (consumers != null) {
@@ -111,7 +136,14 @@ public abstract class IodinePlugin {
 		}
 	}
 	
-	//TODO docs
+	/**
+	 * Registers or unregisters an event listener.
+	 *
+	 * @param event the event to listen for
+	 * @param handler the handler of the event
+	 * @param add whether the handler should be added or removed
+	 * @param <T> the type of the event
+	 */
 	public final <T extends IodineEvent> void changeEventListener(@NotNull Class<T> event,
 			@NotNull Consumer<T> handler, boolean add) {
 		List<Consumer<? extends IodineEvent>> consumers = eventListeners.computeIfAbsent(event, k -> new ArrayList<>());
@@ -148,7 +180,11 @@ public abstract class IodinePlugin {
 		getLogger().log(level, message, cause);
 	}
 	
-	//TODO docs
+	/**
+	 * Gets the logger instance associated with this plugin.
+	 *
+	 * @return this plugin's logger
+	 */
 	@NotNull
 	@Contract(pure = true)
 	protected abstract Logger getLogger();

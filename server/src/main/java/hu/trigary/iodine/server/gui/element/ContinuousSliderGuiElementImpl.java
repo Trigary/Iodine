@@ -28,12 +28,12 @@ public class ContinuousSliderGuiElementImpl extends GuiElementImpl<ContinuousSli
 	/**
 	 * Creates a new instance.
 	 *
-	 * @param gui the GUI which will contain this element
+	 * @param root the instance which will contain this element
 	 * @param internalId the internal ID of this element
 	 * @param id the API-friendly ID of this element
 	 */
-	public ContinuousSliderGuiElementImpl(@NotNull IodineRootImpl<?> gui, int internalId, @NotNull Object id) {
-		super(gui, GuiElementType.CONTINUOUS_SLIDER, internalId, id);
+	public ContinuousSliderGuiElementImpl(@NotNull IodineRootImpl<?> root, int internalId, @NotNull Object id) {
+		super(root, GuiElementType.CONTINUOUS_SLIDER, internalId, id);
 	}
 	
 	

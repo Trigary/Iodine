@@ -24,12 +24,12 @@ public class ButtonGuiElementImpl extends GuiElementImpl<ButtonGuiElement> imple
 	/**
 	 * Creates a new instance.
 	 *
-	 * @param gui the GUI which will contain this element
+	 * @param root the instance which will contain this element
 	 * @param internalId the internal ID of this element
 	 * @param id the API-friendly ID of this element
 	 */
-	public ButtonGuiElementImpl(@NotNull IodineRootImpl<?> gui, int internalId, @NotNull Object id) {
-		super(gui, GuiElementType.BUTTON, internalId, id);
+	public ButtonGuiElementImpl(@NotNull IodineRootImpl<?> root, int internalId, @NotNull Object id) {
+		super(root, GuiElementType.BUTTON, internalId, id);
 	}
 	
 	

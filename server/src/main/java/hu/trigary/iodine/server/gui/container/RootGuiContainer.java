@@ -17,6 +17,10 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * A {@link GuiContainerImpl} that is the backing container of {@link IodineRootImpl} instance.
+ * Exactly one instance of this class must exist at the internal ID of 0 in each {@link IodineRootImpl}.
+ */
 public class RootGuiContainer extends GuiContainerImpl<RootGuiContainer> {
 	private final Map<GuiElementImpl<?>, Position> children = new HashMap<>();
 	
@@ -24,10 +28,10 @@ public class RootGuiContainer extends GuiContainerImpl<RootGuiContainer> {
 	 * Creates a new instance.
 	 * Should only be called once, by {@link IodineGuiImpl}.
 	 *
-	 * @param gui the GUI which will contain this element
+	 * @param root the instance which will contain this element
 	 */
-	public RootGuiContainer(@NotNull IodineRootImpl<?> gui) {
-		super(gui, GuiElementType.CONTAINER_ROOT, 0, new Object());
+	public RootGuiContainer(@NotNull IodineRootImpl<?> root) {
+		super(root, GuiElementType.CONTAINER_ROOT, 0, new Object());
 	}
 	
 	

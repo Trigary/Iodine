@@ -54,7 +54,11 @@ public interface IodinePlayer {
 	@Contract(pure = true)
 	State getState();
 	
-	//TODO docs
+	/**
+	 * Returns whether this player has successfully logged in with a valid mod version.
+	 *
+	 * @return true if this player is in the modded state, false otherwise
+	 */
 	@Contract(pure = true)
 	default boolean isModded() {
 		return getState() == State.MODDED;
@@ -62,10 +66,18 @@ public interface IodinePlayer {
 	
 	
 	
-	//TODO docs
+	/**
+	 * Sends the specified message to this player.
+	 *
+	 * @param message the message to send
+	 */
 	void sendMessage(@NotNull String message);
 	
-	//TODO docs
+	/**
+	 * Sends the specified multi-line message to this player.
+	 *
+	 * @param message the message to send
+	 */
 	default void sendMessage(@NotNull String[] message) {
 		for (String line : message) {
 			sendMessage(line);

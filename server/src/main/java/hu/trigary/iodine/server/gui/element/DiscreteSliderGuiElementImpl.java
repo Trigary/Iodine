@@ -30,12 +30,12 @@ public class DiscreteSliderGuiElementImpl extends GuiElementImpl<DiscreteSliderG
 	/**
 	 * Creates a new instance.
 	 *
-	 * @param gui the GUI which will contain this element
+	 * @param root the instance which will contain this element
 	 * @param internalId the internal ID of this element
 	 * @param id the API-friendly ID of this element
 	 */
-	public DiscreteSliderGuiElementImpl(@NotNull IodineRootImpl<?> gui, int internalId, @NotNull Object id) {
-		super(gui, GuiElementType.DISCRETE_SLIDER, internalId, id);
+	public DiscreteSliderGuiElementImpl(@NotNull IodineRootImpl<?> root, int internalId, @NotNull Object id) {
+		super(root, GuiElementType.DISCRETE_SLIDER, internalId, id);
 	}
 	
 	

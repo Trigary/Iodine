@@ -21,7 +21,7 @@ import java.util.function.Consumer;
 import java.util.logging.Level;
 
 /**
- * The implementation of {@link IodineRoot}.
+ * The implementation of {@link IodineRoot}, a base class for an actual implementation.
  *
  * @param <T> the class implementing this interface
  */
@@ -338,6 +338,12 @@ public abstract class IodineRootImpl<T extends IodineRoot<T>> implements IodineR
 		return serialize(Collections.emptyList(), elements.values());
 	}
 	
+	/**
+	 * Serializes the open packet's header into the specified buffer.
+	 * Should only be called by {@link #IodineRootImpl(IodinePlugin, int)}.
+	 *
+	 * @param buffer the buffer to store the data in
+	 */
 	protected abstract void serializeOpenStart(@NotNull ResizingByteBuffer buffer);
 	
 	@NotNull
@@ -346,6 +352,12 @@ public abstract class IodineRootImpl<T extends IodineRoot<T>> implements IodineR
 		return serialize(flaggedForRemove, flaggedForUpdate);
 	}
 	
+	/**
+	 * Serializes the update packet's header into the specified buffer.
+	 * Should only be called by {@link #IodineRootImpl(IodinePlugin, int)}.
+	 *
+	 * @param buffer the buffer to store the data in
+	 */
 	protected abstract void serializeUpdateStart(@NotNull ResizingByteBuffer buffer);
 	
 	@NotNull
@@ -366,5 +378,14 @@ public abstract class IodineRootImpl<T extends IodineRoot<T>> implements IodineR
 	private T thisT() {
 		//noinspection unchecked
 		return (T) this;
+	}
+	
+	
+	
+	@NotNull
+	@Contract(pure = true)
+	@Override
+	public String toString() {
+		return getClass().getSimpleName() + "#" + getId();
 	}
 }

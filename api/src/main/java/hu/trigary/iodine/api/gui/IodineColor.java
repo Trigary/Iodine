@@ -136,4 +136,29 @@ public final class IodineColor {
 	public IodineColor setBlue(int blue) {
 		return get(red, green, blue);
 	}
+	
+	
+	
+	@NotNull
+	@Contract(pure = true)
+	@Override
+	public String toString() {
+		return "RGB" + Integer.toHexString((red << 16) | (green << 8) | blue);
+	}
+	
+	@Contract(pure = true)
+	@Override
+	public int hashCode() {
+		return 53 * ((red << 16) | (green << 8) | blue);
+	}
+	
+	@Contract(pure = true)
+	@Override
+	public boolean equals(Object object) {
+		if (!(object instanceof IodineColor)) {
+			return false;
+		}
+		IodineColor other = (IodineColor) object;
+		return other.red == red && other.green == green && other.blue == blue;
+	}
 }

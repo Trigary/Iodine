@@ -27,12 +27,12 @@ public class GridGuiContainerImpl extends GuiContainerImpl<GridGuiContainer> imp
 	/**
 	 * Creates a new instance.
 	 *
-	 * @param gui the GUI which will contain this element
+	 * @param root the instance which will contain this element
 	 * @param internalId the internal ID of this element
 	 * @param id the API-friendly ID of this element
 	 */
-	public GridGuiContainerImpl(@NotNull IodineRootImpl<?> gui, int internalId, @NotNull Object id) {
-		super(gui, GuiElementType.CONTAINER_GRID, internalId, id);
+	public GridGuiContainerImpl(@NotNull IodineRootImpl<?> root, int internalId, @NotNull Object id) {
+		super(root, GuiElementType.CONTAINER_GRID, internalId, id);
 		setGridSize(0, 0);
 	}
 	

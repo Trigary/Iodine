@@ -2,6 +2,7 @@ package hu.trigary.iodine.bukkit.network;
 
 import hu.trigary.iodine.backend.PacketType;
 import hu.trigary.iodine.bukkit.IodinePluginImpl;
+import hu.trigary.iodine.server.IodinePlugin;
 import hu.trigary.iodine.server.network.NetworkManager;
 import hu.trigary.iodine.server.player.IodinePlayerBase;
 import org.bukkit.Bukkit;
@@ -10,9 +11,18 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.messaging.Messenger;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * The implementation of {@link NetworkManager}.
+ */
 public class NetworkManagerImpl extends NetworkManager {
 	private final JavaPlugin plugin;
 	
+	/**
+	 * Creates a new instance.
+	 * Should only be called once, by {@link IodinePlugin}.
+	 *
+	 * @param plugin the plugin instance
+	 */
 	public NetworkManagerImpl(@NotNull IodinePluginImpl plugin) {
 		super(plugin);
 		this.plugin = plugin.getBukkitPlugin();

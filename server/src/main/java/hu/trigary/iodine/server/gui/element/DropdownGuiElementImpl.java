@@ -27,12 +27,12 @@ public class DropdownGuiElementImpl extends GuiElementImpl<DropdownGuiElement> i
 	/**
 	 * Creates a new instance.
 	 *
-	 * @param gui the GUI which will contain this element
+	 * @param root the instance which will contain this element
 	 * @param internalId the internal ID of this element
 	 * @param id the API-friendly ID of this element
 	 */
-	public DropdownGuiElementImpl(@NotNull IodineRootImpl<?> gui, int internalId, @NotNull Object id) {
-		super(gui, GuiElementType.DROPDOWN, internalId, id);
+	public DropdownGuiElementImpl(@NotNull IodineRootImpl<?> root, int internalId, @NotNull Object id) {
+		super(root, GuiElementType.DROPDOWN, internalId, id);
 	}
 	
 	

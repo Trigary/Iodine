@@ -20,6 +20,7 @@ public final class IodineApiImpl extends IodineApi {
 	/**
 	 * Creates a new instance.
 	 * Should only be called once, by {@link IodinePlugin}.
+	 * Saves this new object's reference in a static field.
 	 *
 	 * @param plugin the plugin instance
 	 */
@@ -29,9 +30,11 @@ public final class IodineApiImpl extends IodineApi {
 	
 	
 	
-	//TODO docs
-	public void installInstance() {
-		instance = this;
+	/**
+	 * Sets the static field containing a reference to this object to null.
+	 */
+	public void clearInstance() {
+		instance = null;
 	}
 	
 	

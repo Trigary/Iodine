@@ -16,7 +16,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.*;
 
 /**
- * The implementation of {@link IodinePlayer}.
+ * The implementation of {@link IodinePlayer}, a base class for an actual implementation.
  */
 public abstract class IodinePlayerBase implements IodinePlayer {
 	private final Set<IodineOverlayImpl> overlays = new HashSet<>();

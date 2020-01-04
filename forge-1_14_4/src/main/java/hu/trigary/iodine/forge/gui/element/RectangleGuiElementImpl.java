@@ -23,6 +23,7 @@ public class RectangleGuiElementImpl extends RectangleGuiElement {
 	
 	@Override
 	protected void drawImpl(int width, int height, int positionX, int positionY, int mouseX, int mouseY, float partialTicks) {
+		//TODO do I have to set some OpenGL flags?
 		AbstractGui.fill(positionX, positionY, positionX + width, positionY + height, color);
 	}
 	

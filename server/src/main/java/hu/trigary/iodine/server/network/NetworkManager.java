@@ -79,6 +79,11 @@ public abstract class NetworkManager {
 		sendImpl(player, message);
 	}
 	
-	//TODO
+	/**
+	 * Sends the specified payload to the specified client.
+	 *
+	 * @param player the recipient
+	 * @param message the payload
+	 */
 	protected abstract void sendImpl(@NotNull IodinePlayerBase player, @NotNull byte[] message);
 }

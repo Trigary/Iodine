@@ -125,4 +125,13 @@ public abstract class IodineRoot implements GuiParent {
 			element.draw(mouseX, mouseY, partialTicks);
 		}
 	}
+	
+	
+	
+	@NotNull
+	@Contract(pure = true)
+	@Override
+	public String toString() {
+		return getClass().getSimpleName() + "#" + getId();
+	}
 }

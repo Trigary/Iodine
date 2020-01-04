@@ -24,12 +24,12 @@ public class CheckboxGuiElementImpl extends GuiElementImpl<CheckboxGuiElement> i
 	/**
 	 * Creates a new instance.
 	 *
-	 * @param gui the GUI which will contain this element
+	 * @param root the instance which will contain this element
 	 * @param internalId the internal ID of this element
 	 * @param id the API-friendly ID of this element
 	 */
-	public CheckboxGuiElementImpl(@NotNull IodineRootImpl<?> gui, int internalId, @NotNull Object id) {
-		super(gui, GuiElementType.CHECKBOX, internalId, id);
+	public CheckboxGuiElementImpl(@NotNull IodineRootImpl<?> root, int internalId, @NotNull Object id) {
+		super(root, GuiElementType.CHECKBOX, internalId, id);
 	}
 	
 	
