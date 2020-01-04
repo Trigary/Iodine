@@ -1,8 +1,8 @@
 package hu.trigary.iodine.client.gui.element.base;
 
 import hu.trigary.iodine.backend.PacketType;
-import hu.trigary.iodine.client.util.IntPair;
-import hu.trigary.iodine.client.gui.container.base.GuiBase;
+import hu.trigary.iodine.client.IntPair;
+import hu.trigary.iodine.client.gui.IodineRoot;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -11,7 +11,7 @@ import java.util.function.Consumer;
 
 public abstract class GuiElement {
 	private final short[] padding = new short[4];
-	private final GuiBase gui;
+	private final IodineRoot root;
 	private final int id;
 	private byte drawPriority;
 	private int elementWidth;
@@ -21,8 +21,8 @@ public abstract class GuiElement {
 	private int positionX;
 	private int positionY;
 	
-	protected GuiElement(@NotNull GuiBase gui, int id) {
-		this.gui = gui;
+	protected GuiElement(@NotNull IodineRoot root, int id) {
+		this.root = root;
 		this.id = id;
 	}
 	
@@ -30,8 +30,8 @@ public abstract class GuiElement {
 	
 	@NotNull
 	@Contract(pure = true)
-	public final GuiBase getGui() {
-		return gui;
+	public final IodineRoot getGui() {
+		return root;
 	}
 	
 	@Contract(pure = true)
@@ -106,9 +106,9 @@ public abstract class GuiElement {
 			int positionY, int mouseX, int mouseY, float partialTicks);
 	
 	protected final void sendChangePacket(int dataLength, @NotNull Consumer<ByteBuffer> dataProvider) {
-		getGui().getMod().getLogger().debug("GUI > {} sending change packet in {}", id, gui.getId());
-		getGui().getMod().getNetwork().send(PacketType.CLIENT_GUI_CHANGE, dataLength + 8, buffer -> {
-			buffer.putInt(gui.getId());
+		getGui().getMod().getLogger().debug("Root > {} sending change packet in {}", id, root.getId());
+		getGui().getMod().getNetworkManager().send(PacketType.CLIENT_GUI_CHANGE, dataLength + 8, buffer -> {
+			buffer.putInt(root.getId());
 			buffer.putInt(id);
 			dataProvider.accept(buffer);
 		});

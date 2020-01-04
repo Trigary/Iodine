@@ -1,7 +1,7 @@
 package hu.trigary.iodine.client.gui.container;
 
-import hu.trigary.iodine.client.util.IntPair;
-import hu.trigary.iodine.client.gui.container.base.GuiBase;
+import hu.trigary.iodine.client.IntPair;
+import hu.trigary.iodine.client.gui.IodineRoot;
 import hu.trigary.iodine.client.gui.container.base.GuiContainer;
 import hu.trigary.iodine.client.gui.element.base.GuiElement;
 import org.jetbrains.annotations.Contract;
@@ -17,8 +17,8 @@ public final class GridGuiContainer extends GuiContainer {
 	private int[] maxWidths;
 	private int[] maxHeights;
 	
-	public GridGuiContainer(@NotNull GuiBase gui, int id) {
-		super(gui, id);
+	public GridGuiContainer(@NotNull IodineRoot root, int id) {
+		super(root, id);
 	}
 	
 	

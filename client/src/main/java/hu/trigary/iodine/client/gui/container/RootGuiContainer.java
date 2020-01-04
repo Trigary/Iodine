@@ -1,7 +1,7 @@
 package hu.trigary.iodine.client.gui.container;
 
-import hu.trigary.iodine.client.util.IntPair;
-import hu.trigary.iodine.client.gui.container.base.GuiBase;
+import hu.trigary.iodine.client.IntPair;
+import hu.trigary.iodine.client.gui.IodineRoot;
 import hu.trigary.iodine.client.gui.container.base.GuiContainer;
 import hu.trigary.iodine.client.gui.element.base.GuiElement;
 import org.jetbrains.annotations.NotNull;
@@ -14,8 +14,8 @@ public final class RootGuiContainer extends GuiContainer {
 	private final Map<Integer, Position> children = new HashMap<>();
 	private boolean childrenDirty;
 	
-	public RootGuiContainer(@NotNull GuiBase gui, int id) {
-		super(gui, id);
+	public RootGuiContainer(@NotNull IodineRoot root, int id) {
+		super(root, id);
 	}
 	
 	

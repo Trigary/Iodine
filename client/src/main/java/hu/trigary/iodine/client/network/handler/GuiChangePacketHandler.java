@@ -12,6 +12,6 @@ public class GuiChangePacketHandler extends PacketHandler {
 	
 	@Override
 	public void handle(@NotNull ByteBuffer buffer) {
-		getMod().getGui().packetUpdateGui(buffer);
+		getMod().getGuiManager().packetUpdateGui(buffer);
 	}
 }

@@ -1,6 +1,6 @@
 package hu.trigary.iodine.forge.gui.element;
 
-import hu.trigary.iodine.client.gui.container.base.GuiBase;
+import hu.trigary.iodine.client.gui.IodineRoot;
 import hu.trigary.iodine.client.gui.element.TextGuiElement;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
@@ -11,8 +11,8 @@ public class TextGuiElementImpl extends TextGuiElement {
 	private final FontRenderer fontRenderer;
 	private int offset;
 	
-	public TextGuiElementImpl(@NotNull GuiBase gui, int id) {
-		super(gui, id);
+	public TextGuiElementImpl(@NotNull IodineRoot root, int id) {
+		super(root, id);
 		//noinspection resource
 		fontRenderer = Minecraft.getInstance().fontRenderer;
 	}

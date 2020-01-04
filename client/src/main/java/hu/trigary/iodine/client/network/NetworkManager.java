@@ -3,7 +3,6 @@ package hu.trigary.iodine.client.network;
 import hu.trigary.iodine.backend.PacketType;
 import hu.trigary.iodine.client.IodineMod;
 import hu.trigary.iodine.client.network.handler.*;
-import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.nio.ByteBuffer;
@@ -27,12 +26,6 @@ public abstract class NetworkManager {
 	}
 	
 	
-	
-	@NotNull
-	@Contract(pure = true)
-	protected final IodineMod getMod() {
-		return mod;
-	}
 	
 	public abstract void initialize();
 	

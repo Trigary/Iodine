@@ -1,6 +1,6 @@
 package hu.trigary.iodine.forge.gui.element;
 
-import hu.trigary.iodine.client.gui.container.base.GuiBase;
+import hu.trigary.iodine.client.gui.IodineRoot;
 import hu.trigary.iodine.client.gui.element.ButtonGuiElement;
 import net.minecraft.client.gui.widget.button.AbstractButton;
 import org.jetbrains.annotations.NotNull;
@@ -8,8 +8,8 @@ import org.jetbrains.annotations.NotNull;
 public class ButtonGuiElementImpl extends ButtonGuiElement {
 	private AbstractButton widget;
 	
-	public ButtonGuiElementImpl(@NotNull GuiBase gui, int id) {
-		super(gui, id);
+	public ButtonGuiElementImpl(@NotNull IodineRoot root, int id) {
+		super(root, id);
 	}
 	
 	

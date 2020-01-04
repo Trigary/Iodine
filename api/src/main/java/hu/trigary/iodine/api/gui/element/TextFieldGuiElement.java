@@ -1,7 +1,7 @@
 package hu.trigary.iodine.api.gui.element;
 
 import hu.trigary.iodine.api.gui.element.base.*;
-import org.bukkit.entity.Player;
+import hu.trigary.iodine.api.player.IodinePlayer;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -84,6 +84,6 @@ public interface TextFieldGuiElement extends GuiElement<TextFieldGuiElement>,
 		 * @param player the player who caused this change to happen
 		 */
 		void accept(@NotNull TextFieldGuiElement element, @NotNull String oldText,
-				@NotNull String newText, @NotNull Player player);
+				@NotNull String newText, @NotNull IodinePlayer player);
 	}
 }

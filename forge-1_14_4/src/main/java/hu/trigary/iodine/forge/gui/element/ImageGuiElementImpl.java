@@ -1,13 +1,13 @@
 package hu.trigary.iodine.forge.gui.element;
 
-import hu.trigary.iodine.client.gui.container.base.GuiBase;
+import hu.trigary.iodine.client.gui.IodineRoot;
 import hu.trigary.iodine.client.gui.element.ImageGuiElement;
 import org.apache.commons.lang3.NotImplementedException;
 import org.jetbrains.annotations.NotNull;
 
 public class ImageGuiElementImpl extends ImageGuiElement {
-	public ImageGuiElementImpl(@NotNull GuiBase gui, int id) {
-		super(gui, id);
+	public ImageGuiElementImpl(@NotNull IodineRoot root, int id) {
+		super(root, id);
 	}
 
 

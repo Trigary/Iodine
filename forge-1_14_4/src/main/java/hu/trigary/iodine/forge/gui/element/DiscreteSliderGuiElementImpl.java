@@ -1,6 +1,6 @@
 package hu.trigary.iodine.forge.gui.element;
 
-import hu.trigary.iodine.client.gui.container.base.GuiBase;
+import hu.trigary.iodine.client.gui.IodineRoot;
 import hu.trigary.iodine.client.gui.element.DiscreteSliderGuiElement;
 import net.minecraft.client.gui.widget.AbstractSlider;
 import org.jetbrains.annotations.NotNull;
@@ -8,8 +8,8 @@ import org.jetbrains.annotations.NotNull;
 public class DiscreteSliderGuiElementImpl extends DiscreteSliderGuiElement {
 	private Slider widget;
 	
-	public DiscreteSliderGuiElementImpl(@NotNull GuiBase gui, int id) {
-		super(gui, id);
+	public DiscreteSliderGuiElementImpl(@NotNull IodineRoot root, int id) {
+		super(root, id);
 	}
 	
 	

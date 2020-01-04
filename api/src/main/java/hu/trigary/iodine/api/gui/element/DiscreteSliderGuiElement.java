@@ -1,7 +1,7 @@
 package hu.trigary.iodine.api.gui.element;
 
 import hu.trigary.iodine.api.gui.element.base.*;
-import org.bukkit.entity.Player;
+import hu.trigary.iodine.api.player.IodinePlayer;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -103,6 +103,6 @@ public interface DiscreteSliderGuiElement extends GuiElement<DiscreteSliderGuiEl
 		 * @param newProgress the progress that was set by the player
 		 * @param player the player who changed the progress
 		 */
-		void accept(@NotNull DiscreteSliderGuiElement element, int oldProgress, int newProgress, @NotNull Player player);
+		void accept(@NotNull DiscreteSliderGuiElement element, int oldProgress, int newProgress, @NotNull IodinePlayer player);
 	}
 }

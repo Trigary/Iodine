@@ -1,6 +1,5 @@
 package hu.trigary.iodine.api.gui;
 
-import hu.trigary.iodine.api.gui.container.base.GuiBase;
 import hu.trigary.iodine.api.player.IodinePlayer;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -9,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
  * Represents an overlay that can be opened
  * for players who are in the {@link IodinePlayer.State#MODDED} state.
  */
-public interface IodineOverlay extends GuiBase<IodineOverlay>, DrawPrioritizeable {
+public interface IodineOverlay extends IodineRoot<IodineOverlay>, DrawPrioritizeable {
 	/**
 	 * Gets the position the coordinates are relative to.
 	 *

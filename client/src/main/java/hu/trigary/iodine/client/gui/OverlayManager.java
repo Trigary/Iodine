@@ -1,7 +1,6 @@
 package hu.trigary.iodine.client.gui;
 
 import hu.trigary.iodine.client.IodineMod;
-import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.nio.ByteBuffer;
@@ -16,14 +15,6 @@ public abstract class OverlayManager {
 	
 	protected OverlayManager(@NotNull IodineMod mod) {
 		this.mod = mod;
-	}
-	
-	
-	
-	@NotNull
-	@Contract(pure = true)
-	protected final IodineMod getMod() {
-		return mod;
 	}
 	
 	

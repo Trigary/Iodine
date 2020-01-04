@@ -35,7 +35,7 @@ public class IodineGuiScreen extends Screen {
 	
 	@Override
 	public void removed() {
-		gui.getMod().getGui().playerCloseGui();
+		gui.getMod().getGuiManager().playerCloseGui();
 	}
 	
 	

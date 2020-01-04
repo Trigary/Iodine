@@ -19,11 +19,13 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 public class NetworkManagerImpl extends NetworkManager {
+	private final IodineMod mod;
 	private final ResourceLocation channelName;
 	private net.minecraft.network.NetworkManager network;
 	
 	public NetworkManagerImpl(@NotNull IodineMod mod) {
 		super(mod);
+		this.mod = mod;
 		channelName = new ResourceLocation(PacketType.NETWORK_CHANNEL);
 		createNetwork(channelName).addListener(this::onNetworkEvent);
 	}
@@ -64,7 +66,7 @@ public class NetworkManagerImpl extends NetworkManager {
 		context.setPacketHandled(true);
 		ServerPlayerEntity sender = context.getSender();
 		if (sender != null) {
-			getMod().getLogger().warn("Network > Received packet from player {}", sender.getScoreboardName());
+			mod.getLogger().warn("Network > Received packet from player {}", sender.getScoreboardName());
 			return;
 		}
 		

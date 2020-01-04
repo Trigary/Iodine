@@ -16,7 +16,7 @@ public class LoginRequestPacketHandler extends PacketHandler {
 	public void handle(@NotNull ByteBuffer buffer) {
 		getMod().getLogger().debug("Login > responding to server request");
 		byte[] array = BufferUtils.serializeString(getMod().getVersion());
-		getMod().getNetwork().send(PacketType.CLIENT_LOGIN, array.length + 2, b -> {
+		getMod().getNetworkManager().send(PacketType.CLIENT_LOGIN, array.length + 2, b -> {
 			b.putShort((short) array.length);
 			b.put(array);
 		});

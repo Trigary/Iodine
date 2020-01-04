@@ -1,6 +1,6 @@
 package hu.trigary.iodine.forge.gui.element;
 
-import hu.trigary.iodine.client.gui.container.base.GuiBase;
+import hu.trigary.iodine.client.gui.IodineRoot;
 import hu.trigary.iodine.client.gui.element.DropdownGuiElement;
 import net.minecraft.client.gui.widget.button.AbstractButton;
 import org.jetbrains.annotations.NotNull;
@@ -8,8 +8,8 @@ import org.jetbrains.annotations.NotNull;
 public class DropdownGuiElementImpl extends DropdownGuiElement {
 	private AbstractButton widget;
 	
-	public DropdownGuiElementImpl(@NotNull GuiBase gui, int id) {
-		super(gui, id);
+	public DropdownGuiElementImpl(@NotNull IodineRoot root, int id) {
+		super(root, id);
 	}
 	
 	

@@ -1,6 +1,6 @@
 package hu.trigary.iodine.forge.gui.element;
 
-import hu.trigary.iodine.client.gui.container.base.GuiBase;
+import hu.trigary.iodine.client.gui.IodineRoot;
 import hu.trigary.iodine.client.gui.element.CheckboxGuiElement;
 import net.minecraft.client.gui.widget.button.CheckboxButton;
 import org.jetbrains.annotations.NotNull;
@@ -8,8 +8,8 @@ import org.jetbrains.annotations.NotNull;
 public class CheckboxGuiElementImpl extends CheckboxGuiElement {
 	private CheckboxButton widget;
 	
-	public CheckboxGuiElementImpl(@NotNull GuiBase gui, int id) {
-		super(gui, id);
+	public CheckboxGuiElementImpl(@NotNull IodineRoot root, int id) {
+		super(root, id);
 	}
 	
 	

@@ -2,28 +2,48 @@ package hu.trigary.iodine.api.player;
 
 import hu.trigary.iodine.api.gui.IodineGui;
 import hu.trigary.iodine.api.gui.IodineOverlay;
-import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Set;
+import java.util.UUID;
 
 /**
- * A class that associates Iodine data with a Bukkit player.
- * This class should be used like the {@link Player} class:
- * references to this class' instances must be disposed of as soon as the player logs off.
- * Otherwise memory leaks and unintended consequences follow.
+ * A class that associates Iodine data with a Minecraft player.
+ * References to this class' instances should must disposed of as soon as the player logs off.
  */
 public interface IodinePlayer {
 	/**
-	 * Gets the Bukkit player that this instance is associated with.
+	 * Gets the {@link UUID} player that this instance is associated with.
 	 *
-	 * @return the Bukkit player instance
+	 * @return the player's UUID
 	 */
 	@NotNull
 	@Contract(pure = true)
-	Player getPlayer();
+	UUID getPlayer();
+	
+	/**
+	 * Gets the actual player object that this instance is associated with.
+	 *
+	 * @param clazz the type of the player instance
+	 * @param <T> the type of the player instance
+	 * @return the real player instance
+	 */
+	@NotNull
+	@Contract(pure = true)
+	<T> T getPlayer(@NotNull Class<T> clazz);
+	
+	/**
+	 * Gets the player's name.
+	 *
+	 * @return the player's name
+	 */
+	@NotNull
+	@Contract(pure = true)
+	String getName();
+	
+	
 	
 	/**
 	 * Gets the state this player is currently in.
@@ -33,6 +53,24 @@ public interface IodinePlayer {
 	@NotNull
 	@Contract(pure = true)
 	State getState();
+	
+	//TODO docs
+	@Contract(pure = true)
+	default boolean isModded() {
+		return getState() == State.MODDED;
+	}
+	
+	
+	
+	//TODO docs
+	void sendMessage(@NotNull String message);
+	
+	//TODO docs
+	default void sendMessage(@NotNull String[] message) {
+		for (String line : message) {
+			sendMessage(line);
+		}
+	}
 	
 	
 	

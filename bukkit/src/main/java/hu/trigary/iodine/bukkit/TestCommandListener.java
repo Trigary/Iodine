@@ -3,25 +3,18 @@ package hu.trigary.iodine.bukkit;
 import hu.trigary.iodine.api.IodineApi;
 import hu.trigary.iodine.api.gui.GuiElements;
 import hu.trigary.iodine.api.gui.IodineColor;
-import hu.trigary.iodine.api.gui.container.base.GuiBase;
-import org.bukkit.entity.Player;
+import hu.trigary.iodine.api.gui.IodineRoot;
+import hu.trigary.iodine.api.player.IodinePlayer;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.jetbrains.annotations.NotNull;
-
-import java.time.Year;
 
 /**
  * A class which exists solely for testing purposes.
  */
 public class TestCommandListener implements Listener {
 	private final IodineApi api = IodineApi.getInstance();
-	private final IodinePlugin plugin;
-	
-	public TestCommandListener(@NotNull IodinePlugin plugin) {
-		this.plugin = plugin;
-	}
 	
 	
 	
@@ -32,15 +25,15 @@ public class TestCommandListener implements Listener {
 		}
 		
 		event.setCancelled(true);
-		Player player = event.getPlayer();
-		if (!api.isModded(player)) {
+		IodinePlayer player = api.getPlayer(event.getPlayer().getUniqueId());
+		if (!player.isModded()) {
 			player.sendMessage("You are not modded!");
 			return;
 		}
 		
 		api.createGui().addElement(GuiElements.CONTAINER_LINEAR, c -> {
 			c.setOrientation(true);
-			GuiBase<?> gui = c.getGui();
+			IodineRoot<?> gui = c.getRoot();
 			
 			gui.addElement(GuiElements.BUTTON, e -> c.makeChildLast(e)
 					.setText("First"));

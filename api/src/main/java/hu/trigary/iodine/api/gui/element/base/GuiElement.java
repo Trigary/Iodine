@@ -2,7 +2,7 @@ package hu.trigary.iodine.api.gui.element.base;
 
 import hu.trigary.iodine.api.gui.AttachmentHolder;
 import hu.trigary.iodine.api.gui.DrawPrioritizeable;
-import hu.trigary.iodine.api.gui.container.base.GuiBase;
+import hu.trigary.iodine.api.gui.IodineRoot;
 import hu.trigary.iodine.api.gui.container.base.GuiParent;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -15,13 +15,13 @@ import org.jetbrains.annotations.NotNull;
  */
 public interface GuiElement<T extends GuiElement<T>> extends AttachmentHolder<T>, DrawPrioritizeable<T> {
 	/**
-	 * Gets the GUI that contains this element.
+	 * Gets the GUI or overlay that contains this element.
 	 *
-	 * @return the GUI that contains this element
+	 * @return the instance that contains this element
 	 */
 	@NotNull
 	@Contract(pure = true)
-	GuiBase<?> getGui();
+	IodineRoot<?> getRoot();
 	
 	/**
 	 * Gets the ID of this element that was specified during creation.

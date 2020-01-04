@@ -1,12 +1,13 @@
 package hu.trigary.iodine.client.gui.container.base;
 
+import hu.trigary.iodine.client.gui.IodineRoot;
 import hu.trigary.iodine.client.gui.element.base.GuiElement;
 import org.jetbrains.annotations.NotNull;
 
 public abstract class GuiContainer extends GuiElement implements GuiParent {
 	
-	protected GuiContainer(@NotNull GuiBase gui, int id) {
-		super(gui, id);
+	protected GuiContainer(@NotNull IodineRoot root, int id) {
+		super(root, id);
 	}
 	
 	

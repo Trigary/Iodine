@@ -3,7 +3,7 @@ package hu.trigary.iodine.api.gui.element;
 import hu.trigary.iodine.api.gui.element.base.GuiEditable;
 import hu.trigary.iodine.api.gui.element.base.GuiElement;
 import hu.trigary.iodine.api.gui.element.base.GuiWidthSettable;
-import org.bukkit.entity.Player;
+import hu.trigary.iodine.api.player.IodinePlayer;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -102,6 +102,6 @@ public interface DropdownGuiElement extends GuiElement<DropdownGuiElement>,
 		 * @param player the player who caused this change
 		 */
 		void accept(@NotNull DropdownGuiElement element, @NotNull String oldChoice,
-				@NotNull String newChoice, @NotNull Player player);
+				@NotNull String newChoice, @NotNull IodinePlayer player);
 	}
 }

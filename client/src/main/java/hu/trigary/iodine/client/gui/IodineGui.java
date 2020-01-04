@@ -1,15 +1,14 @@
 package hu.trigary.iodine.client.gui;
 
 import hu.trigary.iodine.client.IodineMod;
-import hu.trigary.iodine.client.gui.container.base.GuiBase;
 import hu.trigary.iodine.client.gui.element.base.GuiElement;
-import hu.trigary.iodine.client.util.IntPair;
+import hu.trigary.iodine.client.IntPair;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.nio.ByteBuffer;
 
-public final class IodineGui extends GuiBase {
+public final class IodineGui extends IodineRoot {
 	private GuiElement focused;
 	
 	public IodineGui(@NotNull IodineMod mod, int id) {

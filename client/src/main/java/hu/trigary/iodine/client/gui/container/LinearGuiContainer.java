@@ -1,8 +1,8 @@
 package hu.trigary.iodine.client.gui.container;
 
 import hu.trigary.iodine.backend.BufferUtils;
-import hu.trigary.iodine.client.util.IntPair;
-import hu.trigary.iodine.client.gui.container.base.GuiBase;
+import hu.trigary.iodine.client.IntPair;
+import hu.trigary.iodine.client.gui.IodineRoot;
 import hu.trigary.iodine.client.gui.container.base.GuiContainer;
 import hu.trigary.iodine.client.gui.element.base.GuiElement;
 import org.jetbrains.annotations.NotNull;
@@ -14,8 +14,8 @@ public final class LinearGuiContainer extends GuiContainer {
 	private int[] childrenTemp;
 	private GuiElement[] children;
 	
-	public LinearGuiContainer(@NotNull GuiBase gui, int id) {
-		super(gui, id);
+	public LinearGuiContainer(@NotNull IodineRoot root, int id) {
+		super(root, id);
 	}
 	
 	

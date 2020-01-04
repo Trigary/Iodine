@@ -1,7 +1,6 @@
 package hu.trigary.iodine.api.player;
 
-import org.bukkit.event.Event;
-import org.bukkit.event.HandlerList;
+import hu.trigary.iodine.api.IodineEvent;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -10,8 +9,7 @@ import org.jetbrains.annotations.NotNull;
  * In most cases, this is going to be a change
  * from {@link IodinePlayer.State#VANILLA} to {@link IodinePlayer.State#MODDED}.
  */
-public final class IodinePlayerStateChangedEvent extends Event {
-	private static final HandlerList handlers = new HandlerList();
+public final class IodinePlayerStateChangedEvent implements IodineEvent {
 	private final IodinePlayer player;
 	private final IodinePlayer.State oldState;
 	private final IodinePlayer.State newState;
@@ -29,19 +27,6 @@ public final class IodinePlayerStateChangedEvent extends Event {
 		this.player = player;
 		this.oldState = oldState;
 		this.newState = newState;
-	}
-	
-	
-	
-	@Contract(pure = true)
-	public static HandlerList getHandlerList() {
-		return handlers;
-	}
-	
-	@Contract(pure = true)
-	@Override
-	public HandlerList getHandlers() {
-		return handlers;
 	}
 	
 	

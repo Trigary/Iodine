@@ -2,7 +2,6 @@ package hu.trigary.iodine.client.gui;
 
 import hu.trigary.iodine.backend.PacketType;
 import hu.trigary.iodine.client.IodineMod;
-import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.nio.ByteBuffer;
@@ -13,14 +12,6 @@ public abstract class GuiManager {
 	
 	protected GuiManager(@NotNull IodineMod mod) {
 		this.mod = mod;
-	}
-	
-	
-	
-	@NotNull
-	@Contract(pure = true)
-	protected final IodineMod getMod() {
-		return mod;
 	}
 	
 	
@@ -59,7 +50,7 @@ public abstract class GuiManager {
 	public final void playerCloseGui() {
 		if (openGui != null) {
 			mod.getLogger().debug("GuiManager > player closing {}", openGui.getId());
-			mod.getNetwork().send(PacketType.CLIENT_GUI_CLOSE, 4, b -> b.putInt(openGui.getId()));
+			mod.getNetworkManager().send(PacketType.CLIENT_GUI_CLOSE, 4, b -> b.putInt(openGui.getId()));
 			closeOpenGui(true);
 		}
 	}

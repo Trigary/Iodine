@@ -1,13 +1,13 @@
 package hu.trigary.iodine.forge.gui.element;
 
-import hu.trigary.iodine.client.gui.container.base.GuiBase;
+import hu.trigary.iodine.client.gui.IodineRoot;
 import hu.trigary.iodine.client.gui.element.ProgressBarGuiElement;
 import org.apache.commons.lang3.NotImplementedException;
 import org.jetbrains.annotations.NotNull;
 
 public class ProgressBarGuiElementImpl extends ProgressBarGuiElement {
-	public ProgressBarGuiElementImpl(@NotNull GuiBase gui, int id) {
-		super(gui, id);
+	public ProgressBarGuiElementImpl(@NotNull IodineRoot root, int id) {
+		super(root, id);
 	}
 	
 	

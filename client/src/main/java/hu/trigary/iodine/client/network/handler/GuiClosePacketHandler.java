@@ -12,6 +12,6 @@ public class GuiClosePacketHandler extends PacketHandler {
 	
 	@Override
 	public void handle(@NotNull ByteBuffer buffer) {
-		getMod().getGui().packetCloseGui();
+		getMod().getGuiManager().packetCloseGui();
 	}
 }

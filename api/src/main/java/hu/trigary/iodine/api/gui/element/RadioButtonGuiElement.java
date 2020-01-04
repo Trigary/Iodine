@@ -3,7 +3,7 @@ package hu.trigary.iodine.api.gui.element;
 import hu.trigary.iodine.api.gui.element.base.GuiCheckable;
 import hu.trigary.iodine.api.gui.element.base.GuiEditable;
 import hu.trigary.iodine.api.gui.element.base.GuiElement;
-import org.bukkit.entity.Player;
+import hu.trigary.iodine.api.player.IodinePlayer;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -73,7 +73,7 @@ public interface RadioButtonGuiElement extends GuiElement<RadioButtonGuiElement>
 		 * @param player the player who caused the change
 		 */
 		void accept(@NotNull RadioButtonGuiElement checked,
-				@NotNull RadioButtonGuiElement unchecked, @NotNull Player player);
+				@NotNull RadioButtonGuiElement unchecked, @NotNull IodinePlayer player);
 	}
 	
 	/**
@@ -89,6 +89,6 @@ public interface RadioButtonGuiElement extends GuiElement<RadioButtonGuiElement>
 		 * @param player the player who caused the change
 		 */
 		void accept(@NotNull RadioButtonGuiElement checked,
-				@NotNull RadioButtonGuiElement unchecked, @NotNull Player player);
+				@NotNull RadioButtonGuiElement unchecked, @NotNull IodinePlayer player);
 	}
 }

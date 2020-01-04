@@ -1,6 +1,6 @@
 package hu.trigary.iodine.forge.gui.element;
 
-import hu.trigary.iodine.client.gui.container.base.GuiBase;
+import hu.trigary.iodine.client.gui.IodineRoot;
 import hu.trigary.iodine.client.gui.element.RectangleGuiElement;
 import net.minecraft.client.gui.AbstractGui;
 import org.jetbrains.annotations.NotNull;
@@ -9,8 +9,8 @@ public class RectangleGuiElementImpl extends RectangleGuiElement {
 	private int positionX;
 	private int positionY;
 	
-	public RectangleGuiElementImpl(@NotNull GuiBase gui, int id) {
-		super(gui, id);
+	public RectangleGuiElementImpl(@NotNull IodineRoot root, int id) {
+		super(root, id);
 	}
 	
 	

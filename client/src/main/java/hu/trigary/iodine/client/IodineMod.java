@@ -2,7 +2,7 @@ package hu.trigary.iodine.client;
 
 import hu.trigary.iodine.backend.BufferUtils;
 import hu.trigary.iodine.backend.PacketType;
-import hu.trigary.iodine.client.gui.GuiElementManager;
+import hu.trigary.iodine.client.gui.ElementManager;
 import hu.trigary.iodine.client.gui.GuiManager;
 import hu.trigary.iodine.client.gui.OverlayManager;
 import hu.trigary.iodine.client.network.NetworkManager;
@@ -13,24 +13,24 @@ import org.jetbrains.annotations.NotNull;
 public abstract class IodineMod {
 	private Logger logger;
 	private String version;
-	private NetworkManager network;
-	private GuiElementManager element;
-	private GuiManager gui;
-	private OverlayManager overlay;
+	private NetworkManager networkManager;
+	private ElementManager elementManager;
+	private GuiManager guiManager;
+	private OverlayManager overlayManager;
 	
 	
 	
-	protected final void initializeFirst(@NotNull Logger logger, @NotNull String version) {
+	public final void initialize(@NotNull Logger logger, @NotNull String version) {
 		this.logger = logger;
 		this.version = version;
 	}
 	
-	protected final void initializeSecond(@NotNull NetworkManager network, @NotNull GuiElementManager element,
-			@NotNull GuiManager gui, @NotNull OverlayManager overlay) {
-		this.network = network;
-		this.element = element;
-		this.gui = gui;
-		this.overlay = overlay;
+	public final void setup(@NotNull NetworkManager networkManager, @NotNull ElementManager elementManager,
+			@NotNull GuiManager guiManager, @NotNull OverlayManager overlayManager) {
+		this.networkManager = networkManager;
+		this.elementManager = elementManager;
+		this.guiManager = guiManager;
+		this.overlayManager = overlayManager;
 	}
 	
 	
@@ -49,43 +49,43 @@ public abstract class IodineMod {
 	
 	@NotNull
 	@Contract(pure = true)
-	public final NetworkManager getNetwork() {
-		return network;
+	public final NetworkManager getNetworkManager() {
+		return networkManager;
 	}
 	
 	@NotNull
 	@Contract(pure = true)
-	public final GuiElementManager getElement() {
-		return element;
+	public final ElementManager getElementManager() {
+		return elementManager;
 	}
 	
 	@NotNull
 	@Contract(pure = true)
-	public final GuiManager getGui() {
-		return gui;
+	public final GuiManager getGuiManager() {
+		return guiManager;
 	}
 	
 	@NotNull
 	@Contract(pure = true)
-	public final OverlayManager getOverlay() {
-		return overlay;
+	public final OverlayManager getOverlayManager() {
+		return overlayManager;
 	}
 	
 	
 	
 	public final void onJoinedServer() {
 		logger.info("Joined server, attempting login");
-		network.initialize();
+		networkManager.initialize();
 		byte[] array = BufferUtils.serializeString(version);
-		network.send(PacketType.CLIENT_LOGIN, array.length + 2, buffer -> {
+		networkManager.send(PacketType.CLIENT_LOGIN, array.length + 2, buffer -> {
 			buffer.putShort((short) array.length);
 			buffer.put(array);
 		});
 	}
 	
 	public final void onQuitServer() {
-		gui.playerCloseGui();
-		overlay.closeOverlays();
+		guiManager.playerCloseGui();
+		overlayManager.closeOverlays();
 	}
 	
 	@Contract(pure = true)

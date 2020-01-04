@@ -12,6 +12,6 @@ public class OverlayOpenPacketHandler extends PacketHandler {
 	
 	@Override
 	public void handle(@NotNull ByteBuffer buffer) {
-		getMod().getOverlay().packetOpenOverlay(buffer);
+		getMod().getOverlayManager().packetOpenOverlay(buffer);
 	}
 }

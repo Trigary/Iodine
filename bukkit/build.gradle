@@ -1,20 +1,20 @@
 repositories {
-    maven {
-        url 'https://hub.spigotmc.org/nexus/content/groups/public/'
-    }
+	maven {
+		url 'https://hub.spigotmc.org/nexus/content/groups/public/'
+	}
 }
 
 dependencies {
-    implementation project(':backend')
-    compileOnly('org.bukkit:bukkit:1.14.4-R0.1-SNAPSHOT')
-    implementation project(':api')
+	api project(':server')
+	api 'org.apache.commons:commons-lang3:3.9'
+	compileOnly('org.bukkit:bukkit:1.14.4-R0.1-SNAPSHOT')
 }
 
 processResources {
-    include 'plugin.yml', 'config.yml'
-    expand 'version': project.version
+	include 'plugin.yml', 'config.yml'
+	expand 'version': project.version
 }
 
 shadowJar {
-    archiveFileName = "Iodine-${project.version}.jar"
+	archiveFileName = "Iodine-${project.version}.jar"
 }

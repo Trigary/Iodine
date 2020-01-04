@@ -1,9 +1,9 @@
 package hu.trigary.iodine.client.gui.element;
 
 import hu.trigary.iodine.backend.BufferUtils;
-import hu.trigary.iodine.client.gui.container.base.GuiBase;
+import hu.trigary.iodine.client.gui.IodineRoot;
 import hu.trigary.iodine.client.gui.element.base.GuiElement;
-import hu.trigary.iodine.client.util.IntPair;
+import hu.trigary.iodine.client.IntPair;
 import org.jetbrains.annotations.NotNull;
 
 import java.nio.ByteBuffer;
@@ -18,8 +18,8 @@ public abstract class DiscreteSliderGuiElement extends GuiElement {
 	protected short maxProgress;
 	protected short progress;
 	
-	protected DiscreteSliderGuiElement(@NotNull GuiBase gui, int id) {
-		super(gui, id);
+	protected DiscreteSliderGuiElement(@NotNull IodineRoot root, int id) {
+		super(root, id);
 	}
 	
 	

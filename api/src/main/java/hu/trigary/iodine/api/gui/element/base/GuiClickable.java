@@ -1,6 +1,6 @@
 package hu.trigary.iodine.api.gui.element.base;
 
-import org.bukkit.entity.Player;
+import hu.trigary.iodine.api.player.IodinePlayer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -35,6 +35,6 @@ public interface GuiClickable<T extends GuiClickable<T>> {
 		 * @param element the element that was clicked
 		 * @param player the player who clicked the element
 		 */
-		void accept(@NotNull T element, @NotNull Player player);
+		void accept(@NotNull T element, @NotNull IodinePlayer player);
 	}
 }
