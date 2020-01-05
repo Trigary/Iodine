@@ -5,10 +5,19 @@ import hu.trigary.iodine.client.gui.element.RectangleGuiElement;
 import net.minecraft.client.gui.AbstractGui;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * The implementation of {@link RectangleGuiElement}.
+ */
 public class RectangleGuiElementImpl extends RectangleGuiElement {
 	private int positionX;
 	private int positionY;
-	
+
+	/**
+	 * Creates a new instance.
+	 *
+	 * @param root the instance which will contain this element
+	 * @param id the internal ID of this element
+	 */
 	public RectangleGuiElementImpl(@NotNull IodineRoot root, int id) {
 		super(root, id);
 	}

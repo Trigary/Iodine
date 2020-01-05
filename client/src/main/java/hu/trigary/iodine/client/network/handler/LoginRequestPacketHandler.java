@@ -7,6 +7,9 @@ import org.jetbrains.annotations.NotNull;
 
 import java.nio.ByteBuffer;
 
+/**
+ * Tha handler of {@link hu.trigary.iodine.backend.PacketType#SERVER_LOGIN_REQUEST}.
+ */
 public class LoginRequestPacketHandler extends PacketHandler {
 	public LoginRequestPacketHandler(@NotNull IodineMod mod) {
 		super(mod);

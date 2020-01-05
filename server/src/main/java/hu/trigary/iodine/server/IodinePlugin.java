@@ -20,6 +20,7 @@ import java.util.stream.Stream;
  */
 public abstract class IodinePlugin {
 	private Map<Class<? extends IodineEvent>, List<Consumer<? extends IodineEvent>>> eventListeners;
+	private Logger logger;
 	private boolean debugLog;
 	private String version;
 	private NetworkManager networkManager;
@@ -30,20 +31,23 @@ public abstract class IodinePlugin {
 	
 	
 	/**
-	 * Should be called just before {@link #onEnabled(NetworkManager, PlayerManager, Stream)}
-	 * to initialize the most basic functionality.
+	 * Should be called when the plugin gets activated,
+	 * just before {@link #onEnabled(NetworkManager, PlayerManager, Stream)}.
 	 *
+	 * @param logger the logger to use
 	 * @param debugLog whether debugging logging should be enabled
 	 * @param version the plugin's version
 	 */
-	public final void initialize(boolean debugLog, @NotNull String version) {
+	public final void initialize(@NotNull Logger logger, boolean debugLog, @NotNull String version) {
 		eventListeners = new HashMap<>();
+		this.logger = logger;
 		this.debugLog = debugLog;
 		this.version = version;
 	}
 	
 	/**
-	 * Should be called when the plugin is activated.
+	 * Should be called when the plugin gets activated,
+	 * directly after {@link #initialize(Logger, boolean, String)}.
 	 *
 	 * @param networkManager the network manager implementation instance
 	 * @param playerManager the player manager implementation instance
@@ -63,7 +67,7 @@ public abstract class IodinePlugin {
 	}
 	
 	/**
-	 * Should be called when the plugin is deactivated.
+	 * Should be called when the plugin gets deactivated.
 	 */
 	public final void onDisabled() {
 		log(Level.INFO, "Closing all open GUI instances");
@@ -165,7 +169,7 @@ public abstract class IodinePlugin {
 	 */
 	public final void log(@NotNull Level level, @NotNull String message, @NotNull Object... params) {
 		level = level == Level.OFF && debugLog ? Level.INFO : level;
-		getLogger().log(level, message, params);
+		logger.log(level, message, params);
 	}
 	
 	/**
@@ -177,15 +181,6 @@ public abstract class IodinePlugin {
 	 */
 	public final void log(@NotNull Level level, @NotNull String message, @NotNull Throwable cause) {
 		level = level == Level.OFF && debugLog ? Level.INFO : level;
-		getLogger().log(level, message, cause);
+		logger.log(level, message, cause);
 	}
-	
-	/**
-	 * Gets the logger instance associated with this plugin.
-	 *
-	 * @return this plugin's logger
-	 */
-	@NotNull
-	@Contract(pure = true)
-	protected abstract Logger getLogger();
 }

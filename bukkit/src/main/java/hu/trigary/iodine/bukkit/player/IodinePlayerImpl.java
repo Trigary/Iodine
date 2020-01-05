@@ -1,7 +1,6 @@
 package hu.trigary.iodine.bukkit.player;
 
 import hu.trigary.iodine.bukkit.IodinePluginImpl;
-import hu.trigary.iodine.server.IodinePlugin;
 import hu.trigary.iodine.server.player.IodinePlayerBase;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Contract;

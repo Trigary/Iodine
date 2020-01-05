@@ -8,10 +8,19 @@ import org.jetbrains.annotations.NotNull;
 import java.nio.ByteBuffer;
 import java.util.function.Consumer;
 
+/**
+ * The manager whose responsibility is sending and receiving packets.
+ */
 public abstract class NetworkManager {
 	private final IodineMod mod;
 	private final PacketHandler[] handlers = new PacketHandler[PacketType.getHighestId() + 1];
 	
+	/**
+	 * Creates a new instance.
+	 * Should only be called once, by {@link IodineMod}.
+	 *
+	 * @param mod the mod instance
+	 */
 	protected NetworkManager(@NotNull IodineMod mod) {
 		this.mod = mod;
 		handlers[PacketType.SERVER_LOGIN_SUCCESS.getUnsignedId()] = new LoginSuccessPacketHandler(mod);
@@ -27,10 +36,20 @@ public abstract class NetworkManager {
 	
 	
 	
+	/**
+	 * Called every time the client joins the servers and is able to send packets.
+	 */
 	public abstract void initialize();
 	
 	
 	
+	/**
+	 * Sends the specified payload to the server.
+	 *
+	 * @param type the packet type to include
+	 * @param dataLength the length of the data in the callback
+	 * @param dataProvider the callback that writes the data into the buffer
+	 */
 	public final void send(@NotNull PacketType type, int dataLength, @NotNull Consumer<ByteBuffer> dataProvider) {
 		byte[] message = new byte[dataLength + 1];
 		message[0] = type.getId();
@@ -39,10 +58,20 @@ public abstract class NetworkManager {
 		sendImpl(message);
 	}
 	
+	/**
+	 * Sends the specified message to the server.
+	 *
+	 * @param message the payload to send
+	 */
 	protected abstract void sendImpl(@NotNull byte[] message);
 	
 	
 	
+	/**
+	 * Should be called when the client receives a message from the server.
+	 *
+	 * @param message the received payload.
+	 */
 	protected final void onReceived(@NotNull ByteBuffer message) {
 		byte id = message.get();
 		PacketType type = PacketType.fromId(id);

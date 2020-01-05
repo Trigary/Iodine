@@ -10,10 +10,19 @@ import java.nio.ByteBuffer;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * The implementation of {@link hu.trigary.iodine.backend.GuiElementType#CONTAINER_ROOT}.
+ */
 public final class RootGuiContainer extends GuiContainer {
 	private final Map<Integer, Position> children = new HashMap<>();
 	private boolean childrenDirty;
 	
+	/**
+	 * Creates a new instance.
+	 *
+	 * @param root the instance which will contain this element
+	 * @param id the internal ID of this element
+	 */
 	public RootGuiContainer(@NotNull IodineRoot root, int id) {
 		super(root, id);
 	}

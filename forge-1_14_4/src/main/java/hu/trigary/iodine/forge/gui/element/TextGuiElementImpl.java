@@ -6,11 +6,20 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * The implementation of {@link TextGuiElement}.
+ */
 public class TextGuiElementImpl extends TextGuiElement {
 	private static final int COLOR = 0xFFFFFF; //16777215
 	private final FontRenderer fontRenderer;
 	private int offset;
-	
+
+	/**
+	 * Creates a new instance.
+	 *
+	 * @param root the instance which will contain this element
+	 * @param id the internal ID of this element
+	 */
 	public TextGuiElementImpl(@NotNull IodineRoot root, int id) {
 		super(root, id);
 		//noinspection resource

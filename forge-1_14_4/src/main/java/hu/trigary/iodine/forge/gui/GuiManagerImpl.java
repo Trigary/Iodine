@@ -3,23 +3,31 @@ package hu.trigary.iodine.forge.gui;
 import hu.trigary.iodine.client.IodineMod;
 import hu.trigary.iodine.client.gui.GuiManager;
 import hu.trigary.iodine.client.gui.IodineGui;
+import hu.trigary.iodine.forge.IodineModImpl;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * The implementation of {@link GuiManager}.
+ */
 public class GuiManagerImpl extends GuiManager {
-	public GuiManagerImpl(@NotNull IodineMod mod) {
+	/**
+	 * Creates a new instance.
+	 * Should only be called once, by {@link IodineMod}.
+	 *
+	 * @param mod the mod instance
+	 */
+	public GuiManagerImpl(@NotNull IodineModImpl mod) {
 		super(mod);
 	}
-	
-	
-	
+
+
+
 	@Override
 	protected void openGuiImpl(@NotNull IodineGui gui) {
-		IodineGuiScreen screen = new IodineGuiScreen(gui);
-		gui.setAttachment(screen);
 		//noinspection resource
-		Minecraft.getInstance().displayGuiScreen(screen);
+		Minecraft.getInstance().displayGuiScreen(new IodineGuiScreen(gui));
 	}
 	
 	@Override
@@ -28,7 +36,7 @@ public class GuiManagerImpl extends GuiManager {
 			//noinspection resource
 			Minecraft minecraft = Minecraft.getInstance();
 			Screen screen = minecraft.currentScreen;
-			if (screen == gui.getAttachment()) {
+			if (screen instanceof IodineGuiScreen && ((IodineGuiScreen) screen).getGui() == gui) {
 				minecraft.displayGuiScreen(null);
 			}
 		}

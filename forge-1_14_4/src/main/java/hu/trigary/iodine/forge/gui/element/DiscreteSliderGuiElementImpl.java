@@ -5,9 +5,18 @@ import hu.trigary.iodine.client.gui.element.DiscreteSliderGuiElement;
 import net.minecraft.client.gui.widget.AbstractSlider;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * The implementation of {@link DiscreteSliderGuiElement}.
+ */
 public class DiscreteSliderGuiElementImpl extends DiscreteSliderGuiElement {
 	private Slider widget;
-	
+
+	/**
+	 * Creates a new instance.
+	 *
+	 * @param root the instance which will contain this element
+	 * @param id the internal ID of this element
+	 */
 	public DiscreteSliderGuiElementImpl(@NotNull IodineRoot root, int id) {
 		super(root, id);
 	}

@@ -4,8 +4,17 @@ import hu.trigary.iodine.client.gui.IodineRoot;
 import hu.trigary.iodine.client.gui.element.base.GuiElement;
 import org.jetbrains.annotations.NotNull;
 
-public abstract class GuiContainer extends GuiElement implements GuiParent {
+/**
+ * The base class for GUI elements that can be the parent of other elements.
+ */
+public abstract class GuiContainer extends GuiElement {
 	
+	/**
+	 * Creates a new instance.
+	 *
+	 * @param root the instance which will contain this element
+	 * @param id the internal ID of this element
+	 */
 	protected GuiContainer(@NotNull IodineRoot root, int id) {
 		super(root, id);
 	}
@@ -15,6 +24,12 @@ public abstract class GuiContainer extends GuiElement implements GuiParent {
 	@Override
 	public abstract void initialize();
 	
+	/**
+	 * Converts number-based IDs to object references.
+	 *
+	 * @param childrenIdentifiers the number-based IDs to convert
+	 * @return the resolved elements
+	 */
 	@NotNull
 	protected final GuiElement[] resolveChildren(@NotNull int[] childrenIdentifiers) {
 		GuiElement[] children = new GuiElement[childrenIdentifiers.length];

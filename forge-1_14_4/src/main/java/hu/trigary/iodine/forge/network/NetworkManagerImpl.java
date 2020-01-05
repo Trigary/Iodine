@@ -3,6 +3,7 @@ package hu.trigary.iodine.forge.network;
 import hu.trigary.iodine.backend.PacketType;
 import hu.trigary.iodine.client.IodineMod;
 import hu.trigary.iodine.client.network.NetworkManager;
+import hu.trigary.iodine.forge.IodineModImpl;
 import io.netty.buffer.Unpooled;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -18,12 +19,21 @@ import java.nio.ByteBuffer;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
+/**
+ * The implementation of {@link NetworkManager}.
+ */
 public class NetworkManagerImpl extends NetworkManager {
-	private final IodineMod mod;
+	private final IodineModImpl mod;
 	private final ResourceLocation channelName;
 	private net.minecraft.network.NetworkManager network;
 	
-	public NetworkManagerImpl(@NotNull IodineMod mod) {
+	/**
+	 * Creates a new instance.
+	 * Should only be called once, by {@link IodineMod}.
+	 *
+	 * @param mod the mod instance
+	 */
+	public NetworkManagerImpl(@NotNull IodineModImpl mod) {
 		super(mod);
 		this.mod = mod;
 		channelName = new ResourceLocation(PacketType.NETWORK_CHANNEL);

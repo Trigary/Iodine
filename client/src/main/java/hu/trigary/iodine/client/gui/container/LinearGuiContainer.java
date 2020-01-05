@@ -9,11 +9,20 @@ import org.jetbrains.annotations.NotNull;
 
 import java.nio.ByteBuffer;
 
+/**
+ * The implementation of {@link hu.trigary.iodine.backend.GuiElementType#CONTAINER_LINEAR}.
+ */
 public final class LinearGuiContainer extends GuiContainer {
 	private boolean verticalOrientation;
 	private int[] childrenTemp;
 	private GuiElement[] children;
 	
+	/**
+	 * Creates a new instance.
+	 *
+	 * @param root the instance which will contain this element
+	 * @param id the internal ID of this element
+	 */
 	public LinearGuiContainer(@NotNull IodineRoot root, int id) {
 		super(root, id);
 	}

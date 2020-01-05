@@ -9,6 +9,9 @@ import org.jetbrains.annotations.NotNull;
 
 import java.nio.ByteBuffer;
 
+/**
+ * The implementation of {@link hu.trigary.iodine.backend.GuiElementType#CONTAINER_GRID}.
+ */
 public final class GridGuiContainer extends GuiContainer {
 	private int[] childrenTemp;
 	private GuiElement[] children;
@@ -17,6 +20,12 @@ public final class GridGuiContainer extends GuiContainer {
 	private int[] maxWidths;
 	private int[] maxHeights;
 	
+	/**
+	 * Creates a new instance.
+	 *
+	 * @param root the instance which will contain this element
+	 * @param id the internal ID of this element
+	 */
 	public GridGuiContainer(@NotNull IodineRoot root, int id) {
 		super(root, id);
 	}

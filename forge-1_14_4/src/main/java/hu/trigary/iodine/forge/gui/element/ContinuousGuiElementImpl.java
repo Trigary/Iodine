@@ -5,9 +5,18 @@ import hu.trigary.iodine.client.gui.element.ContinuousSliderGuiElement;
 import net.minecraft.client.gui.widget.AbstractSlider;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * The implementation of {@link ContinuousSliderGuiElement}.
+ */
 public class ContinuousGuiElementImpl extends ContinuousSliderGuiElement {
 	private Slider widget;
-	
+
+	/**
+	 * Creates a new instance.
+	 *
+	 * @param root the instance which will contain this element
+	 * @param id the internal ID of this element
+	 */
 	public ContinuousGuiElementImpl(@NotNull IodineRoot root, int id) {
 		super(root, id);
 	}

@@ -6,9 +6,18 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * The implementation of {@link TextFieldGuiElement}.
+ */
 public class TextFieldGuiElementImpl extends TextFieldGuiElement {
 	private TextFieldWidget widget;
-	
+
+	/**
+	 * Creates a new instance.
+	 *
+	 * @param root the instance which will contain this element
+	 * @param id the internal ID of this element
+	 */
 	public TextFieldGuiElementImpl(@NotNull IodineRoot root, int id) {
 		super(root, id);
 	}

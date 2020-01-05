@@ -5,9 +5,18 @@ import hu.trigary.iodine.client.gui.element.DropdownGuiElement;
 import net.minecraft.client.gui.widget.button.AbstractButton;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * The implementation of {@link DropdownGuiElement}.
+ */
 public class DropdownGuiElementImpl extends DropdownGuiElement {
 	private AbstractButton widget;
-	
+
+	/**
+	 * Creates a new instance.
+	 *
+	 * @param root the instance which will contain this element
+	 * @param id the internal ID of this element
+	 */
 	public DropdownGuiElementImpl(@NotNull IodineRoot root, int id) {
 		super(root, id);
 	}

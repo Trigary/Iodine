@@ -3,10 +3,19 @@ package hu.trigary.iodine.client;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * An immutable class that represents a pair a of {@code int}s.
+ */
 public final class IntPair {
 	private final int x;
 	private final int y;
 	
+	/**
+	 * Creates a new instance of this immutable class.
+	 *
+	 * @param x the first value
+	 * @param y the second value
+	 */
 	public IntPair(int x, int y) {
 		this.x = x;
 		this.y = y;
@@ -14,11 +23,21 @@ public final class IntPair {
 	
 	
 	
+	/**
+	 * Gets the first value.
+	 *
+	 * @return the x value
+	 */
 	@Contract(pure = true)
 	public int getX() {
 		return x;
 	}
 	
+	/**
+	 * Gets the second value.
+	 *
+	 * @return the y value
+	 */
 	@Contract(pure = true)
 	public int getY() {
 		return y;

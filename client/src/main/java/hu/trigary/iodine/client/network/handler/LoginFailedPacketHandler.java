@@ -5,6 +5,9 @@ import org.jetbrains.annotations.NotNull;
 
 import java.nio.ByteBuffer;
 
+/**
+ * Tha handler of {@link hu.trigary.iodine.backend.PacketType#SERVER_LOGIN_FAILED}.
+ */
 public class LoginFailedPacketHandler extends PacketHandler {
 	public LoginFailedPacketHandler(@NotNull IodineMod mod) {
 		super(mod);

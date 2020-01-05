@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
  * Represents an overlay that can be opened
  * for players who are in the {@link IodinePlayer.State#MODDED} state.
  */
-public interface IodineOverlay extends IodineRoot<IodineOverlay>, DrawPrioritizeable {
+public interface IodineOverlay extends IodineRoot<IodineOverlay>, DrawPrioritizeable<IodineOverlay> {
 	/**
 	 * Gets the position the coordinates are relative to.
 	 *

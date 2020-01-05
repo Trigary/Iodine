@@ -1,7 +1,6 @@
 package hu.trigary.iodine.client.gui;
 
 import hu.trigary.iodine.client.IodineMod;
-import hu.trigary.iodine.client.gui.container.base.GuiParent;
 import hu.trigary.iodine.client.IntPair;
 import hu.trigary.iodine.client.gui.container.RootGuiContainer;
 import hu.trigary.iodine.client.gui.element.base.GuiElement;
@@ -12,16 +11,25 @@ import org.jetbrains.annotations.NotNull;
 import java.nio.ByteBuffer;
 import java.util.*;
 
-public abstract class IodineRoot implements GuiParent {
+/**
+ * Represents a {@link IodineGui} or {@link IodineOverlay}.
+ * Instances of this class are the top-level roots of GUIs/overlays.
+ */
+public abstract class IodineRoot {
 	private final Map<Integer, GuiElement> elements = new HashMap<>();
 	private final Collection<GuiElement> drawOrderedElements = new TreeSet<>(Comparator
 			.comparing(GuiElement::getDrawPriority)
 			.thenComparing(GuiElement::getId));
 	private final IodineMod mod;
 	private final int id;
-	private Object attachment;
 	private RootGuiContainer rootElement;
 	
+	/**
+	 * Creates a new instance.
+	 *
+	 * @param mod the mod instance
+	 * @param id this instance's ID
+	 */
 	protected IodineRoot(@NotNull IodineMod mod, int id) {
 		this.mod = mod;
 		this.id = id;
@@ -29,34 +37,47 @@ public abstract class IodineRoot implements GuiParent {
 	
 	
 	
+	/**
+	 * Gets the mod instance.
+	 *
+	 * @return the mod instance
+	 */
 	@NotNull
 	@Contract(pure = true)
 	public final IodineMod getMod() {
 		return mod;
 	}
 	
+	/**
+	 * Gets this instance's ID.
+	 *
+	 * @return the ID
+	 */
 	@Contract(pure = true)
 	public final int getId() {
 		return id;
 	}
 	
-	@Contract(pure = true)
-	public final Object getAttachment() {
-		return attachment;
-	}
-	
-	public final void setAttachment(Object attachment) {
-		this.attachment = attachment;
-	}
 	
 	
-	
+	/**
+	 * Gets all elements that are contained in this instance.
+	 *
+	 * @return all child elements
+	 */
 	@NotNull
 	@Contract(pure = true)
 	public final Collection<GuiElement> getAllElements() {
 		return elements.values();
 	}
 	
+	/**
+	 * Gets the element with the specified internal ID.
+	 * The element must exist.
+	 *
+	 * @param id the ID to search for
+	 * @return the found element
+	 */
 	@NotNull
 	@Contract(pure = true)
 	public final GuiElement getElement(int id) {
@@ -67,6 +88,11 @@ public abstract class IodineRoot implements GuiParent {
 	
 	
 	
+	/**
+	 * Updates this instance from the specified buffer.
+	 *
+	 * @param buffer the buffer the data is stored in
+	 */
 	public final void deserialize(@NotNull ByteBuffer buffer) {
 		mod.getLogger().debug("Base > deserializing {}", id);
 		deserializeStart(buffer);
@@ -94,12 +120,28 @@ public abstract class IodineRoot implements GuiParent {
 		update();
 	}
 	
+	/**
+	 * This method deserializes type-specific data from the buffer
+	 * before the elements' deserialization starts.
+	 *
+	 * @param buffer the buffer the data is stored in
+	 */
 	protected abstract void deserializeStart(@NotNull ByteBuffer buffer);
 	
+	/**
+	 * Called when an element was removed from this instance.
+	 * Can be used for eg. cleanup operations.
+	 *
+	 * @param element the removed element
+	 */
 	protected abstract void onElementRemoved(@NotNull GuiElement element);
 	
 	
 	
+	/**
+	 * Called after {@link #deserialize(ByteBuffer)} and when the client resolution changed.
+	 * Updates the contained elements' sizes and positions.
+	 */
 	public final void update() {
 		mod.getLogger().debug("Base > updating {}", id);
 		rootElement.calculateSize(mod.getScreenWidth(), mod.getScreenHeight());
@@ -112,14 +154,34 @@ public abstract class IodineRoot implements GuiParent {
 		onUpdated();
 	}
 	
+	/**
+	 * Calculates this instance's position based on the screen and gui size.
+	 *
+	 * @param screenWidth the screen's width
+	 * @param screenHeight the screen's height
+	 * @param width this instance's width
+	 * @param height this instance's height
+	 * @return the calculated position for this instance
+	 */
 	@NotNull
 	@Contract(pure = true)
-	protected abstract IntPair calculatePosition(int screenWidth, int screenHeight, int guiWidth, int guiHeight);
+	protected abstract IntPair calculatePosition(int screenWidth, int screenHeight, int width, int height);
 	
+	/**
+	 * Called inside {@link #update()} after all contained elements have been updated.
+	 * Can be used to eg. set the focused element.
+	 */
 	protected abstract void onUpdated();
 	
 	
 	
+	/**
+	 * Renders each element on the screen.
+	 *
+	 * @param mouseX the mouse's X position
+	 * @param mouseY the mouse's Y position
+	 * @param partialTicks the client's partial ticks, used for animations
+	 */
 	public final void draw(int mouseX, int mouseY, float partialTicks) {
 		for (GuiElement element : drawOrderedElements) {
 			element.draw(mouseX, mouseY, partialTicks);

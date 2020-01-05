@@ -5,6 +5,9 @@ import org.jetbrains.annotations.NotNull;
 
 import java.nio.ByteBuffer;
 
+/**
+ * Tha handler of {@link hu.trigary.iodine.backend.PacketType#SERVER_GUI_CLOSE}.
+ */
 public class GuiClosePacketHandler extends PacketHandler {
 	public GuiClosePacketHandler(@NotNull IodineMod mod) {
 		super(mod);

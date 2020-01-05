@@ -5,9 +5,18 @@ import hu.trigary.iodine.client.gui.element.CheckboxGuiElement;
 import net.minecraft.client.gui.widget.button.CheckboxButton;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * The implementation of {@link CheckboxGuiElement}.
+ */
 public class CheckboxGuiElementImpl extends CheckboxGuiElement {
 	private CheckboxButton widget;
-	
+
+	/**
+	 * Creates a new instance.
+	 *
+	 * @param root the instance which will contain this element
+	 * @param id the internal ID of this element
+	 */
 	public CheckboxGuiElementImpl(@NotNull IodineRoot root, int id) {
 		super(root, id);
 	}

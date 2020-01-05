@@ -8,7 +8,7 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * A base class for GUI elements.
+ * The base class for GUI elements.
  * All other elements extend this class.
  *
  * @param <T> the class implementing this interface

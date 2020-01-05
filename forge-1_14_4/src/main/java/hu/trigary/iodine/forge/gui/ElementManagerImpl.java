@@ -8,6 +8,9 @@ import hu.trigary.iodine.client.gui.container.RootGuiContainer;
 import hu.trigary.iodine.forge.gui.element.*;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * The implementation of {@link ElementManager}.
+ */
 public class ElementManagerImpl extends ElementManager {
 	@NotNull
 	@Override
