@@ -18,6 +18,7 @@ import java.nio.ByteBuffer;
  */
 public class CheckboxGuiElementImpl extends GuiElementImpl<CheckboxGuiElement> implements CheckboxGuiElement {
 	private boolean editable = true;
+	private String tooltip = "";
 	private boolean checked;
 	private ClickedAction<CheckboxGuiElement> clickedAction;
 	
@@ -40,6 +41,13 @@ public class CheckboxGuiElementImpl extends GuiElementImpl<CheckboxGuiElement> i
 		return editable;
 	}
 	
+	@NotNull
+	@Contract(pure = true)
+	@Override
+	public String getTooltip() {
+		return tooltip;
+	}
+	
 	@Contract(pure = true)
 	@Override
 	public boolean isChecked() {
@@ -52,6 +60,14 @@ public class CheckboxGuiElementImpl extends GuiElementImpl<CheckboxGuiElement> i
 	@Override
 	public CheckboxGuiElementImpl setEditable(boolean editable) {
 		this.editable = editable;
+		getRoot().flagAndUpdate(this);
+		return this;
+	}
+	
+	@NotNull
+	@Override
+	public CheckboxGuiElementImpl setTooltip(@NotNull String tooltip) {
+		this.tooltip = tooltip;
 		getRoot().flagAndUpdate(this);
 		return this;
 	}
@@ -76,6 +92,7 @@ public class CheckboxGuiElementImpl extends GuiElementImpl<CheckboxGuiElement> i
 	@Override
 	public void serializeImpl(@NotNull ResizingByteBuffer buffer) {
 		buffer.putBool(editable);
+		buffer.putString(tooltip);
 		buffer.putBool(checked);
 	}
 	

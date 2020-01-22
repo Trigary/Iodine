@@ -1,5 +1,6 @@
 package hu.trigary.iodine.forge.gui;
 
+import com.mojang.blaze3d.platform.GlStateManager;
 import hu.trigary.iodine.client.gui.IodineGui;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
@@ -22,9 +23,9 @@ public class IodineGuiScreen extends Screen {
 		super(new StringTextComponent("IodineGUI"));
 		this.gui = gui;
 	}
-
-
-
+	
+	
+	
 	/**
 	 * Gets the gui instance this instance wraps.
 	 *
@@ -34,13 +35,36 @@ public class IodineGuiScreen extends Screen {
 		return gui;
 	}
 	
+	/**
+	 * Renders the specified tooltip if it's not an empty {@link String}.
+	 * This is a utility method, it just delegates to {@link Screen#renderTooltip(String, int, int)}.
+	 *
+	 * @param mouseX the mouse's X position
+	 * @param mouseY the mouse's Y position
+	 * @param tooltip the tooltip to render
+	 */
+	public static void renderTooltip(int mouseX, int mouseY, @NotNull String tooltip) {
+		if (tooltip.isEmpty()) {
+			return;
+		}
+		
+		//noinspection resource
+		Screen screen = Minecraft.getInstance().currentScreen;
+		if (screen instanceof IodineGuiScreen) {
+			screen.renderTooltip(tooltip, mouseX, mouseY);
+			GlStateManager.disableLighting();
+		} else {
+			throw new AssertionError("Attempted to render tooltip when no screens or a non-Iodine screen was open.");
+		}
+	}
+	
+	
+	
 	@Override
 	public boolean isPauseScreen() {
 		return false;
 	}
-
-
-
+	
 	@Override
 	public void resize(@NotNull Minecraft minecraft, int screenWidth, int screenHeight) {
 		setSize(screenWidth, screenHeight);

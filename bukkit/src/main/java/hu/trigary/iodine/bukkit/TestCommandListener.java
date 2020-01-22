@@ -36,6 +36,7 @@ public class TestCommandListener implements Listener {
 			IodineRoot<?> gui = c.getRoot();
 			
 			gui.addElement(GuiElements.BUTTON, e -> c.makeChildLast(e)
+					.setTooltip("Some tooltip")
 					.setText("First"));
 			
 			gui.addElement(GuiElements.CONTAINER_GRID, grid -> {
@@ -57,6 +58,7 @@ public class TestCommandListener implements Listener {
 		})
 				.addElement(GuiElements.BUTTON, 5, 30, e -> e.setText("P-1").setDrawPriority(-1).setWidth(0))
 				.addElement(GuiElements.BUTTON, 10, 25, e -> e.setText("P+1").setDrawPriority(1).setWidth(0))
+				.addElement(GuiElements.BUTTON, 40, 25, e -> e.setText("P-1").setDrawPriority(-1).setWidth(0))
 				.onClosed((gui, p) -> p.sendMessage("You closed the GUI"))
 				.openFor(player);
 	}

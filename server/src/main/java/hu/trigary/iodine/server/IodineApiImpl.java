@@ -26,6 +26,7 @@ public final class IodineApiImpl extends IodineApi {
 	 */
 	public IodineApiImpl(@NotNull IodinePlugin plugin) {
 		this.plugin = plugin;
+		instance = this;
 	}
 	
 	

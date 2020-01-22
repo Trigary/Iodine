@@ -16,6 +16,7 @@ public abstract class DropdownGuiElement extends GuiElement {
 	protected static final int HEIGHT = 20;
 	protected int width;
 	protected boolean editable;
+	protected String tooltip;
 	protected String[] choices;
 	protected short selected;
 	
@@ -35,6 +36,7 @@ public abstract class DropdownGuiElement extends GuiElement {
 	protected final void deserializeImpl(@NotNull ByteBuffer buffer) {
 		width = buffer.getShort();
 		editable = BufferUtils.deserializeBoolean(buffer);
+		tooltip = BufferUtils.deserializeString(buffer);
 		choices = new String[buffer.getShort()];
 		for (int i = 0; i < choices.length; i++) {
 			choices[i] = BufferUtils.deserializeString(buffer);

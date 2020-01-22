@@ -11,7 +11,8 @@ import org.jetbrains.annotations.Nullable;
  */
 public interface TextFieldGuiElement extends GuiElement<TextFieldGuiElement>,
 		GuiWidthSettable<TextFieldGuiElement>, GuiHeightSettable<TextFieldGuiElement>,
-		GuiTextable<TextFieldGuiElement>, GuiEditable<TextFieldGuiElement> {
+		GuiEditable<TextFieldGuiElement>, GuiTooltipable<TextFieldGuiElement>,
+		GuiTextable<TextFieldGuiElement> {
 	/**
 	 * Gets the regex used to determine whether the text should be accepted.
 	 * An empty {@link String} stands for no validation.

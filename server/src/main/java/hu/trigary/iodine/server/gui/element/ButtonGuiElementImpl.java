@@ -18,6 +18,7 @@ import java.nio.ByteBuffer;
 public class ButtonGuiElementImpl extends GuiElementImpl<ButtonGuiElement> implements ButtonGuiElement {
 	private short width = 100;
 	private boolean editable = true;
+	private String tooltip = "";
 	private String text = "";
 	private ClickedAction<ButtonGuiElement> clickedAction;
 	
@@ -48,6 +49,13 @@ public class ButtonGuiElementImpl extends GuiElementImpl<ButtonGuiElement> imple
 	@NotNull
 	@Contract(pure = true)
 	@Override
+	public String getTooltip() {
+		return tooltip;
+	}
+	
+	@NotNull
+	@Contract(pure = true)
+	@Override
 	public String getText() {
 		return text;
 	}
@@ -66,6 +74,14 @@ public class ButtonGuiElementImpl extends GuiElementImpl<ButtonGuiElement> imple
 	@Override
 	public ButtonGuiElementImpl setEditable(boolean editable) {
 		this.editable = editable;
+		getRoot().flagAndUpdate(this);
+		return this;
+	}
+	
+	@NotNull
+	@Override
+	public ButtonGuiElementImpl setTooltip(@NotNull String tooltip) {
+		this.tooltip = tooltip;
 		getRoot().flagAndUpdate(this);
 		return this;
 	}
@@ -91,6 +107,7 @@ public class ButtonGuiElementImpl extends GuiElementImpl<ButtonGuiElement> imple
 	public void serializeImpl(@NotNull ResizingByteBuffer buffer) {
 		buffer.putShort(width);
 		buffer.putBool(editable);
+		buffer.putString(tooltip);
 		buffer.putString(text);
 	}
 	

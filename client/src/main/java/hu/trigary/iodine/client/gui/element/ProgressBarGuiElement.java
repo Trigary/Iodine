@@ -13,9 +13,10 @@ import java.nio.ByteBuffer;
  */
 public abstract class ProgressBarGuiElement extends GuiElement {
 	private static final int SIZE = 20;
+	protected boolean verticalOrientation;
 	protected int width;
 	protected int height;
-	protected boolean verticalOrientation;
+	protected String tooltip;
 	protected String text;
 	protected float progress;
 	
@@ -36,6 +37,7 @@ public abstract class ProgressBarGuiElement extends GuiElement {
 		verticalOrientation = BufferUtils.deserializeBoolean(buffer);
 		width = verticalOrientation ? SIZE : buffer.getShort();
 		height = verticalOrientation ? buffer.getShort() : SIZE;
+		tooltip = BufferUtils.deserializeString(buffer);
 		text = BufferUtils.deserializeString(buffer);
 		progress = buffer.getFloat();
 	}

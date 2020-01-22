@@ -17,10 +17,11 @@ import java.nio.ByteBuffer;
  * The implementation of {@link DiscreteSliderGuiElement}.
  */
 public class DiscreteSliderGuiElementImpl extends GuiElementImpl<DiscreteSliderGuiElement> implements DiscreteSliderGuiElement {
+	private boolean verticalOrientation;
 	private short width = 150;
 	private short height;
 	private boolean editable = true;
-	private boolean verticalOrientation;
+	private String tooltip = "";
 	private String text = "";
 	private short minProgress;
 	private short maxProgress = 100;
@@ -40,6 +41,12 @@ public class DiscreteSliderGuiElementImpl extends GuiElementImpl<DiscreteSliderG
 	
 	
 	
+	@Contract(pure = true)
+	@Override
+	public boolean isVerticalOrientation() {
+		return verticalOrientation;
+	}
+	
 	@Override
 	public int getWidth() {
 		return width;
@@ -56,10 +63,11 @@ public class DiscreteSliderGuiElementImpl extends GuiElementImpl<DiscreteSliderG
 		return editable;
 	}
 	
+	@NotNull
 	@Contract(pure = true)
 	@Override
-	public boolean isVerticalOrientation() {
-		return verticalOrientation;
+	public String getTooltip() {
+		return tooltip;
 	}
 	
 	@NotNull
@@ -91,6 +99,22 @@ public class DiscreteSliderGuiElementImpl extends GuiElementImpl<DiscreteSliderG
 	
 	@NotNull
 	@Override
+	public DiscreteSliderGuiElementImpl setOrientation(boolean vertical) {
+		if (verticalOrientation == vertical) {
+			return this;
+		}
+		
+		short temp = width;
+		//noinspection SuspiciousNameCombination
+		width = height;
+		height = temp;
+		verticalOrientation = vertical;
+		getRoot().flagAndUpdate(this);
+		return this;
+	}
+	
+	@NotNull
+	@Override
 	public DiscreteSliderGuiElementImpl setWidth(int width) {
 		Validate.isTrue(!verticalOrientation, "The width is only configurable in horizontal orientation");
 		this.width = (short) width;
@@ -117,16 +141,8 @@ public class DiscreteSliderGuiElementImpl extends GuiElementImpl<DiscreteSliderG
 	
 	@NotNull
 	@Override
-	public DiscreteSliderGuiElementImpl setOrientation(boolean vertical) {
-		if (verticalOrientation == vertical) {
-			return this;
-		}
-		
-		short temp = width;
-		//noinspection SuspiciousNameCombination
-		width = height;
-		height = temp;
-		verticalOrientation = vertical;
+	public DiscreteSliderGuiElementImpl setTooltip(@NotNull String tooltip) {
+		this.tooltip = tooltip;
 		getRoot().flagAndUpdate(this);
 		return this;
 	}
@@ -187,6 +203,7 @@ public class DiscreteSliderGuiElementImpl extends GuiElementImpl<DiscreteSliderG
 		buffer.putBool(verticalOrientation);
 		buffer.putShort(verticalOrientation ? height : width);
 		buffer.putBool(editable);
+		buffer.putString(tooltip);
 		buffer.putString(text);
 		buffer.putShort((short) (maxProgress - minProgress));
 		buffer.putShort((short) (progress - minProgress));

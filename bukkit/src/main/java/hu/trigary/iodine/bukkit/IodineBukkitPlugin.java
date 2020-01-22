@@ -4,12 +4,17 @@ import hu.trigary.iodine.bukkit.network.NetworkManagerImpl;
 import hu.trigary.iodine.bukkit.player.PlayerManagerImpl;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
+import org.bukkit.event.server.PluginDisableEvent;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * The actual Bukkit plugin's main class.
  */
-public class IodineBukkitPlugin extends JavaPlugin {
+public class IodineBukkitPlugin extends JavaPlugin implements Listener {
 	private IodinePluginImpl plugin;
 	
 	@Override
@@ -24,8 +29,10 @@ public class IodineBukkitPlugin extends JavaPlugin {
 		Bukkit.getPluginManager().registerEvents(new TestCommandListener(), this);
 	}
 	
-	@Override
-	public void onDisable() {
-		plugin.onDisabled();
+	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
+	private void onDisabled(@NotNull PluginDisableEvent event) {
+		if (event.getPlugin() == this) {
+			plugin.onDisabled();
+		}
 	}
 }

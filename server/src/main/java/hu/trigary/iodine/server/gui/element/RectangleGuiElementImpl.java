@@ -7,6 +7,7 @@ import hu.trigary.iodine.server.gui.IodineRootImpl;
 import hu.trigary.iodine.server.gui.element.base.GuiElementImpl;
 import hu.trigary.iodine.server.network.ResizingByteBuffer;
 import hu.trigary.iodine.server.player.IodinePlayerBase;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -18,6 +19,7 @@ import java.nio.ByteBuffer;
 public class RectangleGuiElementImpl extends GuiElementImpl<RectangleGuiElement> implements RectangleGuiElement {
 	private short width = 10;
 	private short height = 10;
+	private String tooltip = "";
 	private IodineColor color;
 	private ClickedAction<RectangleGuiElement> clickedAction;
 	
@@ -42,6 +44,13 @@ public class RectangleGuiElementImpl extends GuiElementImpl<RectangleGuiElement>
 	@Override
 	public int getHeight() {
 		return height;
+	}
+	
+	@NotNull
+	@Contract(pure = true)
+	@Override
+	public String getTooltip() {
+		return tooltip;
 	}
 	
 	@NotNull
@@ -70,6 +79,14 @@ public class RectangleGuiElementImpl extends GuiElementImpl<RectangleGuiElement>
 	
 	@NotNull
 	@Override
+	public RectangleGuiElementImpl setTooltip(@NotNull String tooltip) {
+		this.tooltip = tooltip;
+		getRoot().flagAndUpdate(this);
+		return this;
+	}
+	
+	@NotNull
+	@Override
 	public RectangleGuiElementImpl setColor(@NotNull IodineColor color) {
 		this.color = color;
 		getRoot().flagAndUpdate(this);
@@ -89,6 +106,7 @@ public class RectangleGuiElementImpl extends GuiElementImpl<RectangleGuiElement>
 	public void serializeImpl(@NotNull ResizingByteBuffer buffer) {
 		buffer.putShort(width);
 		buffer.putShort(height);
+		buffer.putString(tooltip);
 		buffer.putByte((byte) color.getRed());
 		buffer.putByte((byte) color.getGreen());
 		buffer.putByte((byte) color.getBlue());

@@ -9,5 +9,6 @@ import hu.trigary.iodine.api.gui.container.GridGuiContainer;
  */
 public interface RectangleGuiElement extends GuiElement<RectangleGuiElement>,
 		GuiWidthSettable<RectangleGuiElement>, GuiHeightSettable<RectangleGuiElement>,
-		GuiColorable<RectangleGuiElement>, GuiClickable<RectangleGuiElement> {
+		GuiTooltipable<RectangleGuiElement>, GuiClickable<RectangleGuiElement>,
+		GuiColorable<RectangleGuiElement> {
 }

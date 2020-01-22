@@ -2,6 +2,7 @@ package hu.trigary.iodine.forge.gui.element;
 
 import hu.trigary.iodine.client.gui.IodineRoot;
 import hu.trigary.iodine.client.gui.element.DiscreteSliderGuiElement;
+import hu.trigary.iodine.forge.gui.IodineGuiScreen;
 import net.minecraft.client.gui.widget.AbstractSlider;
 import org.jetbrains.annotations.NotNull;
 
@@ -34,6 +35,9 @@ public class DiscreteSliderGuiElementImpl extends DiscreteSliderGuiElement {
 	@Override
 	protected void drawImpl(int width, int height, int positionX, int positionY, int mouseX, int mouseY, float partialTicks) {
 		widget.render(mouseX, mouseY, partialTicks);
+		if (widget.isHovered()) {
+			IodineGuiScreen.renderTooltip(mouseX, mouseY, tooltip);
+		}
 	}
 	
 	

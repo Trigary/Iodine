@@ -1,5 +1,6 @@
 package hu.trigary.iodine.client.gui.element;
 
+import hu.trigary.iodine.backend.BufferUtils;
 import hu.trigary.iodine.client.gui.IodineRoot;
 import hu.trigary.iodine.client.gui.element.base.GuiElement;
 import hu.trigary.iodine.client.IntPair;
@@ -14,6 +15,7 @@ import java.util.function.Consumer;
 public abstract class RectangleGuiElement extends GuiElement {
 	protected int width;
 	protected int height;
+	protected String tooltip;
 	protected int color;
 	
 	/**
@@ -32,6 +34,7 @@ public abstract class RectangleGuiElement extends GuiElement {
 	protected final void deserializeImpl(@NotNull ByteBuffer buffer) {
 		width = buffer.getShort();
 		height = buffer.getShort();
+		tooltip = BufferUtils.deserializeString(buffer);
 		color = (0xFF << 24) | ((buffer.get() & 0xFF) << 16) | ((buffer.get() & 0xFF) << 8) | (buffer.get() & 0xFF);
 	}
 	

@@ -7,7 +7,8 @@ import hu.trigary.iodine.api.gui.element.base.*;
  * Only the width or the height is customizable (not both) depending on the orientation.
  * The non-configurable dimension's getter returns 0.
  */
-public interface ProgressBarGuiElement extends GuiElement<ProgressBarGuiElement>, GuiTextable<ProgressBarGuiElement>,
-		GuiWidthSettable<ProgressBarGuiElement>, GuiHeightSettable<ProgressBarGuiElement>,
-		GuiProgressable<ProgressBarGuiElement>, GuiOrientable<ProgressBarGuiElement> {
+public interface ProgressBarGuiElement extends GuiElement<ProgressBarGuiElement>,
+		GuiOrientable<ProgressBarGuiElement>, GuiWidthSettable<ProgressBarGuiElement>,
+		GuiHeightSettable<ProgressBarGuiElement>, GuiTooltipable<ProgressBarGuiElement>,
+		GuiTextable<ProgressBarGuiElement>, GuiProgressable<ProgressBarGuiElement> {
 }

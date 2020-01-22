@@ -12,9 +12,10 @@ import org.jetbrains.annotations.Nullable;
  * Only the width or the height is customizable (not both) depending on the orientation.
  * The non-configurable dimension's getter returns 0.
  */
-public interface DiscreteSliderGuiElement extends GuiElement<DiscreteSliderGuiElement>, GuiOrientable<DiscreteSliderGuiElement>,
-		GuiWidthSettable<DiscreteSliderGuiElement>, GuiHeightSettable<DiscreteSliderGuiElement>,
-		GuiTextable<DiscreteSliderGuiElement>, GuiEditable<DiscreteSliderGuiElement> {
+public interface DiscreteSliderGuiElement extends GuiElement<DiscreteSliderGuiElement>,
+		GuiOrientable<DiscreteSliderGuiElement>, GuiWidthSettable<DiscreteSliderGuiElement>,
+		GuiHeightSettable<DiscreteSliderGuiElement>, GuiEditable<DiscreteSliderGuiElement>,
+		GuiTooltipable<DiscreteSliderGuiElement>, GuiTextable<DiscreteSliderGuiElement> {
 	/**
 	 * Gets the current minimum progress of this element.
 	 *

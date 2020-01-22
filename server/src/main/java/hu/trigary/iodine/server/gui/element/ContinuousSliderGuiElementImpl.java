@@ -17,10 +17,11 @@ import java.nio.ByteBuffer;
  * The implementation of {@link ContinuousSliderGuiElement}.
  */
 public class ContinuousSliderGuiElementImpl extends GuiElementImpl<ContinuousSliderGuiElement> implements ContinuousSliderGuiElement {
+	private boolean verticalOrientation;
 	private short width = 150;
 	private short height;
 	private boolean editable = true;
-	private boolean verticalOrientation;
+	private String tooltip = "";
 	private String text = "";
 	private float progress;
 	private ProgressedAction progressedAction;
@@ -38,6 +39,12 @@ public class ContinuousSliderGuiElementImpl extends GuiElementImpl<ContinuousSli
 	
 	
 	
+	@Contract(pure = true)
+	@Override
+	public boolean isVerticalOrientation() {
+		return verticalOrientation;
+	}
+	
 	@Override
 	public int getWidth() {
 		return width;
@@ -54,10 +61,11 @@ public class ContinuousSliderGuiElementImpl extends GuiElementImpl<ContinuousSli
 		return editable;
 	}
 	
+	@NotNull
 	@Contract(pure = true)
 	@Override
-	public boolean isVerticalOrientation() {
-		return verticalOrientation;
+	public String getTooltip() {
+		return tooltip;
 	}
 	
 	@NotNull
@@ -74,6 +82,22 @@ public class ContinuousSliderGuiElementImpl extends GuiElementImpl<ContinuousSli
 	}
 	
 	
+	
+	@NotNull
+	@Override
+	public ContinuousSliderGuiElementImpl setOrientation(boolean vertical) {
+		if (verticalOrientation == vertical) {
+			return this;
+		}
+		
+		short temp = width;
+		//noinspection SuspiciousNameCombination
+		width = height;
+		height = temp;
+		verticalOrientation = vertical;
+		getRoot().flagAndUpdate(this);
+		return this;
+	}
 	
 	@NotNull
 	@Override
@@ -103,16 +127,8 @@ public class ContinuousSliderGuiElementImpl extends GuiElementImpl<ContinuousSli
 	
 	@NotNull
 	@Override
-	public ContinuousSliderGuiElementImpl setOrientation(boolean vertical) {
-		if (verticalOrientation == vertical) {
-			return this;
-		}
-		
-		short temp = width;
-		//noinspection SuspiciousNameCombination
-		width = height;
-		height = temp;
-		verticalOrientation = vertical;
+	public ContinuousSliderGuiElementImpl setTooltip(@NotNull String tooltip) {
+		this.tooltip = tooltip;
 		getRoot().flagAndUpdate(this);
 		return this;
 	}
@@ -148,6 +164,7 @@ public class ContinuousSliderGuiElementImpl extends GuiElementImpl<ContinuousSli
 		buffer.putBool(verticalOrientation);
 		buffer.putShort(verticalOrientation ? height : width);
 		buffer.putBool(editable);
+		buffer.putString(tooltip);
 		buffer.putString(text);
 		buffer.putFloat(progress);
 	}

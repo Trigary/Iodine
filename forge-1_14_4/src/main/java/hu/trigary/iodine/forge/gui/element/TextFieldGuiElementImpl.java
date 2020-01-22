@@ -2,6 +2,7 @@ package hu.trigary.iodine.forge.gui.element;
 
 import hu.trigary.iodine.client.gui.IodineRoot;
 import hu.trigary.iodine.client.gui.element.TextFieldGuiElement;
+import hu.trigary.iodine.forge.gui.IodineGuiScreen;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import org.jetbrains.annotations.NotNull;
@@ -11,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public class TextFieldGuiElementImpl extends TextFieldGuiElement {
 	private TextFieldWidget widget;
-
+	
 	/**
 	 * Creates a new instance.
 	 *
@@ -37,6 +38,9 @@ public class TextFieldGuiElementImpl extends TextFieldGuiElement {
 	@Override
 	protected void drawImpl(int width, int height, int positionX, int positionY, int mouseX, int mouseY, float partialTicks) {
 		widget.render(mouseX, mouseY, partialTicks);
+		if (widget.isHovered()) {
+			IodineGuiScreen.renderTooltip(mouseX, mouseY, tooltip);
+		}
 	}
 	
 	

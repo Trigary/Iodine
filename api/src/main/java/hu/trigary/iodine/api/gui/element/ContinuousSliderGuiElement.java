@@ -11,9 +11,10 @@ import org.jetbrains.annotations.Nullable;
  * The non-configurable dimension's getter returns 0.
  */
 public interface ContinuousSliderGuiElement extends GuiElement<ContinuousSliderGuiElement>,
-		GuiWidthSettable<ContinuousSliderGuiElement>, GuiHeightSettable<ContinuousSliderGuiElement>,
-		GuiTextable<ContinuousSliderGuiElement>, GuiProgressable<ContinuousSliderGuiElement>,
-		GuiOrientable<ContinuousSliderGuiElement>, GuiEditable<ContinuousSliderGuiElement> {
+		GuiOrientable<ContinuousSliderGuiElement>, GuiWidthSettable<ContinuousSliderGuiElement>,
+		GuiHeightSettable<ContinuousSliderGuiElement>, GuiEditable<ContinuousSliderGuiElement>,
+		GuiTooltipable<ContinuousSliderGuiElement>, GuiTextable<ContinuousSliderGuiElement>,
+		GuiProgressable<ContinuousSliderGuiElement> {
 	/**
 	 * Sets the action that should be executed when
 	 * this GUI element's progress is changed by a player.

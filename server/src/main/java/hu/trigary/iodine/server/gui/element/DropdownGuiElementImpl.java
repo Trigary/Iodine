@@ -21,6 +21,7 @@ public class DropdownGuiElementImpl extends GuiElementImpl<DropdownGuiElement> i
 	private final List<String> choices = new ArrayList<>(Collections.singletonList(""));
 	private short width = 100;
 	private boolean editable = true;
+	private String tooltip = "";
 	private short selected;
 	private ChosenAction chosenAction;
 	
@@ -51,6 +52,13 @@ public class DropdownGuiElementImpl extends GuiElementImpl<DropdownGuiElement> i
 	@NotNull
 	@Contract(pure = true)
 	@Override
+	public String getTooltip() {
+		return tooltip;
+	}
+	
+	@NotNull
+	@Contract(pure = true)
+	@Override
 	public List<String> getChoices() {
 		return Collections.unmodifiableList(choices);
 	}
@@ -76,6 +84,14 @@ public class DropdownGuiElementImpl extends GuiElementImpl<DropdownGuiElement> i
 	@Override
 	public DropdownGuiElementImpl setEditable(boolean editable) {
 		this.editable = editable;
+		getRoot().flagAndUpdate(this);
+		return this;
+	}
+	
+	@NotNull
+	@Override
+	public DropdownGuiElementImpl setTooltip(@NotNull String tooltip) {
+		this.tooltip = tooltip;
 		getRoot().flagAndUpdate(this);
 		return this;
 	}
@@ -114,6 +130,7 @@ public class DropdownGuiElementImpl extends GuiElementImpl<DropdownGuiElement> i
 	public void serializeImpl(@NotNull ResizingByteBuffer buffer) {
 		buffer.putShort(width);
 		buffer.putBool(editable);
+		buffer.putString(tooltip);
 		buffer.putShort((short) choices.size());
 		for (String choice : choices) {
 			buffer.putString(choice);

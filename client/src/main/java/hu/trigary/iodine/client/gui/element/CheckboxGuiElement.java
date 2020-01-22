@@ -15,6 +15,7 @@ import java.util.function.Consumer;
 public abstract class CheckboxGuiElement extends GuiElement {
 	protected static final int SIZE = 20;
 	protected boolean editable;
+	protected String tooltip;
 	protected boolean checked;
 	
 	/**
@@ -32,6 +33,7 @@ public abstract class CheckboxGuiElement extends GuiElement {
 	@Override
 	protected final void deserializeImpl(@NotNull ByteBuffer buffer) {
 		editable = BufferUtils.deserializeBoolean(buffer);
+		tooltip = BufferUtils.deserializeString(buffer);
 		checked = BufferUtils.deserializeBoolean(buffer);
 	}
 	

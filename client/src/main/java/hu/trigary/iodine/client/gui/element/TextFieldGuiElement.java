@@ -17,6 +17,7 @@ public abstract class TextFieldGuiElement extends GuiElement {
 	protected int width;
 	protected int height;
 	protected boolean editable;
+	protected String tooltip;
 	protected String text;
 	protected Pattern regex;
 	protected int maxLength;
@@ -38,6 +39,7 @@ public abstract class TextFieldGuiElement extends GuiElement {
 		width = buffer.getShort();
 		height = buffer.getShort();
 		editable = BufferUtils.deserializeBoolean(buffer);
+		tooltip = BufferUtils.deserializeString(buffer);
 		text = BufferUtils.deserializeString(buffer);
 		String regexString = BufferUtils.deserializeString(buffer);
 		regex = regexString.isEmpty() ? null : Pattern.compile(regexString);

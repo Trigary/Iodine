@@ -19,6 +19,7 @@ import java.util.List;
  */
 public class RadioButtonGuiElementImpl extends GuiElementImpl<RadioButtonGuiElement> implements RadioButtonGuiElement {
 	private boolean editable = true;
+	private String tooltip = "";
 	private boolean checked;
 	private RadioButtonGroupData groupData;
 	private UncheckedAction uncheckedAction;
@@ -37,6 +38,13 @@ public class RadioButtonGuiElementImpl extends GuiElementImpl<RadioButtonGuiElem
 	}
 	
 	
+	
+	@NotNull
+	@Contract(pure = true)
+	@Override
+	public String getTooltip() {
+		return tooltip;
+	}
 	
 	@Contract(pure = true)
 	@Override
@@ -62,6 +70,14 @@ public class RadioButtonGuiElementImpl extends GuiElementImpl<RadioButtonGuiElem
 	@Override
 	public RadioButtonGuiElementImpl setEditable(boolean editable) {
 		this.editable = editable;
+		getRoot().flagAndUpdate(this);
+		return this;
+	}
+	
+	@NotNull
+	@Override
+	public RadioButtonGuiElementImpl setTooltip(@NotNull String tooltip) {
+		this.tooltip = tooltip;
 		getRoot().flagAndUpdate(this);
 		return this;
 	}
@@ -109,8 +125,6 @@ public class RadioButtonGuiElementImpl extends GuiElementImpl<RadioButtonGuiElem
 		return this;
 	}
 	
-	
-	
 	@NotNull
 	@Override
 	public RadioButtonGuiElementImpl onUnchecked(@Nullable UncheckedAction action) {
@@ -130,6 +144,7 @@ public class RadioButtonGuiElementImpl extends GuiElementImpl<RadioButtonGuiElem
 	@Override
 	public void serializeImpl(@NotNull ResizingByteBuffer buffer) {
 		buffer.putBool(editable);
+		buffer.putString(tooltip);
 		buffer.putBool(checked);
 	}
 	

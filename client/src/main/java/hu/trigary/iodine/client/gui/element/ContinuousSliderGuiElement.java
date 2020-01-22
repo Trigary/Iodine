@@ -14,10 +14,11 @@ import java.util.function.Consumer;
  */
 public abstract class ContinuousSliderGuiElement extends GuiElement {
 	private static final int SIZE = 20;
+	protected boolean verticalOrientation;
 	protected int width;
 	protected int height;
 	protected boolean editable;
-	protected boolean verticalOrientation;
+	protected String tooltip;
 	protected String text;
 	protected float progress;
 	
@@ -39,6 +40,7 @@ public abstract class ContinuousSliderGuiElement extends GuiElement {
 		width = verticalOrientation ? SIZE : buffer.getShort();
 		height = verticalOrientation ? buffer.getShort() : SIZE;
 		editable = BufferUtils.deserializeBoolean(buffer);
+		tooltip = BufferUtils.deserializeString(buffer);
 		text = BufferUtils.deserializeString(buffer);
 		progress = buffer.getFloat();
 	}

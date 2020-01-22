@@ -18,16 +18,16 @@ public class ImageGuiElementImpl extends ImageGuiElement {
 	public ImageGuiElementImpl(@NotNull IodineRoot root, int id) {
 		super(root, id);
 	}
-
-
-
+	
+	
+	
 	@Override
 	protected void updateImpl(int width, int height, int positionX, int positionY) {
 		throw new NotImplementedException("");
 	}
-
+	
 	@Override
 	protected void drawImpl(int width, int height, int positionX, int positionY, int mouseX, int mouseY, float partialTicks) {
-
+	
 	}
 }

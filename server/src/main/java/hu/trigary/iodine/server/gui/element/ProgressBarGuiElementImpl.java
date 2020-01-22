@@ -16,9 +16,10 @@ import java.nio.ByteBuffer;
  * The implementation of {@link ProgressBarGuiElement}.
  */
 public class ProgressBarGuiElementImpl extends GuiElementImpl<ProgressBarGuiElement> implements ProgressBarGuiElement {
+	private boolean verticalOrientation;
 	private short width = 150;
 	private short height;
-	private boolean verticalOrientation;
+	private String tooltip = "";
 	private String text = "";
 	private float progress;
 	
@@ -35,6 +36,12 @@ public class ProgressBarGuiElementImpl extends GuiElementImpl<ProgressBarGuiElem
 	
 	
 	
+	@Contract(pure = true)
+	@Override
+	public boolean isVerticalOrientation() {
+		return verticalOrientation;
+	}
+	
 	@Override
 	public int getWidth() {
 		return width;
@@ -45,10 +52,11 @@ public class ProgressBarGuiElementImpl extends GuiElementImpl<ProgressBarGuiElem
 		return height;
 	}
 	
+	@NotNull
 	@Contract(pure = true)
 	@Override
-	public boolean isVerticalOrientation() {
-		return verticalOrientation;
+	public String getTooltip() {
+		return tooltip;
 	}
 	
 	@NotNull
@@ -65,6 +73,22 @@ public class ProgressBarGuiElementImpl extends GuiElementImpl<ProgressBarGuiElem
 	}
 	
 	
+	
+	@NotNull
+	@Override
+	public ProgressBarGuiElementImpl setOrientation(boolean vertical) {
+		if (verticalOrientation == vertical) {
+			return this;
+		}
+		
+		short temp = width;
+		//noinspection SuspiciousNameCombination
+		width = height;
+		height = temp;
+		verticalOrientation = vertical;
+		getRoot().flagAndUpdate(this);
+		return this;
+	}
 	
 	@NotNull
 	@Override
@@ -86,16 +110,8 @@ public class ProgressBarGuiElementImpl extends GuiElementImpl<ProgressBarGuiElem
 	
 	@NotNull
 	@Override
-	public ProgressBarGuiElementImpl setOrientation(boolean vertical) {
-		if (verticalOrientation == vertical) {
-			return this;
-		}
-		
-		short temp = width;
-		//noinspection SuspiciousNameCombination
-		width = height;
-		height = temp;
-		verticalOrientation = vertical;
+	public ProgressBarGuiElementImpl setTooltip(@NotNull String tooltip) {
+		this.tooltip = tooltip;
 		getRoot().flagAndUpdate(this);
 		return this;
 	}
@@ -123,6 +139,7 @@ public class ProgressBarGuiElementImpl extends GuiElementImpl<ProgressBarGuiElem
 	public void serializeImpl(@NotNull ResizingByteBuffer buffer) {
 		buffer.putBool(verticalOrientation);
 		buffer.putShort(verticalOrientation ? height : width);
+		buffer.putString(tooltip);
 		buffer.putString(text);
 		buffer.putFloat(progress);
 	}

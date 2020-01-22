@@ -22,6 +22,7 @@ public class TextFieldGuiElementImpl extends GuiElementImpl<TextFieldGuiElement>
 	private short width = 200;
 	private short height = 20;
 	private boolean editable = true;
+	private String tooltip = "";
 	private String text = "";
 	private String regex = "";
 	private int maxLength = 32;
@@ -55,6 +56,13 @@ public class TextFieldGuiElementImpl extends GuiElementImpl<TextFieldGuiElement>
 	@Override
 	public boolean isEditable() {
 		return editable;
+	}
+	
+	@NotNull
+	@Contract(pure = true)
+	@Override
+	public String getTooltip() {
+		return tooltip;
 	}
 	
 	@NotNull
@@ -105,6 +113,14 @@ public class TextFieldGuiElementImpl extends GuiElementImpl<TextFieldGuiElement>
 	
 	@NotNull
 	@Override
+	public TextFieldGuiElementImpl setTooltip(@NotNull String tooltip) {
+		this.tooltip = tooltip;
+		getRoot().flagAndUpdate(this);
+		return this;
+	}
+	
+	@NotNull
+	@Override
 	public TextFieldGuiElementImpl setText(@NotNull String text) {
 		Validate.isTrue(validate(compiledRegex, text), "The text must match the regex");
 		this.text = text;
@@ -147,6 +163,7 @@ public class TextFieldGuiElementImpl extends GuiElementImpl<TextFieldGuiElement>
 		buffer.putShort(width);
 		buffer.putShort(height);
 		buffer.putBool(editable);
+		buffer.putString(tooltip);
 		buffer.putString(text);
 		buffer.putString(regex);
 		buffer.putByte((byte) maxLength);

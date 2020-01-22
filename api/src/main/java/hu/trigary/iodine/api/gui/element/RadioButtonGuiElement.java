@@ -3,6 +3,7 @@ package hu.trigary.iodine.api.gui.element;
 import hu.trigary.iodine.api.gui.element.base.GuiCheckable;
 import hu.trigary.iodine.api.gui.element.base.GuiEditable;
 import hu.trigary.iodine.api.gui.element.base.GuiElement;
+import hu.trigary.iodine.api.gui.element.base.GuiTooltipable;
 import hu.trigary.iodine.api.player.IodinePlayer;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -13,7 +14,8 @@ import org.jetbrains.annotations.Nullable;
  * Radio buttons are linked together by their common group-ID, which is '0' by default.
  */
 public interface RadioButtonGuiElement extends GuiElement<RadioButtonGuiElement>,
-		GuiCheckable<RadioButtonGuiElement>, GuiEditable<RadioButtonGuiElement> {
+		GuiEditable<RadioButtonGuiElement>, GuiTooltipable<RadioButtonGuiElement>,
+		GuiCheckable<RadioButtonGuiElement> {
 	/**
 	 * Gets this element's group-ID.
 	 *
@@ -46,6 +48,7 @@ public interface RadioButtonGuiElement extends GuiElement<RadioButtonGuiElement>
 	 */
 	@NotNull
 	RadioButtonGuiElement onUnchecked(@Nullable UncheckedAction action);
+	
 	/**
 	 * Sets the action that should be executed when
 	 * this GUI element is checked by a player.

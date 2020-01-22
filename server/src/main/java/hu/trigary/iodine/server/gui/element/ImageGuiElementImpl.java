@@ -19,6 +19,7 @@ import java.nio.ByteBuffer;
 public class ImageGuiElementImpl extends GuiElementImpl<ImageGuiElement> implements ImageGuiElement {
 	private short width = 100;
 	private short height = 100;
+	private String tooltip = "";
 	private byte[] image;
 	private ClickedAction<ImageGuiElement> clickedAction;
 	
@@ -43,6 +44,13 @@ public class ImageGuiElementImpl extends GuiElementImpl<ImageGuiElement> impleme
 	@Override
 	public int getHeight() {
 		return height;
+	}
+	
+	@NotNull
+	@Contract(pure = true)
+	@Override
+	public String getTooltip() {
+		return tooltip;
 	}
 	
 	@NotNull
@@ -73,6 +81,14 @@ public class ImageGuiElementImpl extends GuiElementImpl<ImageGuiElement> impleme
 	
 	@NotNull
 	@Override
+	public ImageGuiElement setTooltip(@NotNull String tooltip) {
+		this.tooltip = tooltip;
+		getRoot().flagAndUpdate(this);
+		return this;
+	}
+	
+	@NotNull
+	@Override
 	public ImageGuiElementImpl setImage(@NotNull byte[] image) {
 		//noinspection AssignmentOrReturnOfFieldWithMutableType
 		this.image = image;
@@ -93,6 +109,7 @@ public class ImageGuiElementImpl extends GuiElementImpl<ImageGuiElement> impleme
 	public void serializeImpl(@NotNull ResizingByteBuffer buffer) {
 		buffer.putShort(width);
 		buffer.putShort(height);
+		buffer.putString(tooltip);
 		buffer.putInt(image.length);
 		buffer.putBytes(image);
 		throw new NotImplementedException("");
