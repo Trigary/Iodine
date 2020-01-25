@@ -16,5 +16,5 @@ displayURL="https://github.com/Trigary/Iodine" #optional
 authors="Trigary" #optional
 # The description text for the mod (multi line!) (#mandatory)
 description='''
-//TODO long mod description
+A Minecraft mod - server plugin pair that adds custom GUIs and overlays. No more inventory and chat menus!
 '''

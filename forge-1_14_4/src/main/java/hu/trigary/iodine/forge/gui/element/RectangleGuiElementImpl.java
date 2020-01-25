@@ -35,13 +35,7 @@ public class RectangleGuiElementImpl extends RectangleGuiElement {
 	
 	@Override
 	protected void drawImpl(int width, int height, int positionX, int positionY, int mouseX, int mouseY, float partialTicks) {
-		//TODO are these OpenGL calls necessary?
 		GlStateManager.color4f(1, 1, 1, 1);
-		GlStateManager.enableBlend();
-		GlStateManager.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA,
-				GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
-		GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-		
 		AbstractGui.fill(positionX, positionY, positionX + width, positionY + height, color);
 		if (isInside(mouseX, mouseY)) {
 			IodineGuiScreen.renderTooltip(mouseX, mouseY, tooltip);

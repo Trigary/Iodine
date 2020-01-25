@@ -7,12 +7,10 @@ buildscript {
 
 	dependencies {
 		classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.+', changing: true
-		classpath 'com.github.jengelman.gradle.plugins:shadow:4.0.2'
 	}
 }
 
 apply plugin: 'net.minecraftforge.gradle'
-apply plugin: 'com.github.johnrengelman.shadow'
 
 version = '1.0.0' //The version must be the same as the other iodine projects' version
 group = 'hu.trigary.iodine'
@@ -43,6 +41,11 @@ minecraft {
 	}
 }
 
+configurations {
+	shade
+	compile.extendsFrom shade
+}
+
 repositories {
 	mavenCentral()
 	mavenLocal()
@@ -50,10 +53,15 @@ repositories {
 
 dependencies {
 	minecraft 'net.minecraftforge:forge:1.14.4-28.1.0'
-	implementation "hu.trigary.iodine:client:${version}"
+	shade "hu.trigary.iodine:client:${version}"
 	compileOnly 'org.jetbrains:annotations:17.0.0'
 }
 
-shadowJar { //TODO is the plugin necessary? if not, set the name somewhere else
+jar {
+	configurations.shade.each { dep ->
+		from(project.zipTree(dep)) {
+			exclude 'META-INF', 'META-INF/**'
+		}
+	}
 	archiveName = "Iodine-1_14_4-${project.version}.jar"
 }
