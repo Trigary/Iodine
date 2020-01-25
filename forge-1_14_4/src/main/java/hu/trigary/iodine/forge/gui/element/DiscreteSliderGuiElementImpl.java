@@ -29,7 +29,6 @@ public class DiscreteSliderGuiElementImpl extends DiscreteSliderGuiElement {
 		widget = new Slider(positionX, positionY, width, height, progress, maxProgress);
 		widget.active = editable;
 		widget.setMessage(text);
-		//TODO verticalOrientation
 	}
 	
 	@Override
@@ -63,12 +62,12 @@ public class DiscreteSliderGuiElementImpl extends DiscreteSliderGuiElement {
 	private static class Slider extends AbstractSlider {
 		private final short maxProgress;
 		
-		protected Slider(int x, int y, int width, int height, short progress, short maxProgress) {
+		Slider(int x, int y, int width, int height, short progress, short maxProgress) {
 			super(x, y, width, height, (double) progress / maxProgress);
 			this.maxProgress = maxProgress;
 		}
 		
-		public short getProgress() {
+		short getProgress() {
 			return (short) Math.round(value * maxProgress);
 		}
 		

@@ -12,12 +12,11 @@ import java.nio.ByteBuffer;
  * The implementation of {@link hu.trigary.iodine.backend.GuiElementType#PROGRESS_BAR}.
  */
 public abstract class ProgressBarGuiElement extends GuiElement {
-	private static final int SIZE = 20;
+	private static final int SIZE = 10;
 	protected boolean verticalOrientation;
 	protected int width;
 	protected int height;
 	protected String tooltip;
-	protected String text;
 	protected float progress;
 	
 	/**
@@ -38,7 +37,6 @@ public abstract class ProgressBarGuiElement extends GuiElement {
 		width = verticalOrientation ? SIZE : buffer.getShort();
 		height = verticalOrientation ? buffer.getShort() : SIZE;
 		tooltip = BufferUtils.deserializeString(buffer);
-		text = BufferUtils.deserializeString(buffer);
 		progress = buffer.getFloat();
 	}
 	

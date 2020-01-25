@@ -2,12 +2,14 @@ package hu.trigary.iodine.bukkit;
 
 import hu.trigary.iodine.api.IodineApi;
 import hu.trigary.iodine.api.gui.GuiElements;
-import hu.trigary.iodine.api.gui.IodineColor;
+import hu.trigary.iodine.api.gui.IodineGui;
 import hu.trigary.iodine.api.gui.IodineRoot;
+import hu.trigary.iodine.api.gui.element.ProgressBarGuiElement;
 import hu.trigary.iodine.api.player.IodinePlayer;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -15,6 +17,11 @@ import org.jetbrains.annotations.NotNull;
  */
 public class TestCommandListener implements Listener {
 	private final IodineApi api = IodineApi.getInstance();
+	private final IodineBukkitPlugin plugin;
+	
+	public TestCommandListener(@NotNull IodineBukkitPlugin plugin) {
+		this.plugin = plugin;
+	}
 	
 	
 	
@@ -31,35 +38,34 @@ public class TestCommandListener implements Listener {
 			return;
 		}
 		
-		api.createGui().addElement(GuiElements.CONTAINER_LINEAR, c -> {
+		Object id = new Object();
+		IodineGui root = api.createGui().addElement(GuiElements.CONTAINER_LINEAR, c -> {
 			c.setOrientation(true);
 			IodineRoot<?> gui = c.getRoot();
 			
 			gui.addElement(GuiElements.BUTTON, e -> c.makeChildLast(e)
+					.setText("Sample button")
+					.setPaddingBottom(5));
+			
+			gui.addElement(id, GuiElements.PROGRESS_BAR, e -> c.makeChildLast(e)
 					.setTooltip("Some tooltip")
-					.setText("First"));
-			
-			gui.addElement(GuiElements.CONTAINER_GRID, grid -> {
-				c.makeChildLast(grid);
-				grid.setPaddingBottom(50);
-				grid.setGridSize(3, 3);
-				for (int x = 0; x < 3; x++) {
-					for (int y = 0; y < 3; y++) {
-						int finalX = x;
-						int finalY = y;
-						gui.addElement(GuiElements.RECTANGLE, e -> grid.makeChild(e, finalX, finalY)
-								.setColor((finalX + finalY) % 2 == 0 ? IodineColor.BLACK : IodineColor.DARK_RED));
-					}
-				}
-			});
-			
-			gui.addElement(GuiElements.BUTTON, e -> c.makeChildLast(e)
-					.setText("Last"));
-		})
-				.addElement(GuiElements.BUTTON, 5, 30, e -> e.setText("P-1").setDrawPriority(-1).setWidth(0))
-				.addElement(GuiElements.BUTTON, 10, 25, e -> e.setText("P+1").setDrawPriority(1).setWidth(0))
-				.addElement(GuiElements.BUTTON, 40, 25, e -> e.setText("P-1").setDrawPriority(-1).setWidth(0))
-				.onClosed((gui, p) -> p.sendMessage("You closed the GUI"))
-				.openFor(player);
+					.setWidth(100)
+					.setOrientation(true));
+		});
+		
+		BukkitRunnable task = new BukkitRunnable() {
+			@Override
+			public void run() {
+				ProgressBarGuiElement element = (ProgressBarGuiElement) root.getElement(id);
+				float newProgress = element.getProgress() + 0.01f;
+				element.setProgress(newProgress > 1f ? 0 : newProgress);
+			}
+		};
+		task.runTaskTimer(plugin, 1, 1);
+		
+		root.onClosed((gui, p) -> {
+			p.sendMessage("You closed the GUI");
+			task.cancel();
+		}).openFor(player);
 	}
 }

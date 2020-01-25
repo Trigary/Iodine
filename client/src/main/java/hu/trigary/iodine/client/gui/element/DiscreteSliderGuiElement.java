@@ -14,7 +14,6 @@ import java.util.function.Consumer;
  */
 public abstract class DiscreteSliderGuiElement extends GuiElement {
 	private static final int SIZE = 20;
-	protected boolean verticalOrientation;
 	protected int width;
 	protected int height;
 	protected boolean editable;
@@ -37,9 +36,8 @@ public abstract class DiscreteSliderGuiElement extends GuiElement {
 	
 	@Override
 	protected final void deserializeImpl(@NotNull ByteBuffer buffer) {
-		verticalOrientation = BufferUtils.deserializeBoolean(buffer);
-		width = verticalOrientation ? SIZE : buffer.getShort();
-		height = verticalOrientation ? buffer.getShort() : SIZE;
+		width = buffer.getShort();
+		height = SIZE;
 		editable = BufferUtils.deserializeBoolean(buffer);
 		tooltip = BufferUtils.deserializeString(buffer);
 		text = BufferUtils.deserializeString(buffer);

@@ -20,17 +20,18 @@ public class IodineBukkitPlugin extends JavaPlugin implements Listener {
 	@Override
 	public void onEnable() {
 		saveDefaultConfig();
-		
 		plugin = new IodinePluginImpl(this);
 		plugin.initialize(getLogger(), getConfig().getBoolean("debug-log"), getDescription().getVersion());
 		plugin.onEnabled(new NetworkManagerImpl(plugin), new PlayerManagerImpl(plugin),
 				Bukkit.getOnlinePlayers().stream().map(Player::getUniqueId));
+		Bukkit.getPluginManager().registerEvents(this, this);
 		
-		Bukkit.getPluginManager().registerEvents(new TestCommandListener(), this);
+		Bukkit.getPluginManager().registerEvents(new TestCommandListener(this), this);
 	}
 	
 	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
 	private void onDisabled(@NotNull PluginDisableEvent event) {
+		//Plugin messages can still be sent here
 		if (event.getPlugin() == this) {
 			plugin.onDisabled();
 		}

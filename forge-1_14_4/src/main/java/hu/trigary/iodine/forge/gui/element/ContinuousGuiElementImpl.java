@@ -29,7 +29,6 @@ public class ContinuousGuiElementImpl extends ContinuousSliderGuiElement {
 		widget = new Slider(positionX, positionY, width, height, progress);
 		widget.active = editable;
 		widget.setMessage(text);
-		//TODO verticalOrientation
 	}
 	
 	@Override
@@ -61,11 +60,11 @@ public class ContinuousGuiElementImpl extends ContinuousSliderGuiElement {
 	
 	
 	private static class Slider extends AbstractSlider {
-		protected Slider(int x, int y, int width, int height, float progress) {
+		Slider(int x, int y, int width, int height, float progress) {
 			super(x, y, width, height, progress);
 		}
 		
-		public float getProgress() {
+		float getProgress() {
 			return (float) value;
 		}
 		

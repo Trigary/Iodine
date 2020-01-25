@@ -9,12 +9,9 @@ import org.jetbrains.annotations.Nullable;
 /**
  * A GUI element that is a discrete, non-continuous slider, with text on top of it.
  * By default progress, min-progress and max-progress are 0, 0 and 100, respectively.
- * Only the width or the height is customizable (not both) depending on the orientation.
- * The non-configurable dimension's getter returns 0.
  */
 public interface DiscreteSliderGuiElement extends GuiElement<DiscreteSliderGuiElement>,
-		GuiOrientable<DiscreteSliderGuiElement>, GuiWidthSettable<DiscreteSliderGuiElement>,
-		GuiHeightSettable<DiscreteSliderGuiElement>, GuiEditable<DiscreteSliderGuiElement>,
+		GuiWidthSettable<DiscreteSliderGuiElement>, GuiEditable<DiscreteSliderGuiElement>,
 		GuiTooltipable<DiscreteSliderGuiElement>, GuiTextable<DiscreteSliderGuiElement> {
 	/**
 	 * Gets the current minimum progress of this element.

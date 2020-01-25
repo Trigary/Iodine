@@ -7,12 +7,9 @@ import org.jetbrains.annotations.Nullable;
 
 /**
  * A GUI element that is a continuous, non-discrete slider, with text on top of it.
- * Only the width or the height is customizable (not both) depending on the orientation.
- * The non-configurable dimension's getter returns 0.
  */
 public interface ContinuousSliderGuiElement extends GuiElement<ContinuousSliderGuiElement>,
-		GuiOrientable<ContinuousSliderGuiElement>, GuiWidthSettable<ContinuousSliderGuiElement>,
-		GuiHeightSettable<ContinuousSliderGuiElement>, GuiEditable<ContinuousSliderGuiElement>,
+		GuiWidthSettable<ContinuousSliderGuiElement>, GuiEditable<ContinuousSliderGuiElement>,
 		GuiTooltipable<ContinuousSliderGuiElement>, GuiTextable<ContinuousSliderGuiElement>,
 		GuiProgressable<ContinuousSliderGuiElement> {
 	/**

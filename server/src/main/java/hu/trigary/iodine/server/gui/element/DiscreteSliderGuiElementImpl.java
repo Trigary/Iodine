@@ -17,9 +17,7 @@ import java.nio.ByteBuffer;
  * The implementation of {@link DiscreteSliderGuiElement}.
  */
 public class DiscreteSliderGuiElementImpl extends GuiElementImpl<DiscreteSliderGuiElement> implements DiscreteSliderGuiElement {
-	private boolean verticalOrientation;
 	private short width = 150;
-	private short height;
 	private boolean editable = true;
 	private String tooltip = "";
 	private String text = "";
@@ -41,20 +39,9 @@ public class DiscreteSliderGuiElementImpl extends GuiElementImpl<DiscreteSliderG
 	
 	
 	
-	@Contract(pure = true)
-	@Override
-	public boolean isVerticalOrientation() {
-		return verticalOrientation;
-	}
-	
 	@Override
 	public int getWidth() {
 		return width;
-	}
-	
-	@Override
-	public int getHeight() {
-		return height;
 	}
 	
 	@Contract(pure = true)
@@ -99,34 +86,8 @@ public class DiscreteSliderGuiElementImpl extends GuiElementImpl<DiscreteSliderG
 	
 	@NotNull
 	@Override
-	public DiscreteSliderGuiElementImpl setOrientation(boolean vertical) {
-		if (verticalOrientation == vertical) {
-			return this;
-		}
-		
-		short temp = width;
-		//noinspection SuspiciousNameCombination
-		width = height;
-		height = temp;
-		verticalOrientation = vertical;
-		getRoot().flagAndUpdate(this);
-		return this;
-	}
-	
-	@NotNull
-	@Override
 	public DiscreteSliderGuiElementImpl setWidth(int width) {
-		Validate.isTrue(!verticalOrientation, "The width is only configurable in horizontal orientation");
 		this.width = (short) width;
-		getRoot().flagAndUpdate(this);
-		return this;
-	}
-	
-	@NotNull
-	@Override
-	public DiscreteSliderGuiElementImpl setHeight(int height) {
-		Validate.isTrue(verticalOrientation, "The height is only configurable in vertical orientation");
-		this.height = (short) height;
 		getRoot().flagAndUpdate(this);
 		return this;
 	}
@@ -200,8 +161,7 @@ public class DiscreteSliderGuiElementImpl extends GuiElementImpl<DiscreteSliderG
 	
 	@Override
 	public void serializeImpl(@NotNull ResizingByteBuffer buffer) {
-		buffer.putBool(verticalOrientation);
-		buffer.putShort(verticalOrientation ? height : width);
+		buffer.putShort(width);
 		buffer.putBool(editable);
 		buffer.putString(tooltip);
 		buffer.putString(text);

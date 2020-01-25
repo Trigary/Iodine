@@ -13,7 +13,7 @@ import java.util.function.Consumer;
  * The implementation of {@link hu.trigary.iodine.backend.GuiElementType#RADIO_BUTTON}.
  */
 public abstract class RadioButtonGuiElement extends GuiElement {
-	protected static final int SIZE = 11;
+	protected static final int SIZE = 20;
 	protected boolean editable;
 	protected String tooltip;
 	protected boolean checked;

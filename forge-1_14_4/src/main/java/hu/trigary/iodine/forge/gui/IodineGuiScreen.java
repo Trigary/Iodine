@@ -37,7 +37,6 @@ public class IodineGuiScreen extends Screen {
 	
 	/**
 	 * Renders the specified tooltip if it's not an empty {@link String}.
-	 * This is a utility method, it just delegates to {@link Screen#renderTooltip(String, int, int)}.
 	 *
 	 * @param mouseX the mouse's X position
 	 * @param mouseY the mouse's Y position

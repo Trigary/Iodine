@@ -20,7 +20,6 @@ public class ProgressBarGuiElementImpl extends GuiElementImpl<ProgressBarGuiElem
 	private short width = 150;
 	private short height;
 	private String tooltip = "";
-	private String text = "";
 	private float progress;
 	
 	/**
@@ -57,13 +56,6 @@ public class ProgressBarGuiElementImpl extends GuiElementImpl<ProgressBarGuiElem
 	@Override
 	public String getTooltip() {
 		return tooltip;
-	}
-	
-	@NotNull
-	@Contract(pure = true)
-	@Override
-	public String getText() {
-		return text;
 	}
 	
 	@Contract(pure = true)
@@ -118,14 +110,6 @@ public class ProgressBarGuiElementImpl extends GuiElementImpl<ProgressBarGuiElem
 	
 	@NotNull
 	@Override
-	public ProgressBarGuiElementImpl setText(@NotNull String text) {
-		this.text = text;
-		getRoot().flagAndUpdate(this);
-		return this;
-	}
-	
-	@NotNull
-	@Override
 	public ProgressBarGuiElementImpl setProgress(float progress) {
 		Validate.isTrue(progress >= 0 && progress <= 1, "Progress must be at least 0 and at most 1");
 		this.progress = progress;
@@ -140,7 +124,6 @@ public class ProgressBarGuiElementImpl extends GuiElementImpl<ProgressBarGuiElem
 		buffer.putBool(verticalOrientation);
 		buffer.putShort(verticalOrientation ? height : width);
 		buffer.putString(tooltip);
-		buffer.putString(text);
 		buffer.putFloat(progress);
 	}
 	

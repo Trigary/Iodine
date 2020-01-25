@@ -84,8 +84,16 @@ public class RadioButtonGuiElementImpl extends GuiElementImpl<RadioButtonGuiElem
 	
 	@NotNull
 	@Override
-	public RadioButtonGuiElementImpl setChecked(boolean checked) {
-		this.checked = checked;
+	public RadioButtonGuiElementImpl setChecked() {
+		if (checked) {
+			return this;
+		}
+		
+		RadioButtonGuiElementImpl oldChecked = groupData.checked;
+		oldChecked.checked = false;
+		groupData.checked = this;
+		checked = true;
+		getRoot().flagOnly(oldChecked);
 		getRoot().flagAndUpdate(this);
 		return this;
 	}
@@ -150,12 +158,12 @@ public class RadioButtonGuiElementImpl extends GuiElementImpl<RadioButtonGuiElem
 	
 	@Override
 	public void handleChangePacket(@NotNull IodinePlayerBase player, @NotNull ByteBuffer message) {
-		if (!editable || groupData.checked == this) {
+		if (!editable || checked) {
 			return;
 		}
 		
 		RadioButtonGuiElementImpl oldChecked = groupData.checked;
-		groupData.checked.checked = false;
+		oldChecked.checked = false;
 		groupData.checked = this;
 		checked = true;
 		getRoot().flagOnly(oldChecked);

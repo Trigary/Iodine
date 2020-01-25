@@ -1,6 +1,5 @@
 package hu.trigary.iodine.api.gui.element;
 
-import hu.trigary.iodine.api.gui.element.base.GuiCheckable;
 import hu.trigary.iodine.api.gui.element.base.GuiEditable;
 import hu.trigary.iodine.api.gui.element.base.GuiElement;
 import hu.trigary.iodine.api.gui.element.base.GuiTooltipable;
@@ -14,8 +13,15 @@ import org.jetbrains.annotations.Nullable;
  * Radio buttons are linked together by their common group-ID, which is '0' by default.
  */
 public interface RadioButtonGuiElement extends GuiElement<RadioButtonGuiElement>,
-		GuiEditable<RadioButtonGuiElement>, GuiTooltipable<RadioButtonGuiElement>,
-		GuiCheckable<RadioButtonGuiElement> {
+		GuiEditable<RadioButtonGuiElement>, GuiTooltipable<RadioButtonGuiElement> {
+	/**
+	 * Gets whether this element is currently in its checked state.
+	 *
+	 * @return whether this element is checked
+	 */
+	@Contract(pure = true)
+	boolean isChecked();
+	
 	/**
 	 * Gets this element's group-ID.
 	 *
@@ -23,6 +29,16 @@ public interface RadioButtonGuiElement extends GuiElement<RadioButtonGuiElement>
 	 */
 	@Contract(pure = true)
 	int getGroupId();
+	
+	
+	
+	/**
+	 * Makes this element the checked one in its group.
+	 *
+	 * @return the current instance (for chaining)
+	 */
+	@NotNull
+	RadioButtonGuiElement setChecked();
 	
 	/**
 	 * Sets this element's group-ID to the specified ID.
