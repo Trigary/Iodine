@@ -10,14 +10,14 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.IPacket;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.network.*;
+import net.minecraftforge.fml.network.NetworkDirection;
+import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraftforge.fml.network.NetworkRegistry;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
 
-import java.lang.reflect.Method;
 import java.nio.ByteBuffer;
 import java.util.function.Predicate;
-import java.util.function.Supplier;
 
 /**
  * The implementation of {@link NetworkManager}.
@@ -37,7 +37,9 @@ public class NetworkManagerImpl extends NetworkManager {
 		super(mod);
 		this.mod = mod;
 		channelName = new ResourceLocation(PacketType.NETWORK_CHANNEL);
-		createNetwork(channelName).addListener(this::onNetworkEvent);
+		Predicate<String> versionPredicate = NetworkRegistry.ACCEPTVANILLA::equals;
+		NetworkRegistry.newEventChannel(channelName, () -> NetworkRegistry.ACCEPTVANILLA,
+				versionPredicate, versionPredicate).addListener(this::onNetworkEvent);
 	}
 	
 	
@@ -55,20 +57,6 @@ public class NetworkManagerImpl extends NetworkManager {
 		Pair<PacketBuffer, Integer> data = Pair.of(new PacketBuffer(Unpooled.wrappedBuffer(message)), Integer.MIN_VALUE);
 		IPacket<?> packet = NetworkDirection.PLAY_TO_SERVER.buildPacket(data, channelName).getThis();
 		network.sendPacket(packet);
-	}
-	
-	@NotNull
-	private static NetworkInstance createNetwork(@NotNull ResourceLocation channelName) {
-		try {
-			Method method = NetworkRegistry.class.getDeclaredMethod("createInstance", ResourceLocation.class,
-					Supplier.class, Predicate.class, Predicate.class);
-			method.setAccessible(true);
-			Supplier<String> versionSupplier = () -> NetworkRegistry.ACCEPTVANILLA;
-			Predicate<String> versionPredicate = NetworkRegistry.ACCEPTVANILLA::equals;
-			return (NetworkInstance) method.invoke(null, channelName, versionSupplier, versionPredicate, versionPredicate);
-		} catch (ReflectiveOperationException e) {
-			throw new RuntimeException(e);
-		}
 	}
 	
 	private void onNetworkEvent(@NotNull NetworkEvent event) {
