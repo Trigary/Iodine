@@ -23,11 +23,12 @@ public class ImageGuiElementImpl extends ImageGuiElement {
 	
 	@Override
 	protected void updateImpl(int width, int height, int positionX, int positionY) {
+		//length is 0 -> set variable used in drawImpl to null and return
 		throw new NotImplementedException("");
 	}
 	
 	@Override
 	protected void drawImpl(int width, int height, int positionX, int positionY, int mouseX, int mouseY, float partialTicks) {
-	
+		throw new NotImplementedException("");
 	}
 }

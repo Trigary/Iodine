@@ -44,6 +44,8 @@ public class ElementManagerImpl extends ElementManager {
 				return TextFieldGuiElementImpl::new;
 			case TEXT:
 				return TextGuiElementImpl::new;
+			case TEXTURE:
+				return TextureGuiElementImpl::new;
 			default:
 				throw new AssertionError("Invalid GuiElementType: " + type);
 		}

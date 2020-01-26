@@ -20,7 +20,8 @@ public enum GuiElementType {
 	RADIO_BUTTON,
 	RECTANGLE,
 	TEXT_FIELD,
-	TEXT;
+	TEXT,
+	TEXTURE;
 	
 	private static final GuiElementType[] VALUES = values();
 	

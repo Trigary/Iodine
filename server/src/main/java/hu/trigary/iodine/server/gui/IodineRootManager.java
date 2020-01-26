@@ -53,6 +53,7 @@ public final class IodineRootManager {
 		element(RectangleGuiElement.class, RectangleGuiElementImpl::new);
 		element(TextFieldGuiElement.class, TextFieldGuiElementImpl::new);
 		element(TextGuiElement.class, TextGuiElementImpl::new);
+		element(TextureGuiElement.class, TextureGuiElementImpl::new);
 	}
 	
 	

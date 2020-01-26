@@ -2,7 +2,7 @@ package hu.trigary.iodine.forge.gui.element;
 
 import hu.trigary.iodine.client.gui.IodineRoot;
 import hu.trigary.iodine.client.gui.element.CheckboxGuiElement;
-import hu.trigary.iodine.forge.gui.IodineGuiScreen;
+import hu.trigary.iodine.forge.gui.IodineGuiUtils;
 import net.minecraft.client.gui.widget.button.CheckboxButton;
 import org.jetbrains.annotations.NotNull;
 
@@ -39,7 +39,7 @@ public class CheckboxGuiElementImpl extends CheckboxGuiElement {
 	protected void drawImpl(int width, int height, int positionX, int positionY, int mouseX, int mouseY, float partialTicks) {
 		widget.render(mouseX, mouseY, partialTicks);
 		if (widget.isHovered()) {
-			IodineGuiScreen.renderTooltip(mouseX, mouseY, tooltip);
+			IodineGuiUtils.renderTooltip(mouseX, mouseY, tooltip);
 		}
 	}
 	

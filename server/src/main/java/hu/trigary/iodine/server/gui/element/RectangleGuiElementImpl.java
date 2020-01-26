@@ -20,7 +20,7 @@ public class RectangleGuiElementImpl extends GuiElementImpl<RectangleGuiElement>
 	private short width = 10;
 	private short height = 10;
 	private String tooltip = "";
-	private IodineColor color;
+	private IodineColor color = IodineColor.WHITE;
 	private ClickedAction<RectangleGuiElement> clickedAction;
 	
 	/**

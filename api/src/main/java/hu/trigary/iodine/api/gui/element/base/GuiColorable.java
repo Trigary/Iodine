@@ -6,6 +6,7 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Represents a {@link GuiElement} that can be colored.
+ * The default {@link IodineColor} is {@link IodineColor#WHITE}.
  *
  * @param <T> the class implementing this interface
  */

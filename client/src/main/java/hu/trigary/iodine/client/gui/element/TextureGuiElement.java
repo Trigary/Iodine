@@ -1,24 +1,29 @@
 package hu.trigary.iodine.client.gui.element;
 
 import hu.trigary.iodine.backend.BufferUtils;
+import hu.trigary.iodine.client.IntPair;
 import hu.trigary.iodine.client.gui.IodineRoot;
 import hu.trigary.iodine.client.gui.element.base.GuiElement;
-import hu.trigary.iodine.client.IntPair;
 import org.jetbrains.annotations.NotNull;
 
 import java.nio.ByteBuffer;
 import java.util.function.Consumer;
 
 /**
- * The implementation of {@link hu.trigary.iodine.backend.GuiElementType#IMAGE}.
+ * The implementation of {@link hu.trigary.iodine.backend.GuiElementType#TEXTURE}.
  */
-public abstract class ImageGuiElement extends GuiElement {
-	private static final int MAX_IMAGE_LENGTH = 1 << 20;
+public abstract class TextureGuiElement extends GuiElement {
 	protected int width;
 	protected int height;
 	protected String tooltip;
 	protected int resizeMode;
-	protected byte[] image = new byte[0];
+	protected String texture;
+	protected int fileWidth;
+	protected int fileHeight;
+	protected int offsetX;
+	protected int offsetY;
+	protected int textureWidth;
+	protected int textureHeight;
 	
 	/**
 	 * Creates a new instance.
@@ -26,7 +31,7 @@ public abstract class ImageGuiElement extends GuiElement {
 	 * @param root the instance which will contain this element
 	 * @param id the internal ID of this element
 	 */
-	protected ImageGuiElement(@NotNull IodineRoot root, int id) {
+	protected TextureGuiElement(@NotNull IodineRoot root, int id) {
 		super(root, id);
 	}
 	
@@ -38,12 +43,13 @@ public abstract class ImageGuiElement extends GuiElement {
 		height = buffer.getShort();
 		tooltip = BufferUtils.deserializeString(buffer);
 		resizeMode = buffer.get();
-		int length = buffer.getInt();
-		if (length > MAX_IMAGE_LENGTH) {
-			throw new AssertionError("Image mustn't be bigger than 1 MB");
-		}
-		image = new byte[length];
-		buffer.get(image);
+		texture = BufferUtils.deserializeString(buffer);
+		fileWidth = buffer.getShort();
+		fileHeight = buffer.getShort();
+		offsetX = buffer.getShort();
+		offsetY = buffer.getShort();
+		textureWidth = buffer.getShort();
+		textureHeight = buffer.getShort();
 	}
 	
 	@NotNull

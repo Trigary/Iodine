@@ -6,7 +6,7 @@ import hu.trigary.iodine.server.gui.IodineRootImpl;
 import hu.trigary.iodine.server.gui.element.base.GuiElementImpl;
 import hu.trigary.iodine.server.network.ResizingByteBuffer;
 import hu.trigary.iodine.server.player.IodinePlayerBase;
-import org.apache.commons.lang3.NotImplementedException;
+import org.apache.commons.lang3.Validate;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -17,9 +17,11 @@ import java.nio.ByteBuffer;
  * The implementation of {@link ImageGuiElement}.
  */
 public class ImageGuiElementImpl extends GuiElementImpl<ImageGuiElement> implements ImageGuiElement {
+	private static final int MAX_IMAGE_LENGTH = 1 << 20;
 	private short width = 100;
 	private short height = 100;
 	private String tooltip = "";
+	private ResizeMode resizeMode = ResizeMode.STRETCH;
 	private byte[] image;
 	private ClickedAction<ImageGuiElement> clickedAction;
 	
@@ -56,6 +58,13 @@ public class ImageGuiElementImpl extends GuiElementImpl<ImageGuiElement> impleme
 	@NotNull
 	@Contract(pure = true)
 	@Override
+	public ResizeMode getResizeMode() {
+		return resizeMode;
+	}
+	
+	@NotNull
+	@Contract(pure = true)
+	@Override
 	public byte[] getImage() {
 		//noinspection AssignmentOrReturnOfFieldWithMutableType
 		return image;
@@ -65,7 +74,7 @@ public class ImageGuiElementImpl extends GuiElementImpl<ImageGuiElement> impleme
 	
 	@NotNull
 	@Override
-	public ImageGuiElement setWidth(int width) {
+	public ImageGuiElementImpl setWidth(int width) {
 		this.width = (short) width;
 		getRoot().flagAndUpdate(this);
 		return this;
@@ -73,7 +82,7 @@ public class ImageGuiElementImpl extends GuiElementImpl<ImageGuiElement> impleme
 	
 	@NotNull
 	@Override
-	public ImageGuiElement setHeight(int height) {
+	public ImageGuiElementImpl setHeight(int height) {
 		this.height = (short) height;
 		getRoot().flagAndUpdate(this);
 		return this;
@@ -81,7 +90,7 @@ public class ImageGuiElementImpl extends GuiElementImpl<ImageGuiElement> impleme
 	
 	@NotNull
 	@Override
-	public ImageGuiElement setTooltip(@NotNull String tooltip) {
+	public ImageGuiElementImpl setTooltip(@NotNull String tooltip) {
 		this.tooltip = tooltip;
 		getRoot().flagAndUpdate(this);
 		return this;
@@ -89,11 +98,20 @@ public class ImageGuiElementImpl extends GuiElementImpl<ImageGuiElement> impleme
 	
 	@NotNull
 	@Override
+	public ImageGuiElementImpl setResizeMode(@NotNull ResizeMode resizeMode) {
+		this.resizeMode = resizeMode;
+		getRoot().flagAndUpdate(this);
+		return this;
+	}
+	
+	@NotNull
+	@Override
 	public ImageGuiElementImpl setImage(@NotNull byte[] image) {
+		Validate.isTrue(image.length <= MAX_IMAGE_LENGTH, "Image mustn't be bigger than 1 MB");
 		//noinspection AssignmentOrReturnOfFieldWithMutableType
 		this.image = image;
 		getRoot().flagAndUpdate(this);
-		throw new NotImplementedException("");
+		return this;
 	}
 	
 	@NotNull
@@ -110,9 +128,9 @@ public class ImageGuiElementImpl extends GuiElementImpl<ImageGuiElement> impleme
 		buffer.putShort(width);
 		buffer.putShort(height);
 		buffer.putString(tooltip);
+		buffer.putByte((byte) resizeMode.ordinal());
 		buffer.putInt(image.length);
 		buffer.putBytes(image);
-		throw new NotImplementedException("");
 	}
 	
 	@Override

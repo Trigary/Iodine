@@ -6,6 +6,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Represents a {@link GuiElement} that contains a continuous, non-discrete bar.
  * Elements have a minimum progress of 0 and a maximum progress of 1 (both inclusive).
+ * The progress is 0 by default.
  *
  * @param <T> the class implementing this interface
  */

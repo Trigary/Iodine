@@ -6,10 +6,12 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * A GUI element that displays an image and can be clicked.
+ * The image mustn't be bigger than 1 MB (2^20 bytes).
  */
 public interface ImageGuiElement extends GuiElement<ImageGuiElement>,
 		GuiWidthSettable<ImageGuiElement>, GuiHeightSettable<ImageGuiElement>,
-		GuiTooltipable<ImageGuiElement>, GuiClickable<ImageGuiElement> {
+		GuiTooltipable<ImageGuiElement>, GuiClickable<ImageGuiElement>,
+		GuiResizable<ImageGuiElement> {
 	/**
 	 * Gets the active image.
 	 * Mutating the returned {@code byte[]} causes undefined behaviour.
@@ -24,7 +26,7 @@ public interface ImageGuiElement extends GuiElement<ImageGuiElement>,
 	
 	/**
 	 * Sets the active image.
-	 * Mutating the {@code byte[]} which was passed as parameter causes undefined behaviour.
+	 * Mutating the {@code byte[]} parameter causes undefined behaviour.
 	 *
 	 * @param image the new image
 	 * @return the current instance (for chaining)

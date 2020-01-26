@@ -26,6 +26,7 @@ public final class GuiElements<T extends GuiElement<T>> {
 	public static final GuiElements<RectangleGuiElement> RECTANGLE = new GuiElements<>(RectangleGuiElement.class);
 	public static final GuiElements<TextFieldGuiElement> TEXT_FIELD = new GuiElements<>(TextFieldGuiElement.class);
 	public static final GuiElements<TextGuiElement> TEXT = new GuiElements<>(TextGuiElement.class);
+	public static final GuiElements<TextureGuiElement> TEXTURE = new GuiElements<>(TextureGuiElement.class);
 	
 	private final Class<T> type;
 	

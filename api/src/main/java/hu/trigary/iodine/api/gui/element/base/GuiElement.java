@@ -56,7 +56,7 @@ public interface GuiElement<T extends GuiElement<T>> extends AttachmentHolder<T>
 	/**
 	 * Sets the padding values.
 	 * The elements in the array must be the top, bottom, left, right padding values in this order.
-	 * A value of {@code -1} is allowed as a way to indicate to leave that specific padding value unchanged.
+	 * A value of -1 is allowed as a way to indicate to leave that specific padding value unchanged.
 	 *
 	 * @param padding the new padding value
 	 * @return the current instance (for chaining)
