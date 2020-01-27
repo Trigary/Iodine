@@ -22,14 +22,13 @@ public class TextGuiElementImpl extends TextGuiElement {
 	 */
 	public TextGuiElementImpl(@NotNull IodineRoot root, int id) {
 		super(root, id);
-		//noinspection resource
 		fontRenderer = Minecraft.getInstance().fontRenderer;
 	}
 	
 	
 	
 	@Override
-	protected void updateImpl(int width, int height, int positionX, int positionY) {
+	protected void updateImpl(int positionX, int positionY, int width, int height) {
 		if (alignment != 4) {
 			offset = width - fontRenderer.getStringWidth(text);
 			if (alignment == 5) {
@@ -39,7 +38,7 @@ public class TextGuiElementImpl extends TextGuiElement {
 	}
 	
 	@Override
-	protected void drawImpl(int width, int height, int positionX, int positionY, int mouseX, int mouseY, float partialTicks) {
+	protected void drawImpl(int positionX, int positionY, int width, int height, int mouseX, int mouseY, float partialTicks) {
 		fontRenderer.drawStringWithShadow(text, positionX + offset, positionY, COLOR);
 	}
 }

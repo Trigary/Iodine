@@ -46,7 +46,7 @@ public class NetworkManagerImpl extends NetworkManager {
 	
 	@Override
 	public void initialize() {
-		//noinspection ConstantConditions,resource
+		//noinspection ConstantConditions
 		network = Minecraft.getInstance().getConnection().getNetworkManager();
 	}
 	

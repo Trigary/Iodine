@@ -4,6 +4,8 @@ import hu.trigary.iodine.api.gui.element.base.*;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.InputStream;
+
 /**
  * A GUI element that displays an image and can be clicked.
  * The image mustn't be bigger than 1 MB (2^20 bytes).

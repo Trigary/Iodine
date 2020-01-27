@@ -34,12 +34,12 @@ public class ProgressBarGuiElementImpl extends ProgressBarGuiElement {
 	
 	
 	@Override
-	protected void updateImpl(int width, int height, int positionX, int positionY) {
+	protected void updateImpl(int positionX, int positionY, int width, int height) {
 		widget = new ProgressBar(positionX, positionY, width, height, verticalOrientation, progress);
 	}
 	
 	@Override
-	protected void drawImpl(int width, int height, int positionX, int positionY, int mouseX, int mouseY, float partialTicks) {
+	protected void drawImpl(int positionX, int positionY, int width, int height, int mouseX, int mouseY, float partialTicks) {
 		widget.render(mouseX, mouseY, partialTicks);
 		if (widget.isHovered()) {
 			IodineGuiUtils.renderTooltip(mouseX, mouseY, tooltip);
@@ -64,7 +64,6 @@ public class ProgressBarGuiElementImpl extends ProgressBarGuiElement {
 		
 		@Override
 		public void renderButton(int mouseX, int mouseY, float partialTicks) {
-			//noinspection resource
 			Minecraft.getInstance().getTextureManager().bindTexture(TEXTURE);
 			GlStateManager.color4f(1, 1, 1, alpha);
 			

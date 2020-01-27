@@ -26,14 +26,12 @@ public class GuiManagerImpl extends GuiManager {
 
 	@Override
 	protected void openGuiImpl(@NotNull IodineGui gui) {
-		//noinspection resource
 		Minecraft.getInstance().displayGuiScreen(new IodineGuiScreen(gui));
 	}
 	
 	@Override
 	protected void closeGuiImpl(@NotNull IodineGui gui, boolean byPlayer) {
 		if (!byPlayer) {
-			//noinspection resource
 			Minecraft minecraft = Minecraft.getInstance();
 			Screen screen = minecraft.currentScreen;
 			if (screen instanceof IodineGuiScreen && ((IodineGuiScreen) screen).getGui() == gui) {

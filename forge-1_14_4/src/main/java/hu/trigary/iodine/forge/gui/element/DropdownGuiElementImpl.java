@@ -25,7 +25,7 @@ public class DropdownGuiElementImpl extends DropdownGuiElement {
 	
 	
 	@Override
-	protected void updateImpl(int width, int height, int positionX, int positionY) {
+	protected void updateImpl(int positionX, int positionY, int width, int height) {
 		widget = new AbstractButton(positionX, positionY, width, height, choices[selected]) {
 			@Override
 			public void onPress() {
@@ -36,7 +36,7 @@ public class DropdownGuiElementImpl extends DropdownGuiElement {
 	}
 	
 	@Override
-	protected void drawImpl(int width, int height, int positionX, int positionY, int mouseX, int mouseY, float partialTicks) {
+	protected void drawImpl(int positionX, int positionY, int width, int height, int mouseX, int mouseY, float partialTicks) {
 		widget.render(mouseX, mouseY, partialTicks);
 		if (widget.isHovered()) {
 			IodineGuiUtils.renderTooltip(mouseX, mouseY, tooltip);

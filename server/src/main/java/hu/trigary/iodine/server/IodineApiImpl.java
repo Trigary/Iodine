@@ -50,13 +50,13 @@ public final class IodineApiImpl extends IodineApi {
 	@NotNull
 	@Override
 	public IodineGui createGui() {
-		return plugin.getGuiManager().createGui();
+		return plugin.getRootManager().createGui();
 	}
 	
 	@NotNull
 	@Override
 	public IodineOverlay createOverlay(@NotNull IodineOverlay.Anchor anchor, int horizontalOffset, int verticalOffset) {
-		return plugin.getGuiManager().createOverlay(anchor, horizontalOffset, verticalOffset);
+		return plugin.getRootManager().createOverlay(anchor, horizontalOffset, verticalOffset);
 	}
 	
 	

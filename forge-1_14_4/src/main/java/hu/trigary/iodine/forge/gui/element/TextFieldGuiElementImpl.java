@@ -26,8 +26,7 @@ public class TextFieldGuiElementImpl extends TextFieldGuiElement {
 	
 	
 	@Override
-	protected void updateImpl(int width, int height, int positionX, int positionY) {
-		//noinspection resource
+	protected void updateImpl(int positionX, int positionY, int width, int height) {
 		widget = new TextFieldWidget(Minecraft.getInstance().fontRenderer, positionX, positionY, width, height, text);
 		widget.active = editable;
 		widget.setText(text);
@@ -36,7 +35,7 @@ public class TextFieldGuiElementImpl extends TextFieldGuiElement {
 	}
 	
 	@Override
-	protected void drawImpl(int width, int height, int positionX, int positionY, int mouseX, int mouseY, float partialTicks) {
+	protected void drawImpl(int positionX, int positionY, int width, int height, int mouseX, int mouseY, float partialTicks) {
 		widget.render(mouseX, mouseY, partialTicks);
 		if (widget.isHovered()) {
 			IodineGuiUtils.renderTooltip(mouseX, mouseY, tooltip);

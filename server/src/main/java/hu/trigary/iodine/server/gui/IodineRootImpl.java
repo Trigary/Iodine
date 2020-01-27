@@ -141,7 +141,7 @@ public abstract class IodineRootImpl<T extends IodineRoot<T>> implements IodineR
 		Validate.notNull(id, "ID must be non-null");
 		Validate.isTrue(!apiIdElements.containsKey(id), "IDs must be unique");
 		plugin.log(Level.OFF, "Base > adding element {0} to {1}", type, this.id);
-		GuiElementImpl<E> impl = plugin.getGuiManager().createElement(type.getType(), this, nextElementId, id);
+		GuiElementImpl<E> impl = plugin.getRootManager().createElement(type.getType(), this, nextElementId, id);
 		elements.put(nextElementId++, impl);
 		apiIdElements.put(id, impl);
 		flagAndAtomicUpdate(impl, () -> {
@@ -259,7 +259,7 @@ public abstract class IodineRootImpl<T extends IodineRoot<T>> implements IodineR
 		onPreOpened(iodinePlayer);
 		viewers.add(iodinePlayer);
 		if (viewers.size() == 1) {
-			plugin.getGuiManager().rememberGui(this);
+			plugin.getRootManager().rememberRoot(this);
 		}
 		
 		onOpened(iodinePlayer);
@@ -315,7 +315,7 @@ public abstract class IodineRootImpl<T extends IodineRoot<T>> implements IodineR
 		} else {
 			plugin.log(Level.OFF, "Base > closing {0} for {1}", id, iodinePlayer.getName());
 			if (viewers.isEmpty()) {
-				plugin.getGuiManager().forgetGui(this);
+				plugin.getRootManager().forgetRoot(this);
 			}
 			onClosed(iodinePlayer, byPlayer);
 		}

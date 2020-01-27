@@ -13,6 +13,8 @@ import org.jetbrains.annotations.NotNull;
  * The implementation of {@link TextureGuiElement}.
  */
 public class TextureGuiElementImpl extends TextureGuiElement {
+	private int positionX;
+	private int positionY;
 	private ResourceLocation resource;
 	
 	/**
@@ -28,19 +30,32 @@ public class TextureGuiElementImpl extends TextureGuiElement {
 	
 	
 	@Override
-	protected void updateImpl(int width, int height, int positionX, int positionY) {
+	protected void updateImpl(int positionX, int positionY, int width, int height) {
+		this.positionX = positionX;
+		this.positionY = positionY;
 		resource = new ResourceLocation(texture);
 	}
 	
 	@Override
-	protected void drawImpl(int width, int height, int positionX, int positionY, int mouseX, int mouseY, float partialTicks) {
-		//noinspection resource
+	protected void drawImpl(int positionX, int positionY, int width, int height, int mouseX, int mouseY, float partialTicks) {
 		Minecraft.getInstance().getTextureManager().bindTexture(resource);
 		GlStateManager.color4f(1, 1, 1, 1);
+		//TODO implement resizing (look at NativeImage source)
 		AbstractGui.blit(positionX, positionY, width, height, offsetX, offsetY,
 				textureWidth, textureHeight, fileWidth, fileHeight);
 		if (IodineGuiUtils.isInside(positionX, positionY, width, height, mouseX, mouseY)) {
 			IodineGuiUtils.renderTooltip(mouseX, mouseY, tooltip);
 		}
+	}
+
+
+
+	@Override
+	public boolean onMousePressed(double mouseX, double mouseY) {
+		if (IodineGuiUtils.isInside(positionX, positionY, width, height, mouseX, mouseY)) {
+			onChanged();
+			return true;
+		}
+		return false;
 	}
 }

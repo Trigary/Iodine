@@ -118,7 +118,7 @@ public abstract class IodinePlugin {
 	 */
 	@NotNull
 	@Contract(pure = true)
-	public final IodineRootManager getGuiManager() {
+	public final IodineRootManager getRootManager() {
 		return rootManager;
 	}
 	

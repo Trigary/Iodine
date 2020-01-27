@@ -84,9 +84,10 @@ public abstract class GuiManager {
 	
 	
 	private void closeOpenGui(boolean byPlayer) {
-		IodineGui gui = openGui;
-		openGui = null;
-		closeGuiImpl(gui, byPlayer);
+		try (IodineGui gui = openGui) {
+			openGui = null;
+			closeGuiImpl(gui, byPlayer);
+		}
 	}
 	
 	/**

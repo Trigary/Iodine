@@ -27,13 +27,13 @@ public class RectangleGuiElementImpl extends RectangleGuiElement {
 	
 	
 	@Override
-	protected void updateImpl(int width, int height, int positionX, int positionY) {
+	protected void updateImpl(int positionX, int positionY, int width, int height) {
 		this.positionX = positionX;
 		this.positionY = positionY;
 	}
 	
 	@Override
-	protected void drawImpl(int width, int height, int positionX, int positionY, int mouseX, int mouseY, float partialTicks) {
+	protected void drawImpl(int positionX, int positionY, int width, int height, int mouseX, int mouseY, float partialTicks) {
 		GlStateManager.color4f(1, 1, 1, 1);
 		AbstractGui.fill(positionX, positionY, positionX + width, positionY + height, color);
 		if (IodineGuiUtils.isInside(positionX, positionY, width, height, mouseX, mouseY)) {

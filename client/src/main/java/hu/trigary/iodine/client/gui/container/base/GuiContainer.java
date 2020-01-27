@@ -35,7 +35,7 @@ public abstract class GuiContainer extends GuiElement {
 		GuiElement[] children = new GuiElement[childrenIdentifiers.length];
 		for (int i = 0; i < children.length; i++) {
 			int id = childrenIdentifiers[i];
-			children[i] = id == getId() ? null : getGui().getElement(childrenIdentifiers[i]);
+			children[i] = id == getId() ? null : getRoot().getElement(childrenIdentifiers[i]);
 		}
 		return children;
 	}
@@ -44,7 +44,7 @@ public abstract class GuiContainer extends GuiElement {
 	protected abstract void setChildrenPositions(int offsetX, int offsetY);
 	
 	@Override
-	protected void updateImpl(int width, int height, int positionX, int positionY) {}
+	protected void updateImpl(int positionX, int positionY, int width, int height) {}
 	
 	@Override
 	protected void drawImpl(int width, int height, int positionX,

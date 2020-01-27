@@ -92,7 +92,6 @@ public class IodineGuiScreen extends Screen {
 	@Override
 	public boolean keyPressed(int key, int scanCode, int modifiers) {
 		if (key == 256) {
-			//noinspection resource
 			Minecraft.getInstance().displayGuiScreen(null);
 		} else {
 			gui.onKeyPressed(key, scanCode, modifiers);

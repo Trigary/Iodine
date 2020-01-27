@@ -6,6 +6,7 @@ import hu.trigary.iodine.client.gui.IodineRoot;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.Closeable;
 import java.nio.ByteBuffer;
 import java.util.function.Consumer;
 
@@ -13,7 +14,7 @@ import java.util.function.Consumer;
  * The base class for GUI elements.
  * All other elements extend this class.
  */
-public abstract class GuiElement {
+public abstract class GuiElement implements Closeable {
 	private final short[] padding = new short[4];
 	private final IodineRoot root;
 	private final int id;
@@ -45,7 +46,7 @@ public abstract class GuiElement {
 	 */
 	@NotNull
 	@Contract(pure = true)
-	public final IodineRoot getGui() {
+	public final IodineRoot getRoot() {
 		return root;
 	}
 	
@@ -123,8 +124,6 @@ public abstract class GuiElement {
 	 */
 	public void initialize() {}
 	
-	
-	
 	/**
 	 * Calculates the size of this element, with paddings included.
 	 * Called directly after each element has received the {@link #initialize()}
@@ -183,19 +182,19 @@ public abstract class GuiElement {
 	 * The order in which this method is called on elements is unspecified.
 	 */
 	public final void update() {
-		updateImpl(elementWidth, elementHeight, positionX, positionY);
+		updateImpl(positionX, positionY, elementWidth, elementHeight);
 	}
 	
 	/**
 	 * Allows for internal data recalculation for the possibly changed size and position.
-	 * Should only be called be {@link #update()}.
+	 * Should only be called by {@link #update()}.
 	 *
-	 * @param width this element's width, with paddings excluded
-	 * @param height this element's height, with paddings excluded
 	 * @param positionX this element's X position, with paddings included
 	 * @param positionY this element's Y position, with paddings included
+	 * @param width this element's width, with paddings excluded
+	 * @param height this element's height, with paddings excluded
 	 */
-	protected abstract void updateImpl(int width, int height, int positionX, int positionY);
+	protected abstract void updateImpl(int positionX, int positionY, int width, int height);
 	
 	
 	
@@ -207,17 +206,17 @@ public abstract class GuiElement {
 	 * @param partialTicks the client's partial ticks, used for animations
 	 */
 	public final void draw(int mouseX, int mouseY, float partialTicks) {
-		drawImpl(elementWidth, elementHeight, positionX, positionY, mouseX, mouseY, partialTicks);
+		drawImpl(positionX, positionY, elementWidth, elementHeight, mouseX, mouseY, partialTicks);
 	}
 	
 	/**
 	 * Renders this element on the screen.
 	 * Should only be called be {@link #draw(int, int, float)}.
 	 *
-	 * @param width this element's width, with paddings excluded
-	 * @param height this element's height, with paddings excluded
 	 * @param positionX this element's X position, with paddings included
 	 * @param positionY this element's Y position, with paddings included
+	 * @param width this element's width, with paddings excluded
+	 * @param height this element's height, with paddings excluded
 	 * @param mouseX the mouse's X position
 	 * @param mouseY the mouse's Y position
 	 * @param partialTicks the client's partial ticks, used for animations
@@ -233,8 +232,8 @@ public abstract class GuiElement {
 	 * @param dataProvider a callback that puts the data in the buffer
 	 */
 	protected final void sendChangePacket(int dataLength, @NotNull Consumer<ByteBuffer> dataProvider) {
-		getGui().getMod().getLogger().debug("Root > {} sending change packet in {}", id, root.getId());
-		getGui().getMod().getNetworkManager().send(PacketType.CLIENT_GUI_CHANGE, dataLength + 8, buffer -> {
+		getRoot().getMod().getLogger().debug("Root > {} sending change packet in {}", id, root.getId());
+		getRoot().getMod().getNetworkManager().send(PacketType.CLIENT_GUI_CHANGE, dataLength + 8, buffer -> {
 			buffer.putInt(root.getId());
 			buffer.putInt(id);
 			dataProvider.accept(buffer);
@@ -312,6 +311,13 @@ public abstract class GuiElement {
 	public void onCharTyped(char codePoint, int modifiers) {}
 	
 	
+	
+	/**
+	 * Allows for internal data to be cleared, eg. the closing of {@link java.io.Closeable}.
+	 * Called exactly once per instance and always after {@link #update()}.
+	 */
+	@Override
+	public void close() {}
 	
 	@NotNull
 	@Contract(pure = true)

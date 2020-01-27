@@ -44,12 +44,10 @@ public class IodineModImpl extends IodineMod {
 	}
 	
 	private void onJoined(@NotNull ClientPlayerNetworkEvent.LoggedInEvent event) {
-		//noinspection resource
 		Minecraft.getInstance().enqueue(this::onJoinedServer);
 	}
 	
 	private void onQuit(@NotNull ClientPlayerNetworkEvent.LoggedOutEvent event) {
-		//noinspection resource
 		Minecraft.getInstance().enqueue(this::onQuitServer);
 	}
 	
@@ -58,14 +56,12 @@ public class IodineModImpl extends IodineMod {
 	@Contract(pure = true)
 	@Override
 	public int getScreenWidth() {
-		//noinspection resource
 		return Minecraft.getInstance().mainWindow.getScaledWidth();
 	}
 	
 	@Contract(pure = true)
 	@Override
 	public int getScreenHeight() {
-		//noinspection resource
 		return Minecraft.getInstance().mainWindow.getScaledHeight();
 	}
 }

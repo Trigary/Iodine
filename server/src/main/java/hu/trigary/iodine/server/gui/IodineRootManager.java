@@ -27,7 +27,7 @@ import java.util.logging.Level;
  */
 public final class IodineRootManager {
 	private final Map<Class<? extends GuiElement<?>>, ElementConstructor<?>> elements = new HashMap<>();
-	private final Map<Integer, IodineRootImpl<?>> guiMap = new HashMap<>();
+	private final Map<Integer, IodineRootImpl<?>> rootMap = new HashMap<>();
 	private final IodinePlugin plugin;
 	private int nextGuiId;
 	
@@ -94,8 +94,8 @@ public final class IodineRootManager {
 	 */
 	@Nullable
 	@Contract(pure = true)
-	public IodineRootImpl<?> getGui(int id) {
-		return guiMap.get(id);
+	public IodineRootImpl<?> getRoot(int id) {
+		return rootMap.get(id);
 	}
 	
 	/**
@@ -126,9 +126,9 @@ public final class IodineRootManager {
 	 *
 	 * @param base the instance to unregister
 	 */
-	public void forgetGui(@NotNull IodineRootImpl<?> base) {
+	public void forgetRoot(@NotNull IodineRootImpl<?> base) {
 		plugin.log(Level.OFF, "GuiManager > forgetting {0}", base.getId());
-		Validate.notNull(guiMap.remove(base.getId()), "Can only forget registered instances");
+		Validate.notNull(rootMap.remove(base.getId()), "Can only forget registered instances");
 	}
 	
 	/**
@@ -138,16 +138,16 @@ public final class IodineRootManager {
 	 *
 	 * @param base the instance to register
 	 */
-	public void rememberGui(@NotNull IodineRootImpl<?> base) {
+	public void rememberRoot(@NotNull IodineRootImpl<?> base) {
 		plugin.log(Level.OFF, "GuiManager > remembering {0}", base.getId());
-		Validate.isTrue(guiMap.put(base.getId(), base) == null, "Can't remember registered instances");
+		Validate.isTrue(rootMap.put(base.getId(), base) == null, "Can't remember registered instances");
 	}
 	
 	/**
 	 * Closes all GUIs for all of their viewers.
 	 */
 	public void closeAllGuiInstances() {
-		for (IodineRootImpl<?> gui : new ArrayList<>(guiMap.values())) {
+		for (IodineRootImpl<?> gui : new ArrayList<>(rootMap.values())) {
 			for (IodinePlayer player : gui.getViewers()) {
 				gui.closeFor(player);
 			}

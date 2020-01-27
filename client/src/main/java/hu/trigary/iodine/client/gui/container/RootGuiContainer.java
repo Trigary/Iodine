@@ -42,7 +42,7 @@ public final class RootGuiContainer extends GuiContainer {
 	@Override
 	public void initialize() {
 		if (childrenDirty) {
-			children.forEach((id, position) -> position.element = getGui().getElement(id));
+			children.forEach((id, position) -> position.element = getRoot().getElement(id));
 			childrenDirty = false;
 		}
 		

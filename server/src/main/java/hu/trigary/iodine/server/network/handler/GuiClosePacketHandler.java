@@ -29,7 +29,7 @@ public class GuiClosePacketHandler extends PacketHandler {
 	
 	@Override
 	public void handle(@NotNull IodinePlayerBase player, @NotNull ByteBuffer message) {
-		IodineRootImpl<?> gui = getPlugin().getGuiManager().getGui(message.getInt());
+		IodineRootImpl<?> gui = getPlugin().getRootManager().getRoot(message.getInt());
 		if (gui == null) {
 			getPlugin().log(Level.OFF, "Network > closing GUI failed: no open GUI by id");
 		} else {

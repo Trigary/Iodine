@@ -36,10 +36,10 @@ public interface GuiResizable<T extends GuiResizable<T>> {
 	enum ResizeMode { //TODO how to serialize?
 		STRETCH,
 		REPEAT,
-		NONE;
+		NONE
 		
-		//TODO increase size: repeat / stretch=interpolation (linear or NN)
-		//TODO decrease size: cut / interpolation (linear or NN)
-		//TODO I can't even do these client-side...
+		//TODO define stuff depending on what I can implement client-side, but optimally:
+		// magnification: original; repeat; linear interpolation; nearest neighbour interpolation
+		// minification: cut (keep left and top); linear interpolation; nearest neighbour interpolation
 	}
 }

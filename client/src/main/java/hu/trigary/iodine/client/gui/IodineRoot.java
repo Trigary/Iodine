@@ -8,6 +8,7 @@ import org.apache.commons.lang3.Validate;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.Closeable;
 import java.nio.ByteBuffer;
 import java.util.*;
 
@@ -15,7 +16,7 @@ import java.util.*;
  * Represents a {@link IodineGui} or {@link IodineOverlay}.
  * Instances of this class are the top-level roots of GUIs/overlays.
  */
-public abstract class IodineRoot {
+public abstract class IodineRoot implements Closeable {
 	private final Map<Integer, GuiElement> elements = new HashMap<>();
 	private final Collection<GuiElement> drawOrderedElements = new TreeSet<>(Comparator
 			.comparing(GuiElement::getDrawPriority)
@@ -99,10 +100,11 @@ public abstract class IodineRoot {
 		
 		int removeCount = buffer.getInt();
 		for (int i = 0; i < removeCount; i++) {
-			GuiElement removed = elements.remove(buffer.getInt());
-			mod.getLogger().debug("Base > removing {} in {}", removed.getId(), id);
-			drawOrderedElements.remove(removed);
-			onElementRemoved(removed);
+			try (GuiElement removed = elements.remove(buffer.getInt())) {
+				mod.getLogger().debug("Base > removing {} in {}", removed.getId(), id);
+				drawOrderedElements.remove(removed);
+				onElementRemoved(removed);
+			}
 		}
 		
 		while (buffer.hasRemaining()) {
@@ -189,6 +191,17 @@ public abstract class IodineRoot {
 	}
 	
 	
+	
+	/**
+	 * Clears internal data, eg. the closing of {@link java.io.Closeable}.
+	 * Must be called exactly once per instance and always after {@link #update()}.
+	 */
+	@Override
+	public final void close() {
+		for (GuiElement element : elements.values()) {
+			element.close();
+		}
+	}
 	
 	@NotNull
 	@Contract(pure = true)

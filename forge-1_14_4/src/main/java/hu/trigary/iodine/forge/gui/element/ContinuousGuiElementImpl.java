@@ -25,14 +25,14 @@ public class ContinuousGuiElementImpl extends ContinuousSliderGuiElement {
 	
 	
 	@Override
-	protected void updateImpl(int width, int height, int positionX, int positionY) {
+	protected void updateImpl(int positionX, int positionY, int width, int height) {
 		widget = new Slider(positionX, positionY, width, height, progress);
 		widget.active = editable;
 		widget.setMessage(text);
 	}
 	
 	@Override
-	protected void drawImpl(int width, int height, int positionX, int positionY, int mouseX, int mouseY, float partialTicks) {
+	protected void drawImpl(int positionX, int positionY, int width, int height, int mouseX, int mouseY, float partialTicks) {
 		widget.render(mouseX, mouseY, partialTicks);
 		if (widget.isHovered()) {
 			IodineGuiUtils.renderTooltip(mouseX, mouseY, tooltip);

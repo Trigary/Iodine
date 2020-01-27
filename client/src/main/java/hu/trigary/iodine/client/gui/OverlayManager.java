@@ -34,6 +34,7 @@ public abstract class OverlayManager {
 	 * @param buffer the buffer containing the packet
 	 */
 	public final void packetOpenOverlay(@NotNull ByteBuffer buffer) {
+		//noinspection IOResourceOpenedButNotSafelyClosed
 		IodineOverlay overlay = new IodineOverlay(mod, buffer.getInt(),
 				buffer.get(), buffer.getShort(), buffer.getShort());
 		mod.getLogger().debug("OverlayManager > opening {}", overlay.getId());
@@ -61,8 +62,9 @@ public abstract class OverlayManager {
 	 * @param buffer the buffer containing the packet
 	 */
 	public final void packetCloseOverlay(@NotNull ByteBuffer buffer) {
-		IodineOverlay overlay = openOverlays.remove(buffer.getInt());
-		mod.getLogger().debug("OverlayManager > closing {}", overlay.getId());
+		try (IodineOverlay overlay = openOverlays.remove(buffer.getInt())) {
+			mod.getLogger().debug("OverlayManager > closing {}", overlay.getId());
+		}
 	}
 	
 	
@@ -95,6 +97,9 @@ public abstract class OverlayManager {
 	 */
 	public final void closeOverlays() {
 		mod.getLogger().debug("OverlayManager > closing all");
+		for (IodineOverlay overlay : openOverlays.values()) {
+			overlay.close();
+		}
 		openOverlays.clear();
 		drawOrderedOverlays.clear();
 	}

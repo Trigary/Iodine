@@ -25,8 +25,7 @@ public final class IodineGuiUtils {
 		if (tooltip.isEmpty()) {
 			return;
 		}
-		
-		//noinspection resource
+
 		Screen screen = Minecraft.getInstance().currentScreen;
 		if (screen instanceof IodineGuiScreen) {
 			screen.renderTooltip(tooltip, mouseX, mouseY);
