@@ -55,9 +55,8 @@ public class TestCommandListener implements Listener {
 					.setTooltip("Sample tooltip")
 					.setPaddingBottom(5));
 			
-			gui.addElement(GuiElements.IMAGE, e -> c.makeChildLast(e)
-					.setTooltip("Sample tooltip")
-					.setImage(image));
+			gui.addElement(GuiElements.TEXTURE, e -> c.makeChildLast(e)
+					.setTooltip("Sample tooltip"));
 		});
 		
 		root.onClosed((gui, p) -> p.sendMessage("You closed the GUI"))

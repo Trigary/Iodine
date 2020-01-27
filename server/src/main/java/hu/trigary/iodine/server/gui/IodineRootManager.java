@@ -47,7 +47,6 @@ public final class IodineRootManager {
 		element(ContinuousSliderGuiElement.class, ContinuousSliderGuiElementImpl::new);
 		element(DiscreteSliderGuiElement.class, DiscreteSliderGuiElementImpl::new);
 		element(DropdownGuiElement.class, DropdownGuiElementImpl::new);
-		element(ImageGuiElement.class, ImageGuiElementImpl::new);
 		element(ProgressBarGuiElement.class, ProgressBarGuiElementImpl::new);
 		element(RadioButtonGuiElement.class, RadioButtonGuiElementImpl::new);
 		element(RectangleGuiElement.class, RectangleGuiElementImpl::new);

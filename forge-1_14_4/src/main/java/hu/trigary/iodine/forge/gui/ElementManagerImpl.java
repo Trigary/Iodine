@@ -32,8 +32,6 @@ public class ElementManagerImpl extends ElementManager {
 				return DiscreteSliderGuiElementImpl::new;
 			case DROPDOWN:
 				return DropdownGuiElementImpl::new;
-			case IMAGE:
-				return ImageGuiElementImpl::new;
 			case PROGRESS_BAR:
 				return ProgressBarGuiElementImpl::new;
 			case RADIO_BUTTON:

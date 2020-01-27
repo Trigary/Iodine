@@ -7,11 +7,11 @@ import org.jetbrains.annotations.NotNull;
 /**
  * A GUI element that displays a texture and can be clicked.
  * The texture can be from vanilla Minecraft texture or from a resource pack.
+ * The default {@link ResizeMode} is {@link ResizeMode#STRETCH}.
  */
 public interface TextureGuiElement extends GuiElement<TextureGuiElement>,
 		GuiWidthSettable<TextureGuiElement>, GuiHeightSettable<TextureGuiElement>,
-		GuiTooltipable<TextureGuiElement>, GuiClickable<TextureGuiElement>,
-		GuiResizable<TextureGuiElement> {
+		GuiTooltipable<TextureGuiElement>, GuiClickable<TextureGuiElement> {
 	/**
 	 * Gets the texture's identifier.
 	 *
@@ -31,6 +31,15 @@ public interface TextureGuiElement extends GuiElement<TextureGuiElement>,
 	@NotNull
 	@Contract(pure = true)
 	int[] getTextureData();
+	
+	/**
+	 * Gets the active resizing logic.
+	 *
+	 * @return the current resizing logic.
+	 */
+	@NotNull
+	@Contract(pure = true)
+	ResizeMode getResizeMode();
 	
 	
 	
@@ -75,4 +84,28 @@ public interface TextureGuiElement extends GuiElement<TextureGuiElement>,
 	@NotNull
 	TextureGuiElement setTexture(@NotNull String namespacedKey, int textureFileWidth, int textureFileHeight,
 			int textureOffsetX, int textureOffsetY, int textureWidth, int textureHeight);
+	
+	/**
+	 * Sets the resizing logic to use.
+	 *
+	 * @param resizeMode the new resize mode
+	 * @return the current instance (for chaining)
+	 */
+	@NotNull
+	TextureGuiElement setResizeMode(@NotNull ResizeMode resizeMode);
+	
+	
+	
+	/**
+	 * The logic using which the graphical content's size should be adjusted to match the element's size.
+	 */
+	enum ResizeMode { //TODO how to serialize?
+		STRETCH,
+		REPEAT,
+		NONE
+		
+		//TODO define stuff depending on what I can implement client-side, but optimally:
+		// magnification: original; repeat; linear interpolation; nearest neighbour interpolation
+		// minification: cut (keep left and top); linear interpolation; nearest neighbour interpolation
+	}
 }

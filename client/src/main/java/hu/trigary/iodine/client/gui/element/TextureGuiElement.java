@@ -16,7 +16,6 @@ public abstract class TextureGuiElement extends GuiElement {
 	protected int width;
 	protected int height;
 	protected String tooltip;
-	protected int resizeMode;
 	protected String texture;
 	protected int fileWidth;
 	protected int fileHeight;
@@ -24,6 +23,7 @@ public abstract class TextureGuiElement extends GuiElement {
 	protected int offsetY;
 	protected int textureWidth;
 	protected int textureHeight;
+	protected int resizeMode;
 	
 	/**
 	 * Creates a new instance.
@@ -42,7 +42,6 @@ public abstract class TextureGuiElement extends GuiElement {
 		width = buffer.getShort();
 		height = buffer.getShort();
 		tooltip = BufferUtils.deserializeString(buffer);
-		resizeMode = buffer.get();
 		texture = BufferUtils.deserializeString(buffer);
 		fileWidth = buffer.getShort();
 		fileHeight = buffer.getShort();
@@ -50,6 +49,7 @@ public abstract class TextureGuiElement extends GuiElement {
 		offsetY = buffer.getShort();
 		textureWidth = buffer.getShort();
 		textureHeight = buffer.getShort();
+		resizeMode = buffer.get();
 	}
 	
 	@NotNull

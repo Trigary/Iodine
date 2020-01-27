@@ -20,7 +20,6 @@ public final class GuiElements<T extends GuiElement<T>> {
 	public static final GuiElements<ContinuousSliderGuiElement> CONTINUOUS_SLIDER = new GuiElements<>(ContinuousSliderGuiElement.class);
 	public static final GuiElements<DiscreteSliderGuiElement> DISCRETE_SLIDER = new GuiElements<>(DiscreteSliderGuiElement.class);
 	public static final GuiElements<DropdownGuiElement> DROPDOWN = new GuiElements<>(DropdownGuiElement.class);
-	public static final GuiElements<ImageGuiElement> IMAGE = new GuiElements<>(ImageGuiElement.class);
 	public static final GuiElements<ProgressBarGuiElement> PROGRESS_BAR = new GuiElements<>(ProgressBarGuiElement.class);
 	public static final GuiElements<RadioButtonGuiElement> RADIO_BUTTON = new GuiElements<>(RadioButtonGuiElement.class);
 	public static final GuiElements<RectangleGuiElement> RECTANGLE = new GuiElements<>(RectangleGuiElement.class);
