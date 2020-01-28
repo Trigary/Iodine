@@ -1,10 +1,9 @@
 package hu.trigary.iodine.client.network.handler;
 
+import hu.trigary.iodine.backend.InputBuffer;
 import hu.trigary.iodine.client.IodineMod;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
-
-import java.nio.ByteBuffer;
 
 /**
  * The handler of a specific {@link hu.trigary.iodine.backend.PacketType}.
@@ -40,5 +39,5 @@ public abstract class PacketHandler {
 	 *
 	 * @param buffer the buffer containing the packet
 	 */
-	public abstract void handle(@NotNull ByteBuffer buffer);
+	public abstract void handle(@NotNull InputBuffer buffer);
 }

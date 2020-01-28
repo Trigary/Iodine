@@ -1,6 +1,5 @@
 package hu.trigary.iodine.bukkit;
 
-import com.google.common.io.Files;
 import hu.trigary.iodine.api.IodineApi;
 import hu.trigary.iodine.api.gui.GuiElements;
 import hu.trigary.iodine.api.gui.IodineGui;
@@ -11,24 +10,15 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.File;
-import java.io.IOException;
-
 /**
  * A class which exists solely for testing purposes.
  */
 public class TestCommandListener implements Listener {
 	private final IodineApi api = IodineApi.getInstance();
 	private final IodineBukkitPlugin plugin;
-	private final byte[] image;
 	
 	public TestCommandListener(@NotNull IodineBukkitPlugin plugin) {
 		this.plugin = plugin;
-		try {
-			image = Files.toByteArray(new File(plugin.getDataFolder(), "image.jpg"));
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
 	}
 	
 	

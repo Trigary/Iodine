@@ -1,5 +1,7 @@
 package hu.trigary.iodine.client.gui.element.base;
 
+import hu.trigary.iodine.backend.InputBuffer;
+import hu.trigary.iodine.backend.OutputBuffer;
 import hu.trigary.iodine.backend.PacketType;
 import hu.trigary.iodine.client.IntPair;
 import hu.trigary.iodine.client.gui.IodineRoot;
@@ -7,7 +9,6 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.Closeable;
-import java.nio.ByteBuffer;
 import java.util.function.Consumer;
 
 /**
@@ -99,25 +100,25 @@ public abstract class GuiElement implements Closeable {
 	 *
 	 * @param buffer the buffer the data is stored in
 	 */
-	public final void deserialize(@NotNull ByteBuffer buffer) {
-		padding[0] = buffer.getShort();
-		padding[1] = buffer.getShort();
-		padding[2] = buffer.getShort();
-		padding[3] = buffer.getShort();
-		drawPriority = buffer.get();
+	public final void deserialize(@NotNull InputBuffer buffer) {
+		padding[0] = buffer.readShort();
+		padding[1] = buffer.readShort();
+		padding[2] = buffer.readShort();
+		padding[3] = buffer.readShort();
+		drawPriority = buffer.readByte();
 		deserializeImpl(buffer);
 	}
 	
 	/**
 	 * Loads this element's type specified data from the specific buffer.
-	 * This method should only be called by {@link #deserialize(ByteBuffer)}.
+	 * This method should only be called by {@link #deserialize(InputBuffer)}.
 	 *
 	 * @param buffer the buffer the data is stored in
 	 */
-	protected abstract void deserializeImpl(@NotNull ByteBuffer buffer);
+	protected abstract void deserializeImpl(@NotNull InputBuffer buffer);
 	
 	/**
-	 * Called directly after {@link #deserialize(ByteBuffer)} has been called on each changed element.
+	 * Called directly after {@link #deserialize(InputBuffer)} has been called on each changed element.
 	 * This element in particular might not have received that method call, that isn't known.
 	 * This method is called in a top-down order: parents call this method on all of their children.
 	 * It can be used to convert number-based IDs to object references, set up element relations, etc.
@@ -228,12 +229,11 @@ public abstract class GuiElement implements Closeable {
 	 * Sends a {@link PacketType#CLIENT_GUI_CLOSE} packet with
 	 * the GUI's and the element's ID preceding the specified contents.
 	 *
-	 * @param dataLength the length of the data specified in the callback
 	 * @param dataProvider a callback that puts the data in the buffer
 	 */
-	protected final void sendChangePacket(int dataLength, @NotNull Consumer<ByteBuffer> dataProvider) {
+	protected final void sendChangePacket(@NotNull Consumer<OutputBuffer> dataProvider) {
 		getRoot().getMod().getLogger().debug("Root > {} sending change packet in {}", id, root.getId());
-		getRoot().getMod().getNetworkManager().send(PacketType.CLIENT_GUI_CHANGE, dataLength + 8, buffer -> {
+		getRoot().getMod().getNetworkManager().send(PacketType.CLIENT_GUI_CHANGE, buffer -> {
 			buffer.putInt(root.getId());
 			buffer.putInt(id);
 			dataProvider.accept(buffer);

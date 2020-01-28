@@ -1,5 +1,6 @@
 package hu.trigary.iodine.client.gui;
 
+import hu.trigary.iodine.backend.InputBuffer;
 import hu.trigary.iodine.client.IodineMod;
 import hu.trigary.iodine.client.IntPair;
 import hu.trigary.iodine.client.gui.container.RootGuiContainer;
@@ -9,7 +10,6 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.Closeable;
-import java.nio.ByteBuffer;
 import java.util.*;
 
 /**
@@ -94,13 +94,13 @@ public abstract class IodineRoot implements Closeable {
 	 *
 	 * @param buffer the buffer the data is stored in
 	 */
-	public final void deserialize(@NotNull ByteBuffer buffer) {
+	public final void deserialize(@NotNull InputBuffer buffer) {
 		mod.getLogger().debug("Base > deserializing {}", id);
 		deserializeStart(buffer);
 		
-		int removeCount = buffer.getInt();
+		int removeCount = buffer.readInt();
 		for (int i = 0; i < removeCount; i++) {
-			try (GuiElement removed = elements.remove(buffer.getInt())) {
+			try (GuiElement removed = elements.remove(buffer.readInt())) {
 				mod.getLogger().debug("Base > removing {} in {}", removed.getId(), id);
 				drawOrderedElements.remove(removed);
 				onElementRemoved(removed);
@@ -128,7 +128,7 @@ public abstract class IodineRoot implements Closeable {
 	 *
 	 * @param buffer the buffer the data is stored in
 	 */
-	protected abstract void deserializeStart(@NotNull ByteBuffer buffer);
+	protected abstract void deserializeStart(@NotNull InputBuffer buffer);
 	
 	/**
 	 * Called when an element was removed from this instance.
@@ -141,7 +141,7 @@ public abstract class IodineRoot implements Closeable {
 	
 	
 	/**
-	 * Called after {@link #deserialize(ByteBuffer)} and when the client resolution changed.
+	 * Called after {@link #deserialize(InputBuffer)} and when the client resolution changed.
 	 * Updates the contained elements' sizes and positions.
 	 */
 	public final void update() {

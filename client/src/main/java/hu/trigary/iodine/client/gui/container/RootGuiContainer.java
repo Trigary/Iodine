@@ -1,12 +1,12 @@
 package hu.trigary.iodine.client.gui.container;
 
+import hu.trigary.iodine.backend.InputBuffer;
 import hu.trigary.iodine.client.IntPair;
 import hu.trigary.iodine.client.gui.IodineRoot;
 import hu.trigary.iodine.client.gui.container.base.GuiContainer;
 import hu.trigary.iodine.client.gui.element.base.GuiElement;
 import org.jetbrains.annotations.NotNull;
 
-import java.nio.ByteBuffer;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -30,11 +30,11 @@ public final class RootGuiContainer extends GuiContainer {
 	
 	
 	@Override
-	protected void deserializeImpl(@NotNull ByteBuffer buffer) {
+	protected void deserializeImpl(@NotNull InputBuffer buffer) {
 		children.clear();
-		int count = buffer.getInt();
+		int count = buffer.readInt();
 		for (int i = 0; i < count; i++) {
-			children.put(buffer.getInt(), new Position(buffer.getShort(), buffer.getShort()));
+			children.put(buffer.readInt(), new Position(buffer.readShort(), buffer.readShort()));
 		}
 		childrenDirty = true;
 	}

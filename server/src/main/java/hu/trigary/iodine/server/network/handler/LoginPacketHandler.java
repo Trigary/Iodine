@@ -1,8 +1,8 @@
 package hu.trigary.iodine.server.network.handler;
 
 import hu.trigary.iodine.api.player.IodinePlayer;
-import hu.trigary.iodine.backend.BufferUtils;
 import hu.trigary.iodine.backend.ChatUtils;
+import hu.trigary.iodine.backend.InputBuffer;
 import hu.trigary.iodine.server.IodinePlugin;
 import hu.trigary.iodine.backend.PacketType;
 import hu.trigary.iodine.server.network.PacketListener;
@@ -12,7 +12,6 @@ import org.apache.commons.lang3.Validate;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
-import java.nio.ByteBuffer;
 import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.regex.Pattern;
@@ -54,8 +53,8 @@ public class LoginPacketHandler extends PacketHandler {
 	}
 	
 	@Override
-	public void handle(@NotNull IodinePlayerBase player, @NotNull ByteBuffer message) {
-		String clientVersion = BufferUtils.deserializeString(message, 50);
+	public void handle(@NotNull IodinePlayerBase player, @NotNull InputBuffer buffer) {
+		String clientVersion = buffer.readString(50);
 		if (clientVersion == null) {
 			getPlugin().log(Level.OFF, "Login > received too long version");
 			unexpectedInput(player);

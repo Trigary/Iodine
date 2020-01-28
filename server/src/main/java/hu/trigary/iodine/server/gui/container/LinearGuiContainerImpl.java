@@ -3,16 +3,16 @@ package hu.trigary.iodine.server.gui.container;
 import hu.trigary.iodine.api.gui.container.LinearGuiContainer;
 import hu.trigary.iodine.api.gui.element.base.GuiElement;
 import hu.trigary.iodine.backend.GuiElementType;
+import hu.trigary.iodine.backend.InputBuffer;
+import hu.trigary.iodine.backend.OutputBuffer;
 import hu.trigary.iodine.server.gui.IodineRootImpl;
 import hu.trigary.iodine.server.gui.container.base.GuiContainerImpl;
 import hu.trigary.iodine.server.gui.element.base.GuiElementImpl;
-import hu.trigary.iodine.server.network.ResizingByteBuffer;
 import hu.trigary.iodine.server.player.IodinePlayerBase;
 import org.apache.commons.lang3.Validate;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
-import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -116,7 +116,7 @@ public class LinearGuiContainerImpl extends GuiContainerImpl<LinearGuiContainer>
 	
 	
 	@Override
-	public void serializeImpl(@NotNull ResizingByteBuffer buffer) {
+	public void serializeImpl(@NotNull OutputBuffer buffer) {
 		buffer.putBool(verticalOrientation);
 		buffer.putShort((short) children.size());
 		for (GuiElementImpl<?> element : children) {
@@ -125,5 +125,5 @@ public class LinearGuiContainerImpl extends GuiContainerImpl<LinearGuiContainer>
 	}
 	
 	@Override
-	public void handleChangePacket(@NotNull IodinePlayerBase player, @NotNull ByteBuffer message) {}
+	public void handleChangePacket(@NotNull IodinePlayerBase player, @NotNull InputBuffer buffer) {}
 }

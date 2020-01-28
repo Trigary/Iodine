@@ -1,12 +1,11 @@
 package hu.trigary.iodine.client.gui;
 
+import hu.trigary.iodine.backend.InputBuffer;
 import hu.trigary.iodine.client.IodineMod;
 import hu.trigary.iodine.client.gui.element.base.GuiElement;
 import hu.trigary.iodine.client.IntPair;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
-
-import java.nio.ByteBuffer;
 
 /**
  * Represents a GUI.
@@ -28,7 +27,7 @@ public final class IodineGui extends IodineRoot {
 	
 	
 	@Override
-	protected void deserializeStart(@NotNull ByteBuffer buffer) {}
+	protected void deserializeStart(@NotNull InputBuffer buffer) {}
 	
 	@Override
 	protected void onElementRemoved(@NotNull GuiElement element) {

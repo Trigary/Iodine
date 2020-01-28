@@ -1,6 +1,5 @@
 package hu.trigary.iodine.client;
 
-import hu.trigary.iodine.backend.BufferUtils;
 import hu.trigary.iodine.backend.PacketType;
 import hu.trigary.iodine.client.gui.ElementManager;
 import hu.trigary.iodine.client.gui.GuiManager;
@@ -128,11 +127,7 @@ public abstract class IodineMod {
 	public final void onJoinedServer() {
 		logger.info("Joined server, attempting login");
 		networkManager.initialize();
-		byte[] array = BufferUtils.serializeString(version);
-		networkManager.send(PacketType.CLIENT_LOGIN, array.length + 2, buffer -> {
-			buffer.putShort((short) array.length);
-			buffer.put(array);
-		});
+		networkManager.send(PacketType.CLIENT_LOGIN, b -> b.putString(version));
 	}
 	
 	/**

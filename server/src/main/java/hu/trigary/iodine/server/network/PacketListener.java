@@ -2,6 +2,7 @@ package hu.trigary.iodine.server.network;
 
 import hu.trigary.iodine.api.player.IodinePlayer;
 import hu.trigary.iodine.backend.ChatUtils;
+import hu.trigary.iodine.backend.InputBuffer;
 import hu.trigary.iodine.server.IodinePlugin;
 import hu.trigary.iodine.server.network.handler.GuiChangePacketHandler;
 import hu.trigary.iodine.server.network.handler.GuiClosePacketHandler;
@@ -11,7 +12,6 @@ import hu.trigary.iodine.server.network.handler.PacketHandler;
 import hu.trigary.iodine.server.player.IodinePlayerBase;
 import org.jetbrains.annotations.NotNull;
 
-import java.nio.ByteBuffer;
 import java.util.UUID;
 import java.util.logging.Level;
 
@@ -20,8 +20,9 @@ import java.util.logging.Level;
  * delegating valid messages to the internally registered {@link PacketHandler} instances.
  */
 public abstract class PacketListener {
-	private final IodinePlugin plugin;
 	private final PacketHandler[] handlers = new PacketHandler[PacketType.getHighestId() + 1];
+	private final InputBuffer buffer = new InputBuffer();
+	private final IodinePlugin plugin;
 	
 	/**
 	 * Creates a new instance.
@@ -82,7 +83,7 @@ public abstract class PacketListener {
 		
 		try {
 			plugin.log(Level.OFF, "Network > handling {0} from {1}", type, iodinePlayer.getName());
-			handler.handle(iodinePlayer, ByteBuffer.wrap(message, 1, message.length - 1));
+			handler.handle(iodinePlayer, buffer.update(message,1));
 		} catch (Throwable t) {
 			plugin.log(Level.INFO, "Network > error handling {0} from {1}, ignoring player", type, iodinePlayer.getName());
 			plugin.log(Level.INFO, "Network > cause (this is maybe a bug, maybe not):", t);

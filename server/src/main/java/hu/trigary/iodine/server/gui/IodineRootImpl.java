@@ -4,12 +4,12 @@ import hu.trigary.iodine.api.gui.GuiElements;
 import hu.trigary.iodine.api.gui.IodineRoot;
 import hu.trigary.iodine.api.gui.element.base.GuiElement;
 import hu.trigary.iodine.api.player.IodinePlayer;
+import hu.trigary.iodine.backend.OutputBuffer;
 import hu.trigary.iodine.server.IodinePlugin;
 import hu.trigary.iodine.server.gui.container.RootGuiContainer;
 import hu.trigary.iodine.server.gui.container.base.GuiParentPlus;
 import hu.trigary.iodine.server.gui.element.base.GuiElementImpl;
 import hu.trigary.iodine.server.network.NetworkManager;
-import hu.trigary.iodine.server.network.ResizingByteBuffer;
 import hu.trigary.iodine.server.player.IodinePlayerBase;
 import org.apache.commons.lang3.Validate;
 import org.jetbrains.annotations.Contract;
@@ -26,7 +26,7 @@ import java.util.logging.Level;
  * @param <T> the class implementing this interface
  */
 public abstract class IodineRootImpl<T extends IodineRoot<T>> implements IodineRoot<T>, GuiParentPlus<T> {
-	private static final ResizingByteBuffer BUFFER = new ResizingByteBuffer(1000);
+	private static final OutputBuffer BUFFER = new OutputBuffer();
 	private final Set<IodinePlayerBase> viewers = new HashSet<>();
 	private final Map<Integer, GuiElementImpl<?>> elements = new HashMap<>();
 	private final Map<Object, GuiElementImpl<?>> apiIdElements = new HashMap<>();
@@ -344,7 +344,7 @@ public abstract class IodineRootImpl<T extends IodineRoot<T>> implements IodineR
 	 *
 	 * @param buffer the buffer to store the data in
 	 */
-	protected abstract void serializeOpenStart(@NotNull ResizingByteBuffer buffer);
+	protected abstract void serializeOpenStart(@NotNull OutputBuffer buffer);
 	
 	@NotNull
 	private byte[] serializeUpdate() {
@@ -358,7 +358,7 @@ public abstract class IodineRootImpl<T extends IodineRoot<T>> implements IodineR
 	 *
 	 * @param buffer the buffer to store the data in
 	 */
-	protected abstract void serializeUpdateStart(@NotNull ResizingByteBuffer buffer);
+	protected abstract void serializeUpdateStart(@NotNull OutputBuffer buffer);
 	
 	@NotNull
 	private static byte[] serialize(@NotNull Collection<GuiElementImpl<?>> remove,

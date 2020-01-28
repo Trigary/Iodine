@@ -1,9 +1,8 @@
 package hu.trigary.iodine.client.network.handler;
 
+import hu.trigary.iodine.backend.InputBuffer;
 import hu.trigary.iodine.client.IodineMod;
 import org.jetbrains.annotations.NotNull;
-
-import java.nio.ByteBuffer;
 
 /**
  * Tha handler of {@link hu.trigary.iodine.backend.PacketType#SERVER_LOGIN_SUCCESS}.
@@ -14,7 +13,7 @@ public class LoginSuccessPacketHandler extends PacketHandler {
 	}
 	
 	@Override
-	public void handle(@NotNull ByteBuffer buffer) {
+	public void handle(@NotNull InputBuffer buffer) {
 		getMod().getLogger().info("Login > successful");
 	}
 }

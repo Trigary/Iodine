@@ -1,19 +1,22 @@
 package hu.trigary.iodine.client.network;
 
+import hu.trigary.iodine.backend.InputBuffer;
+import hu.trigary.iodine.backend.OutputBuffer;
 import hu.trigary.iodine.backend.PacketType;
 import hu.trigary.iodine.client.IodineMod;
 import hu.trigary.iodine.client.network.handler.*;
 import org.jetbrains.annotations.NotNull;
 
-import java.nio.ByteBuffer;
 import java.util.function.Consumer;
 
 /**
  * The manager whose responsibility is sending and receiving packets.
  */
 public abstract class NetworkManager {
-	private final IodineMod mod;
 	private final PacketHandler[] handlers = new PacketHandler[PacketType.getHighestId() + 1];
+	private final OutputBuffer outputBuffer = new OutputBuffer();
+	private final InputBuffer inputBuffer = new InputBuffer();
+	private final IodineMod mod;
 	
 	/**
 	 * Creates a new instance.
@@ -47,15 +50,13 @@ public abstract class NetworkManager {
 	 * Sends the specified payload to the server.
 	 *
 	 * @param type the packet type to include
-	 * @param dataLength the length of the data in the callback
 	 * @param dataProvider the callback that writes the data into the buffer
 	 */
-	public final void send(@NotNull PacketType type, int dataLength, @NotNull Consumer<ByteBuffer> dataProvider) {
-		byte[] message = new byte[dataLength + 1];
-		message[0] = type.getId();
-		dataProvider.accept(ByteBuffer.wrap(message, 1, dataLength));
+	public final void send(@NotNull PacketType type, @NotNull Consumer<OutputBuffer> dataProvider) {
+		outputBuffer.putByte(type.getId());
+		dataProvider.accept(outputBuffer);
 		mod.getLogger().debug("Network > sending {}", type);
-		sendImpl(message);
+		sendImpl(outputBuffer.toArrayAndReset());
 	}
 	
 	/**
@@ -72,8 +73,13 @@ public abstract class NetworkManager {
 	 *
 	 * @param message the received payload.
 	 */
-	protected final void onReceived(@NotNull ByteBuffer message) {
-		byte id = message.get();
+	protected final void onReceived(@NotNull byte[] message) {
+		if (message.length == 0) {
+			mod.getLogger().error("Network > received message with length of 0");
+			return;
+		}
+		
+		byte id = message[0];
 		PacketType type = PacketType.fromId(id);
 		if (type == null) {
 			mod.getLogger().error("Network > received invalid type-id {}", id);
@@ -82,7 +88,7 @@ public abstract class NetworkManager {
 		
 		try {
 			mod.getLogger().debug("Network > handling {}", type);
-			handlers[type.getUnsignedId()].handle(message);
+			handlers[type.getUnsignedId()].handle(inputBuffer.update(message, 1));
 		} catch (Throwable t) {
 			mod.getLogger().error("Network > error handling {}", type, t);
 		}

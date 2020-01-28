@@ -2,15 +2,14 @@ package hu.trigary.iodine.server.gui.element;
 
 import hu.trigary.iodine.api.gui.element.ProgressBarGuiElement;
 import hu.trigary.iodine.backend.GuiElementType;
+import hu.trigary.iodine.backend.InputBuffer;
+import hu.trigary.iodine.backend.OutputBuffer;
 import hu.trigary.iodine.server.gui.IodineRootImpl;
 import hu.trigary.iodine.server.gui.element.base.GuiElementImpl;
-import hu.trigary.iodine.server.network.ResizingByteBuffer;
 import hu.trigary.iodine.server.player.IodinePlayerBase;
 import org.apache.commons.lang3.Validate;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
-
-import java.nio.ByteBuffer;
 
 /**
  * The implementation of {@link ProgressBarGuiElement}.
@@ -120,7 +119,7 @@ public class ProgressBarGuiElementImpl extends GuiElementImpl<ProgressBarGuiElem
 	
 	
 	@Override
-	public void serializeImpl(@NotNull ResizingByteBuffer buffer) {
+	public void serializeImpl(@NotNull OutputBuffer buffer) {
 		buffer.putBool(verticalOrientation);
 		buffer.putShort(verticalOrientation ? height : width);
 		buffer.putString(tooltip);
@@ -128,5 +127,5 @@ public class ProgressBarGuiElementImpl extends GuiElementImpl<ProgressBarGuiElem
 	}
 	
 	@Override
-	public void handleChangePacket(@NotNull IodinePlayerBase player, @NotNull ByteBuffer message) {}
+	public void handleChangePacket(@NotNull IodinePlayerBase player, @NotNull InputBuffer buffer) {}
 }

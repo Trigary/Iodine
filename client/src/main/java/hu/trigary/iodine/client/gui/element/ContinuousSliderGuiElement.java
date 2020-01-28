@@ -1,12 +1,11 @@
 package hu.trigary.iodine.client.gui.element;
 
-import hu.trigary.iodine.backend.BufferUtils;
+import hu.trigary.iodine.backend.InputBuffer;
 import hu.trigary.iodine.client.gui.IodineRoot;
 import hu.trigary.iodine.client.gui.element.base.GuiElement;
 import hu.trigary.iodine.client.IntPair;
 import org.jetbrains.annotations.NotNull;
 
-import java.nio.ByteBuffer;
 import java.util.function.Consumer;
 
 /**
@@ -34,13 +33,13 @@ public abstract class ContinuousSliderGuiElement extends GuiElement {
 	
 	
 	@Override
-	protected final void deserializeImpl(@NotNull ByteBuffer buffer) {
-		width = buffer.getShort();
+	protected final void deserializeImpl(@NotNull InputBuffer buffer) {
+		width = buffer.readShort();
 		height = SIZE;
-		editable = BufferUtils.deserializeBoolean(buffer);
-		tooltip = BufferUtils.deserializeString(buffer);
-		text = BufferUtils.deserializeString(buffer);
-		progress = buffer.getFloat();
+		editable = buffer.readBool();
+		tooltip = buffer.readString();
+		text = buffer.readString();
+		progress = buffer.readFloat();
 	}
 	
 	@NotNull
@@ -51,13 +50,13 @@ public abstract class ContinuousSliderGuiElement extends GuiElement {
 	
 	/**
 	 * Should be called when the user moved and released this slider.
-	 * Calls {@link #sendChangePacket(int, Consumer)} internally after doing sanity checks.
+	 * Calls {@link #sendChangePacket(Consumer)} internally after doing sanity checks.
 	 *
 	 * @param newProgress the new progress
 	 */
 	protected final void onChanged(float newProgress) {
 		if (editable && Float.compare(progress, newProgress) != 0 && newProgress >= 0 && newProgress <= 1) {
-			sendChangePacket(4, b -> b.putFloat(newProgress));
+			sendChangePacket(b -> b.putFloat(newProgress));
 		}
 	}
 }

@@ -1,12 +1,11 @@
 package hu.trigary.iodine.client.gui.element;
 
-import hu.trigary.iodine.backend.BufferUtils;
+import hu.trigary.iodine.backend.InputBuffer;
 import hu.trigary.iodine.client.gui.IodineRoot;
 import hu.trigary.iodine.client.gui.element.base.GuiElement;
 import hu.trigary.iodine.client.IntPair;
 import org.jetbrains.annotations.NotNull;
 
-import java.nio.ByteBuffer;
 import java.util.function.Consumer;
 import java.util.regex.Pattern;
 
@@ -35,15 +34,15 @@ public abstract class TextFieldGuiElement extends GuiElement {
 	
 	
 	@Override
-	protected final void deserializeImpl(@NotNull ByteBuffer buffer) {
-		width = buffer.getShort();
-		height = buffer.getShort();
-		editable = BufferUtils.deserializeBoolean(buffer);
-		tooltip = BufferUtils.deserializeString(buffer);
-		text = BufferUtils.deserializeString(buffer);
-		String regexString = BufferUtils.deserializeString(buffer);
+	protected final void deserializeImpl(@NotNull InputBuffer buffer) {
+		width = buffer.readShort();
+		height = buffer.readShort();
+		editable = buffer.readBool();
+		tooltip = buffer.readString();
+		text = buffer.readString();
+		String regexString = buffer.readString();
 		regex = regexString.isEmpty() ? null : Pattern.compile(regexString);
-		maxLength = buffer.get() & 0xFF;
+		maxLength = buffer.readByte() & 0xFF;
 	}
 	
 	@NotNull
@@ -54,18 +53,14 @@ public abstract class TextFieldGuiElement extends GuiElement {
 	
 	/**
 	 * Should be called when the user changed the text in this element.
-	 * Calls {@link #sendChangePacket(int, Consumer)} internally after doing sanity checks.
+	 * Calls {@link #sendChangePacket(Consumer)} internally after doing sanity checks.
 	 *
 	 * @param newText the new text in this element
 	 */
 	protected void onChanged(@NotNull String newText) {
 		if (editable && !text.equals(newText) && newText.length() <= maxLength
 				&& (regex == null || regex.matcher(newText).matches())) {
-			byte[] array = BufferUtils.serializeString(newText);
-			sendChangePacket(array.length + 2, buffer -> {
-				buffer.putShort((short) array.length);
-				buffer.put(array);
-			});
+			sendChangePacket(b -> b.putString(newText));
 		}
 	}
 }

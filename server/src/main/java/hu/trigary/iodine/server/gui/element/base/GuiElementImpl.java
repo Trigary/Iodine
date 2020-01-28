@@ -3,17 +3,16 @@ package hu.trigary.iodine.server.gui.element.base;
 import hu.trigary.iodine.api.gui.element.base.GuiElement;
 import hu.trigary.iodine.backend.GuiElementType;
 import hu.trigary.iodine.api.gui.IodineRoot;
+import hu.trigary.iodine.backend.InputBuffer;
+import hu.trigary.iodine.backend.OutputBuffer;
 import hu.trigary.iodine.server.gui.IodineRootImpl;
 import hu.trigary.iodine.server.gui.container.base.GuiParentPlus;
-import hu.trigary.iodine.server.network.ResizingByteBuffer;
 import hu.trigary.iodine.server.network.handler.GuiChangePacketHandler;
 import hu.trigary.iodine.server.player.IodinePlayerBase;
 import org.apache.commons.lang3.Validate;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.nio.ByteBuffer;
 
 /**
  * The implementation of {@link GuiElement}.
@@ -155,7 +154,7 @@ public abstract class GuiElementImpl<T extends GuiElement<T>> implements GuiElem
 	 *
 	 * @param buffer the buffer to store the data in
 	 */
-	public final void serialize(@NotNull ResizingByteBuffer buffer) {
+	public final void serialize(@NotNull OutputBuffer buffer) {
 		buffer.putByte(type.getId());
 		buffer.putInt(internalId);
 		buffer.putShort(padding[0]);
@@ -168,11 +167,11 @@ public abstract class GuiElementImpl<T extends GuiElement<T>> implements GuiElem
 	
 	/**
 	 * Serializes this element's type specific data into the specified buffer.
-	 * This method should only be called be {@link #serialize(ResizingByteBuffer)}.
+	 * This method should only be called be {@link #serialize(OutputBuffer)}.
 	 *
 	 * @param buffer the buffer to store the data in
 	 */
-	protected abstract void serializeImpl(@NotNull ResizingByteBuffer buffer);
+	protected abstract void serializeImpl(@NotNull OutputBuffer buffer);
 	
 	/**
 	 * Called by {@link GuiChangePacketHandler} when a viewer acts upon this element.
@@ -183,9 +182,9 @@ public abstract class GuiElementImpl<T extends GuiElement<T>> implements GuiElem
 	 * then {@link IodineRootImpl#flagAndAtomicUpdate(GuiElementImpl, Runnable)} should be used.
 	 *
 	 * @param player the sender of the packet
-	 * @param message the packet's contents
+	 * @param buffer the packet's contents
 	 */
-	public abstract void handleChangePacket(@NotNull IodinePlayerBase player, @NotNull ByteBuffer message);
+	public abstract void handleChangePacket(@NotNull IodinePlayerBase player, @NotNull InputBuffer buffer);
 	
 	/**
 	 * A method that is called when this element is removed from its {@link IodineRoot}.

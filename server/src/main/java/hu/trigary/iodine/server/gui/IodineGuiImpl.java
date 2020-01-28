@@ -1,10 +1,10 @@
 package hu.trigary.iodine.server.gui;
 
 import hu.trigary.iodine.api.gui.IodineGui;
+import hu.trigary.iodine.backend.OutputBuffer;
 import hu.trigary.iodine.backend.PacketType;
 import hu.trigary.iodine.server.IodinePlugin;
 import hu.trigary.iodine.server.network.NetworkManager;
-import hu.trigary.iodine.server.network.ResizingByteBuffer;
 import hu.trigary.iodine.server.player.IodinePlayerBase;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -66,13 +66,13 @@ public class IodineGuiImpl extends IodineRootImpl<IodineGui> implements IodineGu
 	
 	
 	@Override
-	protected void serializeOpenStart(@NotNull ResizingByteBuffer buffer) {
+	protected void serializeOpenStart(@NotNull OutputBuffer buffer) {
 		buffer.putByte(PacketType.SERVER_GUI_OPEN.getId());
 		buffer.putInt(getId());
 	}
 	
 	@Override
-	protected void serializeUpdateStart(@NotNull ResizingByteBuffer buffer) {
+	protected void serializeUpdateStart(@NotNull OutputBuffer buffer) {
 		buffer.putByte(PacketType.SERVER_GUI_CHANGE.getId());
 	}
 }

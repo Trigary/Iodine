@@ -1,12 +1,11 @@
 package hu.trigary.iodine.client.gui.element;
 
-import hu.trigary.iodine.backend.BufferUtils;
+import hu.trigary.iodine.backend.InputBuffer;
 import hu.trigary.iodine.client.gui.IodineRoot;
 import hu.trigary.iodine.client.gui.element.base.GuiElement;
 import hu.trigary.iodine.client.IntPair;
 import org.jetbrains.annotations.NotNull;
 
-import java.nio.ByteBuffer;
 import java.util.function.Consumer;
 
 /**
@@ -33,15 +32,15 @@ public abstract class DropdownGuiElement extends GuiElement {
 	
 	
 	@Override
-	protected final void deserializeImpl(@NotNull ByteBuffer buffer) {
-		width = buffer.getShort();
-		editable = BufferUtils.deserializeBoolean(buffer);
-		tooltip = BufferUtils.deserializeString(buffer);
-		choices = new String[buffer.getShort()];
+	protected final void deserializeImpl(@NotNull InputBuffer buffer) {
+		width = buffer.readShort();
+		editable = buffer.readBool();
+		tooltip = buffer.readString();
+		choices = new String[buffer.readShort()];
 		for (int i = 0; i < choices.length; i++) {
-			choices[i] = BufferUtils.deserializeString(buffer);
+			choices[i] = buffer.readString();
 		}
-		selected = buffer.getShort();
+		selected = buffer.readShort();
 	}
 	
 	@NotNull
@@ -52,11 +51,11 @@ public abstract class DropdownGuiElement extends GuiElement {
 	
 	/**
 	 * Should be called when the user clicked this element.
-	 * Calls {@link #sendChangePacket(int, Consumer)} internally after doing sanity checks.
+	 * Calls {@link #sendChangePacket(Consumer)} internally after doing sanity checks.
 	 */
 	protected final void onChanged() {
 		if (editable && choices.length != 1) {
-			sendChangePacket(4, b -> b.putShort((short) (selected + 1 == choices.length ? 0 : selected + 1)));
+			sendChangePacket(b -> b.putShort((short) (selected + 1 == choices.length ? 0 : selected + 1)));
 		}
 	}
 }

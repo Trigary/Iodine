@@ -3,15 +3,14 @@ package hu.trigary.iodine.server.gui.element;
 import hu.trigary.iodine.api.gui.IodineColor;
 import hu.trigary.iodine.api.gui.element.RectangleGuiElement;
 import hu.trigary.iodine.backend.GuiElementType;
+import hu.trigary.iodine.backend.InputBuffer;
+import hu.trigary.iodine.backend.OutputBuffer;
 import hu.trigary.iodine.server.gui.IodineRootImpl;
 import hu.trigary.iodine.server.gui.element.base.GuiElementImpl;
-import hu.trigary.iodine.server.network.ResizingByteBuffer;
 import hu.trigary.iodine.server.player.IodinePlayerBase;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.nio.ByteBuffer;
 
 /**
  * The implementation of {@link RectangleGuiElement}.
@@ -103,7 +102,7 @@ public class RectangleGuiElementImpl extends GuiElementImpl<RectangleGuiElement>
 	
 	
 	@Override
-	public void serializeImpl(@NotNull ResizingByteBuffer buffer) {
+	public void serializeImpl(@NotNull OutputBuffer buffer) {
 		buffer.putShort(width);
 		buffer.putShort(height);
 		buffer.putString(tooltip);
@@ -113,7 +112,7 @@ public class RectangleGuiElementImpl extends GuiElementImpl<RectangleGuiElement>
 	}
 	
 	@Override
-	public void handleChangePacket(@NotNull IodinePlayerBase player, @NotNull ByteBuffer message) {
+	public void handleChangePacket(@NotNull IodinePlayerBase player, @NotNull InputBuffer buffer) {
 		if (clickedAction != null) {
 			clickedAction.accept(this, player);
 		}

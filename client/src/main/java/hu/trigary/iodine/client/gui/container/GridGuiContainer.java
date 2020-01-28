@@ -1,13 +1,12 @@
 package hu.trigary.iodine.client.gui.container;
 
+import hu.trigary.iodine.backend.InputBuffer;
 import hu.trigary.iodine.client.IntPair;
 import hu.trigary.iodine.client.gui.IodineRoot;
 import hu.trigary.iodine.client.gui.container.base.GuiContainer;
 import hu.trigary.iodine.client.gui.element.base.GuiElement;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
-
-import java.nio.ByteBuffer;
 
 /**
  * The implementation of {@link hu.trigary.iodine.backend.GuiElementType#CONTAINER_GRID}.
@@ -41,12 +40,12 @@ public final class GridGuiContainer extends GuiContainer {
 	
 	
 	@Override
-	protected void deserializeImpl(@NotNull ByteBuffer buffer) {
-		columnCount = buffer.getShort();
-		rowCount = buffer.getShort();
+	protected void deserializeImpl(@NotNull InputBuffer buffer) {
+		columnCount = buffer.readShort();
+		rowCount = buffer.readShort();
 		childrenTemp = new int[columnCount * rowCount];
 		for (int i = 0; i < childrenTemp.length; i++) {
-			childrenTemp[i] = buffer.getInt();
+			childrenTemp[i] = buffer.readInt();
 		}
 	}
 	

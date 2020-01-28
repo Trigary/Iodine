@@ -1,10 +1,9 @@
 package hu.trigary.iodine.client.gui;
 
+import hu.trigary.iodine.backend.InputBuffer;
 import hu.trigary.iodine.backend.PacketType;
 import hu.trigary.iodine.client.IodineMod;
 import org.jetbrains.annotations.NotNull;
-
-import java.nio.ByteBuffer;
 
 /**
  * The manager whose responsibility is managing the open {@link IodineGui}.
@@ -30,8 +29,8 @@ public abstract class GuiManager {
 	 *
 	 * @param buffer the buffer containing the packet
 	 */
-	public final void packetOpenGui(@NotNull ByteBuffer buffer) {
-		IodineGui gui = new IodineGui(mod, buffer.getInt());
+	public final void packetOpenGui(@NotNull InputBuffer buffer) {
+		IodineGui gui = new IodineGui(mod, buffer.readInt());
 		if (openGui != null) {
 			closeOpenGui(false);
 			mod.getLogger().debug("GuiManager > closing {} to open {}", openGui.getId(), gui.getId());
@@ -48,7 +47,7 @@ public abstract class GuiManager {
 	 *
 	 * @param buffer the buffer containing the packet
 	 */
-	public final void packetUpdateGui(@NotNull ByteBuffer buffer) {
+	public final void packetUpdateGui(@NotNull InputBuffer buffer) {
 		if (openGui != null) {
 			mod.getLogger().debug("GuiManager > updating {}", openGui.getId());
 			openGui.deserialize(buffer);
@@ -76,7 +75,7 @@ public abstract class GuiManager {
 	public final void playerCloseGui() {
 		if (openGui != null) {
 			mod.getLogger().debug("GuiManager > player closing {}", openGui.getId());
-			mod.getNetworkManager().send(PacketType.CLIENT_GUI_CLOSE, 4, b -> b.putInt(openGui.getId()));
+			mod.getNetworkManager().send(PacketType.CLIENT_GUI_CLOSE, b -> b.putInt(openGui.getId()));
 			closeOpenGui(true);
 		}
 	}

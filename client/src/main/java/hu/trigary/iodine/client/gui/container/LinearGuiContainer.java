@@ -1,13 +1,11 @@
 package hu.trigary.iodine.client.gui.container;
 
-import hu.trigary.iodine.backend.BufferUtils;
+import hu.trigary.iodine.backend.InputBuffer;
 import hu.trigary.iodine.client.IntPair;
 import hu.trigary.iodine.client.gui.IodineRoot;
 import hu.trigary.iodine.client.gui.container.base.GuiContainer;
 import hu.trigary.iodine.client.gui.element.base.GuiElement;
 import org.jetbrains.annotations.NotNull;
-
-import java.nio.ByteBuffer;
 
 /**
  * The implementation of {@link hu.trigary.iodine.backend.GuiElementType#CONTAINER_LINEAR}.
@@ -30,11 +28,11 @@ public final class LinearGuiContainer extends GuiContainer {
 	
 	
 	@Override
-	protected void deserializeImpl(@NotNull ByteBuffer buffer) {
-		verticalOrientation = BufferUtils.deserializeBoolean(buffer);
-		childrenTemp = new int[buffer.getShort()];
+	protected void deserializeImpl(@NotNull InputBuffer buffer) {
+		verticalOrientation = buffer.readBool();
+		childrenTemp = new int[buffer.readShort()];
 		for (int i = 0; i < childrenTemp.length; i++) {
-			childrenTemp[i] = buffer.getInt();
+			childrenTemp[i] = buffer.readInt();
 		}
 	}
 	

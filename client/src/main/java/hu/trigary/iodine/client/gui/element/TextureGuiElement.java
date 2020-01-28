@@ -1,12 +1,11 @@
 package hu.trigary.iodine.client.gui.element;
 
-import hu.trigary.iodine.backend.BufferUtils;
+import hu.trigary.iodine.backend.InputBuffer;
 import hu.trigary.iodine.client.IntPair;
 import hu.trigary.iodine.client.gui.IodineRoot;
 import hu.trigary.iodine.client.gui.element.base.GuiElement;
 import org.jetbrains.annotations.NotNull;
 
-import java.nio.ByteBuffer;
 import java.util.function.Consumer;
 
 /**
@@ -38,18 +37,18 @@ public abstract class TextureGuiElement extends GuiElement {
 	
 	
 	@Override
-	protected final void deserializeImpl(@NotNull ByteBuffer buffer) {
-		width = buffer.getShort();
-		height = buffer.getShort();
-		tooltip = BufferUtils.deserializeString(buffer);
-		texture = BufferUtils.deserializeString(buffer);
-		fileWidth = buffer.getShort();
-		fileHeight = buffer.getShort();
-		offsetX = buffer.getShort();
-		offsetY = buffer.getShort();
-		textureWidth = buffer.getShort();
-		textureHeight = buffer.getShort();
-		resizeMode = buffer.get();
+	protected final void deserializeImpl(@NotNull InputBuffer buffer) {
+		width = buffer.readShort();
+		height = buffer.readShort();
+		tooltip = buffer.readString();
+		texture = buffer.readString();
+		fileWidth = buffer.readShort();
+		fileHeight = buffer.readShort();
+		offsetX = buffer.readShort();
+		offsetY = buffer.readShort();
+		textureWidth = buffer.readShort();
+		textureHeight = buffer.readShort();
+		resizeMode = buffer.readByte();
 	}
 	
 	@NotNull
@@ -60,9 +59,9 @@ public abstract class TextureGuiElement extends GuiElement {
 	
 	/**
 	 * Should be called when the user clicked this element.
-	 * Calls {@link #sendChangePacket(int, Consumer)} internally after doing sanity checks.
+	 * Calls {@link #sendChangePacket(Consumer)} internally after doing sanity checks.
 	 */
 	protected final void onChanged() {
-		sendChangePacket(0, b -> {});
+		sendChangePacket(b -> {});
 	}
 }

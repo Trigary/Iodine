@@ -1,12 +1,10 @@
 package hu.trigary.iodine.client.gui.element;
 
-import hu.trigary.iodine.backend.BufferUtils;
+import hu.trigary.iodine.backend.InputBuffer;
 import hu.trigary.iodine.client.gui.IodineRoot;
 import hu.trigary.iodine.client.gui.element.base.GuiElement;
 import hu.trigary.iodine.client.IntPair;
 import org.jetbrains.annotations.NotNull;
-
-import java.nio.ByteBuffer;
 
 /**
  * The implementation of {@link hu.trigary.iodine.backend.GuiElementType#PROGRESS_BAR}.
@@ -32,12 +30,12 @@ public abstract class ProgressBarGuiElement extends GuiElement {
 	
 	
 	@Override
-	protected final void deserializeImpl(@NotNull ByteBuffer buffer) {
-		verticalOrientation = BufferUtils.deserializeBoolean(buffer);
-		width = verticalOrientation ? SIZE : buffer.getShort();
-		height = verticalOrientation ? buffer.getShort() : SIZE;
-		tooltip = BufferUtils.deserializeString(buffer);
-		progress = buffer.getFloat();
+	protected final void deserializeImpl(@NotNull InputBuffer buffer) {
+		verticalOrientation = buffer.readBool();
+		width = verticalOrientation ? SIZE : buffer.readShort();
+		height = verticalOrientation ? buffer.readShort() : SIZE;
+		tooltip = buffer.readString();
+		progress = buffer.readFloat();
 	}
 	
 	@NotNull

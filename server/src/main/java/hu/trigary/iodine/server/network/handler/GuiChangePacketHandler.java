@@ -1,5 +1,6 @@
 package hu.trigary.iodine.server.network.handler;
 
+import hu.trigary.iodine.backend.InputBuffer;
 import hu.trigary.iodine.server.IodinePlugin;
 import hu.trigary.iodine.server.gui.IodineGuiImpl;
 import hu.trigary.iodine.server.gui.element.base.GuiElementImpl;
@@ -8,7 +9,6 @@ import hu.trigary.iodine.backend.PacketType;
 import hu.trigary.iodine.server.player.IodinePlayerBase;
 import org.jetbrains.annotations.NotNull;
 
-import java.nio.ByteBuffer;
 import java.util.logging.Level;
 
 /**
@@ -29,20 +29,20 @@ public class GuiChangePacketHandler extends PacketHandler {
 	
 	
 	@Override
-	public void handle(@NotNull IodinePlayerBase player, @NotNull ByteBuffer message) {
+	public void handle(@NotNull IodinePlayerBase player, @NotNull InputBuffer buffer) {
 		IodineGuiImpl gui = player.getOpenGui();
-		if (gui == null || gui.getId() != message.getInt()) {
+		if (gui == null || gui.getId() != buffer.readInt()) {
 			getPlugin().log(Level.OFF, "Network > updating GUI failed: no open GUI by id");
 			return;
 		}
 		
 		getPlugin().log(Level.OFF, "Network > updating GUI {0}", gui.getId());
-		GuiElementImpl<?> element = gui.getElement(message.getInt());
+		GuiElementImpl<?> element = gui.getElement(buffer.readInt());
 		if (element == null) {
 			getPlugin().log(Level.OFF, "Network > updating element failed: no element by id");
 		} else {
 			getPlugin().log(Level.OFF, "Network > updating element {0}", element.getInternalId());
-			element.handleChangePacket(player, message);
+			element.handleChangePacket(player, buffer);
 		}
 	}
 }

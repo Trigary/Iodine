@@ -1,12 +1,11 @@
 package hu.trigary.iodine.client.gui.element;
 
-import hu.trigary.iodine.backend.BufferUtils;
+import hu.trigary.iodine.backend.InputBuffer;
 import hu.trigary.iodine.client.gui.IodineRoot;
 import hu.trigary.iodine.client.gui.element.base.GuiElement;
 import hu.trigary.iodine.client.IntPair;
 import org.jetbrains.annotations.NotNull;
 
-import java.nio.ByteBuffer;
 import java.util.function.Consumer;
 
 /**
@@ -32,11 +31,11 @@ public abstract class ButtonGuiElement extends GuiElement {
 	
 	
 	@Override
-	protected final void deserializeImpl(@NotNull ByteBuffer buffer) {
-		width = buffer.getShort();
-		editable = BufferUtils.deserializeBoolean(buffer);
-		tooltip = BufferUtils.deserializeString(buffer);
-		text = BufferUtils.deserializeString(buffer);
+	protected final void deserializeImpl(@NotNull InputBuffer buffer) {
+		width = buffer.readShort();
+		editable = buffer.readBool();
+		tooltip = buffer.readString();
+		text = buffer.readString();
 	}
 	
 	@NotNull
@@ -47,11 +46,11 @@ public abstract class ButtonGuiElement extends GuiElement {
 	
 	/**
 	 * Should be called when the user clicked this element.
-	 * Calls {@link #sendChangePacket(int, Consumer)} internally after doing sanity checks.
+	 * Calls {@link #sendChangePacket(Consumer)} internally after doing sanity checks.
 	 */
 	protected final void onChanged() {
 		if (editable) {
-			sendChangePacket(0, b -> {});
+			sendChangePacket(b -> {});
 		}
 	}
 }

@@ -1,9 +1,8 @@
 package hu.trigary.iodine.client.network.handler;
 
+import hu.trigary.iodine.backend.InputBuffer;
 import hu.trigary.iodine.client.IodineMod;
 import org.jetbrains.annotations.NotNull;
-
-import java.nio.ByteBuffer;
 
 /**
  * Tha handler of {@link hu.trigary.iodine.backend.PacketType#SERVER_LOGIN_FAILED}.
@@ -14,8 +13,8 @@ public class LoginFailedPacketHandler extends PacketHandler {
 	}
 	
 	@Override
-	public void handle(@NotNull ByteBuffer buffer) {
-		int value = buffer.get();
+	public void handle(@NotNull InputBuffer buffer) {
+		int value = buffer.readByte();
 		if (value == 0) {
 			getMod().getLogger().info("Login > client sent invalid login packet");
 		} else if (value == 1) {

@@ -1,18 +1,17 @@
 package hu.trigary.iodine.server.gui.element;
 
 import hu.trigary.iodine.api.gui.element.TextFieldGuiElement;
-import hu.trigary.iodine.backend.BufferUtils;
 import hu.trigary.iodine.backend.GuiElementType;
+import hu.trigary.iodine.backend.InputBuffer;
+import hu.trigary.iodine.backend.OutputBuffer;
 import hu.trigary.iodine.server.gui.IodineRootImpl;
 import hu.trigary.iodine.server.gui.element.base.GuiElementImpl;
-import hu.trigary.iodine.server.network.ResizingByteBuffer;
 import hu.trigary.iodine.server.player.IodinePlayerBase;
 import org.apache.commons.lang3.Validate;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.nio.ByteBuffer;
 import java.util.regex.Pattern;
 
 /**
@@ -159,7 +158,7 @@ public class TextFieldGuiElementImpl extends GuiElementImpl<TextFieldGuiElement>
 	
 	
 	@Override
-	public void serializeImpl(@NotNull ResizingByteBuffer buffer) {
+	public void serializeImpl(@NotNull OutputBuffer buffer) {
 		buffer.putShort(width);
 		buffer.putShort(height);
 		buffer.putBool(editable);
@@ -170,12 +169,12 @@ public class TextFieldGuiElementImpl extends GuiElementImpl<TextFieldGuiElement>
 	}
 	
 	@Override
-	public void handleChangePacket(@NotNull IodinePlayerBase player, @NotNull ByteBuffer message) {
+	public void handleChangePacket(@NotNull IodinePlayerBase player, @NotNull InputBuffer buffer) {
 		if (!editable) {
 			return;
 		}
 		
-		String newText = BufferUtils.deserializeString(message, maxLength * 4);
+		String newText = buffer.readString(maxLength * 4);
 		if (newText == null || text.equals(newText) || newText.length() > maxLength || !validate(compiledRegex, newText)) {
 			return;
 		}

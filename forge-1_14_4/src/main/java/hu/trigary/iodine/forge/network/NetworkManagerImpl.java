@@ -16,7 +16,6 @@ import net.minecraftforge.fml.network.NetworkRegistry;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
 
-import java.nio.ByteBuffer;
 import java.util.function.Predicate;
 
 /**
@@ -70,9 +69,13 @@ public class NetworkManagerImpl extends NetworkManager {
 		
 		PacketBuffer buffer = event.getPayload();
 		byte[] array = new byte[buffer.readableBytes()];
-		for (int i = 0; i < array.length; i++) {
-			array[i] = buffer.readByte();
+		if (buffer.hasArray()) {
+			System.arraycopy(buffer.array(), buffer.arrayOffset(), array, 0, array.length);
+		} else {
+			for (int i = 0; i < array.length; i++) {
+				array[i] = buffer.readByte();
+			}
 		}
-		context.enqueueWork(() -> onReceived(ByteBuffer.wrap(array)));
+		context.enqueueWork(() -> onReceived(array));
 	}
 }

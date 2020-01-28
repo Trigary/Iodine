@@ -1,9 +1,9 @@
 package hu.trigary.iodine.client.gui;
 
+import hu.trigary.iodine.backend.InputBuffer;
 import hu.trigary.iodine.client.IodineMod;
 import org.jetbrains.annotations.NotNull;
 
-import java.nio.ByteBuffer;
 import java.util.*;
 
 /**
@@ -33,10 +33,10 @@ public abstract class OverlayManager {
 	 *
 	 * @param buffer the buffer containing the packet
 	 */
-	public final void packetOpenOverlay(@NotNull ByteBuffer buffer) {
+	public final void packetOpenOverlay(@NotNull InputBuffer buffer) {
 		//noinspection IOResourceOpenedButNotSafelyClosed
-		IodineOverlay overlay = new IodineOverlay(mod, buffer.getInt(),
-				buffer.get(), buffer.getShort(), buffer.getShort());
+		IodineOverlay overlay = new IodineOverlay(mod, buffer.readInt(),
+				buffer.readByte(), buffer.readShort(), buffer.readShort());
 		mod.getLogger().debug("OverlayManager > opening {}", overlay.getId());
 		openOverlays.put(overlay.getId(), overlay);
 		drawOrderedOverlays.add(overlay);
@@ -48,8 +48,8 @@ public abstract class OverlayManager {
 	 *
 	 * @param buffer the buffer containing the packet
 	 */
-	public final void packetUpdateOverlay(@NotNull ByteBuffer buffer) {
-		IodineOverlay overlay = openOverlays.get(buffer.getInt());
+	public final void packetUpdateOverlay(@NotNull InputBuffer buffer) {
+		IodineOverlay overlay = openOverlays.get(buffer.readInt());
 		mod.getLogger().debug("OverlayManager > updating {}", overlay.getId());
 		drawOrderedOverlays.remove(overlay);
 		overlay.deserialize(buffer);
@@ -61,8 +61,8 @@ public abstract class OverlayManager {
 	 *
 	 * @param buffer the buffer containing the packet
 	 */
-	public final void packetCloseOverlay(@NotNull ByteBuffer buffer) {
-		try (IodineOverlay overlay = openOverlays.remove(buffer.getInt())) {
+	public final void packetCloseOverlay(@NotNull InputBuffer buffer) {
+		try (IodineOverlay overlay = openOverlays.remove(buffer.readInt())) {
 			mod.getLogger().debug("OverlayManager > closing {}", overlay.getId());
 		}
 	}

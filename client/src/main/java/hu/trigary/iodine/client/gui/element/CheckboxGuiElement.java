@@ -1,12 +1,11 @@
 package hu.trigary.iodine.client.gui.element;
 
-import hu.trigary.iodine.backend.BufferUtils;
+import hu.trigary.iodine.backend.InputBuffer;
 import hu.trigary.iodine.client.gui.IodineRoot;
 import hu.trigary.iodine.client.gui.element.base.GuiElement;
 import hu.trigary.iodine.client.IntPair;
 import org.jetbrains.annotations.NotNull;
 
-import java.nio.ByteBuffer;
 import java.util.function.Consumer;
 
 /**
@@ -31,10 +30,10 @@ public abstract class CheckboxGuiElement extends GuiElement {
 	
 	
 	@Override
-	protected final void deserializeImpl(@NotNull ByteBuffer buffer) {
-		editable = BufferUtils.deserializeBoolean(buffer);
-		tooltip = BufferUtils.deserializeString(buffer);
-		checked = BufferUtils.deserializeBoolean(buffer);
+	protected final void deserializeImpl(@NotNull InputBuffer buffer) {
+		editable = buffer.readBool();
+		tooltip = buffer.readString();
+		checked = buffer.readBool();
 	}
 	
 	@NotNull
@@ -45,11 +44,11 @@ public abstract class CheckboxGuiElement extends GuiElement {
 	
 	/**
 	 * Should be called when the user clicked this element.
-	 * Calls {@link #sendChangePacket(int, Consumer)} internally after doing sanity checks.
+	 * Calls {@link #sendChangePacket(Consumer)} internally after doing sanity checks.
 	 */
 	protected final void onChanged() {
 		if (editable) {
-			sendChangePacket(1, b -> BufferUtils.serializeBoolean(b, !checked));
+			sendChangePacket(b -> b.putBool(!checked));
 		}
 	}
 }

@@ -1,12 +1,11 @@
 package hu.trigary.iodine.client.gui;
 
+import hu.trigary.iodine.backend.InputBuffer;
 import hu.trigary.iodine.client.gui.element.base.GuiElement;
 import hu.trigary.iodine.client.IntPair;
 import hu.trigary.iodine.client.IodineMod;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
-
-import java.nio.ByteBuffer;
 
 /**
  * Represents an overlay.
@@ -51,8 +50,8 @@ public final class IodineOverlay extends IodineRoot {
 	
 	
 	@Override
-	protected void deserializeStart(@NotNull ByteBuffer buffer) {
-		drawPriority = buffer.get();
+	protected void deserializeStart(@NotNull InputBuffer buffer) {
+		drawPriority = buffer.readByte();
 	}
 	
 	@Override

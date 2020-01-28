@@ -1,5 +1,6 @@
 package hu.trigary.iodine.server.network.handler;
 
+import hu.trigary.iodine.backend.InputBuffer;
 import hu.trigary.iodine.backend.PacketType;
 import hu.trigary.iodine.server.IodinePlugin;
 import hu.trigary.iodine.server.gui.IodineRootImpl;
@@ -7,7 +8,6 @@ import hu.trigary.iodine.server.network.PacketListener;
 import hu.trigary.iodine.server.player.IodinePlayerBase;
 import org.jetbrains.annotations.NotNull;
 
-import java.nio.ByteBuffer;
 import java.util.logging.Level;
 
 /**
@@ -28,8 +28,8 @@ public class GuiClosePacketHandler extends PacketHandler {
 	
 	
 	@Override
-	public void handle(@NotNull IodinePlayerBase player, @NotNull ByteBuffer message) {
-		IodineRootImpl<?> gui = getPlugin().getRootManager().getRoot(message.getInt());
+	public void handle(@NotNull IodinePlayerBase player, @NotNull InputBuffer buffer) {
+		IodineRootImpl<?> gui = getPlugin().getRootManager().getRoot(buffer.readInt());
 		if (gui == null) {
 			getPlugin().log(Level.OFF, "Network > closing GUI failed: no open GUI by id");
 		} else {

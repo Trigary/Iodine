@@ -1,10 +1,10 @@
 package hu.trigary.iodine.server.gui;
 
 import hu.trigary.iodine.api.gui.IodineOverlay;
+import hu.trigary.iodine.backend.OutputBuffer;
 import hu.trigary.iodine.backend.PacketType;
 import hu.trigary.iodine.server.IodinePlugin;
 import hu.trigary.iodine.server.network.NetworkManager;
-import hu.trigary.iodine.server.network.ResizingByteBuffer;
 import hu.trigary.iodine.server.player.IodinePlayerBase;
 import org.apache.commons.lang3.Validate;
 import org.jetbrains.annotations.Contract;
@@ -94,7 +94,7 @@ public class IodineOverlayImpl extends IodineRootImpl<IodineOverlay> implements 
 	
 	
 	@Override
-	protected void serializeOpenStart(@NotNull ResizingByteBuffer buffer) {
+	protected void serializeOpenStart(@NotNull OutputBuffer buffer) {
 		buffer.putByte(PacketType.SERVER_OVERLAY_OPEN.getId());
 		buffer.putInt(getId());
 		buffer.putByte((byte) anchor.getNumber());
@@ -104,7 +104,7 @@ public class IodineOverlayImpl extends IodineRootImpl<IodineOverlay> implements 
 	}
 	
 	@Override
-	protected void serializeUpdateStart(@NotNull ResizingByteBuffer buffer) {
+	protected void serializeUpdateStart(@NotNull OutputBuffer buffer) {
 		buffer.putByte(PacketType.SERVER_OVERLAY_CHANGE.getId());
 		buffer.putInt(getId());
 		buffer.putByte(drawPriority);
