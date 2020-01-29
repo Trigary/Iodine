@@ -65,7 +65,10 @@ public class TextureGuiElementImpl extends TextureGuiElement {
 						widthLeft, textureHeight, offsetX, offsetY, widthLeft, textureHeight, fileWidth, fileHeight);
 			}
 		}
-		
+	}
+	
+	@Override
+	protected void drawTooltipImpl(int positionX, int positionY, int width, int height, int mouseX, int mouseY) {
 		if (IodineGuiUtils.isInside(positionX, positionY, width, height, mouseX, mouseY)) {
 			IodineGuiUtils.renderTooltip(mouseX, mouseY, tooltip);
 		}

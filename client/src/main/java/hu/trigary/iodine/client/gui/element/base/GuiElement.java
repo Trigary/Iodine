@@ -242,8 +242,34 @@ public abstract class GuiElement implements Closeable {
 	 * @param mouseY the mouse's Y position
 	 * @param partialTicks the client's partial ticks, used for animations
 	 */
-	protected abstract void drawImpl(int width, int height, int positionX,
-			int positionY, int mouseX, int mouseY, float partialTicks);
+	protected abstract void drawImpl(int positionX, int positionY, int width,
+			int height, int mouseX, int mouseY, float partialTicks);
+	
+	/**
+	 * Renders this element's tooltip on the screen,
+	 * if applicable and if the element is hovered.
+	 *
+	 * @param mouseX the mouse's X position
+	 * @param mouseY the mouse's Y position
+	 */
+	public final void drawTooltip(int mouseX, int mouseY) {
+		drawTooltipImpl(positionX, positionY, elementWidth, elementHeight, mouseX, mouseY);
+	}
+	
+	/**
+	 * Renders this element's tooltip on the screen,
+	 * if applicable and if the element is hovered.
+	 * Should only be called be {@link #drawTooltip(int, int)}.
+	 *
+	 * @param positionX this element's X position, with paddings included
+	 * @param positionY this element's Y position, with paddings included
+	 * @param width this element's width, with paddings excluded
+	 * @param height this element's height, with paddings excluded
+	 * @param mouseX the mouse's X position
+	 * @param mouseY the mouse's Y position
+	 */
+	protected void drawTooltipImpl(int positionX, int positionY,
+			int width, int height, int mouseX, int mouseY) {}
 	
 	/**
 	 * Sends a {@link PacketType#CLIENT_GUI_CLOSE} packet with

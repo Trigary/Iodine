@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public class ButtonGuiElementImpl extends ButtonGuiElement {
 	private AbstractButton widget;
-
+	
 	/**
 	 * Creates a new instance.
 	 *
@@ -22,7 +22,7 @@ public class ButtonGuiElementImpl extends ButtonGuiElement {
 		super(root, id);
 	}
 	
-
+	
 	
 	@Override
 	protected void updateImpl(int positionX, int positionY, int width, int height) {
@@ -38,6 +38,10 @@ public class ButtonGuiElementImpl extends ButtonGuiElement {
 	@Override
 	protected void drawImpl(int positionX, int positionY, int width, int height, int mouseX, int mouseY, float partialTicks) {
 		widget.render(mouseX, mouseY, partialTicks);
+	}
+
+	@Override
+	protected void drawTooltipImpl(int positionX, int positionY, int width, int height, int mouseX, int mouseY) {
 		if (widget.isHovered()) {
 			IodineGuiUtils.renderTooltip(mouseX, mouseY, tooltip);
 		}

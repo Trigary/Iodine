@@ -30,6 +30,10 @@ public class RectangleGuiElementImpl extends RectangleGuiElement {
 	protected void drawImpl(int positionX, int positionY, int width, int height, int mouseX, int mouseY, float partialTicks) {
 		GlStateManager.color4f(1, 1, 1, 1);
 		AbstractGui.fill(positionX, positionY, positionX + width, positionY + height, color);
+	}
+
+	@Override
+	protected void drawTooltipImpl(int positionX, int positionY, int width, int height, int mouseX, int mouseY) {
 		if (IodineGuiUtils.isInside(positionX, positionY, width, height, mouseX, mouseY)) {
 			IodineGuiUtils.renderTooltip(mouseX, mouseY, tooltip);
 		}

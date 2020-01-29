@@ -188,6 +188,9 @@ public abstract class IodineRoot implements Closeable {
 		for (GuiElement element : drawOrderedElements) {
 			element.draw(mouseX, mouseY, partialTicks);
 		}
+		for (GuiElement element : drawOrderedElements) {
+			element.drawTooltip(mouseX, mouseY);
+		}
 	}
 	
 	

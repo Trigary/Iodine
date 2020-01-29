@@ -47,6 +47,6 @@ public abstract class GuiContainer extends GuiElement {
 	protected void updateImpl(int positionX, int positionY, int width, int height) {}
 	
 	@Override
-	protected void drawImpl(int width, int height, int positionX,
-			int positionY, int mouseX, int mouseY, float partialTicks) {}
+	protected void drawImpl(int positionX, int positionY, int width,
+			int height, int mouseX, int mouseY, float partialTicks) {}
 }
