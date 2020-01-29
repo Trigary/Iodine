@@ -58,7 +58,7 @@ public interface IodineRoot<T extends IodineRoot<T>> extends GuiParent<T>, Attac
 	 * @param x the X component of the element's render position
 	 * @param y the Y component of the element's render position
 	 * @param <E> the type of the element
-	 * @return the current instance (for chaining)
+	 * @return the new child (for chaining)
 	 */
 	@NotNull <E extends GuiElement<E>> E makeChild(@NotNull E element, int x, int y);
 	

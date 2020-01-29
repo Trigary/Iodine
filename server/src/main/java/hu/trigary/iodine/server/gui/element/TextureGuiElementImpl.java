@@ -23,8 +23,8 @@ public class TextureGuiElementImpl extends GuiElementImpl<TextureGuiElement> imp
 	private short width = 100;
 	private short height = 100;
 	private String tooltip = "";
-	private String texture = "minecraft:textures/block/dirt.png";
-	private ResizeMode resizeMode = ResizeMode.STRETCH;
+	private String texture;
+	private boolean interpolating = true;
 	private ClickedAction<TextureGuiElement> clickedAction;
 	
 	/**
@@ -36,6 +36,7 @@ public class TextureGuiElementImpl extends GuiElementImpl<TextureGuiElement> imp
 	 */
 	public TextureGuiElementImpl(@NotNull IodineRootImpl<?> root, int internalId, @NotNull Object id) {
 		super(root, GuiElementType.TEXTURE, internalId, id);
+		setTexture("minecraft:textures/block/dirt.png", 16, 16, 0, 0, 16, 16);
 	}
 	
 	
@@ -75,11 +76,10 @@ public class TextureGuiElementImpl extends GuiElementImpl<TextureGuiElement> imp
 		return array;
 	}
 	
-	@NotNull
 	@Contract(pure = true)
 	@Override
-	public ResizeMode getResizeMode() {
-		return resizeMode;
+	public boolean isInterpolating() {
+		return interpolating;
 	}
 	
 	
@@ -129,8 +129,8 @@ public class TextureGuiElementImpl extends GuiElementImpl<TextureGuiElement> imp
 	
 	@NotNull
 	@Override
-	public TextureGuiElementImpl setResizeMode(@NotNull ResizeMode resizeMode) {
-		this.resizeMode = resizeMode;
+	public TextureGuiElementImpl setInterpolating(boolean interpolating) {
+		this.interpolating = interpolating;
 		getRoot().flagAndUpdate(this);
 		return this;
 	}
@@ -156,7 +156,7 @@ public class TextureGuiElementImpl extends GuiElementImpl<TextureGuiElement> imp
 		buffer.putShort(textureData[3]);
 		buffer.putShort(textureData[4] <= 0 ? width : textureData[4]);
 		buffer.putShort(textureData[5] <= 0 ? height : textureData[5]);
-		buffer.putByte((byte) resizeMode.ordinal());
+		buffer.putBool(interpolating);
 	}
 	
 	@Override

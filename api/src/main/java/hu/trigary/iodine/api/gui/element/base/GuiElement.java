@@ -62,7 +62,7 @@ public interface GuiElement<T extends GuiElement<T>> extends AttachmentHolder<T>
 	 * @return the current instance (for chaining)
 	 */
 	@NotNull
-	GuiElement<T> setPadding(@NotNull int[] padding);
+	T setPadding(@NotNull int[] padding);
 	
 	/**
 	 * Sets a single padding value.
@@ -73,7 +73,7 @@ public interface GuiElement<T extends GuiElement<T>> extends AttachmentHolder<T>
 	 * @return the current instance (for chaining)
 	 */
 	@NotNull
-	default GuiElement<T> setPaddingTop(int padding) {
+	default T setPaddingTop(int padding) {
 		return setPadding(new int[]{padding, -1, -1, -1});
 	}
 	
@@ -86,7 +86,7 @@ public interface GuiElement<T extends GuiElement<T>> extends AttachmentHolder<T>
 	 * @return the current instance (for chaining)
 	 */
 	@NotNull
-	default GuiElement<T> setPaddingBottom(int padding) {
+	default T setPaddingBottom(int padding) {
 		return setPadding(new int[]{-1, padding, -1, -1});
 	}
 	
@@ -99,7 +99,7 @@ public interface GuiElement<T extends GuiElement<T>> extends AttachmentHolder<T>
 	 * @return the current instance (for chaining)
 	 */
 	@NotNull
-	default GuiElement<T> setPaddingLeft(int padding) {
+	default T setPaddingLeft(int padding) {
 		return setPadding(new int[]{-1, -1, padding, -1});
 	}
 	
@@ -112,7 +112,7 @@ public interface GuiElement<T extends GuiElement<T>> extends AttachmentHolder<T>
 	 * @return the current instance (for chaining)
 	 */
 	@NotNull
-	default GuiElement<T> setPaddingRight(int padding) {
+	default T setPaddingRight(int padding) {
 		return setPadding(new int[]{-1, -1, -1, padding});
 	}
 }

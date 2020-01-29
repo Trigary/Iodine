@@ -45,7 +45,40 @@ public class TestCommandListener implements Listener {
 					.setTooltip("Sample tooltip")
 					.setPaddingBottom(5));
 			
-			gui.addElement(GuiElements.TEXTURE, e -> c.makeChildLast(e)
+			gui.addElement(GuiElements.CONTAINER_LINEAR, cc -> {
+				c.makeChildLast(cc).setPaddingBottom(5);
+				gui.addElement(GuiElements.TEXTURE, e -> cc.makeChildLast(e)
+						.setPaddingRight(5)
+						.setTooltip("Interpolate")
+						.setInterpolating(true)
+						.setWidth(50)
+						.setHeight(50));
+				gui.addElement(GuiElements.TEXTURE, e -> cc.makeChildLast(e)
+						.setPaddingRight(5)
+						.setTooltip("Repeat/cut")
+						.setInterpolating(false)
+						.setWidth(50)
+						.setHeight(50));
+			});
+			
+			gui.addElement(GuiElements.CONTAINER_LINEAR, cc -> {
+				c.makeChildLast(cc).setPaddingBottom(5);
+				gui.addElement(GuiElements.TEXTURE, e -> cc.makeChildLast(e)
+						.setPaddingRight(5)
+						.setTooltip("Interpolate")
+						.setInterpolating(true)
+						.setWidth(10)
+						.setHeight(10));
+				gui.addElement(GuiElements.TEXTURE, e -> cc.makeChildLast(e)
+						.setPaddingRight(5)
+						.setTooltip("Repeat/cut")
+						.setInterpolating(false)
+						.setWidth(10)
+						.setHeight(10));
+			});
+			
+			gui.addElement(GuiElements.BUTTON, e -> c.makeChildLast(e)
+					.setText("Sample button")
 					.setTooltip("Sample tooltip"));
 		});
 		

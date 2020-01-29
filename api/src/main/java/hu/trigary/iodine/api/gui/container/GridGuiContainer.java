@@ -44,7 +44,7 @@ public interface GridGuiContainer extends GuiContainer<GridGuiContainer> {
 	 * @param column the column the element should be inserted into
 	 * @param row the row the element should be inserted into
 	 * @param <E> the type of the element
-	 * @return the current instance (for chaining)
+	 * @return the new child (for chaining)
 	 */
 	@NotNull
 	<E extends GuiElement<E>> E makeChild(@NotNull E element, int column, int row);

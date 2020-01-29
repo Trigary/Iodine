@@ -117,7 +117,7 @@ public abstract class GuiElementImpl<T extends GuiElement<T>> implements GuiElem
 	
 	@NotNull
 	@Override
-	public final GuiElementImpl<T> setPadding(@NotNull int[] padding) {
+	public final T setPadding(@NotNull int[] padding) {
 		Validate.isTrue(padding.length == 4, "The array containing the padding values must have a length of 4");
 		for (int i = 0; i < 4; i++) {
 			int value = padding[i];
@@ -125,7 +125,7 @@ public abstract class GuiElementImpl<T extends GuiElement<T>> implements GuiElem
 				this.padding[i] = (short) value;
 			}
 		}
-		return this;
+		return thisT();
 	}
 	
 	

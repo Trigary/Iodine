@@ -11,9 +11,6 @@ import org.jetbrains.annotations.NotNull;
  * The implementation of {@link RectangleGuiElement}.
  */
 public class RectangleGuiElementImpl extends RectangleGuiElement {
-	private int positionX;
-	private int positionY;
-
 	/**
 	 * Creates a new instance.
 	 *
@@ -27,10 +24,7 @@ public class RectangleGuiElementImpl extends RectangleGuiElement {
 	
 	
 	@Override
-	protected void updateImpl(int positionX, int positionY, int width, int height) {
-		this.positionX = positionX;
-		this.positionY = positionY;
-	}
+	protected void updateImpl(int positionX, int positionY, int width, int height) {}
 	
 	@Override
 	protected void drawImpl(int positionX, int positionY, int width, int height, int mouseX, int mouseY, float partialTicks) {
@@ -45,7 +39,7 @@ public class RectangleGuiElementImpl extends RectangleGuiElement {
 	
 	@Override
 	public boolean onMousePressed(double mouseX, double mouseY) {
-		if (IodineGuiUtils.isInside(positionX, positionY, width, height, mouseX, mouseY)) {
+		if (IodineGuiUtils.isInside(getPositionX(), getPositionY(), width, height, mouseX, mouseY)) {
 			onChanged();
 			return true;
 		}

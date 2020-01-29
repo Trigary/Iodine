@@ -92,6 +92,26 @@ public abstract class GuiElement implements Closeable {
 		return totalHeight;
 	}
 	
+	/**
+	 * Gets this element's X position, padding included.
+	 *
+	 * @return this element's X position together with its padding
+	 */
+	@Contract(pure = true)
+	public final int getPositionX() {
+		return positionX;
+	}
+	
+	/**
+	 * Gets this element's Y position, padding included.
+	 *
+	 * @return this element's Y position together with its padding
+	 */
+	@Contract(pure = true)
+	public final int getPositionY() {
+		return positionY;
+	}
+	
 	
 	
 	/**

@@ -36,7 +36,7 @@ public interface LinearGuiContainer extends GuiContainer<LinearGuiContainer>, Gu
 	 *
 	 * @param element the element to add as as child
 	 * @param <E> the type of the element
-	 * @return the current instance (for chaining)
+	 * @return the new child (for chaining)
 	 */
 	@NotNull
 	<E extends GuiElement<E>> E makeChildFirst(@NotNull E element);
@@ -49,7 +49,7 @@ public interface LinearGuiContainer extends GuiContainer<LinearGuiContainer>, Gu
 	 * @param element the element to add as as child
 	 * @param after the child after which this element should be inserted
 	 * @param <E> the type of the element
-	 * @return the current instance (for chaining)
+	 * @return the new child (for chaining)
 	 */
 	@NotNull
 	<E extends GuiElement<E>> E makeChildAfter(@NotNull E element, @NotNull GuiElement<?> after);
@@ -62,7 +62,7 @@ public interface LinearGuiContainer extends GuiContainer<LinearGuiContainer>, Gu
 	 * @param element the element to add as as child
 	 * @param after the child before which this element should be inserted
 	 * @param <E> the type of the element
-	 * @return the current instance (for chaining)
+	 * @return the new child (for chaining)
 	 */
 	@NotNull
 	<E extends GuiElement<E>> E makeChildBefore(@NotNull E element, @NotNull GuiElement<?> after);

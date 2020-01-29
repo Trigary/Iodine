@@ -22,7 +22,7 @@ public abstract class TextureGuiElement extends GuiElement {
 	protected int offsetY;
 	protected int textureWidth;
 	protected int textureHeight;
-	protected int resizeMode;
+	protected boolean interpolating;
 	
 	/**
 	 * Creates a new instance.
@@ -48,7 +48,7 @@ public abstract class TextureGuiElement extends GuiElement {
 		offsetY = buffer.readShort();
 		textureWidth = buffer.readShort();
 		textureHeight = buffer.readShort();
-		resizeMode = buffer.readByte();
+		interpolating = buffer.readBool();
 	}
 	
 	@NotNull

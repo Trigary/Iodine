@@ -7,7 +7,8 @@ import org.jetbrains.annotations.NotNull;
 /**
  * A GUI element that displays a texture and can be clicked.
  * The texture can be from vanilla Minecraft texture or from a resource pack.
- * The default {@link ResizeMode} is {@link ResizeMode#STRETCH}.
+ * The default resizing logic is interpolation: the whole texture is rendered, but is magnified or minified.
+ * The alternative resizing logic is repeating or cutting: the texture's original size is preserved.
  */
 public interface TextureGuiElement extends GuiElement<TextureGuiElement>,
 		GuiWidthSettable<TextureGuiElement>, GuiHeightSettable<TextureGuiElement>,
@@ -33,13 +34,12 @@ public interface TextureGuiElement extends GuiElement<TextureGuiElement>,
 	int[] getTextureData();
 	
 	/**
-	 * Gets the active resizing logic.
+	 * Gets whether the resizing logic is interpolation or repeat/cut.
 	 *
-	 * @return the current resizing logic.
+	 * @return true if the current resizing logic is interpolation, false if it is resizing or cutting
 	 */
-	@NotNull
 	@Contract(pure = true)
-	ResizeMode getResizeMode();
+	boolean isInterpolating();
 	
 	
 	
@@ -86,26 +86,11 @@ public interface TextureGuiElement extends GuiElement<TextureGuiElement>,
 			int textureOffsetX, int textureOffsetY, int textureWidth, int textureHeight);
 	
 	/**
-	 * Sets the resizing logic to use.
+	 * Sets whether to use interpolation or repeat/cut resizing logic.
 	 *
-	 * @param resizeMode the new resize mode
+	 * @param interpolating the new resize mode
 	 * @return the current instance (for chaining)
 	 */
 	@NotNull
-	TextureGuiElement setResizeMode(@NotNull ResizeMode resizeMode);
-	
-	
-	
-	/**
-	 * The logic using which the graphical content's size should be adjusted to match the element's size.
-	 */
-	enum ResizeMode { //TODO how to serialize?
-		STRETCH,
-		REPEAT,
-		NONE
-		
-		//TODO define stuff depending on what I can implement client-side, but optimally:
-		// magnification: original; repeat; linear interpolation; nearest neighbour interpolation
-		// minification: cut (keep left and top); linear interpolation; nearest neighbour interpolation
-	}
+	TextureGuiElement setInterpolating(boolean interpolating);
 }

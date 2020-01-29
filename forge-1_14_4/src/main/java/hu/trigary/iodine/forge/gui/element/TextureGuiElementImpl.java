@@ -13,8 +13,6 @@ import org.jetbrains.annotations.NotNull;
  * The implementation of {@link TextureGuiElement}.
  */
 public class TextureGuiElementImpl extends TextureGuiElement {
-	private int positionX;
-	private int positionY;
 	private ResourceLocation resource;
 	
 	/**
@@ -31,28 +29,53 @@ public class TextureGuiElementImpl extends TextureGuiElement {
 	
 	@Override
 	protected void updateImpl(int positionX, int positionY, int width, int height) {
-		this.positionX = positionX;
-		this.positionY = positionY;
 		resource = new ResourceLocation(texture);
+		System.out.println(textureWidth + " " + textureHeight + " " + fileWidth + " " + fileHeight);
 	}
 	
 	@Override
 	protected void drawImpl(int positionX, int positionY, int width, int height, int mouseX, int mouseY, float partialTicks) {
 		Minecraft.getInstance().getTextureManager().bindTexture(resource);
 		GlStateManager.color4f(1, 1, 1, 1);
-		//TODO implement resizing (look at NativeImage source)
-		AbstractGui.blit(positionX, positionY, width, height, offsetX, offsetY,
-				textureWidth, textureHeight, fileWidth, fileHeight);
+		
+		if (interpolating) {
+			AbstractGui.blit(positionX, positionY, width, height, offsetX, offsetY,
+					textureWidth, textureHeight, fileWidth, fileHeight);
+		} else {
+			int columns = width / textureWidth;
+			int rows = height / textureHeight;
+			for (int x = 0; x < columns; x++) {
+				for (int y = 0; y < rows; y++) {
+					AbstractGui.blit(positionX + x * textureWidth, positionY + y * textureHeight,
+							textureWidth, textureHeight, offsetX, offsetY,
+							textureWidth, textureHeight, fileWidth, fileHeight);
+				}
+			}
+			
+			int widthLeft = width % textureWidth;
+			int heightLeft = height % textureHeight;
+			AbstractGui.blit(positionX + columns * textureWidth, positionY + rows * textureHeight,
+					widthLeft, heightLeft, offsetX, offsetY, widthLeft, heightLeft, fileWidth, fileHeight);
+			for (int x = 0; x < columns; x++) {
+				AbstractGui.blit(positionX + x * textureWidth, positionY + rows * textureHeight,
+						textureWidth, heightLeft, offsetX, offsetY, textureWidth, heightLeft, fileWidth, fileHeight);
+			}
+			for (int y = 0; y < rows; y++) {
+				AbstractGui.blit(positionX + columns * textureWidth, positionY + y * textureHeight,
+						widthLeft, textureHeight, offsetX, offsetY, widthLeft, textureHeight, fileWidth, fileHeight);
+			}
+		}
+		
 		if (IodineGuiUtils.isInside(positionX, positionY, width, height, mouseX, mouseY)) {
 			IodineGuiUtils.renderTooltip(mouseX, mouseY, tooltip);
 		}
 	}
-
-
-
+	
+	
+	
 	@Override
 	public boolean onMousePressed(double mouseX, double mouseY) {
-		if (IodineGuiUtils.isInside(positionX, positionY, width, height, mouseX, mouseY)) {
+		if (IodineGuiUtils.isInside(getPositionX(), getPositionY(), width, height, mouseX, mouseY)) {
 			onChanged();
 			return true;
 		}
