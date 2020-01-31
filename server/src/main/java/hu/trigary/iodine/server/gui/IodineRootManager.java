@@ -143,12 +143,12 @@ public final class IodineRootManager {
 	}
 	
 	/**
-	 * Closes all GUIs for all of their viewers.
+	 * Closes all GUIs and overlays for all of their viewers.
 	 */
-	public void closeAllGuiInstances() {
-		for (IodineRootImpl<?> gui : new ArrayList<>(rootMap.values())) {
-			for (IodinePlayer player : gui.getViewers()) {
-				gui.closeFor(player);
+	public void closeAllRoots() {
+		for (IodineRootImpl<?> root : new ArrayList<>(rootMap.values())) {
+			for (IodinePlayer player : new ArrayList<>(root.getViewers())) {
+				root.closeFor(player);
 			}
 		}
 	}

@@ -71,7 +71,7 @@ public abstract class IodinePlugin {
 	 */
 	public final void onDisabled() {
 		log(Level.INFO, "Closing all open GUI instances");
-		rootManager.closeAllGuiInstances();
+		rootManager.closeAllRoots();
 		api.clearInstance();
 	}
 	
