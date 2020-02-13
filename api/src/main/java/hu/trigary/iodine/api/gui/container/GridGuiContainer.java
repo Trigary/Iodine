@@ -24,6 +24,22 @@ public interface GridGuiContainer extends GuiContainer<GridGuiContainer> {
 	GuiElement<?> getChild(int column, int row);
 	
 	/**
+	 * Gets the amount of columns set by {@link #setGridSize(int, int)}.
+	 *
+	 * @return the amount of columns
+	 */
+	@Contract(pure = true)
+	int getColumnCount();
+	
+	/**
+	 * Gets the amount of rows set by {@link #setGridSize(int, int)}.
+	 *
+	 * @return the amount of rows
+	 */
+	@Contract(pure = true)
+	int getRowCount();
+	
+	/**
 	 * Sets the dimensions of this grid.
 	 * Each child must fit into the new grid.
 	 *

@@ -134,8 +134,14 @@ public abstract class IodinePlugin {
 		List<Consumer<? extends IodineEvent>> consumers = eventListeners.get(event.getClass());
 		if (consumers != null) {
 			for (Consumer<? extends IodineEvent> consumer : consumers) {
-				//noinspection unchecked
-				((Consumer<T>) consumer).accept(event);
+				try {
+					//noinspection unchecked
+					((Consumer<T>) consumer).accept(event);
+				} catch (Throwable t) {
+					//TODO it would be cool to also log the plugin name, currently it can only be found in the stacktrace
+					// (for that we would have to pass and store the plugin name in the register listener method)
+					log(Level.SEVERE, "Exception in event listener for " + event.getClass().getSimpleName(), t);
+				}
 			}
 		}
 	}
@@ -152,6 +158,7 @@ public abstract class IodinePlugin {
 			@NotNull Consumer<T> handler, boolean add) {
 		List<Consumer<? extends IodineEvent>> consumers = eventListeners.computeIfAbsent(event, k -> new ArrayList<>());
 		if (add) {
+			//TODO what if the plugin ClassLoader gets dropped, eg. the plugin gets reloaded (PlugMan pls just vanish)
 			consumers.add(handler);
 		} else {
 			consumers.remove(handler);

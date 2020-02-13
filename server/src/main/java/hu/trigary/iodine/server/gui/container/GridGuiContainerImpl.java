@@ -54,6 +54,18 @@ public class GridGuiContainerImpl extends GuiContainerImpl<GridGuiContainer> imp
 		return Collections.unmodifiableCollection(children);
 	}
 	
+	@Override
+	@Contract(pure = true)
+	public int getColumnCount() {
+		return columnCount;
+	}
+	
+	@Override
+	@Contract(pure = true)
+	public int getRowCount() {
+		return rowCount;
+	}
+	
 	
 	
 	@NotNull

@@ -11,7 +11,7 @@ import java.util.function.Consumer;
 
 /**
  * The API plugins should use to have access to Iodine's features.
- * An instance of this class can be obtained through the {@link #getInstance()} getter.
+ * An instance of this class can be obtained through the {@link #get()} getter.
  * <br><br>
  * When the Iodine plugin gets disabled all {@link IodineGui} instances are closed
  * without calling the {@link IodineGui#onClosed(IodineGui.ClosedAction)} callback.
@@ -28,11 +28,11 @@ public abstract class IodineApi {
 	/**
 	 * Gets the API instance.
 	 *
-	 * @return an instance of this class
+	 * @return the instance of this class
 	 */
 	@NotNull
 	@Contract(pure = true)
-	public static IodineApi getInstance() {
+	public static IodineApi get() {
 		return instance;
 	}
 	

@@ -95,13 +95,13 @@ public abstract class IodineRoot implements Closeable {
 	 * @param buffer the buffer the data is stored in
 	 */
 	public final void deserialize(@NotNull InputBuffer buffer) {
-		mod.getLogger().debug("Base > deserializing {}", id);
+		mod.getLogger().debug("Root > deserializing {}", id);
 		deserializeStart(buffer);
 		
 		int removeCount = buffer.readInt();
 		for (int i = 0; i < removeCount; i++) {
 			try (GuiElement removed = elements.remove(buffer.readInt())) {
-				mod.getLogger().debug("Base > removing {} in {}", removed.getId(), id);
+				mod.getLogger().debug("Root > removing {} in {}", removed.getId(), id);
 				drawOrderedElements.remove(removed);
 				onElementRemoved(removed);
 			}
@@ -109,7 +109,7 @@ public abstract class IodineRoot implements Closeable {
 		
 		while (buffer.hasRemaining()) {
 			GuiElement changed = mod.getElementManager().getElement(this, elements, buffer);
-			mod.getLogger().debug("Base > deserializing {} in {}", changed.getId(), id);
+			mod.getLogger().debug("Root > deserializing {} in {}", changed.getId(), id);
 			drawOrderedElements.remove(changed);
 			changed.deserialize(buffer);
 			drawOrderedElements.add(changed);
@@ -145,7 +145,7 @@ public abstract class IodineRoot implements Closeable {
 	 * Updates the contained elements' sizes and positions.
 	 */
 	public final void update() {
-		mod.getLogger().debug("Base > updating {}", id);
+		mod.getLogger().debug("Root > updating {}", id);
 		rootElement.calculateSize(mod.getScreenWidth(), mod.getScreenHeight());
 		IntPair position = calculatePosition(mod.getScreenWidth(), mod.getScreenHeight(),
 				rootElement.getTotalWidth(), rootElement.getTotalHeight());

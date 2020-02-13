@@ -102,7 +102,7 @@ public final class IodineRootManager {
 	 * Should only be called by {@link IodineRootImpl} subclasses.
 	 *
 	 * @param type the API class of the element to create
-	 * @param base the instance which will contain this element
+	 * @param root the instance which will contain this element
 	 * @param internalId the internal ID of the element, specified by the GUI
 	 * @param id the API-friendly ID of the element
 	 * @param <T> the type of the element
@@ -111,9 +111,9 @@ public final class IodineRootManager {
 	@NotNull
 	@Contract(pure = true)
 	public <T extends GuiElement<T>> GuiElementImpl<T> createElement(@NotNull Class<T> type,
-			@NotNull IodineRootImpl<?> base, int internalId, @NotNull Object id) {
+			@NotNull IodineRootImpl<?> root, int internalId, @NotNull Object id) {
 		//noinspection unchecked
-		return (GuiElementImpl<T>) elements.get(type).apply(base, internalId, id);
+		return (GuiElementImpl<T>) elements.get(type).apply(root, internalId, id);
 	}
 	
 	
@@ -123,11 +123,11 @@ public final class IodineRootManager {
 	 * allowing it to be garbage collected.
 	 * Should only be called by {@link IodineRootImpl} subclasses.
 	 *
-	 * @param base the instance to unregister
+	 * @param root the instance to unregister
 	 */
-	public void forgetRoot(@NotNull IodineRootImpl<?> base) {
-		plugin.log(Level.OFF, "GuiManager > forgetting {0}", base.getId());
-		Validate.notNull(rootMap.remove(base.getId()), "Can only forget registered instances");
+	public void forgetRoot(@NotNull IodineRootImpl<?> root) {
+		plugin.log(Level.OFF, "GuiManager > forgetting {0}", root.getId());
+		Validate.notNull(rootMap.remove(root.getId()), "Can only forget registered instances");
 	}
 	
 	/**
@@ -135,11 +135,11 @@ public final class IodineRootManager {
 	 * disallowing it from being garbage collected.
 	 * Should only be called by {@link IodineRootImpl} subclasses.
 	 *
-	 * @param base the instance to register
+	 * @param root the instance to register
 	 */
-	public void rememberRoot(@NotNull IodineRootImpl<?> base) {
-		plugin.log(Level.OFF, "GuiManager > remembering {0}", base.getId());
-		Validate.isTrue(rootMap.put(base.getId(), base) == null, "Can't remember registered instances");
+	public void rememberRoot(@NotNull IodineRootImpl<?> root) {
+		plugin.log(Level.OFF, "GuiManager > remembering {0}", root.getId());
+		Validate.isTrue(rootMap.put(root.getId(), root) == null, "Can't remember registered instances");
 	}
 	
 	/**
@@ -155,13 +155,13 @@ public final class IodineRootManager {
 	
 	
 	
-	private <T extends GuiElement<T>> void element(Class<T> clazz, ElementConstructor<T> constructor) {
+	private <T extends GuiElement<T>> void element(@NotNull Class<T> clazz, @NotNull ElementConstructor<T> constructor) {
 		Validate.isTrue(elements.put(clazz, constructor) == null,
 				"Only one constructor can be mapped to a type");
 	}
 	
 	@FunctionalInterface
 	private interface ElementConstructor<R extends GuiElement<R>> {
-		R apply(IodineRootImpl<?> base, int internalId, Object id);
+		R apply(@NotNull IodineRootImpl<?> root, int internalId, @Nullable Object id);
 	}
 }

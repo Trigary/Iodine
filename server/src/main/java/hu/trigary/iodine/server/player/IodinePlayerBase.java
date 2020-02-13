@@ -53,7 +53,7 @@ public abstract class IodinePlayerBase implements IodinePlayer {
 	 */
 	public final void setState(@NotNull IodinePlayer.State newState) {
 		Validate.isTrue(state != newState, "Old and new state mustn't be the same");
-		if (state == State.MODDED) {
+		if (state == State.MODDED) { //new state is INVALID
 			if (openGui != null) {
 				openGui.closeForNoPacket(this, true);
 			}
