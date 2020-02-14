@@ -87,24 +87,30 @@ public class TextureGuiElementImpl extends GuiElementImpl<TextureGuiElement> imp
 	@NotNull
 	@Override
 	public TextureGuiElementImpl setWidth(int width) {
-		this.width = (short) width;
-		getRoot().flagAndUpdate(this);
+		if (this.width != width) {
+			this.width = (short) width;
+			getRoot().flagAndUpdate(this);
+		}
 		return this;
 	}
 	
 	@NotNull
 	@Override
 	public TextureGuiElementImpl setHeight(int height) {
-		this.height = (short) height;
-		getRoot().flagAndUpdate(this);
+		if (this.height != height) {
+			this.height = (short) height;
+			getRoot().flagAndUpdate(this);
+		}
 		return this;
 	}
 	
 	@NotNull
 	@Override
 	public TextureGuiElementImpl setTooltip(@NotNull String tooltip) {
-		this.tooltip = tooltip;
-		getRoot().flagAndUpdate(this);
+		if (!this.tooltip.equals(tooltip)) {
+			this.tooltip = tooltip;
+			getRoot().flagAndUpdate(this);
+		}
 		return this;
 	}
 	
@@ -112,6 +118,13 @@ public class TextureGuiElementImpl extends GuiElementImpl<TextureGuiElement> imp
 	@Override
 	public TextureGuiElementImpl setTexture(@NotNull String namespacedKey, int textureFileWidth, int textureFileHeight,
 			int textureOffsetX, int textureOffsetY, int textureWidth, int textureHeight) {
+		if (texture.equals(namespacedKey)
+				&& textureData[0] == textureFileWidth && textureData[1] == textureFileHeight
+				&& textureData[2] == textureOffsetX && textureData[3] == textureOffsetY
+				&& textureData[3] == textureWidth && textureData[4] == textureHeight) {
+			return this;
+		}
+		
 		Validate.isTrue(TEXTURE_PATTERN.matcher(namespacedKey).matches(),
 				"The texture resource location must be a valid namespaced key");
 		Validate.isTrue(textureFileWidth >= textureOffsetX + textureWidth
@@ -124,14 +137,17 @@ public class TextureGuiElementImpl extends GuiElementImpl<TextureGuiElement> imp
 		textureData[3] = (short) textureOffsetY;
 		textureData[4] = (short) textureWidth;
 		textureData[5] = (short) textureHeight;
+		getRoot().flagAndUpdate(this);
 		return this;
 	}
 	
 	@NotNull
 	@Override
 	public TextureGuiElementImpl setInterpolating(boolean interpolating) {
-		this.interpolating = interpolating;
-		getRoot().flagAndUpdate(this);
+		if (this.interpolating != interpolating) {
+			this.interpolating = interpolating;
+			getRoot().flagAndUpdate(this);
+		}
 		return this;
 	}
 	

@@ -57,16 +57,20 @@ public class CheckboxGuiElementImpl extends GuiElementImpl<CheckboxGuiElement> i
 	@NotNull
 	@Override
 	public CheckboxGuiElementImpl setEditable(boolean editable) {
-		this.editable = editable;
-		getRoot().flagAndUpdate(this);
+		if (this.editable != editable) {
+			this.editable = editable;
+			getRoot().flagAndUpdate(this);
+		}
 		return this;
 	}
 	
 	@NotNull
 	@Override
 	public CheckboxGuiElementImpl setTooltip(@NotNull String tooltip) {
-		this.tooltip = tooltip;
-		getRoot().flagAndUpdate(this);
+		if (!this.tooltip.equals(tooltip)) {
+			this.tooltip = tooltip;
+			getRoot().flagAndUpdate(this);
+		}
 		return this;
 	}
 	

@@ -47,9 +47,15 @@ public class RootGuiContainer extends GuiContainerImpl<RootGuiContainer> {
 	@NotNull
 	public <E extends GuiElement<E>> E makeChild(@NotNull E element, int x, int y) {
 		GuiElementImpl<?> impl = (GuiElementImpl<?>) element;
-		Validate.isTrue(children.put(impl, new Position((short) x, (short) y)) == null,
-				"The specified element is already the child of this GUI");
+		if (impl.getParent() == this) {
+			Position position = children.get(impl);
+			if (position.x == x && position.y == y) {
+				return element;
+			}
+		}
+		
 		impl.setParent(this);
+		children.put(impl, new Position((short) x, (short) y));
 		getRoot().flagAndUpdate(this);
 		return element;
 	}

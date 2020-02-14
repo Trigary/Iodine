@@ -52,7 +52,6 @@ public class LinearGuiContainerImpl extends GuiContainerImpl<LinearGuiContainer>
 	
 	
 	
-	
 	@NotNull
 	@Override
 	public LinearGuiContainer setOrientation(boolean vertical) {
@@ -99,11 +98,13 @@ public class LinearGuiContainerImpl extends GuiContainerImpl<LinearGuiContainer>
 	
 	
 	
-	private void makeChildAt(int index, GuiElement<?> element) {
+	private void makeChildAt(int index, @NotNull GuiElement<?> element) {
 		GuiElementImpl<?> impl = (GuiElementImpl<?>) element;
-		children.add(index, impl);
-		impl.setParent(this);
-		getRoot().flagAndUpdate(this);
+		if (impl.getParent() != this || children.indexOf(element) != index) {
+			impl.setParent(this);
+			children.add(index, impl);
+			getRoot().flagAndUpdate(this);
+		}
 	}
 	
 	@Override

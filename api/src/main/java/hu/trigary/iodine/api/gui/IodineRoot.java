@@ -53,6 +53,7 @@ public interface IodineRoot<T extends IodineRoot<T>> extends GuiParent<T>, Attac
 	
 	/**
 	 * Makes the specified element a direct child of this instance.
+	 * If the element is already a child it is moved to the new position if necessary.
 	 *
 	 * @param element the element to add as a child
 	 * @param x the X component of the element's render position

@@ -54,24 +54,30 @@ public class TextGuiElementImpl extends GuiElementImpl<TextGuiElement> implement
 	@NotNull
 	@Override
 	public TextGuiElementImpl setWidth(int width) {
-		this.width = (short) width;
-		getRoot().flagAndUpdate(this);
+		if (this.width != width) {
+			this.width = (short) width;
+			getRoot().flagAndUpdate(this);
+		}
 		return this;
 	}
 	
 	@NotNull
 	@Override
 	public TextGuiElementImpl setText(@NotNull String text) {
-		this.text = text;
-		getRoot().flagAndUpdate(this);
+		if (!this.text.equals(text)) {
+			this.text = text;
+			getRoot().flagAndUpdate(this);
+		}
 		return this;
 	}
 	
 	@NotNull
 	@Override
 	public TextGuiElementImpl setAlignment(@NotNull Alignment alignment) {
-		this.alignment = alignment;
-		getRoot().flagAndUpdate(this);
+		if (this.alignment != alignment) {
+			this.alignment = alignment;
+			getRoot().flagAndUpdate(this);
+		}
 		return this;
 	}
 	

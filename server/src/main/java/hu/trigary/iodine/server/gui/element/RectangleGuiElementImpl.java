@@ -63,32 +63,40 @@ public class RectangleGuiElementImpl extends GuiElementImpl<RectangleGuiElement>
 	@NotNull
 	@Override
 	public RectangleGuiElementImpl setWidth(int width) {
-		this.width = (short) width;
-		getRoot().flagAndUpdate(this);
+		if (this.width != width) {
+			this.width = (short) width;
+			getRoot().flagAndUpdate(this);
+		}
 		return this;
 	}
 	
 	@NotNull
 	@Override
 	public RectangleGuiElementImpl setHeight(int height) {
-		this.height = (short) height;
-		getRoot().flagAndUpdate(this);
+		if (this.height != height) {
+			this.height = (short) height;
+			getRoot().flagAndUpdate(this);
+		}
 		return this;
 	}
 	
 	@NotNull
 	@Override
 	public RectangleGuiElementImpl setTooltip(@NotNull String tooltip) {
-		this.tooltip = tooltip;
-		getRoot().flagAndUpdate(this);
+		if (!this.tooltip.equals(tooltip)) {
+			this.tooltip = tooltip;
+			getRoot().flagAndUpdate(this);
+		}
 		return this;
 	}
 	
 	@NotNull
 	@Override
 	public RectangleGuiElementImpl setColor(@NotNull IodineColor color) {
-		this.color = color;
-		getRoot().flagAndUpdate(this);
+		if (!this.color.equals(color)) {
+			this.color = color;
+			getRoot().flagAndUpdate(this);
+		}
 		return this;
 	}
 	

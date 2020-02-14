@@ -139,10 +139,12 @@ public abstract class GuiElementImpl<T extends GuiElement<T>> implements GuiElem
 	@NotNull
 	@Override
 	public T setDrawPriority(int priority) {
-		Validate.isTrue(priority >= Byte.MIN_VALUE && priority <= Byte.MAX_VALUE,
-				"The draw priority must be representable as a byte");
-		drawPriority = (byte) priority;
-		getRoot().flagAndUpdate(this);
+		if (drawPriority != priority) {
+			Validate.isTrue(priority >= Byte.MIN_VALUE && priority <= Byte.MAX_VALUE,
+					"The draw priority must be representable as a byte");
+			drawPriority = (byte) priority;
+			getRoot().flagAndUpdate(this);
+		}
 		return thisT();
 	}
 	

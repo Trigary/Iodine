@@ -89,62 +89,76 @@ public class TextFieldGuiElementImpl extends GuiElementImpl<TextFieldGuiElement>
 	@NotNull
 	@Override
 	public TextFieldGuiElementImpl setWidth(int width) {
-		this.width = (short) width;
-		getRoot().flagAndUpdate(this);
+		if (this.width != width) {
+			this.width = (short) width;
+			getRoot().flagAndUpdate(this);
+		}
 		return this;
 	}
 	
 	@NotNull
 	@Override
 	public TextFieldGuiElementImpl setHeight(int height) {
-		this.height = (short) height;
-		getRoot().flagAndUpdate(this);
+		if (this.height != height) {
+			this.height = (short) height;
+			getRoot().flagAndUpdate(this);
+		}
 		return this;
 	}
 	
 	@NotNull
 	@Override
 	public TextFieldGuiElementImpl setEditable(boolean editable) {
-		this.editable = editable;
-		getRoot().flagAndUpdate(this);
+		if (this.editable != editable) {
+			this.editable = editable;
+			getRoot().flagAndUpdate(this);
+		}
 		return this;
 	}
 	
 	@NotNull
 	@Override
 	public TextFieldGuiElementImpl setTooltip(@NotNull String tooltip) {
-		this.tooltip = tooltip;
-		getRoot().flagAndUpdate(this);
+		if (!this.tooltip.equals(tooltip)) {
+			this.tooltip = tooltip;
+			getRoot().flagAndUpdate(this);
+		}
 		return this;
 	}
 	
 	@NotNull
 	@Override
 	public TextFieldGuiElementImpl setText(@NotNull String text) {
-		Validate.isTrue(validate(compiledRegex, text), "The text must match the regex");
-		this.text = text;
-		getRoot().flagAndUpdate(this);
+		if (!this.text.equals(text)) {
+			Validate.isTrue(validate(compiledRegex, text), "The text must match the regex");
+			this.text = text;
+			getRoot().flagAndUpdate(this);
+		}
 		return this;
 	}
 	
 	@NotNull
 	@Override
 	public TextFieldGuiElement setRegex(@NotNull String regex) {
-		Pattern tempRegex = regex.isEmpty() ? null : Pattern.compile(regex);
-		Validate.isTrue(validate(tempRegex, text), "The text must match the regex");
-		this.regex = regex;
-		compiledRegex = tempRegex;
-		getRoot().flagAndUpdate(this);
+		if (!this.regex.equals(regex)) {
+			Pattern tempRegex = regex.isEmpty() ? null : Pattern.compile(regex);
+			Validate.isTrue(validate(tempRegex, text), "The text must match the regex");
+			this.regex = regex;
+			compiledRegex = tempRegex;
+			getRoot().flagAndUpdate(this);
+		}
 		return this;
 	}
 	
 	@NotNull
 	@Override
 	public TextFieldGuiElement setMaxLength(int maxLength) {
-		Validate.isTrue(maxLength > 0 && maxLength <= 250, "The max length must be positive and at most 250");
-		Validate.isTrue(text.length() <= maxLength, "The text must not be longer than the max length");
-		this.maxLength = maxLength;
-		getRoot().flagAndUpdate(this);
+		if (this.maxLength != maxLength) {
+			Validate.isTrue(maxLength > 0 && maxLength <= 250, "The max length must be positive and at most 250");
+			Validate.isTrue(text.length() <= maxLength, "The text must not be longer than the max length");
+			this.maxLength = maxLength;
+			getRoot().flagAndUpdate(this);
+		}
 		return this;
 	}
 	

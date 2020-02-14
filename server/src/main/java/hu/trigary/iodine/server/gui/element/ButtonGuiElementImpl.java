@@ -64,32 +64,40 @@ public class ButtonGuiElementImpl extends GuiElementImpl<ButtonGuiElement> imple
 	@NotNull
 	@Override
 	public ButtonGuiElementImpl setWidth(int width) {
-		this.width = (short) width;
-		getRoot().flagAndUpdate(this);
+		if (this.width != width) {
+			this.width = (short) width;
+			getRoot().flagAndUpdate(this);
+		}
 		return this;
 	}
 	
 	@NotNull
 	@Override
 	public ButtonGuiElementImpl setEditable(boolean editable) {
-		this.editable = editable;
-		getRoot().flagAndUpdate(this);
+		if (this.editable != editable) {
+			this.editable = editable;
+			getRoot().flagAndUpdate(this);
+		}
 		return this;
 	}
 	
 	@NotNull
 	@Override
 	public ButtonGuiElementImpl setTooltip(@NotNull String tooltip) {
-		this.tooltip = tooltip;
-		getRoot().flagAndUpdate(this);
+		if (!this.tooltip.equals(tooltip)) {
+			this.tooltip = tooltip;
+			getRoot().flagAndUpdate(this);
+		}
 		return this;
 	}
 	
 	@NotNull
 	@Override
 	public ButtonGuiElementImpl setText(@NotNull String text) {
-		this.text = text;
-		getRoot().flagAndUpdate(this);
+		if (!this.text.equals(text)) {
+			this.text = text;
+			getRoot().flagAndUpdate(this);
+		}
 		return this;
 	}
 	

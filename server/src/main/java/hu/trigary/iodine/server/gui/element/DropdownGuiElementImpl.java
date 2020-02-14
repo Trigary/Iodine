@@ -75,35 +75,43 @@ public class DropdownGuiElementImpl extends GuiElementImpl<DropdownGuiElement> i
 	@NotNull
 	@Override
 	public DropdownGuiElementImpl setWidth(int width) {
-		this.width = (short) width;
-		getRoot().flagAndUpdate(this);
+		if (this.width != width) {
+			this.width = (short) width;
+			getRoot().flagAndUpdate(this);
+		}
 		return this;
 	}
 	
 	@NotNull
 	@Override
 	public DropdownGuiElementImpl setEditable(boolean editable) {
-		this.editable = editable;
-		getRoot().flagAndUpdate(this);
+		if (this.editable != editable) {
+			this.editable = editable;
+			getRoot().flagAndUpdate(this);
+		}
 		return this;
 	}
 	
 	@NotNull
 	@Override
 	public DropdownGuiElementImpl setTooltip(@NotNull String tooltip) {
-		this.tooltip = tooltip;
-		getRoot().flagAndUpdate(this);
+		if (!this.tooltip.equals(tooltip)) {
+			this.tooltip = tooltip;
+			getRoot().flagAndUpdate(this);
+		}
 		return this;
 	}
 	
 	@NotNull
 	@Override
 	public DropdownGuiElementImpl setChoices(@NotNull Collection<String> choices) {
-		Validate.isTrue(!choices.isEmpty(), "The count of choices must be at least 1");
-		this.choices.clear();
-		this.choices.addAll(choices);
-		selected = 0;
-		getRoot().flagAndUpdate(this);
+		if (!this.choices.equals(choices)) {
+			Validate.isTrue(!choices.isEmpty(), "The count of choices must be at least 1");
+			this.choices.clear();
+			this.choices.addAll(choices);
+			selected = 0;
+			getRoot().flagAndUpdate(this);
+		}
 		return this;
 	}
 	
@@ -111,9 +119,11 @@ public class DropdownGuiElementImpl extends GuiElementImpl<DropdownGuiElement> i
 	@Override
 	public DropdownGuiElementImpl setSelected(@NotNull String value) {
 		int index = choices.indexOf(value);
-		Validate.isTrue(index != -1, "The selected value must be among the choices");
-		selected = (short) index;
-		getRoot().flagAndUpdate(this);
+		if (selected != index) {
+			Validate.isTrue(index != -1, "The selected value must be among the choices");
+			selected = (short) index;
+			getRoot().flagAndUpdate(this);
+		}
 		return this;
 	}
 	

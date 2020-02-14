@@ -86,66 +86,80 @@ public class DiscreteSliderGuiElementImpl extends GuiElementImpl<DiscreteSliderG
 	@NotNull
 	@Override
 	public DiscreteSliderGuiElementImpl setWidth(int width) {
-		this.width = (short) width;
-		getRoot().flagAndUpdate(this);
+		if (this.width != width) {
+			this.width = (short) width;
+			getRoot().flagAndUpdate(this);
+		}
 		return this;
 	}
 	
 	@NotNull
 	@Override
 	public DiscreteSliderGuiElementImpl setEditable(boolean editable) {
-		this.editable = editable;
-		getRoot().flagAndUpdate(this);
+		if (this.editable != editable) {
+			this.editable = editable;
+			getRoot().flagAndUpdate(this);
+		}
 		return this;
 	}
 	
 	@NotNull
 	@Override
 	public DiscreteSliderGuiElementImpl setTooltip(@NotNull String tooltip) {
-		this.tooltip = tooltip;
-		getRoot().flagAndUpdate(this);
+		if (!this.tooltip.equals(tooltip)) {
+			this.tooltip = tooltip;
+			getRoot().flagAndUpdate(this);
+		}
 		return this;
 	}
 	
 	@NotNull
 	@Override
 	public DiscreteSliderGuiElementImpl setText(@NotNull String text) {
-		this.text = text;
-		getRoot().flagAndUpdate(this);
+		if (!this.text.equals(text)) {
+			this.text = text;
+			getRoot().flagAndUpdate(this);
+		}
 		return this;
 	}
 	
 	@NotNull
 	@Override
 	public DiscreteSliderGuiElementImpl setMinProgress(int minProgress) {
-		Validate.isTrue(minProgress <= maxProgress, "Min progress must be at most max progress");
-		this.minProgress = (short) minProgress;
-		if (progress < minProgress) {
-			progress = this.minProgress;
+		if (this.minProgress != minProgress) {
+			Validate.isTrue(minProgress <= maxProgress, "Min progress must be at most max progress");
+			this.minProgress = (short) minProgress;
+			if (progress < minProgress) {
+				progress = this.minProgress;
+			}
+			getRoot().flagAndUpdate(this);
 		}
-		getRoot().flagAndUpdate(this);
 		return this;
 	}
 	
 	@NotNull
 	@Override
 	public DiscreteSliderGuiElementImpl setMaxProgress(int maxProgress) {
-		Validate.isTrue(maxProgress >= minProgress, "Max progress must be at least min progress");
-		this.maxProgress = (short) maxProgress;
-		if (progress > maxProgress) {
-			progress = this.maxProgress;
+		if (this.maxProgress != maxProgress) {
+			Validate.isTrue(maxProgress >= minProgress, "Max progress must be at least min progress");
+			this.maxProgress = (short) maxProgress;
+			if (progress > maxProgress) {
+				progress = this.maxProgress;
+			}
+			getRoot().flagAndUpdate(this);
 		}
-		getRoot().flagAndUpdate(this);
 		return this;
 	}
 	
 	@NotNull
 	@Override
 	public DiscreteSliderGuiElementImpl setProgress(int progress) {
-		Validate.isTrue(progress >= 0 && progress <= maxProgress,
-				"Progress must be at least 0 and at most maxProgress");
-		this.progress = (short) progress;
-		getRoot().flagAndUpdate(this);
+		if (this.progress != progress) {
+			Validate.isTrue(progress >= minProgress && progress <= maxProgress,
+					"Progress must be at least minProgress and at most maxProgress");
+			this.progress = (short) progress;
+			getRoot().flagAndUpdate(this);
+		}
 		return this;
 	}
 	

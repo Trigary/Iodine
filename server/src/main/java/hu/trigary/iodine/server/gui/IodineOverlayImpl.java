@@ -64,10 +64,12 @@ public class IodineOverlayImpl extends IodineRootImpl<IodineOverlay> implements 
 	@NotNull
 	@Override
 	public IodineOverlayImpl setDrawPriority(int priority) {
-		Validate.isTrue(priority >= Byte.MIN_VALUE && priority <= Byte.MAX_VALUE,
-				"The draw priority must be representable as a byte");
-		drawPriority = (byte) priority;
-		executeUpdate();
+		if (drawPriority != priority) {
+			Validate.isTrue(priority >= Byte.MIN_VALUE && priority <= Byte.MAX_VALUE,
+					"The draw priority must be representable as a byte");
+			drawPriority = (byte) priority;
+			executeUpdate();
+		}
 		return this;
 	}
 	

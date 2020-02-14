@@ -52,6 +52,7 @@ public interface GridGuiContainer extends GuiContainer<GridGuiContainer> {
 	
 	/**
 	 * Makes the specified element a direct child of this container.
+	 * If the element is already a child it is moved to the new position if necessary.
 	 * The element is inserted into the specified column-row pair.
 	 * An exception is thrown if that position already contains an element.
 	 * Indexing starts at 0.

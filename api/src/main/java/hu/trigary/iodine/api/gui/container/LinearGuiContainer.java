@@ -21,6 +21,7 @@ public interface LinearGuiContainer extends GuiContainer<LinearGuiContainer>, Gu
 	
 	/**
 	 * Makes the specified element a direct child of this container.
+	 * If the element is already a child it is moved to the new position if necessary.
 	 * The element is inserted after the other children.
 	 *
 	 * @param element the element to add as as child
@@ -32,6 +33,7 @@ public interface LinearGuiContainer extends GuiContainer<LinearGuiContainer>, Gu
 	
 	/**
 	 * Makes the specified element a direct child of this container.
+	 * If the element is already a child it is moved to the new position if necessary.
 	 * The element is inserted before the other children.
 	 *
 	 * @param element the element to add as as child
@@ -43,6 +45,7 @@ public interface LinearGuiContainer extends GuiContainer<LinearGuiContainer>, Gu
 	
 	/**
 	 * Makes the specified element a direct child of this container.
+	 * If the element is already a child it is moved to the new position if necessary.
 	 * The element is inserted after the specified child.
 	 * An exception is thrown if the specified element is not a child of this container.
 	 *
@@ -56,6 +59,7 @@ public interface LinearGuiContainer extends GuiContainer<LinearGuiContainer>, Gu
 	
 	/**
 	 * Makes the specified element a direct child of this container.
+	 * If the element is already a child it is moved to the new position if necessary.
 	 * The element is inserted before the specified child.
 	 * An exception is thrown if the specified element is not a child of this container.
 	 *

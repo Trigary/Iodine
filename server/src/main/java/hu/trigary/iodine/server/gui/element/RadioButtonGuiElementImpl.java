@@ -69,32 +69,34 @@ public class RadioButtonGuiElementImpl extends GuiElementImpl<RadioButtonGuiElem
 	@NotNull
 	@Override
 	public RadioButtonGuiElementImpl setEditable(boolean editable) {
-		this.editable = editable;
-		getRoot().flagAndUpdate(this);
+		if (this.editable != editable) {
+			this.editable = editable;
+			getRoot().flagAndUpdate(this);
+		}
 		return this;
 	}
 	
 	@NotNull
 	@Override
 	public RadioButtonGuiElementImpl setTooltip(@NotNull String tooltip) {
-		this.tooltip = tooltip;
-		getRoot().flagAndUpdate(this);
+		if (!this.tooltip.equals(tooltip)) {
+			this.tooltip = tooltip;
+			getRoot().flagAndUpdate(this);
+		}
 		return this;
 	}
 	
 	@NotNull
 	@Override
 	public RadioButtonGuiElementImpl setChecked() {
-		if (checked) {
-			return this;
+		if (!checked) {
+			RadioButtonGuiElementImpl oldChecked = groupData.checked;
+			oldChecked.checked = false;
+			groupData.checked = this;
+			checked = true;
+			getRoot().flagOnly(oldChecked);
+			getRoot().flagAndUpdate(this);
 		}
-		
-		RadioButtonGuiElementImpl oldChecked = groupData.checked;
-		oldChecked.checked = false;
-		groupData.checked = this;
-		checked = true;
-		getRoot().flagOnly(oldChecked);
-		getRoot().flagAndUpdate(this);
 		return this;
 	}
 	

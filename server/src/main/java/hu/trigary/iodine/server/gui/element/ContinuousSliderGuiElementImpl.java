@@ -72,41 +72,51 @@ public class ContinuousSliderGuiElementImpl extends GuiElementImpl<ContinuousSli
 	@NotNull
 	@Override
 	public ContinuousSliderGuiElementImpl setWidth(int width) {
-		this.width = (short) width;
-		getRoot().flagAndUpdate(this);
+		if (this.width != width) {
+			this.width = (short) width;
+			getRoot().flagAndUpdate(this);
+		}
 		return this;
 	}
 	
 	@NotNull
 	@Override
 	public ContinuousSliderGuiElementImpl setEditable(boolean editable) {
-		this.editable = editable;
-		getRoot().flagAndUpdate(this);
+		if (this.editable != editable) {
+			this.editable = editable;
+			getRoot().flagAndUpdate(this);
+		}
 		return this;
 	}
 	
 	@NotNull
 	@Override
 	public ContinuousSliderGuiElementImpl setTooltip(@NotNull String tooltip) {
-		this.tooltip = tooltip;
-		getRoot().flagAndUpdate(this);
+		if (!this.tooltip.equals(tooltip)) {
+			this.tooltip = tooltip;
+			getRoot().flagAndUpdate(this);
+		}
 		return this;
 	}
 	
 	@NotNull
 	@Override
 	public ContinuousSliderGuiElementImpl setText(@NotNull String text) {
-		this.text = text;
-		getRoot().flagAndUpdate(this);
+		if (!this.text.equals(text)) {
+			this.text = text;
+			getRoot().flagAndUpdate(this);
+		}
 		return this;
 	}
 	
 	@NotNull
 	@Override
 	public ContinuousSliderGuiElementImpl setProgress(float progress) {
-		Validate.isTrue(progress >= 0 && progress <= 1, "Progress must be at least 0 and at most 1");
-		this.progress = progress;
-		getRoot().flagAndUpdate(this);
+		if (Float.compare(this.progress, progress) != 0) {
+			Validate.isTrue(progress >= 0 && progress <= 1, "Progress must be at least 0 and at most 1");
+			this.progress = progress;
+			getRoot().flagAndUpdate(this);
+		}
 		return this;
 	}
 	

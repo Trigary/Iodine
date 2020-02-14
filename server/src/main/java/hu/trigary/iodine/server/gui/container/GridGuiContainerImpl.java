@@ -108,9 +108,11 @@ public class GridGuiContainerImpl extends GuiContainerImpl<GridGuiContainer> imp
 				"The columns and rows must be at least 0 and less than the values specified in #setGridSize");
 		Validate.isTrue(children.get(column * rowCount + row) == null, "That position is already taken by another child");
 		GuiElementImpl<?> impl = (GuiElementImpl<?>) element;
-		children.set(column * rowCount + row, impl);
-		impl.setParent(this);
-		getRoot().flagAndUpdate(this);
+		if (impl.getParent() != this || children.indexOf(element) != column * rowCount + row) {
+			impl.setParent(this);
+			children.set(column * rowCount + row, impl);
+			getRoot().flagAndUpdate(this);
+		}
 		return element;
 	}
 	
@@ -136,7 +138,7 @@ public class GridGuiContainerImpl extends GuiContainerImpl<GridGuiContainer> imp
 	@Override
 	public void handleChangePacket(@NotNull IodinePlayerBase player, @NotNull InputBuffer buffer) {}
 	
-
+	
 	
 	private void validateGrid(int currentCount, int newCount) {
 		if (currentCount > newCount) {

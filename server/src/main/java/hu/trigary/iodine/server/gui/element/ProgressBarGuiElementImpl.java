@@ -68,51 +68,62 @@ public class ProgressBarGuiElementImpl extends GuiElementImpl<ProgressBarGuiElem
 	@NotNull
 	@Override
 	public ProgressBarGuiElementImpl setOrientation(boolean vertical) {
-		if (verticalOrientation == vertical) {
-			return this;
+		if (verticalOrientation != vertical) {
+			if (vertical) {
+				//noinspection SuspiciousNameCombination
+				height = width;
+				width = 0;
+			} else {
+				//noinspection SuspiciousNameCombination
+				width = height;
+				height = 0;
+			}
+			verticalOrientation = vertical;
+			getRoot().flagAndUpdate(this);
 		}
-		
-		short temp = width;
-		//noinspection SuspiciousNameCombination
-		width = height;
-		height = temp;
-		verticalOrientation = vertical;
-		getRoot().flagAndUpdate(this);
 		return this;
 	}
 	
 	@NotNull
 	@Override
 	public ProgressBarGuiElementImpl setWidth(int width) {
-		Validate.isTrue(!verticalOrientation, "The width is only configurable in horizontal orientation");
-		this.width = (short) width;
-		getRoot().flagAndUpdate(this);
+		if (this.width != width) {
+			Validate.isTrue(!verticalOrientation, "The width is only configurable in horizontal orientation");
+			this.width = (short) width;
+			getRoot().flagAndUpdate(this);
+		}
 		return this;
 	}
 	
 	@NotNull
 	@Override
 	public ProgressBarGuiElementImpl setHeight(int height) {
-		Validate.isTrue(verticalOrientation, "The height is only configurable in vertical orientation");
-		this.height = (short) height;
-		getRoot().flagAndUpdate(this);
+		if (this.height != height) {
+			Validate.isTrue(verticalOrientation, "The height is only configurable in vertical orientation");
+			this.height = (short) height;
+			getRoot().flagAndUpdate(this);
+		}
 		return this;
 	}
 	
 	@NotNull
 	@Override
 	public ProgressBarGuiElementImpl setTooltip(@NotNull String tooltip) {
-		this.tooltip = tooltip;
-		getRoot().flagAndUpdate(this);
+		if (!this.tooltip.equals(tooltip)) {
+			this.tooltip = tooltip;
+			getRoot().flagAndUpdate(this);
+		}
 		return this;
 	}
 	
 	@NotNull
 	@Override
 	public ProgressBarGuiElementImpl setProgress(float progress) {
-		Validate.isTrue(progress >= 0 && progress <= 1, "Progress must be at least 0 and at most 1");
-		this.progress = progress;
-		getRoot().flagAndUpdate(this);
+		if (Float.compare(this.progress,progress) != 0) {
+			Validate.isTrue(progress >= 0 && progress <= 1, "Progress must be at least 0 and at most 1");
+			this.progress = progress;
+			getRoot().flagAndUpdate(this);
+		}
 		return this;
 	}
 	
