@@ -19,11 +19,11 @@ import java.util.regex.Pattern;
  */
 public class TextureGuiElementImpl extends GuiElementImpl<TextureGuiElement> implements TextureGuiElement {
 	private static final Pattern TEXTURE_PATTERN = Pattern.compile("[a-z0-9_.-]+:[a-z0-9/_.-]+");
-	private final short[] textureData = new short[6];
+	private final short[] textureData = {16, 16, 0, 0, 16, 16};
 	private short width = 100;
 	private short height = 100;
 	private String tooltip = "";
-	private String texture;
+	private String texture = "minecraft:textures/block/dirt.png";
 	private boolean interpolating = true;
 	private ClickedAction<TextureGuiElement> clickedAction;
 	
@@ -36,7 +36,6 @@ public class TextureGuiElementImpl extends GuiElementImpl<TextureGuiElement> imp
 	 */
 	public TextureGuiElementImpl(@NotNull IodineRootImpl<?> root, int internalId, @NotNull Object id) {
 		super(root, GuiElementType.TEXTURE, internalId, id);
-		setTexture("minecraft:textures/block/dirt.png", 16, 16, 0, 0, 16, 16);
 	}
 	
 	

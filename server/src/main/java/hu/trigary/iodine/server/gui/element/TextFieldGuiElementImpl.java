@@ -130,7 +130,7 @@ public class TextFieldGuiElementImpl extends GuiElementImpl<TextFieldGuiElement>
 	@Override
 	public TextFieldGuiElementImpl setText(@NotNull String text) {
 		if (!this.text.equals(text)) {
-			Validate.isTrue(validate(compiledRegex, text), "The text must match the regex");
+			Validate.isTrue(isValid(compiledRegex, text), "The text must match the regex");
 			this.text = text;
 			getRoot().flagAndUpdate(this);
 		}
@@ -142,7 +142,7 @@ public class TextFieldGuiElementImpl extends GuiElementImpl<TextFieldGuiElement>
 	public TextFieldGuiElement setRegex(@NotNull String regex) {
 		if (!this.regex.equals(regex)) {
 			Pattern tempRegex = regex.isEmpty() ? null : Pattern.compile(regex);
-			Validate.isTrue(validate(tempRegex, text), "The text must match the regex");
+			Validate.isTrue(isValid(tempRegex, text), "The text must match the regex");
 			this.regex = regex;
 			compiledRegex = tempRegex;
 			getRoot().flagAndUpdate(this);
@@ -189,7 +189,7 @@ public class TextFieldGuiElementImpl extends GuiElementImpl<TextFieldGuiElement>
 		}
 		
 		String newText = buffer.readString(maxLength * 4);
-		if (newText == null || text.equals(newText) || newText.length() > maxLength || !validate(compiledRegex, newText)) {
+		if (newText == null || text.equals(newText) || newText.length() > maxLength || !isValid(compiledRegex, newText)) {
 			return;
 		}
 		
@@ -203,7 +203,7 @@ public class TextFieldGuiElementImpl extends GuiElementImpl<TextFieldGuiElement>
 	}
 	
 	@Contract(pure = true, value = "null, _ -> true")
-	private static boolean validate(@Nullable Pattern regex, @NotNull String text) {
+	private static boolean isValid(@Nullable Pattern regex, @NotNull String text) {
 		return regex == null || regex.matcher(text).matches();
 	}
 }

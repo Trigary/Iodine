@@ -86,7 +86,7 @@ public abstract class PacketListener {
 			handler.handle(iodinePlayer, buffer.update(message,1));
 		} catch (Throwable t) {
 			plugin.log(Level.INFO, "Network > error handling {0} from {1}, ignoring player", type, iodinePlayer.getName());
-			plugin.log(Level.INFO, "Network > cause (this is maybe a bug, maybe not):", t);
+			plugin.log(Level.INFO, "Network > cause (this might be a bug, might not):", t);
 			ignore(iodinePlayer);
 		}
 	}

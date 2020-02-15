@@ -127,9 +127,11 @@ public class DiscreteSliderGuiElementImpl extends GuiElementImpl<DiscreteSliderG
 	@Override
 	public DiscreteSliderGuiElementImpl setMinProgress(int minProgress) {
 		if (this.minProgress != minProgress) {
-			Validate.isTrue(minProgress <= maxProgress, "Min progress must be at most max progress");
 			this.minProgress = (short) minProgress;
-			if (progress < minProgress) {
+			if (maxProgress < minProgress) {
+				maxProgress = this.minProgress;
+				progress = this.minProgress;
+			} else if (progress < minProgress) {
 				progress = this.minProgress;
 			}
 			getRoot().flagAndUpdate(this);
@@ -141,9 +143,11 @@ public class DiscreteSliderGuiElementImpl extends GuiElementImpl<DiscreteSliderG
 	@Override
 	public DiscreteSliderGuiElementImpl setMaxProgress(int maxProgress) {
 		if (this.maxProgress != maxProgress) {
-			Validate.isTrue(maxProgress >= minProgress, "Max progress must be at least min progress");
 			this.maxProgress = (short) maxProgress;
-			if (progress > maxProgress) {
+			if (minProgress > maxProgress) {
+				minProgress = this.maxProgress;
+				progress = this.maxProgress;
+			} else if (progress > maxProgress) {
 				progress = this.maxProgress;
 			}
 			getRoot().flagAndUpdate(this);

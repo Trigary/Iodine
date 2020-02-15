@@ -41,9 +41,8 @@ public interface DiscreteSliderGuiElement extends GuiElement<DiscreteSliderGuiEl
 	
 	/**
 	 * Sets the minimum progress of this element.
-	 * Must be at most {@link #getMaxProgress()}.
-	 * If {@link #getProgress()} is lower than this new minimum progress,
-	 * then it is set to the new minimum progress.
+	 * If {@link #getMaxProgress()} or {@link #getProgress()} ()} are lower than this new minimum progress,
+	 * then they are set to the new minimum progress.
 	 *
 	 * @param minProgress the new minimum progress
 	 * @return the current instance (for chaining)
@@ -53,9 +52,8 @@ public interface DiscreteSliderGuiElement extends GuiElement<DiscreteSliderGuiEl
 	
 	/**
 	 * Sets the maximum progress of this element.
-	 * Must be at least {@link #getMinProgress()}.
-	 * If {@link #getProgress()} is higher than this new maximum progress,
-	 * then it is set to the new maximum progress.
+	 * If {@link #getMinProgress()} ()} or {@link #getProgress()} ()} are lower than this new maximum progress,
+	 * then they are set to the new maximum progress.
 	 *
 	 * @param maxProgress the new maximum progress
 	 * @return the current instance (for chaining)

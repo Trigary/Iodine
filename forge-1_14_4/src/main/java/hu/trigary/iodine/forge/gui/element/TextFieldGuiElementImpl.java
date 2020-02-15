@@ -28,10 +28,10 @@ public class TextFieldGuiElementImpl extends TextFieldGuiElement {
 	@Override
 	protected void updateImpl(int positionX, int positionY, int width, int height) {
 		widget = new TextFieldWidget(Minecraft.getInstance().fontRenderer, positionX, positionY, width, height, text);
-		widget.active = editable;
+		widget.active = editable; //TODO doesn't work, maybe check editable in onTyped methods?
 		widget.setText(text);
 		widget.setMaxStringLength(maxLength);
-		widget.setValidator(s -> regex.matcher(s).matches());
+		widget.setValidator(regex == null ? s -> true : s -> regex.matcher(s).matches());
 	}
 	
 	@Override

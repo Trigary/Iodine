@@ -30,7 +30,6 @@ public class TextureGuiElementImpl extends TextureGuiElement {
 	@Override
 	protected void updateImpl(int positionX, int positionY, int width, int height) {
 		resource = new ResourceLocation(texture);
-		System.out.println(textureWidth + " " + textureHeight + " " + fileWidth + " " + fileHeight);
 	}
 	
 	@Override
