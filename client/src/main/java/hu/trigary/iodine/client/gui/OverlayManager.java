@@ -40,7 +40,7 @@ public abstract class OverlayManager {
 		mod.getLogger().debug("OverlayManager > opening {}", overlay.getId());
 		openOverlays.put(overlay.getId(), overlay);
 		drawOrderedOverlays.add(overlay);
-		overlay.deserialize(buffer);
+		overlay.deserialize(buffer, false);
 	}
 	
 	/**
@@ -52,7 +52,7 @@ public abstract class OverlayManager {
 		IodineOverlay overlay = openOverlays.get(buffer.readInt());
 		mod.getLogger().debug("OverlayManager > updating {}", overlay.getId());
 		drawOrderedOverlays.remove(overlay);
-		overlay.deserialize(buffer);
+		overlay.deserialize(buffer, true);
 		drawOrderedOverlays.add(overlay);
 	}
 	

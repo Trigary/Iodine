@@ -19,7 +19,6 @@ import org.jetbrains.annotations.Nullable;
 import java.lang.ref.WeakReference;
 import java.util.*;
 import java.util.function.Consumer;
-import java.util.function.Supplier;
 import java.util.logging.Level;
 
 /**
@@ -34,19 +33,13 @@ public abstract class IodineRootImpl<T extends IodineRoot<T>> implements IodineR
 	private final Map<Object, GuiElementImpl<?>> apiIdElements = new HashMap<>();
 	private final Set<GuiElementImpl<?>> flaggedForUpdate = new HashSet<>();
 	private final Set<GuiElementImpl<?>> flaggedForRemove = new HashSet<>();
-	private final PacketSupplier openPacket = new PacketSupplier("open", () -> {
-		serializeOpenStart(BUFFER);
-		return serialize(Collections.emptyList(), elements.values());
-	});
-	private final PacketSupplier updatePacket = new PacketSupplier("update", () -> {
-		serializeUpdateStart(BUFFER);
-		return serialize(flaggedForRemove, flaggedForUpdate);
-	});
 	private final IodinePlugin plugin;
 	private final int id;
 	private final RootGuiContainer root;
 	private int nextElementId = 1; //id 0 is root
 	private int atomicUpdateLock;
+	private boolean anythingFlagged;
+	private WeakReference<byte[]> cachedOpenPacket;
 	
 	/**
 	 * Creates a new instance.
@@ -172,10 +165,8 @@ public abstract class IodineRootImpl<T extends IodineRoot<T>> implements IodineR
 			element.onRemoved();
 			element.getParent().removeChild(element);
 			elements.remove(element.getInternalId());
-			openPacket.clear();
-			updatePacket.clear();
 			flaggedForRemove.add(element);
-			executeUpdate();
+			flagAndUpdate(null);
 		}
 		return thisT();
 	}
@@ -188,18 +179,16 @@ public abstract class IodineRootImpl<T extends IodineRoot<T>> implements IodineR
 	
 	
 	
-	/**
-	 * Updates this instance for all of its viewers except in currently in an atomic update block.
-	 */
-	protected final void executeUpdate() {
-		if (atomicUpdateLock != 0) {
+	private void executeUpdate() {
+		if (atomicUpdateLock != 0 || !anythingFlagged) {
 			return;
 		}
 		
 		plugin.log(Level.OFF, "Root > updating {0}", id);
 		if (!viewers.isEmpty()) {
 			flaggedForUpdate.removeAll(flaggedForRemove);
-			byte[] payload = updatePacket.get();
+			serializeUpdateStart(BUFFER);
+			byte[] payload = serialize(flaggedForRemove, flaggedForUpdate);
 			NetworkManager network = plugin.getNetworkManager();
 			for (IodinePlayerBase player : viewers) {
 				network.send(player, payload);
@@ -208,6 +197,7 @@ public abstract class IodineRootImpl<T extends IodineRoot<T>> implements IodineR
 		
 		flaggedForUpdate.clear();
 		flaggedForRemove.clear();
+		anythingFlagged = false;
 	}
 	
 	@NotNull
@@ -223,36 +213,37 @@ public abstract class IodineRootImpl<T extends IodineRoot<T>> implements IodineR
 	
 	
 	/**
-	 * Flags the specified element for update.
-	 * No errors are thrown, even if the element has already been flagged or removed.
+	 * Flags this root instance, and the specified element if it's not null, for update.
 	 *
 	 * @param element the element to flag
 	 */
-	public final void flagOnly(@NotNull GuiElementImpl<?> element) {
-		openPacket.clear();
-		updatePacket.clear();
-		flaggedForUpdate.add(element);
+	public final void flagOnly(@Nullable GuiElementImpl<?> element) {
+		if (element != null) {
+			flaggedForUpdate.add(element);
+		}
+		anythingFlagged = true;
+		cachedOpenPacket = null;
 	}
 	
 	/**
-	 * Flags the specified element for update and then executes an update.
-	 * No errors are thrown, even if the element has already been flagged or removed.
+	 * Flags this root instance, and the specified element if it's not null,
+	 * for update and then also executes an update.
 	 *
 	 * @param element the element to flag
 	 */
-	public final void flagAndUpdate(@NotNull GuiElementImpl<?> element) {
+	public final void flagAndUpdate(@Nullable GuiElementImpl<?> element) {
 		flagOnly(element);
 		executeUpdate();
 	}
 	
 	/**
-	 * Flags the specified element for update and then executes an atomic update with the specified callback.
-	 * No errors are thrown, even if the element has already been flagged or removed.
+	 * Flags this root instance, and the specified element if it's not null,
+	 * for update and then executes an atomic update with the specified callback.
 	 *
 	 * @param element the element to flag
 	 * @param updater the callback that updates this GUI
 	 */
-	public final void flagAndAtomicUpdate(@NotNull GuiElementImpl<?> element, @NotNull Runnable updater) {
+	public final void flagAndAtomicUpdate(@Nullable GuiElementImpl<?> element, @NotNull Runnable updater) {
 		flagOnly(element);
 		atomicUpdate(ignored -> updater.run());
 	}
@@ -277,7 +268,13 @@ public abstract class IodineRootImpl<T extends IodineRoot<T>> implements IodineR
 		}
 		
 		onOpened(iodinePlayer);
-		plugin.getNetworkManager().send(iodinePlayer, openPacket.get());
+		byte[] payload = cachedOpenPacket == null ? null : cachedOpenPacket.get();
+		if (payload == null) {
+			serializeOpenStart(BUFFER);
+			payload = serialize(null, elements.values());
+			cachedOpenPacket = new WeakReference<>(payload);
+		}
+		plugin.getNetworkManager().send(iodinePlayer, payload);
 		return thisT();
 	}
 	
@@ -363,11 +360,13 @@ public abstract class IodineRootImpl<T extends IodineRoot<T>> implements IodineR
 	protected abstract void serializeUpdateStart(@NotNull OutputBuffer buffer);
 	
 	@NotNull
-	private static byte[] serialize(@NotNull Collection<GuiElementImpl<?>> remove,
+	private static byte[] serialize(@Nullable Collection<GuiElementImpl<?>> remove,
 			@NotNull Collection<GuiElementImpl<?>> add) {
-		BUFFER.putInt(remove.size());
-		for (GuiElementImpl<?> element : remove) {
-			BUFFER.putInt(element.getInternalId());
+		if (remove != null) {
+			BUFFER.putInt(remove.size());
+			for (GuiElementImpl<?> element : remove) {
+				BUFFER.putInt(element.getInternalId());
+			}
 		}
 		for (GuiElementImpl<?> element : add) {
 			element.serialize(BUFFER);
@@ -389,35 +388,5 @@ public abstract class IodineRootImpl<T extends IodineRoot<T>> implements IodineR
 	@Override
 	public String toString() {
 		return getClass().getSimpleName() + "#" + getId();
-	}
-	
-	
-	
-	private class PacketSupplier {
-		private final String name;
-		private final Supplier<byte[]> computer;
-		private WeakReference<byte[]> reference;
-		
-		PacketSupplier(@NotNull String name, @NotNull Supplier<byte[]> computer) {
-			this.name = name;
-			this.computer = computer;
-		}
-		
-		@NotNull
-		byte[] get() {
-			byte[] array = reference == null ? null : reference.get();
-			if (array == null) {
-				plugin.log(Level.OFF, "Root > {0} constructing {1} packet", id, name);
-				array = computer.get();
-				reference = new WeakReference<>(array);
-			} else {
-				plugin.log(Level.OFF, "Root > {0} using cached {1} packet", id, name);
-			}
-			return array;
-		}
-		
-		void clear() {
-			reference = null;
-		}
 	}
 }

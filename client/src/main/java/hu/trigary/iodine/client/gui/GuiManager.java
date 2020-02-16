@@ -38,7 +38,7 @@ public abstract class GuiManager {
 		
 		mod.getLogger().debug("GuiManager > opening {}", gui.getId());
 		openGui = gui;
-		gui.deserialize(buffer);
+		gui.deserialize(buffer, false);
 		openGuiImpl(gui);
 	}
 	
@@ -50,7 +50,7 @@ public abstract class GuiManager {
 	public final void packetUpdateGui(@NotNull InputBuffer buffer) {
 		if (openGui != null) {
 			mod.getLogger().debug("GuiManager > updating {}", openGui.getId());
-			openGui.deserialize(buffer);
+			openGui.deserialize(buffer, true);
 		} else {
 			mod.getLogger().debug("GuiManager > update failed: no open GUIs");
 		}

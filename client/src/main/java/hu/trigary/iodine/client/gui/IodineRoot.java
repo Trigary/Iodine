@@ -93,17 +93,20 @@ public abstract class IodineRoot implements Closeable {
 	 * Updates this instance from the specified buffer.
 	 *
 	 * @param buffer the buffer the data is stored in
+	 * @param removeIncluded whether the buffer contains elements that are to be removed
 	 */
-	public final void deserialize(@NotNull InputBuffer buffer) {
+	public final void deserialize(@NotNull InputBuffer buffer, boolean removeIncluded) {
 		mod.getLogger().debug("Root > deserializing {}", id);
 		deserializeStart(buffer);
 		
-		int removeCount = buffer.readInt();
-		for (int i = 0; i < removeCount; i++) {
-			try (GuiElement removed = elements.remove(buffer.readInt())) {
-				mod.getLogger().debug("Root > removing {} in {}", removed.getId(), id);
-				drawOrderedElements.remove(removed);
-				onElementRemoved(removed);
+		if (removeIncluded) {
+			int removeCount = buffer.readInt();
+			for (int i = 0; i < removeCount; i++) {
+				try (GuiElement removed = elements.remove(buffer.readInt())) {
+					mod.getLogger().debug("Root > removing {} in {}", removed.getId(), id);
+					drawOrderedElements.remove(removed);
+					onElementRemoved(removed);
+				}
 			}
 		}
 		
@@ -141,7 +144,7 @@ public abstract class IodineRoot implements Closeable {
 	
 	
 	/**
-	 * Called after {@link #deserialize(InputBuffer)} and when the client resolution changed.
+	 * Called after {@link #deserialize(InputBuffer, boolean)} and when the client resolution changed.
 	 * Updates the contained elements' sizes and positions.
 	 */
 	public final void update() {
