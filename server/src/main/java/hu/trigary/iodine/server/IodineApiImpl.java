@@ -62,12 +62,13 @@ public final class IodineApiImpl extends IodineApi {
 	
 	
 	@Override
-	public <T extends IodineEvent> void addListener(@NotNull Class<T> event, @NotNull Consumer<T> handler) {
-		plugin.changeEventListener(event, handler, true);
+	public <T extends IodineEvent> void addListener(@NotNull Class<T> event,
+			@NotNull String plugin, @NotNull Consumer<T> handler) {
+		this.plugin.addEventListener(event, plugin, handler);
 	}
 	
 	@Override
-	public <T extends IodineEvent> void removeListener(@NotNull Class<T> event, @NotNull Consumer<T> handler) {
-		plugin.changeEventListener(event, handler, false);
+	public <T extends IodineEvent> boolean removeListener(@NotNull Class<T> event, @NotNull Consumer<T> handler) {
+		return plugin.removeEventListener(event, handler);
 	}
 }

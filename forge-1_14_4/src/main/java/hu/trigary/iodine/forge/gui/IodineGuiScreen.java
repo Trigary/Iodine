@@ -93,7 +93,6 @@ public class IodineGuiScreen extends Screen {
 	public boolean keyPressed(int key, int scanCode, int modifiers) {
 		if (key == 256) {
 			Minecraft.getInstance().displayGuiScreen(null);
-			//TODO also close on inventory button maybe?
 		} else {
 			gui.onKeyPressed(key, scanCode, modifiers);
 		}

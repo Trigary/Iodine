@@ -34,6 +34,8 @@ public class IodineBukkitPlugin extends JavaPlugin implements Listener {
 		//Plugin messages can still be sent here
 		if (event.getPlugin() == this) {
 			plugin.onDisabled();
+		} else {
+			plugin.removePluginEventListeners(event.getPlugin().getName());
 		}
 	}
 }

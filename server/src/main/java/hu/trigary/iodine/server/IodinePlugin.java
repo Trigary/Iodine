@@ -19,7 +19,7 @@ import java.util.stream.Stream;
  * A base class for Iodine plugin main classes.
  */
 public abstract class IodinePlugin {
-	private Map<Class<? extends IodineEvent>, List<Consumer<? extends IodineEvent>>> eventListeners;
+	private Map<Class<? extends IodineEvent>, List<EventListener>> eventListeners;
 	private Logger logger;
 	private boolean debugLog;
 	private String version;
@@ -131,38 +131,77 @@ public abstract class IodinePlugin {
 	 * @param <T> the type of the event
 	 */
 	public final <T extends IodineEvent> void postEvent(@NotNull T event) {
-		List<Consumer<? extends IodineEvent>> consumers = eventListeners.get(event.getClass());
-		if (consumers != null) {
-			for (Consumer<? extends IodineEvent> consumer : consumers) {
-				try {
-					//noinspection unchecked
-					((Consumer<T>) consumer).accept(event);
-				} catch (Throwable t) {
-					//TODO it would be cool to also log the plugin name, currently it can only be found in the stacktrace
-					// (for that we would have to pass and store the plugin name in the register listener method)
-					log(Level.SEVERE, "Exception in event listener for " + event.getClass().getSimpleName(), t);
-				}
+		List<EventListener> listeners = eventListeners.get(event.getClass());
+		if (listeners == null) {
+			return;
+		}
+		
+		for (EventListener listener : listeners) {
+			try {
+				//noinspection unchecked
+				((Consumer<T>) listener.handler).accept(event);
+			} catch (Throwable t) {
+				log(Level.SEVERE, "Exception in " + listener.plugin + " plugin's event listener for "
+						+ event.getClass().getSimpleName(), t);
 			}
 		}
 	}
 	
 	/**
-	 * Registers or unregisters an event listener.
+	 * Registers an event listener.
+	 * Should only be called through the API.
 	 *
 	 * @param event the event to listen for
 	 * @param handler the handler of the event
-	 * @param add whether the handler should be added or removed
+	 * @param plugin the exact name of the plugin that is registering the listener
 	 * @param <T> the type of the event
 	 */
-	public final <T extends IodineEvent> void changeEventListener(@NotNull Class<T> event,
-			@NotNull Consumer<T> handler, boolean add) {
-		List<Consumer<? extends IodineEvent>> consumers = eventListeners.computeIfAbsent(event, k -> new ArrayList<>());
-		if (add) {
-			//TODO what if the plugin ClassLoader gets dropped, eg. the plugin gets reloaded (PlugMan pls just vanish)
-			consumers.add(handler);
-		} else {
-			consumers.remove(handler);
+	public final <T extends IodineEvent> void addEventListener(@NotNull Class<T> event,
+			@NotNull String plugin, @NotNull Consumer<T> handler) {
+		List<EventListener> listeners = eventListeners.computeIfAbsent(event, k -> new ArrayList<>());
+		if (listeners.stream().anyMatch(listener -> listener.handler == handler)) {
+			log(Level.WARNING, "Exact handler instance got registered again in plugin {0} for {1}",
+					plugin, event.getSimpleName());
 		}
+		listeners.add(new EventListener(plugin, handler));
+	}
+	
+	/**
+	 * Unregisters an event listener.
+	 * Should only be called through the API.
+	 *
+	 * @param event the event to listen for
+	 * @param handler the handler of the event
+	 * @param <T> the type of the event
+	 * @return true if the handler was actually removed, false if it wasn't registered
+	 */
+	public final <T extends IodineEvent> boolean removeEventListener(@NotNull Class<T> event, @NotNull Consumer<T> handler) {
+		List<EventListener> listeners = eventListeners.get(event);
+		if (listeners == null) {
+			return false;
+		}
+		
+		if (listeners.size() == 1 && listeners.get(0).handler == handler) {
+			eventListeners.remove(event);
+			return true;
+		} else {
+			for (Iterator<EventListener> iterator = listeners.iterator(); iterator.hasNext(); ) {
+				if (iterator.next().handler == handler) {
+					iterator.remove();
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	
+	/**
+	 * Unregisters all event listeners linked to the specified plugin.
+	 *
+	 * @param plugin the exact name of the plugin whose listeners to remove
+	 */
+	public final void removePluginEventListeners(@NotNull String plugin) {
+		eventListeners.values().removeIf(list -> list.removeIf(listener -> listener.plugin.equals(plugin)) && list.isEmpty());
 	}
 	
 	
@@ -189,5 +228,17 @@ public abstract class IodinePlugin {
 	public final void log(@NotNull Level level, @NotNull String message, @NotNull Throwable cause) {
 		level = level == Level.OFF && debugLog ? Level.INFO : level;
 		logger.log(level, message, cause);
+	}
+	
+	
+	
+	private static class EventListener {
+		final String plugin;
+		final Consumer<? extends IodineEvent> handler;
+		
+		EventListener(@NotNull String plugin, @NotNull Consumer<? extends IodineEvent> handler) {
+			this.plugin = plugin;
+			this.handler = handler;
+		}
 	}
 }

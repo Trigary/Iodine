@@ -88,20 +88,26 @@ public abstract class IodineApi {
 	/**
 	 * Registers an event listener.
 	 * Handler instances can be unregistered using the {@link #removeListener(Class, Consumer)} method.
+	 * The listener is automatically unregistered when the specified plugin gets disabled.
 	 *
 	 * @param event the event to listen for
+	 * @param plugin the exact name of the plugin that is registering the listener
 	 * @param handler the handler of the event
 	 * @param <T> the type of the event
 	 */
-	public abstract <T extends IodineEvent> void addListener(@NotNull Class<T> event, @NotNull Consumer<T> handler);
+	public abstract <T extends IodineEvent> void addListener(@NotNull Class<T> event,
+			@NotNull String plugin, @NotNull Consumer<T> handler);
 	
 	/**
 	 * Unregisters an event listener.
-	 * Handler instances can be registered using the {@link #addListener(Class, Consumer)} method.
+	 * Keep in mind that the handler instance must be the exact same one
+	 * passed to the {@link #addListener(Class, String, Consumer)} method.
+	 * Considering using assertions on the return value to detect such bugs.
 	 *
 	 * @param event the event to listen for
 	 * @param handler the handler of the event
 	 * @param <T> the type of the event
+	 * @return true if the handler was actually removed, false if it wasn't registered
 	 */
-	public abstract <T extends IodineEvent> void removeListener(@NotNull Class<T> event, @NotNull Consumer<T> handler);
+	public abstract <T extends IodineEvent> boolean removeListener(@NotNull Class<T> event, @NotNull Consumer<T> handler);
 }
