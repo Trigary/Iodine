@@ -63,6 +63,7 @@ public abstract class OverlayManager {
 	 */
 	public final void packetCloseOverlay(@NotNull InputBuffer buffer) {
 		try (IodineOverlay overlay = openOverlays.remove(buffer.readInt())) {
+			drawOrderedOverlays.remove(overlay);
 			mod.getLogger().debug("OverlayManager > closing {}", overlay.getId());
 		}
 	}
