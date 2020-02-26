@@ -122,7 +122,7 @@ public class RectangleGuiElementImpl extends GuiElementImpl<RectangleGuiElement>
 	@Override
 	public void handleChangePacket(@NotNull IodinePlayerBase player, @NotNull InputBuffer buffer) {
 		if (clickedAction != null) {
-			clickedAction.accept(this, player);
+			getRoot().atomicUpdate(ignored -> clickedAction.accept(this, player));
 		}
 	}
 }

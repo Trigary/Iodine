@@ -177,7 +177,7 @@ public class TextureGuiElementImpl extends GuiElementImpl<TextureGuiElement> imp
 	@Override
 	public void handleChangePacket(@NotNull IodinePlayerBase player, @NotNull InputBuffer buffer) {
 		if (clickedAction != null) {
-			clickedAction.accept(this, player);
+			getRoot().atomicUpdate(ignored -> clickedAction.accept(this, player));
 		}
 	}
 }

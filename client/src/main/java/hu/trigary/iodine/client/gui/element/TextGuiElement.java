@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
  * The implementation of {@link hu.trigary.iodine.backend.GuiElementType#TEXT}.
  */
 public abstract class TextGuiElement extends GuiElement {
-	protected static final int HEIGHT = 20;
+	protected static final int HEIGHT = 10;
 	protected int width;
 	protected String text;
 	protected byte alignment;

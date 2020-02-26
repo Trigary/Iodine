@@ -121,7 +121,7 @@ public class ButtonGuiElementImpl extends GuiElementImpl<ButtonGuiElement> imple
 	@Override
 	public void handleChangePacket(@NotNull IodinePlayerBase player, @NotNull InputBuffer buffer) {
 		if (editable && clickedAction != null) {
-			clickedAction.accept(this, player);
+			getRoot().atomicUpdate(ignored -> clickedAction.accept(this, player));
 		}
 	}
 }
