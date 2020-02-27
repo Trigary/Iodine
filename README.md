@@ -14,7 +14,7 @@ to how the project is structured: Forge and Bukkit are abstracted away.
 
 What this project offers:
 
- - GUIs that can be viewed and interacted with by multiple players simulatenously
+ - GUIs that can be viewed and interacted with by multiple players simultaneously
  - Clickable buttons, sliders, checkboxes, linear and grid layouts, etc.
  - Overlays which can be made into minimaps or custom status bars
  - An easy-to-use API for plugin developers to harness this all
@@ -23,32 +23,58 @@ What this project offers:
 
 ## Showcase
 
-images, GIFs: to be added
+Showcase of some of the implemented elements:
+
+![](showcase/elements.png)
+
+Showcase of a proof-of-concept Factions minimap:
+
+![](showcase/minimap-menu.png)
+
+![](showcase/minimap-overlay.png)
+
+## API
+
+Very simple, "Hello World" sample code:
 
 ```java
-//the code behind one of the samples
+IodineApi.get().createGui()
+    .addElement(GuiElements.TEXT, e -> e.setText("Hello, world!").setWidth(75))
+    .addElement(GuiElements.BUTTON, 0, 15, e -> e.setText("Exit").setWidth(75)
+        .onClicked((ee, p) -> p.closeOpenGui()))
+    .onClosed((gui, p, byPlayer) -> p.sendMessage(
+        byPlayer ? "You pressed the escape key" : "You clicked the exit button"))
+    .openFor(IodineApi.get().getPlayer(player.getUniqueId()));
 ```
+
+Real example code can be found in the [showcase](showcase/src/main/java/hu/trigary/iodine/showcase) subproject.
+
+TODO add Maven, Gradle coordinates and link to JavaDocs (through JitPack, if possible)
 
 ## Modules
 
 This project consists of multiple subprojects, each with their own role:
 
- - **iodine-common:** contains code that both *iodine-api* and *iodine-backend* require
- - **iodine-api:** the API that plugin developers use, included in *iodine-server*
- - **iodine-backend:** contains code that both *iodine-server* and *iodine-client* require
- - **iodine-server:** contains code that is used by multiple server-side plugin projects
- - **iodine-client:** contains code that is used by multiple client-side mod projects
- - **iodine-bukkit:** the Bukkit plugin part of the project
- - **iodine-forge-VERSION:** the Forge mod part of the project, for the specified version
+ - **common:** contains code that both *api* and *backend* require
+ - **api:** the API that plugin developers use, included in *server*
+ - **backend:** contains code that both *server* and *client* require
+ - **server:** contains code that is used by multiple server-side plugin projects
+ - **client:** contains code that is used by multiple client-side mod projects
+ - **bukkit:** the Bukkit plugin part of the project
+ - **forge-VERSION:** the Forge mod part of the project, for the specified version
+ - **showcase** contains sample code, this is an actual Bukkit plugin
 
-The *iodine-forge-VERSION* projects are not be real subprojects due to
+The *forge-VERSION* projects are not be real subprojects due to
 ForgeGradle issues, they are actually considered separate projects by Gradle.
+The *showcase* project isn't a subproject either since it's not an actual
+component in neither the server-side, nor the client-side part of this project.
 
 To recap which projects depend on which:
 
- - **iodine-api:** common
- - **iodine-backend:** common
- - **iodine-server:** backend + api (inherited: common)
- - **iodine-client:** backend (inherited: common)
- - **iodine-bukkit:** server (inherited: api, backend, common)
- - **iodine-forge-VERSION:** client (inherited: backend, common)
+ - **api:** common
+ - **backend:** common
+ - **server:** backend + api (inherited: common)
+ - **client:** backend (inherited: common)
+ - **bukkit:** server (inherited: api, backend, common)
+ - **forge-VERSION:** client (inherited: backend, common)
+ - **showcase**: api (inherited: common)

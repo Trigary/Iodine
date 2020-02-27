@@ -1,5 +1,6 @@
 /.idea
 /forge-*/.idea
+/showcase/.idea
 
 /.gradle
 /*/.gradle
@@ -7,5 +8,5 @@
 /out
 /*/out
 /*/build
-
 /forge-*/run
+/showcase/target

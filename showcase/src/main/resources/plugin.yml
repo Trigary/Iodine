@@ -1,0 +1,16 @@
+name: IodineShowcase
+version: ${project.version}
+author: Trigary
+main: hu.trigary.iodine.showcase.IodineShowcase
+api-version: "1.13"
+depend: [Iodine]
+
+commands:
+  confirm:
+    description: "Confirm showcase command"
+  elements:
+    description: "Elements showcase command"
+  helloworld:
+    description: "Hello world showcase command"
+  minimap:
+    description: "Minimap showcase command"
