@@ -12,7 +12,8 @@ import org.jetbrains.annotations.NotNull;
  */
 public interface TextureGuiElement extends GuiElement<TextureGuiElement>,
 		GuiWidthSettable<TextureGuiElement>, GuiHeightSettable<TextureGuiElement>,
-		GuiTooltipable<TextureGuiElement>, GuiClickable<TextureGuiElement> {
+		GuiTooltipable<TextureGuiElement>, GuiClickable<TextureGuiElement>,
+		GuiTransparentable<TextureGuiElement> {
 	/**
 	 * Gets the texture's identifier.
 	 *

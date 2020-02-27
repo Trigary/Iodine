@@ -114,9 +114,7 @@ public class RectangleGuiElementImpl extends GuiElementImpl<RectangleGuiElement>
 		buffer.putShort(width);
 		buffer.putShort(height);
 		buffer.putString(tooltip);
-		buffer.putByte((byte) color.getRed());
-		buffer.putByte((byte) color.getGreen());
-		buffer.putByte((byte) color.getBlue());
+		buffer.putInt(color.getArgb());
 	}
 	
 	@Override

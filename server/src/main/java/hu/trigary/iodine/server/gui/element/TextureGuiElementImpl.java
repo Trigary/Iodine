@@ -23,6 +23,7 @@ public class TextureGuiElementImpl extends GuiElementImpl<TextureGuiElement> imp
 	private short width = 100;
 	private short height = 100;
 	private String tooltip = "";
+	private int transparency = 0xFF;
 	private String texture = "minecraft:textures/block/dirt.png";
 	private boolean interpolating = true;
 	private ClickedAction<TextureGuiElement> clickedAction;
@@ -55,6 +56,12 @@ public class TextureGuiElementImpl extends GuiElementImpl<TextureGuiElement> imp
 	@Override
 	public String getTooltip() {
 		return tooltip;
+	}
+	
+	@Contract(pure = true)
+	@Override
+	public int getTransparencyComponent() {
+		return transparency;
 	}
 	
 	@NotNull
@@ -115,6 +122,15 @@ public class TextureGuiElementImpl extends GuiElementImpl<TextureGuiElement> imp
 	
 	@NotNull
 	@Override
+	public TextureGuiElementImpl setTransparencyComponent(int transparency) {
+		Validate.isTrue((transparency & 0xFF) == transparency,
+				"Transparency range from 0 to 255, or from 0 to 1 in case of percentages (all inclusive)");
+		this.transparency = transparency;
+		return this;
+	}
+	
+	@NotNull
+	@Override
 	public TextureGuiElementImpl setTexture(@NotNull String namespacedKey, int textureFileWidth, int textureFileHeight,
 			int textureOffsetX, int textureOffsetY, int textureWidth, int textureHeight) {
 		if (texture.equals(namespacedKey)
@@ -164,6 +180,7 @@ public class TextureGuiElementImpl extends GuiElementImpl<TextureGuiElement> imp
 		buffer.putShort(width);
 		buffer.putShort(height);
 		buffer.putString(tooltip);
+		buffer.putByte((byte) transparency);
 		buffer.putString(texture);
 		buffer.putShort(textureData[0] <= 0 ? width : textureData[0]);
 		buffer.putShort(textureData[1] <= 0 ? height : textureData[1]);

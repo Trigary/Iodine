@@ -34,8 +34,7 @@ public abstract class RectangleGuiElement extends GuiElement {
 		width = buffer.readShort();
 		height = buffer.readShort();
 		tooltip = buffer.readString();
-		color = (0xFF << 24) | ((buffer.readByte() & 0xFF) << 16)
-				| ((buffer.readByte() & 0xFF) << 8) | (buffer.readByte() & 0xFF);
+		color = buffer.readInt();
 	}
 	
 	@NotNull

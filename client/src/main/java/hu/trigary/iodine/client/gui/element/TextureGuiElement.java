@@ -15,6 +15,7 @@ public abstract class TextureGuiElement extends GuiElement {
 	protected int width;
 	protected int height;
 	protected String tooltip;
+	protected int transparency;
 	protected String texture;
 	protected int fileWidth;
 	protected int fileHeight;
@@ -41,6 +42,7 @@ public abstract class TextureGuiElement extends GuiElement {
 		width = buffer.readShort();
 		height = buffer.readShort();
 		tooltip = buffer.readString();
+		transparency = buffer.readByte() & 0xFF;
 		texture = buffer.readString();
 		fileWidth = buffer.readShort();
 		fileHeight = buffer.readShort();

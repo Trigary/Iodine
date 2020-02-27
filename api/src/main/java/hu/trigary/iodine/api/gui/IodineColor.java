@@ -5,39 +5,56 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * An immutable class representing an RGB color.
+ * An immutable class representing an ARGB color.
  * Since it is immutable, the setter methods return a new instance.
- * The components' values range from 0x0 to 0xFF.
+ * The components' values range from 0x00 to 0xFF (both inclusive).
+ * An alpha channel value of 0xFF stands for full opacity (no transparency).
  */
 public final class IodineColor {
-	public static final IodineColor BLACK = get(0x000000);
-	public static final IodineColor DARK_GRAY = get(0x555555);
-	public static final IodineColor GRAY = get(0xAAAAAA);
-	public static final IodineColor WHITE = get(0xFFFFFF);
-	public static final IodineColor DARK_RED = get(0xAA0000);
-	public static final IodineColor RED = get(0xFF5555);
-	public static final IodineColor GOLD = get(0xFFAA00);
-	public static final IodineColor YELLOW = get(0xFFFF55);
-	public static final IodineColor DARK_GREEN = get(0x00AA00);
-	public static final IodineColor GREEN = get(0x55FF55);
-	public static final IodineColor AQUA = get(0x55FFFF);
-	public static final IodineColor DARK_AQUA = get(0x00AAAA);
-	public static final IodineColor DARK_BLUE = get(0x0000AA);
-	public static final IodineColor BLUE = get(0x5555FF);
-	public static final IodineColor LIGHT_PURPLE = get(0xFF55FF);
-	public static final IodineColor DARK_PURPLE = get(0xAA00AA);
-	private final int red;
-	private final int green;
-	private final int blue;
+	public static final IodineColor BLACK = get(0xFF000000);
+	public static final IodineColor DARK_GRAY = get(0xFF555555);
+	public static final IodineColor GRAY = get(0xFFAAAAAA);
+	public static final IodineColor WHITE = get(0xFFFFFFFF);
+	public static final IodineColor DARK_RED = get(0xFFAA0000);
+	public static final IodineColor RED = get(0xFFFF5555);
+	public static final IodineColor GOLD = get(0xFFFFAA00);
+	public static final IodineColor YELLOW = get(0xFFFFFF55);
+	public static final IodineColor DARK_GREEN = get(0xFF00AA00);
+	public static final IodineColor GREEN = get(0xFF55FF55);
+	public static final IodineColor AQUA = get(0xFF55FFFF);
+	public static final IodineColor DARK_AQUA = get(0xFF00AAAA);
+	public static final IodineColor DARK_BLUE = get(0xFF0000AA);
+	public static final IodineColor BLUE = get(0xFF5555FF);
+	public static final IodineColor LIGHT_PURPLE = get(0xFFFF55FF);
+	public static final IodineColor DARK_PURPLE = get(0xFFAA00AA);
+	private final int argb;
 	
-	private IodineColor(int red, int green, int blue) {
-		this.red = red;
-		this.green = green;
-		this.blue = blue;
+	private IodineColor(int argb) {
+		this.argb = argb;
 	}
 	
 	/**
 	 * Creates a new instance from the specified components.
+	 *
+	 * @param alpha the alpha component
+	 * @param red the red component
+	 * @param green the green component
+	 * @param blue the blue component
+	 * @return the new color instance containing the specified components
+	 */
+	@NotNull
+	@Contract(pure = true, value = "_, _, _, _ -> new")
+	public static IodineColor get(int alpha, int red, int green, int blue) {
+		Validate.isTrue((alpha & 0xFF) == alpha, "Component values must range from 0 to 255 (both inclusive)");
+		Validate.isTrue((red & 0xFF) == red, "Component values must range from 0 to 255 (both inclusive)");
+		Validate.isTrue((green & 0xFF) == green, "Component values must range from 0 to 255 (both inclusive)");
+		Validate.isTrue((blue & 0xFF) == blue, "Component values must range from 0 to 255 (both inclusive)");
+		return new IodineColor((red << 16) | (green << 8) | blue);
+	}
+	
+	/**
+	 * Creates a new instance from the specified components.
+	 * The alpha channel's value will be 0xFF.
 	 *
 	 * @param red the red component
 	 * @param green the green component
@@ -47,27 +64,44 @@ public final class IodineColor {
 	@NotNull
 	@Contract(pure = true, value = "_, _, _ -> new")
 	public static IodineColor get(int red, int green, int blue) {
-		Validate.isTrue((red & 0xFF) == red, "Component values must range from 0 to 255 (both inclusive)");
-		Validate.isTrue((green & 0xFF) == green, "Component values must range from 0 to 255 (both inclusive)");
-		Validate.isTrue((blue & 0xFF) == blue, "Component values must range from 0 to 255 (both inclusive)");
-		return new IodineColor(red, green, blue);
+		return get(0xFF, red, green, blue);
 	}
 	
 	/**
 	 * Creates a new instance from the specified integer.
-	 * The 8 most significant bits must not be set.
+	 * The 8 most significant bits hold the alpha component.
 	 *
-	 * @param rgb the components as a single integer
+	 * @param argb the components as a single integer
 	 * @return the new color instance containing the specified values
 	 */
 	@NotNull
 	@Contract(pure = true, value = "_ -> new")
-	public static IodineColor get(int rgb) {
-		Validate.isTrue(rgb >>> 24 == 0, "The 8 most significant bits must not be set");
-		return new IodineColor(rgb >>> 16, (rgb >>> 8) & 0xFF, rgb & 0xFF);
+	public static IodineColor get(int argb) {
+		return new IodineColor(argb);
 	}
 	
 	
+	
+	/**
+	 * Gets this color's components as a single integer.
+	 * The 8 most significant bits hold the alpha component.
+	 *
+	 * @return the red component's value
+	 */
+	@Contract(pure = true)
+	public int getArgb() {
+		return argb;
+	}
+	
+	/**
+	 * Gets this color's alpha component.
+	 *
+	 * @return the alpha component's value
+	 */
+	@Contract(pure = true)
+	public int getAlpha() {
+		return argb >>> 24;
+	}
 	
 	/**
 	 * Gets this color's red component.
@@ -76,7 +110,7 @@ public final class IodineColor {
 	 */
 	@Contract(pure = true)
 	public int getRed() {
-		return red;
+		return (argb >>> 16) & 0xFF;
 	}
 	
 	/**
@@ -86,7 +120,7 @@ public final class IodineColor {
 	 */
 	@Contract(pure = true)
 	public int getGreen() {
-		return green;
+		return (argb >>> 8) & 0xFF;
 	}
 	
 	/**
@@ -96,10 +130,23 @@ public final class IodineColor {
 	 */
 	@Contract(pure = true)
 	public int getBlue() {
-		return blue;
+		return argb & 0xFF;
 	}
 	
 	
+	
+	/**
+	 * Creates a new instance with all components having the same value, except this one.
+	 *
+	 * @param alpha the component's new value
+	 * @return a new instance with the correct components
+	 */
+	@NotNull
+	@Contract(pure = true, value = "_ -> new")
+	public IodineColor setAlpha(int alpha) {
+		Validate.isTrue((alpha & 0xFF) == alpha, "Component values must range from 0 to 255 (both inclusive)");
+		return new IodineColor((argb & 0x00FFFFFF) | (alpha << 24));
+	}
 	
 	/**
 	 * Creates a new instance with all components having the same value, except this one.
@@ -110,7 +157,8 @@ public final class IodineColor {
 	@NotNull
 	@Contract(pure = true, value = "_ -> new")
 	public IodineColor setRed(int red) {
-		return get(red, green, blue);
+		Validate.isTrue((red & 0xFF) == red, "Component values must range from 0 to 255 (both inclusive)");
+		return new IodineColor((argb & 0xFF00FFFF) | (red << 16));
 	}
 	
 	/**
@@ -122,7 +170,8 @@ public final class IodineColor {
 	@NotNull
 	@Contract(pure = true, value = "_ -> new")
 	public IodineColor setGreen(int green) {
-		return get(red, green, blue);
+		Validate.isTrue((green & 0xFF) == green, "Component values must range from 0 to 255 (both inclusive)");
+		return new IodineColor((argb & 0xFFFF00FF) | (green << 8));
 	}
 	
 	/**
@@ -134,7 +183,8 @@ public final class IodineColor {
 	@NotNull
 	@Contract(pure = true, value = "_ -> new")
 	public IodineColor setBlue(int blue) {
-		return get(red, green, blue);
+		Validate.isTrue((blue & 0xFF) == blue, "Component values must range from 0 to 255 (both inclusive)");
+		return new IodineColor((argb & 0xFFFFFF00) | blue);
 	}
 	
 	
@@ -143,22 +193,18 @@ public final class IodineColor {
 	@Contract(pure = true)
 	@Override
 	public String toString() {
-		return "RGB" + Integer.toHexString((red << 16) | (green << 8) | blue);
+		return "ARGB" + Integer.toHexString(argb);
 	}
 	
 	@Contract(pure = true)
 	@Override
 	public int hashCode() {
-		return 53 * ((red << 16) | (green << 8) | blue);
+		return 131 + 127 * argb;
 	}
 	
 	@Contract(pure = true)
 	@Override
 	public boolean equals(Object object) {
-		if (!(object instanceof IodineColor)) {
-			return false;
-		}
-		IodineColor other = (IodineColor) object;
-		return other.red == red && other.green == green && other.blue == blue;
+		return object instanceof IodineColor && argb == ((IodineColor) object).argb;
 	}
 }

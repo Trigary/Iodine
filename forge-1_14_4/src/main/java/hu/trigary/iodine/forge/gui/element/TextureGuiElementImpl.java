@@ -35,7 +35,7 @@ public class TextureGuiElementImpl extends TextureGuiElement {
 	@Override
 	protected void drawImpl(int positionX, int positionY, int width, int height, int mouseX, int mouseY, float partialTicks) {
 		Minecraft.getInstance().getTextureManager().bindTexture(resource);
-		GlStateManager.color4f(1, 1, 1, 1);
+		GlStateManager.color4f(1, 1, 1, transparency / 255f);
 		
 		if (interpolating) {
 			AbstractGui.blit(positionX, positionY, width, height, offsetX, offsetY,
