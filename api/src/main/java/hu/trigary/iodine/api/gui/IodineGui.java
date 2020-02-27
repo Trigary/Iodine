@@ -10,7 +10,7 @@ import org.jetbrains.annotations.Nullable;
  */
 public interface IodineGui extends IodineRoot<IodineGui> {
 	/**
-	 * Sets the action that should be executed when this GUI is closed by a player.
+	 * Sets the action that should be executed when this GUI is closed by a player or a plugin.
 	 * GUIs are not allowed to be opened or closed in this callback.
 	 * The callback is atomically executed GUI updating wise.
 	 *
@@ -32,7 +32,8 @@ public interface IodineGui extends IodineRoot<IodineGui> {
 		 *
 		 * @param gui the GUI that was closed
 		 * @param player the player that closed the GUI
+		 * @param byPlayer true if the player closed the GUI, false is a plugin is responsible
 		 */
-		void accept(@NotNull IodineGui gui, @NotNull IodinePlayer player);
+		void accept(@NotNull IodineGui gui, @NotNull IodinePlayer player, boolean byPlayer);
 	}
 }

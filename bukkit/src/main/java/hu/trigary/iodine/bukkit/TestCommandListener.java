@@ -86,7 +86,7 @@ public class TestCommandListener implements Listener {
 							.setText("Sample button")
 							.setTooltip("Sample tooltip"));
 				})
-				.onClosed((g, p) -> p.sendMessage("You closed the GUI"))
+				.onClosed((g, p, byPlayer) -> p.sendMessage("You closed the GUI"))
 				.openFor(player);
 	}
 }

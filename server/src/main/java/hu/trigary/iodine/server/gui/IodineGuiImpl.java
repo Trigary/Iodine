@@ -58,8 +58,8 @@ public class IodineGuiImpl extends IodineRootImpl<IodineGui> implements IodineGu
 	@Override
 	protected void onClosed(@NotNull IodinePlayerBase iodinePlayer, boolean byPlayer) {
 		iodinePlayer.setOpenGui(null);
-		if (byPlayer && closedAction != null) {
-			closedAction.accept(this, iodinePlayer);
+		if (closedAction != null) {
+			closedAction.accept(this, iodinePlayer, byPlayer);
 		}
 	}
 	
