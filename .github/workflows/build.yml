@@ -21,7 +21,7 @@ jobs:
         chmod +x gradlew 
         ./gradlew jar --warning-mode all
         cd ..
-    - name: "Determine Iodine version"
+    - name: Determine Iodine version
       id: version
       run: echo ::set-output name=version::$(grep -oP "version '[0-9]+\.[0-9]+\.[0-9]+" build.gradle | cut -c 10-)
     - name: Archive Bukkit plugin

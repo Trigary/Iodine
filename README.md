@@ -5,8 +5,9 @@ No more inventory and chat menus!
 This is a successor to [NickAc's Lithium project](https://www.spigotmc.org/threads/lithium.274569/).
 
 This project is under heavy development currently.
-It is not in a usable state, everything is expected to change, etc.
-Helping hands are welcome.
+There are no stable releases, but Bukkit and Forge builds are automatically generated after each commit.
+These can be downloaded from the [Actions page](https://github.com/Trigary/Iodine/actions).
+The plugin API is available through JitPack, see the [API section](#API).
 
 Currently a Forge based client-side and a Bukkit based server-side is being worked on.
 Adding Fabric or especially Sponge support shouldn't be much trouble at all thanks
@@ -47,9 +48,11 @@ IodineApi.get().createGui()
     .openFor(IodineApi.get().getPlayer(player.getUniqueId()));
 ```
 
-Real example code can be found in the [showcase](showcase/src/main/java/hu/trigary/iodine/showcase) subproject.
+Real examples can be found in the [showcase](showcase/src/main/java/hu/trigary/iodine/showcase) subproject.
 
-The JavaDocs are available online, hosted on JitPack: [latest](https://javadoc.jitpack.io/com/github/Trigary/Iodine/api/-SNAPSHOT/javadoc/)
+The JavaDocs are available online, hosted on JitPack:
+[latest](https://javadoc.jitpack.io/com/github/Trigary/Iodine/api/-SNAPSHOT/javadoc/)  
+(It might take a while to load, because the build might have to run first.)
 
 Gradle coordinates:
 
@@ -92,10 +95,10 @@ This project consists of multiple subprojects, each with their own role:
  - **forge-VERSION:** the Forge mod part of the project, for the specified version
  - **showcase** contains sample code, this is an actual Bukkit plugin
 
-The *forge-VERSION* projects are not be real subprojects due to
+The *forge-VERSION* projects are not real subprojects due to
 ForgeGradle issues, they are actually considered separate projects by Gradle.
-The *showcase* project isn't a subproject either since it's not an actual
-component in neither the server-side, nor the client-side part of this project.
+The *showcase* project isn't a subproject either
+since it's not an actual component in Iodine, it only depends on it.
 
 To recap which projects depend on which:
 
