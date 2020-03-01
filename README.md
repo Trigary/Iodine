@@ -49,7 +49,35 @@ IodineApi.get().createGui()
 
 Real example code can be found in the [showcase](showcase/src/main/java/hu/trigary/iodine/showcase) subproject.
 
-TODO add Maven, Gradle coordinates and link to JavaDocs (through JitPack, if possible)
+The JavaDocs are available online, hosted on JitPack: [latest](https://javadoc.jitpack.io/com/github/Trigary/Iodine/api/-SNAPSHOT/javadoc/)
+
+Gradle coordinates:
+
+```groovy
+repositories {
+    maven { url 'https://jitpack.io' }
+}
+
+dependencies {
+    compileOnly 'com.github.Trigary.Iodine:api:-SNAPSHOT'
+}
+```
+
+Maven coordinates:
+
+```xml
+<repository>
+    <id>jitpack.io</id>
+    <url>https://jitpack.io</url>
+</repository>
+
+<dependency>
+    <groupId>com.github.Trigary.Iodine</groupId>
+    <artifactId>api</artifactId>
+    <version>-SNAPSHOT</version>
+    <scope>provided</scope>
+</dependency>
+```
 
 ## Modules
 
