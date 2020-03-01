@@ -24,12 +24,12 @@ jobs:
     - name: Determine Iodine version
       id: version
       run: echo ::set-output name=version::$(grep -oP "version '[0-9]+\.[0-9]+\.[0-9]+" build.gradle | cut -c 10-)
-    - name: Archive Bukkit plugin
+    - name: Upload Bukkit plugin JAR
       uses: actions/upload-artifact@v1
       with:
         name: Iodine-Bukkit-${{ steps.version.outputs.version }}.jar
         path: bukkit/build/libs/Iodine-Bukkit-${{ steps.version.outputs.version }}.jar
-    - name: Archive Forge mod
+    - name: Upload Forge mod JAR
       uses: actions/upload-artifact@v1
       with:
         name: Iodine-Forge-1_14_4-${{ steps.version.outputs.version }}.jar

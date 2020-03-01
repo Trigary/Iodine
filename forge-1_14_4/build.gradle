@@ -12,7 +12,7 @@ buildscript {
 
 apply plugin: 'net.minecraftforge.gradle'
 
-version = '1.0.0' //The version must be the same as the other iodine projects' version
+version = file('../VERSION').text //The version must be the same as the other iodine projects' version
 group = 'hu.trigary.iodine'
 
 sourceCompatibility = 1.8

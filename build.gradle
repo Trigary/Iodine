@@ -15,7 +15,7 @@ subprojects {
 	apply plugin: 'com.github.johnrengelman.shadow'
 
 	group 'hu.trigary.iodine'
-	version '1.0.0' //The version must follow the #.#.# pattern.
+	version file('../VERSION').text //The version must follow the #.#.# pattern.
 	//Changes which do not break the forge-bukkit protocol should increase only the third number in the version.
 
 	java {

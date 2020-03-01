@@ -36,7 +36,7 @@
 		<dependency>
 			<groupId>com.github.Trigary.Iodine</groupId>
 			<artifactId>api</artifactId>
-			<version>-SNAPSHOT</version>
+			<version>master-SNAPSHOT</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>

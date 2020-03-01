@@ -21,10 +21,6 @@ import org.jetbrains.annotations.NotNull;
  */
 @Mod("iodine")
 public class IodineModImpl extends IodineMod {
-	/**
-	 * Creates a new instance.
-	 * Called by the Forge mod loader system.
-	 */
 	public IodineModImpl() {
 		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onSetup);
 		MinecraftForge.EVENT_BUS.addListener(this::onJoined);
