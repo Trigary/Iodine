@@ -23,9 +23,6 @@ jobs:
         chmod +x gradlew 
         ./gradlew jar --warning-mode all
         cd ..
-    - name: Determine Iodine version
-      run: |
-        $raw=grep -oE "version '([0-9]+\.[0-9]+\.[0-9]+)'" build.gradle
     - name: Archive Bukkit plugin
       uses: actions/upload-artifact@v1
       with:
