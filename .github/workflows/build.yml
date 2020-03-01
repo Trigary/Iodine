@@ -4,8 +4,6 @@ on: [push]
 
 jobs:
   build:
-    env:
-      VERSION: grep -oP "version '([0-9]+\.[0-9]+\.[0-9]+)" build.gradle | cut -c 10-
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
@@ -23,13 +21,16 @@ jobs:
         chmod +x gradlew 
         ./gradlew jar --warning-mode all
         cd ..
+    - name: "Determine Iodine version"
+      id: version
+      run: echo ::set-output name=version::$(grep -oP "version '[0-9]+\.[0-9]+\.[0-9]+" build.gradle | cut -c 10-)
     - name: Archive Bukkit plugin
       uses: actions/upload-artifact@v1
       with:
-        name: Iodine-bukkit-$VERSION.jar
-        path: bukkit/build/libs/Iodine-bukkit-${{ env.VERSION }}.jar
+        name: Iodine-bukkit-${{ steps.version.outputs.version }}.jar
+        path: bukkit/build/libs/Iodine-bukkit-${{ steps.version.outputs.version }}.jar
     - name: Archive Forge mod
       uses: actions/upload-artifact@v1
       with:
-        name: Iodine-bukkit-$VERSION.jar
-        path: forge-1_14_4/build/libs/Iodine-forge-1_14_4-${{ env.VERSION }}.jar
+        name: Iodine-bukkit-${{ steps.version.outputs.version }}.jar
+        path: forge-1_14_4/build/libs/Iodine-forge-1_14_4-${{ steps.version.outputs.version }}.jar
