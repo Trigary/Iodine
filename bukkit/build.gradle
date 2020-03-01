@@ -6,7 +6,7 @@ repositories {
 
 dependencies {
 	api project(':server')
-	api 'org.apache.commons:commons-lang3:3.9'
+	implementation 'org.apache.commons:commons-lang3:3.9'
 	compileOnly 'org.bukkit:bukkit:1.14.4-R0.1-SNAPSHOT'
 }
 
@@ -16,5 +16,7 @@ processResources {
 }
 
 shadowJar {
+	relocate 'org.apache.commons.lang3', 'hu.trigary.iodine.bukkit.shaded.lang3'
+	minimize()
 	archiveFileName = "Iodine-Bukkit-${project.version}.jar"
 }
