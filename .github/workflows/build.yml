@@ -27,9 +27,9 @@ jobs:
       uses: actions/upload-artifact@v1
       with:
         name: Iodine-bukkit-$VERSION.jar
-        path: bukkit/build/libs/Iodine-bukkit-$VERSION.jar
+        path: bukkit/build/libs/Iodine-bukkit-${{ env.VERSION }}.jar
     - name: Archive Forge mod
       uses: actions/upload-artifact@v1
       with:
         name: Iodine-bukkit-$VERSION.jar
-        path: forge-1_14_4/build/libs/Iodine-forge-1_14_4-$VERSION.jar
+        path: forge-1_14_4/build/libs/Iodine-forge-1_14_4-${{ env.VERSION }}.jar
