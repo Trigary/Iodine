@@ -27,10 +27,10 @@ jobs:
     - name: Archive Bukkit plugin
       uses: actions/upload-artifact@v1
       with:
-        name: Iodine-bukkit-${{ steps.version.outputs.version }}.jar
-        path: bukkit/build/libs/Iodine-bukkit-${{ steps.version.outputs.version }}.jar
+        name: Iodine-Bukkit-${{ steps.version.outputs.version }}.jar
+        path: bukkit/build/libs/Iodine-Bukkit-${{ steps.version.outputs.version }}.jar
     - name: Archive Forge mod
       uses: actions/upload-artifact@v1
       with:
-        name: Iodine-bukkit-${{ steps.version.outputs.version }}.jar
-        path: forge-1_14_4/build/libs/Iodine-forge-1_14_4-${{ steps.version.outputs.version }}.jar
+        name: Iodine-Forge-1_14_4-${{ steps.version.outputs.version }}.jar
+        path: forge-1_14_4/build/libs/Iodine-Forge-1_14_4-${{ steps.version.outputs.version }}.jar

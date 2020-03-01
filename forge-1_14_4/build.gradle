@@ -63,5 +63,5 @@ jar {
 			exclude 'META-INF', 'META-INF/**'
 		}
 	}
-	archiveName = "Iodine-forge-1_14_4-${project.version}.jar"
+	archiveName = "Iodine-Forge-1_14_4-${project.version}.jar"
 }

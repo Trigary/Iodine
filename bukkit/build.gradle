@@ -16,5 +16,5 @@ processResources {
 }
 
 shadowJar {
-	archiveFileName = "Iodine-bukkit-${project.version}.jar"
+	archiveFileName = "Iodine-Bukkit-${project.version}.jar"
 }
