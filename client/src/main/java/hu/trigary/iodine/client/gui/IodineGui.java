@@ -60,6 +60,7 @@ public final class IodineGui extends IodineRoot {
 	 * @param mouseY the mouse's Y position
 	 */
 	public void onMousePressed(double mouseX, double mouseY) {
+		boolean gainedFocus = false;
 		for (GuiElement element : getAllElements()) {
 			if (element.onMousePressed(mouseX, mouseY)) {
 				if (focused != null) {
@@ -67,7 +68,12 @@ public final class IodineGui extends IodineRoot {
 				}
 				focused = element;
 				focused.setFocused(true);
+				gainedFocus = true;
 			}
+		}
+		if (!gainedFocus && focused != null) {
+			focused.setFocused(false);
+			focused = null;
 		}
 	}
 	

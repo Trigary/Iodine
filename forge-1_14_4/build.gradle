@@ -53,7 +53,7 @@ repositories {
 
 dependencies {
 	minecraft 'net.minecraftforge:forge:1.14.4-28.1.0'
-	shade "hu.trigary.iodine:client:${version}"
+	shade "hu.trigary.iodine:client:${project.version}"
 	compileOnly 'org.jetbrains:annotations:17.0.0'
 }
 

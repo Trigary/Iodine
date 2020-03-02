@@ -28,7 +28,6 @@ public class TextFieldGuiElementImpl extends TextFieldGuiElement {
 	@Override
 	protected void updateImpl(int positionX, int positionY, int width, int height) {
 		widget = new TextFieldWidget(Minecraft.getInstance().fontRenderer, positionX, positionY, width, height, text);
-		widget.active = editable; //TODO doesn't work, maybe check editable in onTyped methods?
 		widget.setText(text);
 		widget.setMaxStringLength(maxLength);
 		widget.setValidator(regex == null ? s -> true : s -> regex.matcher(s).matches());
@@ -55,18 +54,22 @@ public class TextFieldGuiElementImpl extends TextFieldGuiElement {
 	
 	@Override
 	public boolean onMousePressed(double mouseX, double mouseY) {
-		return widget.mouseClicked(mouseX, mouseY, 0);
+		return editable && widget.mouseClicked(mouseX, mouseY, 0);
 	}
 	
 	@Override
 	public void onKeyPressed(int key, int scanCode, int modifiers) {
-		widget.keyPressed(key, scanCode, modifiers);
-		onChanged(widget.getText());
+		if (editable) {
+			widget.keyPressed(key, scanCode, modifiers);
+			onChanged(widget.getText());
+		}
 	}
 	
 	@Override
 	public void onCharTyped(char codePoint, int modifiers) {
-		widget.charTyped(codePoint, modifiers);
-		onChanged(widget.getText());
+		if (editable) {
+			widget.charTyped(codePoint, modifiers);
+			onChanged(widget.getText());
+		}
 	}
 }
