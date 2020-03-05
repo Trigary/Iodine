@@ -4,7 +4,7 @@ buildscript {
 		jcenter()
 		mavenCentral()
 	}
-
+	
 	dependencies {
 		classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.+', changing: true
 	}
@@ -25,13 +25,13 @@ minecraft {
 	// Use non-default mappings at your own risk. they may not always work.
 	// Simply re-run your setup task after changing the mappings to update your workspace.
 	mappings channel: 'stable', version: '58-1.14.4'
-
+	
 	runs {
 		client {
 			workingDirectory project.file('run')
 			property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
 			property 'forge.logging.console.level', 'debug'
-
+			
 			mods {
 				iodine {
 					source sourceSets.main
@@ -58,10 +58,17 @@ dependencies {
 }
 
 jar {
+	manifest {
+		attributes([
+				"Implementation-Version": project.version
+		])
+	}
+	
 	configurations.shade.each { dep ->
 		from(project.zipTree(dep)) {
 			exclude 'META-INF', 'META-INF/**'
 		}
 	}
+	
 	archiveName = "Iodine-Forge-1_14_4-${project.version}.jar"
 }

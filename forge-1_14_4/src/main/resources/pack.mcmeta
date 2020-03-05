@@ -1,2 +1,6 @@
 {
+    "pack": {
+        "description": "Iodine Mod",
+        "pack_format": 4
+    }
 }

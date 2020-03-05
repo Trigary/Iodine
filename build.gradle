@@ -2,7 +2,7 @@ buildscript {
 	repositories {
 		jcenter()
 	}
-
+	
 	dependencies {
 		classpath 'com.github.jengelman.gradle.plugins:shadow:4.0.2'
 	}
@@ -13,16 +13,16 @@ subprojects {
 	apply plugin: 'java-library'
 	apply plugin: 'maven-publish'
 	apply plugin: 'com.github.johnrengelman.shadow'
-
+	
 	group 'hu.trigary.iodine'
 	version file('../VERSION').text //The version must follow the #.#.# pattern.
 	//Changes which do not break the forge-bukkit protocol should increase only the third number in the version.
-
+	
 	java {
 		withJavadocJar()
 		withSourcesJar()
 	}
-
+	
 	publishing {
 		publications {
 			mavenJava(MavenPublication) {
@@ -30,14 +30,14 @@ subprojects {
 			}
 		}
 	}
-
+	
 	sourceCompatibility = 1.8
 	targetCompatibility = 1.8
-
+	
 	repositories {
 		mavenCentral()
 	}
-
+	
 	dependencies {
 		compileOnly 'org.jetbrains:annotations:17.0.0'
 		compileOnly 'org.apache.commons:commons-lang3:3.9'

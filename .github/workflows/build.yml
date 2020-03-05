@@ -27,7 +27,7 @@ jobs:
       run: |
         cd forge-1_14_4
         chmod +x gradlew 
-        ./gradlew jar --warning-mode all
+        ./gradlew build --warning-mode all
         cd ..
     - name: Upload Forge mod JAR
       uses: actions/upload-artifact@v1

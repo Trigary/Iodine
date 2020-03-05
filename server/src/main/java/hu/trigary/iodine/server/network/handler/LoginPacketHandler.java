@@ -61,7 +61,7 @@ public class LoginPacketHandler extends PacketHandler {
 			return;
 		}
 		
-		if (serverVersion.equals(clientVersion) || clientVersion.equals("${version}") || clientVersion.equals("version")) {
+		if (serverVersion.equals(clientVersion) || clientVersion.equals("NONE")) {
 			//Forge is weird... let's call this a feature, not like this affects anyone apart from the developers
 			versionMatches(player);
 			return;
