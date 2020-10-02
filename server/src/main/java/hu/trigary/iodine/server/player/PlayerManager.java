@@ -6,6 +6,7 @@ import hu.trigary.iodine.server.gui.IodineOverlayImpl;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -78,7 +79,7 @@ public abstract class PlayerManager {
 		if (iodinePlayer.getOpenGui() != null) {
 			iodinePlayer.getOpenGui().closeForNoPacket(iodinePlayer, true);
 		}
-		for (IodineOverlay overlay : iodinePlayer.getOverlays()) {
+		for (IodineOverlay overlay : new ArrayList<>(iodinePlayer.getOverlays())) {
 			((IodineOverlayImpl) overlay).closeForNoPacket(iodinePlayer, true);
 		}
 		players.remove(player);
