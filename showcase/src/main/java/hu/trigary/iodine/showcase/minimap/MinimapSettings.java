@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class MinimapSettings {
-	private IodineOverlay.Anchor anchor = IodineOverlay.Anchor.TOP_RIGHT;
+	private IodineOverlay.Anchor anchor;
 	
 	
 	

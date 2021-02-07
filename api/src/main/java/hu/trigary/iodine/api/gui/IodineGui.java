@@ -32,7 +32,8 @@ public interface IodineGui extends IodineRoot<IodineGui> {
 		 *
 		 * @param gui the GUI that was closed
 		 * @param player the player that closed the GUI
-		 * @param byPlayer true if the player closed the GUI, false is a plugin is responsible
+		 * @param byPlayer true if the player closed the GUI (eg. by pressing escape, disconnecting,
+		 * entering {@link IodinePlayer.State#INVALID}), false is a plugin is responsible (eg. by closing this GUI, opening another one)
 		 */
 		void accept(@NotNull IodineGui gui, @NotNull IodinePlayer player, boolean byPlayer);
 	}
