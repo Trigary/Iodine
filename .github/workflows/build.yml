@@ -1,6 +1,9 @@
 name: Build projects
 
-on: [push]
+on:
+  push:
+  schedule: # Uploaded artifacts expire after some time, so let's upload new ones every so often
+    - cron: '0 0 1 * *'
 
 jobs:
   build:
